@@ -26,6 +26,18 @@ class Capture {
 
   String get rootHash => recording.root.subtreeHash;
 
+  /// Everything the recording holds by value: every node's ops except the
+  /// pixel hashes of opaque nodes, and every child placement. A mutation that
+  /// changes [rootHash] but not this was caught only by the pixel fallback.
+  String get valueText => recording.nodes
+      .map(
+        (RecordedNode n) =>
+            '${n.index} ${n.renderObject.runtimeType} '
+            '${n.ops.where((String op) => !op.startsWith('pixels(')).join('|')} '
+            '${n.childOffsets.join(',')}',
+      )
+      .join('\n');
+
   /// Own paint hashes of every node in the tagged subtree, sorted.
   List<String> paintHashesUnder(String key) {
     final RecordedNode? node = byKey[key];
@@ -44,7 +56,13 @@ class Capture {
 }
 
 class CaptureTimings {
-  CaptureTimings({required this.pump, required this.raster, required this.record, required this.resolve});
+  CaptureTimings({
+    required this.pump,
+    required this.raster,
+    required this.record,
+    required this.resolve,
+    required this.restore,
+  });
 
   final Duration pump;
 
@@ -53,6 +71,10 @@ class CaptureTimings {
   final Duration raster;
   final Duration record;
   final Duration resolve;
+
+  /// Marking recorded nodes for repaint and pumping the frame that restores
+  /// the layers recording touched.
+  final Duration restore;
 }
 
 Future<FixtureAssets> makeAssets(WidgetTester tester) async {
@@ -126,8 +148,10 @@ Future<Capture> captureFixture(
   await tester.runAsync(() => recording.resolve(pixelHash: (Rect r) async => full.crop(r, dpr).hash));
   resolveWatch.stop();
 
+  final restoreWatch = Stopwatch()..start();
   PaintRecorder.restore(recording);
   await tester.pump();
+  restoreWatch.stop();
   expect(tester.binding.hasScheduledFrame, isFalse);
   final PixelRegion pixels = withPixels ? full : PixelRegion(0, 0, Uint8List(0));
   return Capture(
@@ -139,6 +163,7 @@ Future<Capture> captureFixture(
       raster: rasterWatch.elapsed,
       record: recordWatch.elapsed,
       resolve: resolveWatch.elapsed,
+      restore: restoreWatch.elapsed,
     ),
   );
 }

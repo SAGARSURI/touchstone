@@ -215,7 +215,15 @@ final platformViewScreen = FixtureScreen(
   defaults: <String, Object?>{'headerColor': const Color(0xCCFFFFFF), 'mapHeight': 300.0},
   build: (Knobs k, FixtureAssets _) => Stack(
     children: <Widget>[
-      Positioned.fill(child: tagged('map', const Texture(textureId: 7))),
+      // The map sits below the header so the header's pixels are judged by
+      // its own recording, not by the texture's pixel hash.
+      Positioned(
+        left: 0,
+        right: 0,
+        top: 120,
+        height: k('mapHeight'),
+        child: tagged('map', const Texture(textureId: 7)),
+      ),
       Positioned(
         left: 0,
         right: 0,

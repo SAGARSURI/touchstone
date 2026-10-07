@@ -15,6 +15,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:fixture_app/screens.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:touchstone/touchstone.dart';
 
@@ -43,6 +44,10 @@ class MutationResult {
     final List<String> b = mutant.paintHashesUnder(mutation.target);
     return a.length != b.length || !_listEquals(a, b);
   }
+
+  /// Changed the hash only through an opaque node's pixel hash: nothing
+  /// recorded by value changed.
+  bool get caughtOnlyByPixels => recordingChanged && base.valueText == mutant.valueText;
 
   /// Equal hashes with different pixels.
   bool get captureGap => !recordingChanged && pixelsChanged;
@@ -80,6 +85,7 @@ class MutationResult {
     'targetSubtreeChanged': targetSubtreeChanged,
     'pixelsChanged': pixelsChanged,
     'differingPixels': base.pixels.differingPixels(mutant.pixels),
+    'caughtOnlyByPixels': caughtOnlyByPixels,
     'captureGap': captureGap,
     'missed': missed,
     'falseAlarm': falseAlarm,
@@ -145,10 +151,17 @@ void main() {
       );
 
       // A10: cost of the same pump without capture, and snapshot size.
-      final plain = Stopwatch()..start();
-      await captureFixtureWithoutRecording(tester, screen, assets);
-      plain.stop();
-      final int opaque = base.recording.nodes.where((RecordedNode n) => n.isOpaque).length;
+      final plainPumps = <int>[];
+      for (var i = 0; i < repeatsPerScreen; i++) {
+        final plain = Stopwatch()..start();
+        await captureFixtureWithoutRecording(tester, screen, assets);
+        plain.stop();
+        plainPumps.add(plain.elapsedMicroseconds);
+      }
+      final List<RecordedNode> opaqueNodes = base.recording.nodes.where((RecordedNode n) => n.isOpaque).toList();
+      final int opaque = opaqueNodes.length;
+      final Rect view = base.recording.viewRect;
+      final int unverified = base.recording.nodes.where((RecordedNode n) => !n.geometryVerified).length;
       final int bytes = base.recording.nodes.fold<int>(
         0,
         (int sum, RecordedNode n) => sum + utf8.encode(n.ops.join('\n')).length,
@@ -161,12 +174,23 @@ void main() {
           for (final RecordedNode n in base.recording.nodes)
             if (n.isOpaque) '${n.renderObject.runtimeType}(${n.opaque.keys.map((OpaqueReason r) => r.name).join('+')})',
         }.toList(),
+        'unverifiedGeometryNodes': unverified,
+        'opaqueRegions': <String>[
+          for (final RecordedNode n in opaqueNodes) '${n.renderObject.runtimeType} ${base.recording.opaqueRegion(n)}',
+        ],
+        'opaqueAreaShare':
+            opaqueNodes.fold<double>(0, (double sum, RecordedNode n) {
+              final Rect r = base.recording.opaqueRegion(n);
+              return sum + r.width * r.height;
+            }) /
+            (view.width * view.height),
         'opsBytes': bytes,
-        'pumpMicros': plain.elapsedMicroseconds,
+        'pumpMicros': plainPumps,
         'pumpInCaptureMicros': captures.map((Capture c) => c.timings.pump.inMicroseconds).toList(),
         'rasterMicros': captures.map((Capture c) => c.timings.raster.inMicroseconds).toList(),
         'recordMicros': captures.map((Capture c) => c.timings.record.inMicroseconds).toList(),
         'resolveMicros': captures.map((Capture c) => c.timings.resolve.inMicroseconds).toList(),
+        'restoreMicros': captures.map((Capture c) => c.timings.restore.inMicroseconds).toList(),
       });
 
       for (final Mutation m in screen.mutations) {
@@ -176,6 +200,7 @@ void main() {
       }
 
       expect(diffs, 0, reason: 'recording differs across repeats');
+      expect(unverified, 0, reason: 'nodes whose paint transform could not be verified');
       final List<MutationResult> mine = results.where((MutationResult r) => r.screen == screen.name).toList();
       expect(
         mine.where((MutationResult r) => r.captureGap).map((MutationResult r) => r.mutation.name),
