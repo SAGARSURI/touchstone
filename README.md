@@ -13,7 +13,7 @@ component.
 
 | Phase | Exit gate | Status |
 | --- | --- | --- |
-| 0. Feasibility spikes | A decision per node kind (recorded paint or pixel hash); 0 capture gaps on fixtures | Met on Linux, 2026-10-07 |
+| 0. Feasibility spikes | A decision per node kind (recorded paint or pixel hash); 0 capture gaps on fixtures | Met on Linux after review fixes, 2026-10-07; awaiting approval |
 | 1. Capture | 0 differing snapshots in 1,000 repeats per OS; schema maps to web | Not passed |
 | 2. Diff and policy | Every mutation and no-op gate | Not passed |
 | 3. Catalogue verification, then release | 0 capture gaps on catalogue history; budgets met | Not passed |
@@ -37,7 +37,7 @@ mutations.
 
 ```sh
 flutter test                               # unit tests
-cd corpus/fixture_app && flutter test      # Phase 0 harness, writes build/phase0/
+cd corpus/fixture_app && flutter test      # Phase 0 harness (writes build/phase0/) and regression cases
 ```
 
 Requires Flutter 3.47 or later.

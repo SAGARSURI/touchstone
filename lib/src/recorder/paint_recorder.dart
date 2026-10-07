@@ -21,7 +21,16 @@ import 'recording_canvas.dart';
 
 /// One render object's own paint.
 class RecordedNode implements OpSink {
-  RecordedNode._(this.index, this.renderObject, this.parent, this._recording) {
+  RecordedNode._(
+    this.index,
+    this.renderObject,
+    this.parent,
+    this._recording, {
+    required this.toGlobal,
+    required this.inheritedClip,
+    required this.spreadClip,
+    required this.geometryVerified,
+  }) {
     describeContext = DescribeContext(renderObject, _markOpaque);
   }
 
@@ -30,6 +39,22 @@ class RecordedNode implements OpSink {
   final RenderObject renderObject;
   final RecordedNode? parent;
   final PaintRecording _recording;
+
+  /// Maps this node's paint origin to global logical coordinates, composed
+  /// from the transforms its ancestors painted with.
+  final Matrix4 toGlobal;
+
+  /// Global clip in effect when this node starts painting.
+  final Rect inheritedClip;
+
+  /// Set when an ancestor layer can move or spread this node's pixels (see
+  /// [RecordingCanvas]).
+  final Rect? spreadClip;
+
+  /// Whether [toGlobal] agrees with the render object's own paint transform
+  /// ([RenderObject.getTransformTo]). When it does not, this node's reach is
+  /// the whole view.
+  final bool geometryVerified;
 
   /// Children in paint order.
   final List<RecordedNode> children = <RecordedNode>[];
@@ -48,6 +73,16 @@ class RecordedNode implements OpSink {
 
   bool get isOpaque => opaque.isNotEmpty;
 
+  /// Number of times this node was marked opaque so far.
+  int _opaqueMarks = 0;
+
+  /// Global bounds of every pixel this node's own paint can change: what it
+  /// drew, widened for stroke and blur, inside the clip in effect, plus the
+  /// whole clip for effects with no bounded geometry. Null when it drew
+  /// nothing.
+  Rect? get reachBounds => _reach;
+  Rect? _reach;
+
   /// Hash of [ops] after image fingerprints are resolved.
   late final String paintHash;
 
@@ -55,6 +90,7 @@ class RecordedNode implements OpSink {
   late final String subtreeHash;
 
   void _markOpaque(OpaqueReason reason, String detail) {
+    _opaqueMarks++;
     (opaque[reason] ??= <String>{}).add(detail);
   }
 
@@ -64,8 +100,14 @@ class RecordedNode implements OpSink {
   @override
   String image(ui.Image image) => _recording._addImage(image);
 
-  /// Global bounds of the render object's paint bounds.
-  Rect get globalPaintBounds => MatrixUtils.transformRect(renderObject.getTransformTo(null), renderObject.paintBounds);
+  @override
+  void reach(Rect globalRect) {
+    final Rect r = geometryVerified ? globalRect : _recording.viewRect;
+    if (!(r.width > 0 && r.height > 0)) {
+      return;
+    }
+    _reach = _reach?.expandToInclude(r) ?? r;
+  }
 }
 
 /// The result of painting a render tree into [PaintRecorder].
@@ -74,6 +116,13 @@ class PaintRecording {
 
   final List<RecordedNode> nodes = <RecordedNode>[];
   final List<ui.Image> _images = <ui.Image>[];
+
+  /// The view, in global logical coordinates.
+  late final Rect viewRect;
+
+  /// Global regions a backdrop filter reads and rewrites. A pixel change under
+  /// one can spread anywhere inside it.
+  final List<Rect> backdrops = <Rect>[];
   final List<String?> _imageFingerprints = <String?>[];
 
   RecordedNode get root => nodes.first;
@@ -88,12 +137,12 @@ class PaintRecording {
   /// Reads image bytes and computes every hash. Must run outside the fake
   /// async zone of a widget test, for example inside `tester.runAsync`.
   ///
-  /// An opaque node's paint hash includes [pixelHash] of its global paint
-  /// bounds, so a change in what it draws still changes its hash.
+  /// An opaque node's paint hash includes [pixelHash] of [opaqueRegion], so a
+  /// change in what it draws still changes its hash.
   Future<void> resolve({required Future<String> Function(Rect globalRect) pixelHash}) async {
     final Map<RecordedNode, Rect> opaqueRegions = <RecordedNode, Rect>{
       for (final RecordedNode node in nodes)
-        if (node.isOpaque) node: node.globalPaintBounds,
+        if (node.isOpaque) node: opaqueRegion(node),
     };
     for (final ui.Image image in _images) {
       _imageFingerprints.add(await fingerprintImage(image));
@@ -123,16 +172,42 @@ class PaintRecording {
     }
   }
 
+  /// The pixels an opaque node's paint can change: its reach (or, if it drew
+  /// nothing, the clip it was given) inside the view, grown by every backdrop
+  /// filter it overlaps.
+  Rect opaqueRegion(RecordedNode node) {
+    Rect region = (node.reachBounds ?? node.inheritedClip).intersect(viewRect);
+    for (final Rect backdrop in backdrops) {
+      if (region.overlaps(backdrop)) {
+        region = region.expandToInclude(backdrop.intersect(viewRect));
+      }
+    }
+    return region;
+  }
+
   static String _hash(List<String> lines) => sha256.convert(utf8.encode(lines.join('\n'))).toString();
 }
 
 /// Paints a render tree into per-node op streams.
 class PaintRecorder {
-  /// Records [root] and everything it paints. Call after the last pump, with
+  /// Records [view] and everything it paints. Call after the last pump, with
   /// no frame scheduled.
-  static PaintRecording record(RenderObject root) {
-    final recording = PaintRecording._();
-    final RecordedNode node = _newNode(recording, root, null);
+  static PaintRecording record(RenderView view) {
+    final recording = PaintRecording._()..viewRect = Offset.zero & view.size;
+    final node = RecordedNode._(
+      0,
+      view,
+      null,
+      recording,
+      toGlobal: Matrix4.identity(),
+      inheritedClip: recording.viewRect,
+      spreadClip: null,
+      geometryVerified: true,
+    );
+    recording.nodes.add(node);
+    // Device pixel ratio and view size decide how every logical value maps to
+    // pixels.
+    node.op(c.rec('view', <Object?>[view.configuration.devicePixelRatio, c.size(view.size)]));
     _paintNode(recording, node);
     return recording;
   }
@@ -153,30 +228,73 @@ class PaintRecorder {
     }
   }
 
-  static RecordedNode _newNode(PaintRecording recording, RenderObject ro, RecordedNode? parent) {
-    final node = RecordedNode._(recording.nodes.length, ro, parent, recording);
-    recording.nodes.add(node);
-    return node;
-  }
-
   static void _paintNode(PaintRecording recording, RecordedNode node) {
     final context = _RecordingContext(recording, node);
     node.renderObject.paint(context, Offset.zero);
   }
+
+  /// Whether [composed] matches the render object's own paint transform to
+  /// the view's logical coordinates. getTransformTo(null) stops below the
+  /// render view's device pixel ratio transform; if that ever changed, every
+  /// node would fail verification and be hashed over the whole view.
+  static bool _verify(RenderObject ro, Matrix4 composed) {
+    final Matrix4 reference = ro.getTransformTo(null);
+    for (var i = 0; i < 16; i++) {
+      final double a = composed.storage[i];
+      final double b = reference.storage[i];
+      if (!((a - b).abs() <= 1e-7 * (1 + a.abs()))) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 class _RecordingContext extends ClipContext implements PaintingContext {
-  _RecordingContext(this._recording, this._node) : canvas = RecordingCanvas(_node);
+  _RecordingContext(this._recording, this._node)
+    : canvas = RecordingCanvas(
+        _node,
+        _node.toGlobal,
+        _node.geometryVerified ? _node.inheritedClip : _recording.viewRect,
+        spreadClip: _node.spreadClip,
+        trackClips: _node.geometryVerified,
+      );
 
   final PaintRecording _recording;
   final RecordedNode _node;
 
   @override
-  final Canvas canvas;
+  final RecordingCanvas canvas;
 
   DescribeContext get _ctx => _node.describeContext;
 
   void _op(String name, [List<Object?> fields = const <Object?>[]]) => _node.op(c.rec(name, fields));
+
+  /// Runs [describe]; if it marked the node opaque, the effect it describes
+  /// can change any pixel inside [localBounds] (in current canvas
+  /// coordinates), or inside the current clip when it has no bounds.
+  String _describeEffect(String Function() describe, {Rect? localBounds}) {
+    final int before = _node._opaqueMarks;
+    final String text = describe();
+    if (_node._opaqueMarks != before) {
+      if (localBounds == null) {
+        canvas.reachClip();
+      } else {
+        canvas.reachLocal(localBounds);
+      }
+    }
+    return text;
+  }
+
+  /// Runs [painter] inside canvas state for a pushed transform, clip or
+  /// spreading layer, between the recorded push op and `pop`.
+  void _push(String op, VoidCallback painter, {Matrix4? transform, Rect? localClip, bool spread = false}) {
+    _node.op(op);
+    canvas.pushState(transform: transform, localClip: localClip, spread: spread);
+    painter();
+    canvas.popState();
+    _op('pop');
+  }
 
   @override
   Rect get estimatedBounds => Rect.largest;
@@ -188,7 +306,26 @@ class _RecordingContext extends ClipContext implements PaintingContext {
     if (child.debugNeedsLayout) {
       return;
     }
-    final RecordedNode childNode = PaintRecorder._newNode(_recording, child, _node);
+    Matrix4 toGlobal = canvas.childTransform(offset);
+    Rect? spreadClip = canvas.spreadClip;
+    final Layer? boundaryLayer = child.isRepaintBoundary ? child.debugLayer : null;
+    if (boundaryLayer is TransformLayer && boundaryLayer.transform != null) {
+      toGlobal = toGlobal.multiplied(boundaryLayer.transform!);
+    }
+    if (boundaryLayer is ImageFilterLayer) {
+      spreadClip ??= canvas.currentClip;
+    }
+    final childNode = RecordedNode._(
+      _recording.nodes.length,
+      child,
+      _node,
+      _recording,
+      toGlobal: toGlobal,
+      inheritedClip: canvas.currentClip,
+      spreadClip: spreadClip,
+      geometryVerified: _node.geometryVerified && PaintRecorder._verify(child, toGlobal),
+    );
+    _recording.nodes.add(childNode);
     _node.children.add(childNode);
     _node.childOffsets.add(offset);
     _node.op('child');
@@ -197,13 +334,16 @@ class _RecordingContext extends ClipContext implements PaintingContext {
       // built by updateCompositedLayer (an OpacityLayer for RenderOpacity, for
       // example). That layer's effect belongs to the child's own paint; its
       // offset is the placement already recorded above.
-      childNode.op(c.rec('composite', <Object?>[_describeBoundaryLayer(child, childNode)]));
+      final int before = childNode._opaqueMarks;
+      childNode.op(c.rec('composite', <Object?>[_describeBoundaryLayer(boundaryLayer, childNode)]));
+      if (childNode._opaqueMarks != before) {
+        childNode.reach(spreadClip ?? canvas.currentClip);
+      }
     }
     PaintRecorder._paintNode(_recording, childNode);
   }
 
-  static String _describeBoundaryLayer(RenderObject child, RecordedNode node) {
-    final Layer? layer = child.debugLayer;
+  static String _describeBoundaryLayer(Layer? layer, RecordedNode node) {
     switch (layer) {
       case null:
         return '-';
@@ -235,9 +375,11 @@ class _RecordingContext extends ClipContext implements PaintingContext {
     Clip clipBehavior = Clip.hardEdge,
     ClipRectLayer? oldLayer,
   }) {
-    _op('pushClipRect', <Object?>[c.rect(clipRect.shift(offset)), clipBehavior]);
-    painter(this, offset);
-    _op('pop');
+    _push(
+      c.rec('pushClipRect', <Object?>[c.rect(clipRect.shift(offset)), clipBehavior]),
+      () => painter(this, offset),
+      localClip: clipBehavior == Clip.none ? null : clipRect.shift(offset),
+    );
     return oldLayer;
   }
 
@@ -251,9 +393,11 @@ class _RecordingContext extends ClipContext implements PaintingContext {
     Clip clipBehavior = Clip.antiAlias,
     ClipRRectLayer? oldLayer,
   }) {
-    _op('pushClipRRect', <Object?>[c.rrect(clipRRect.shift(offset)), c.rect(bounds.shift(offset)), clipBehavior]);
-    painter(this, offset);
-    _op('pop');
+    _push(
+      c.rec('pushClipRRect', <Object?>[c.rrect(clipRRect.shift(offset)), c.rect(bounds.shift(offset)), clipBehavior]),
+      () => painter(this, offset),
+      localClip: clipBehavior == Clip.none ? null : clipRRect.outerRect.shift(offset),
+    );
     return oldLayer;
   }
 
@@ -267,13 +411,15 @@ class _RecordingContext extends ClipContext implements PaintingContext {
     Clip clipBehavior = Clip.antiAlias,
     ClipRSuperellipseLayer? oldLayer,
   }) {
-    _op('pushClipRSE', <Object?>[
-      c.rsuperellipse(clipRSuperellipse.shift(offset)),
-      c.rect(bounds.shift(offset)),
-      clipBehavior,
-    ]);
-    painter(this, offset);
-    _op('pop');
+    _push(
+      c.rec('pushClipRSE', <Object?>[
+        c.rsuperellipse(clipRSuperellipse.shift(offset)),
+        c.rect(bounds.shift(offset)),
+        clipBehavior,
+      ]),
+      () => painter(this, offset),
+      localClip: clipBehavior == Clip.none ? null : clipRSuperellipse.outerRect.shift(offset),
+    );
     return oldLayer;
   }
 
@@ -287,9 +433,18 @@ class _RecordingContext extends ClipContext implements PaintingContext {
     Clip clipBehavior = Clip.antiAlias,
     ClipPathLayer? oldLayer,
   }) {
-    _op('pushClipPath', <Object?>[fingerprintPath(clipPath.shift(offset)), c.rect(bounds.shift(offset)), clipBehavior]);
-    painter(this, offset);
-    _op('pop');
+    final Path shifted = clipPath.shift(offset);
+    if (clipBehavior != Clip.none) {
+      // The clip's edge decides which pixels of everything inside show, and a
+      // path fingerprint is lossy: pixel-hash the clipped area.
+      _ctx.markOpaque(OpaqueReason.path, 'pushClipPath');
+      canvas.reachLocal(shifted.getBounds().inflate(1));
+    }
+    _push(
+      c.rec('pushClipPath', <Object?>[fingerprintPath(shifted), c.rect(bounds.shift(offset)), clipBehavior]),
+      () => painter(this, offset),
+      localClip: clipBehavior == Clip.none ? null : shifted.getBounds(),
+    );
     return oldLayer;
   }
 
@@ -300,9 +455,10 @@ class _RecordingContext extends ClipContext implements PaintingContext {
     PaintingContextCallback painter, {
     ColorFilterLayer? oldLayer,
   }) {
-    _op('pushColorFilter', <Object?>[describeColorFilter(colorFilter, _ctx)]);
-    painter(this, offset);
-    _op('pop');
+    _push(
+      c.rec('pushColorFilter', <Object?>[_describeEffect(() => describeColorFilter(colorFilter, _ctx))]),
+      () => painter(this, offset),
+    );
     return oldLayer ?? ColorFilterLayer();
   }
 
@@ -314,27 +470,92 @@ class _RecordingContext extends ClipContext implements PaintingContext {
     PaintingContextCallback painter, {
     TransformLayer? oldLayer,
   }) {
-    _op('pushTransform', <Object?>[c.offset(offset), c.float64s(transform.storage)]);
-    painter(this, offset);
-    _op('pop');
+    // As PaintingContext.pushTransform: the transform applies about offset.
+    final Matrix4 effective = Matrix4.translationValues(offset.dx, offset.dy, 0)
+      ..multiply(transform)
+      ..translateByDouble(-offset.dx, -offset.dy, 0, 1);
+    _push(
+      c.rec('pushTransform', <Object?>[c.offset(offset), c.float64s(transform.storage)]),
+      () => painter(this, offset),
+      transform: effective,
+    );
     return oldLayer;
   }
 
   @override
   OpacityLayer pushOpacity(Offset offset, int alpha, PaintingContextCallback painter, {OpacityLayer? oldLayer}) {
     // The real context sets the layer's offset and paints at Offset.zero.
-    _op('pushOpacity', <Object?>[alpha, c.offset(offset)]);
-    painter(this, Offset.zero);
-    _op('pop');
+    _push(
+      c.rec('pushOpacity', <Object?>[alpha, c.offset(offset)]),
+      () => painter(this, Offset.zero),
+      transform: Matrix4.translationValues(offset.dx, offset.dy, 0),
+    );
     return oldLayer ?? OpacityLayer();
   }
 
   @override
   void pushLayer(ContainerLayer childLayer, PaintingContextCallback painter, Offset offset, {Rect? childPaintBounds}) {
-    _op('pushLayer', <Object?>[_describeLayer(childLayer), c.offset(offset)]);
-    painter(this, offset);
-    _op('pop');
+    // A shader mask is drawn over its mask rect, onto its children's content.
+    final String description = _describeEffect(
+      () => _describeLayer(childLayer),
+      localBounds: childLayer is ShaderMaskLayer ? childLayer.maskRect?.inflate(1) : null,
+    );
+    if (childLayer is BackdropFilterLayer) {
+      _recording.backdrops.add(canvas.spreadClip ?? canvas.currentClip);
+    }
+    _push(
+      c.rec('pushLayer', <Object?>[description, c.offset(offset)]),
+      () => painter(this, offset),
+      transform: _layerTransform(childLayer),
+      localClip: _layerClip(childLayer),
+      spread: childLayer is ImageFilterLayer || _isUnknownLayer(childLayer),
+    );
   }
+
+  /// How a pushed layer moves its content, as its addToScene applies it.
+  Matrix4? _layerTransform(ContainerLayer layer) {
+    switch (layer) {
+      case TransformLayer():
+        final Matrix4 t = Matrix4.translationValues(layer.offset.dx, layer.offset.dy, 0);
+        return layer.transform == null ? t : (t..multiply(layer.transform!));
+      case OffsetLayer():
+        return Matrix4.translationValues(layer.offset.dx, layer.offset.dy, 0);
+      case LeaderLayer():
+        return Matrix4.translationValues(layer.offset.dx, layer.offset.dy, 0);
+      case FollowerLayer():
+        // Where the follower lands depends on its leader. The transform used
+        // by the last composition is the one RenderFollowerLayer applies for
+        // painting and hit testing.
+        final RenderObject owner = _ctx.owner;
+        return owner is RenderFollowerLayer ? owner.getCurrentTransform() : null;
+      default:
+        return null;
+    }
+  }
+
+  static Rect? _layerClip(ContainerLayer layer) => switch (layer) {
+    ClipRectLayer(:final clipRect?, :final clipBehavior) when clipBehavior != Clip.none => clipRect,
+    ClipRRectLayer(:final clipRRect?, :final clipBehavior) when clipBehavior != Clip.none => clipRRect.outerRect,
+    ClipRSuperellipseLayer(:final clipRSuperellipse?, :final clipBehavior) when clipBehavior != Clip.none =>
+      clipRSuperellipse.outerRect,
+    ClipPathLayer(:final clipPath?, :final clipBehavior) when clipBehavior != Clip.none => clipPath.getBounds(),
+    _ => null,
+  };
+
+  static bool _isUnknownLayer(ContainerLayer layer) => switch (layer) {
+    OffsetLayer() ||
+    ColorFilterLayer() ||
+    ClipRectLayer() ||
+    ClipRRectLayer() ||
+    ClipRSuperellipseLayer() ||
+    ClipPathLayer() ||
+    ShaderMaskLayer() ||
+    BackdropFilterLayer() ||
+    LeaderLayer() ||
+    FollowerLayer() ||
+    AnnotatedRegionLayer<Object>() => false,
+    _ => true,
+  };
 
   String _describeLayer(ContainerLayer layer) {
     switch (layer) {
@@ -370,6 +591,9 @@ class _RecordingContext extends ClipContext implements PaintingContext {
           layer.clipBehavior,
         ]);
       case ClipPathLayer():
+        if (layer.clipPath != null && layer.clipBehavior != Clip.none) {
+          _ctx.markOpaque(OpaqueReason.path, 'ClipPathLayer');
+        }
         return c.rec('ClipPath', <Object?>[
           if (layer.clipPath == null) null else fingerprintPath(layer.clipPath!),
           layer.clipBehavior,
@@ -389,10 +613,16 @@ class _RecordingContext extends ClipContext implements PaintingContext {
       case LeaderLayer():
         return c.rec('Leader', <Object?>[c.offset(layer.offset)]);
       case FollowerLayer():
+        final RenderObject owner = _ctx.owner;
+        if (owner is! RenderFollowerLayer) {
+          _ctx.markOpaque(OpaqueReason.unknownLayer, 'FollowerLayer outside RenderFollowerLayer');
+        }
         return c.rec('Follower', <Object?>[
           layer.showWhenUnlinked,
           if (layer.unlinkedOffset == null) null else c.offset(layer.unlinkedOffset!),
           if (layer.linkedOffset == null) null else c.offset(layer.linkedOffset!),
+          // Which leader it follows, and where that leader is.
+          if (owner is RenderFollowerLayer) c.float64s(owner.getCurrentTransform().storage),
         ]);
       case AnnotatedRegionLayer<Object>():
         // Annotations carry data for the system UI, not pixels.
@@ -410,12 +640,15 @@ class _RecordingContext extends ClipContext implements PaintingContext {
     switch (layer) {
       case PlatformViewLayer():
         _ctx.markOpaque(OpaqueReason.platformView, 'PlatformViewLayer');
+        canvas.reachLocal(layer.rect);
         _op('addLayer', <Object?>['PlatformView', c.rect(layer.rect)]);
       case TextureLayer():
         _ctx.markOpaque(OpaqueReason.texture, 'TextureLayer');
+        canvas.reachLocal(layer.rect);
         _op('addLayer', <Object?>['Texture', c.rect(layer.rect), layer.freeze, layer.filterQuality]);
       default:
         _ctx.markOpaque(OpaqueReason.unknownLayer, layer.runtimeType.toString());
+        canvas.reachClip();
         _op('addLayer', <Object?>['?${layer.runtimeType}']);
     }
   }

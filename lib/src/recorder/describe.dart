@@ -29,6 +29,11 @@ enum OpaqueReason {
   picture,
   vertices,
   unknownTextSource,
+
+  /// A path was drawn, used as a clip or cast a shadow. Path fingerprints are
+  /// lossy (two different paths can share every sampled value), so the spec's
+  /// A2 fallback applies: the node is pixel-hashed.
+  path,
 }
 
 /// Context the describers may use to verify a value exactly.
@@ -40,6 +45,11 @@ class DescribeContext {
 
   /// Called when a value cannot be described exactly.
   final void Function(OpaqueReason reason, String detail) markOpaque;
+
+  /// Gradient shaders already described for [owner]. Only the first is the
+  /// decoration's background; any other was built by something else (a
+  /// custom border, for example) and cannot be read back.
+  int gradientShaders = 0;
 }
 
 String describePaint(Paint p, DescribeContext ctx) {
@@ -166,22 +176,48 @@ String describeShader(Shader shader, DescribeContext ctx) {
     ctx.markOpaque(OpaqueReason.fragmentShader, 'FragmentShader');
     return 'SH.fragment';
   }
-  if (shader is ui.Gradient) {
+  if (shader is ui.Gradient && ctx.gradientShaders++ == 0) {
     // A ui.Gradient keeps no readable fields. A decorated box builds its
-    // shader from its decoration's gradient, so that gradient describes it.
-    final Gradient? gradient = switch (ctx.owner) {
-      RenderDecoratedBox(decoration: BoxDecoration(:final gradient)) => gradient,
-      RenderDecoratedBox(decoration: ShapeDecoration(:final gradient)) => gradient,
-      _ => null,
-    };
-    final String? text = gradient == null ? null : describeGradient(gradient);
-    if (text != null) {
-      return 'SH.$text';
+    // background shader from its decoration's gradient, the box rect and the
+    // ambient text direction, so those describe it. Only decorations whose
+    // every other part is a stock type are trusted: a custom border or shape
+    // may build shaders of its own.
+    final RenderObject owner = ctx.owner;
+    if (owner is RenderDecoratedBox) {
+      final Gradient? gradient = switch (owner.decoration) {
+        final BoxDecoration d when d.runtimeType == BoxDecoration && _stockBorder(d.border) => d.gradient,
+        final ShapeDecoration d when d.runtimeType == ShapeDecoration && _stockShape(d.shape) => d.gradient,
+        _ => null,
+      };
+      final String? text = gradient == null ? null : describeGradient(gradient);
+      if (text != null) {
+        return 'SH.$text@${c.textDirection(owner.configuration.textDirection) ?? '-'}';
+      }
     }
   }
   ctx.markOpaque(OpaqueReason.unknownShader, shader.runtimeType.toString());
   return 'SH?';
 }
+
+bool _stockBorder(BoxBorder? border) =>
+    border == null || border.runtimeType == Border || border.runtimeType == BorderDirectional;
+
+/// Shape borders from the painting library, which paint only with
+/// [BorderSide] colours.
+bool _stockShape(ShapeBorder shape) => switch (shape.runtimeType) {
+  const (Border) ||
+  const (BorderDirectional) ||
+  const (RoundedRectangleBorder) ||
+  const (RoundedSuperellipseBorder) ||
+  const (CircleBorder) ||
+  const (OvalBorder) ||
+  const (StadiumBorder) ||
+  const (BeveledRectangleBorder) ||
+  const (ContinuousRectangleBorder) ||
+  const (StarBorder) ||
+  const (LinearBorder) => true,
+  _ => false,
+};
 
 /// Exact text for a painting-library gradient, or null when it holds a value
 /// with no exact form (an unknown [GradientTransform]).

@@ -53,8 +53,12 @@ String alignment(AlignmentGeometry a) {
   if (a is AlignmentDirectional) {
     return 'AD(${d(a.start)},${d(a.y)})';
   }
-  // Mixed alignments only arise from arithmetic; their text is exact.
-  return 'A?(${a.runtimeType}:$a)';
+  // A mixed alignment (from adding an Alignment and an AlignmentDirectional)
+  // keeps its parts private and prints them with one decimal. Its resolved
+  // value under each text direction is exact and is what reaches pixels.
+  final Alignment l = a.resolve(TextDirection.ltr);
+  final Alignment r = a.resolve(TextDirection.rtl);
+  return 'AM(${d(l.x)},${d(l.y)}|${d(r.x)},${d(r.y)})';
 }
 
 String? textDirection(TextDirection? t) => t?.name;

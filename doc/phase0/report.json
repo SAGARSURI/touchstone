@@ -16,16 +16,16 @@
     "kinds": 0
   },
   "rootHashes": {
-    "text": "a5e00b249b8c8546146398a6931f852f904b841a2ea5cd079483fa33bc6709c1",
-    "decorated": "4934b4d3408429d0b44ae78734d799d890ab8163e5a7b6d2448706a079b7ae42",
-    "effects": "24540e9787d48f880815ef5ddb5fbc60263b15623e7e3fc14625109c8b975283",
-    "images": "4e677817705152535d3853e1bc0ae34a8813495f0bebdf8ff9d30bd6cf5759e1",
-    "lists": "d86f4c0c60f589d049ad1e495f3052ff1be379276e3994c497e757e62ded51be",
-    "chart": "ae0e424744d0f07ab16801bf564935884236e8180cddf3a0e411bf2931f5bd8b",
-    "platform_view": "0372593cdfac099464755e8ee870dc4966e2d706d5851133ce17310fa1d1f852",
-    "themed": "04cb8c6ca6011a705a51700369be49ed81deedca0a78ec25988e9b5e192ab7a7",
-    "overlay": "97bb755195e90cc0a13aee5337b5bd5a1f1c686612a4215b3f18a7aeac37d947",
-    "kinds": "751bc5a72341d48072563b4c3fdf30f25790913f1419b82bb62099e01eb35a32"
+    "text": "ad08a460ddba6b817b7fbcf40f35c5c3fc0b606a99c6d31a1cc1f9daa872b711",
+    "decorated": "c31145504ffc955eb6b9157b8b4efc2710c2050c0cd30598ee8815db11c66f26",
+    "effects": "5b7ec2cb40053923489679c13995f400f4156fdb4dc00a767d100abcb06ccc33",
+    "images": "0855180a7dbe49743f051a5f5432e3f0abd2d479e899b6fa85ed92c43c41cc59",
+    "lists": "d4e9b9e6ad22037102c55acc219e36358103d6887d0d8298c6be730b87e77dde",
+    "chart": "0dea2d88b286a9b707bfdcc754a8c8b961f1282b9871368032277520ab040ca8",
+    "platform_view": "800243ff606c187a981a4181ef85e898ccf9a0ee6ebd8d4808c5421799324369",
+    "themed": "6de26e10f2e17a87fe559f41634d009ae47af3968fe40791b02e6a9a2d3f5540",
+    "overlay": "e245d58a59de9f22d6fcdb4b1d3768f55d5c35f940fc6e065ab9ade715d90e3b",
+    "kinds": "22b970197df6222f16a892259e4011843bf5b64ce282338c9e75b6b7e9f67236"
   },
   "mutations": [
     {
@@ -38,6 +38,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": false,
       "differingPixels": 0,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -54,6 +55,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 5626,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -70,6 +72,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 5168,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -86,6 +89,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 64890,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -102,6 +106,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 73516,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -118,6 +123,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 17019,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -134,6 +140,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 3864,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -150,6 +157,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 11350,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -166,6 +174,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 177633,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -182,6 +191,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 858,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -198,6 +208,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 7420,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -214,6 +225,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 135337,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -230,6 +242,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 96294,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -246,6 +259,7 @@
       "targetSubtreeChanged": false,
       "pixelsChanged": false,
       "differingPixels": 0,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -262,6 +276,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 3328,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -278,6 +293,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 32400,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -294,6 +310,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 619,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -310,6 +327,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 5484,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -326,6 +344,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 1287,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -342,6 +361,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 7530,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -358,6 +378,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 8100,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -374,6 +395,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 30594,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -390,6 +412,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 56185,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -406,6 +429,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 31514,
+      "caughtOnlyByPixels": true,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -422,6 +446,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 32400,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -438,6 +463,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 144,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -454,6 +480,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 39580,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -470,6 +497,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": false,
       "differingPixels": 0,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -486,6 +514,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 2880,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -502,6 +531,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 636,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -518,6 +548,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 2363868,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -534,6 +565,7 @@
       "targetSubtreeChanged": false,
       "pixelsChanged": true,
       "differingPixels": 297752,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -550,6 +582,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 4356,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -566,6 +599,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 34805,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -582,6 +616,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 5913,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -598,6 +633,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 133012,
+      "caughtOnlyByPixels": true,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -614,6 +650,7 @@
       "targetSubtreeChanged": false,
       "pixelsChanged": false,
       "differingPixels": 0,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -630,6 +667,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 282,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -646,6 +684,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 276863,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -662,6 +701,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": false,
       "differingPixels": 0,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": true,
@@ -678,6 +718,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 2955480,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -694,6 +735,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 2944614,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -710,6 +752,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 13161,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -726,6 +769,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 125989,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -742,6 +786,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 15490,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -758,6 +803,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 2896,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -774,6 +820,7 @@
       "targetSubtreeChanged": false,
       "pixelsChanged": false,
       "differingPixels": 0,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -790,6 +837,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 2188974,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -806,6 +854,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 20726,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -822,6 +871,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 7448,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -838,6 +888,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": false,
       "differingPixels": 0,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -854,6 +905,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 2030,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -870,6 +922,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 125790,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -886,6 +939,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 114480,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -902,6 +956,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 501264,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -918,6 +973,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 720,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -934,6 +990,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 96660,
+      "caughtOnlyByPixels": false,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -950,6 +1007,7 @@
       "targetSubtreeChanged": true,
       "pixelsChanged": true,
       "differingPixels": 128400,
+      "caughtOnlyByPixels": true,
       "captureGap": false,
       "missed": false,
       "falseAlarm": false,
@@ -963,35 +1021,51 @@
       "nodes": 48,
       "opaqueNodes": 0,
       "opaqueKinds": [],
-      "opsBytes": 2863,
-      "pumpMicros": 21534,
+      "unverifiedGeometryNodes": 0,
+      "opaqueRegions": [],
+      "opaqueAreaShare": 0.0,
+      "opsBytes": 2887,
+      "pumpMicros": [
+        25561,
+        22139,
+        23758,
+        20774,
+        23011
+      ],
       "pumpInCaptureMicros": [
-        273235,
-        39859,
-        21784,
-        29634,
-        21604
+        293536,
+        54100,
+        28337,
+        32370,
+        23408
       ],
       "rasterMicros": [
-        22890,
-        19388,
-        14210,
-        11198,
-        11054
+        24416,
+        19075,
+        15219,
+        10906,
+        10268
       ],
       "recordMicros": [
-        14263,
-        839,
-        928,
-        806,
-        670
+        29026,
+        2345,
+        1587,
+        1461,
+        1377
       ],
       "resolveMicros": [
-        13869,
-        2020,
-        2127,
-        1697,
-        1362
+        16236,
+        2370,
+        1630,
+        1817,
+        1357
+      ],
+      "restoreMicros": [
+        3701,
+        1406,
+        1390,
+        1449,
+        1145
       ]
     },
     {
@@ -999,35 +1073,51 @@
       "nodes": 66,
       "opaqueNodes": 0,
       "opaqueKinds": [],
-      "opsBytes": 2045,
-      "pumpMicros": 24160,
+      "unverifiedGeometryNodes": 0,
+      "opaqueRegions": [],
+      "opaqueAreaShare": 0.0,
+      "opsBytes": 2073,
+      "pumpMicros": [
+        24583,
+        18751,
+        16324,
+        15401,
+        14905
+      ],
       "pumpInCaptureMicros": [
-        36336,
-        20994,
-        20358,
-        24076,
-        18762
+        37004,
+        25851,
+        18207,
+        27543,
+        19377
       ],
       "rasterMicros": [
-        14959,
-        11504,
-        17276,
-        7633,
-        6868
+        17934,
+        7851,
+        6835,
+        9260,
+        7680
       ],
       "recordMicros": [
-        2185,
-        649,
-        847,
-        626,
-        701
+        3661,
+        1681,
+        1796,
+        1624,
+        1673
       ],
       "resolveMicros": [
-        1704,
-        1512,
-        2025,
-        1481,
-        1431
+        2338,
+        1581,
+        1848,
+        1893,
+        1876
+      ],
+      "restoreMicros": [
+        1298,
+        1257,
+        1195,
+        1305,
+        1332
       ]
     },
     {
@@ -1037,35 +1127,53 @@
       "opaqueKinds": [
         "RenderShaderMask(unknownShader)"
       ],
-      "opsBytes": 8591,
-      "pumpMicros": 23190,
+      "unverifiedGeometryNodes": 0,
+      "opaqueRegions": [
+        "RenderShaderMask Rect.fromLTRB(159.0, 117.0, 221.0, 179.0)"
+      ],
+      "opaqueAreaShare": 0.011678211204277556,
+      "opsBytes": 8615,
+      "pumpMicros": [
+        23491,
+        18823,
+        25035,
+        19007,
+        18419
+      ],
       "pumpInCaptureMicros": [
-        55950,
-        23400,
-        32290,
-        29489,
-        33779
+        77257,
+        22865,
+        22052,
+        21906,
+        18472
       ],
       "rasterMicros": [
-        14231,
-        13964,
-        17041,
-        16757,
-        16416
+        9714,
+        7247,
+        6804,
+        7017,
+        13066
       ],
       "recordMicros": [
-        7212,
-        1615,
-        2608,
-        2378,
-        1914
+        9686,
+        2874,
+        2723,
+        2127,
+        3168
       ],
       "resolveMicros": [
-        5067,
-        6995,
-        6340,
-        5913,
-        5592
+        4033,
+        4382,
+        3948,
+        2941,
+        5451
+      ],
+      "restoreMicros": [
+        2908,
+        2203,
+        1628,
+        1284,
+        1651
       ]
     },
     {
@@ -1073,109 +1181,180 @@
       "nodes": 55,
       "opaqueNodes": 0,
       "opaqueKinds": [],
-      "opsBytes": 1584,
-      "pumpMicros": 24062,
+      "unverifiedGeometryNodes": 0,
+      "opaqueRegions": [],
+      "opaqueAreaShare": 0.0,
+      "opsBytes": 1608,
+      "pumpMicros": [
+        19083,
+        15568,
+        21416,
+        21846,
+        21917
+      ],
       "pumpInCaptureMicros": [
-        65237,
-        23391,
-        19052,
-        19421,
-        17875
+        78602,
+        25254,
+        19834,
+        24800,
+        19214
       ],
       "rasterMicros": [
-        13986,
-        13508,
-        12234,
-        11490,
-        11836
+        8882,
+        8041,
+        6582,
+        6302,
+        11307
       ],
       "recordMicros": [
-        1460,
-        1028,
-        788,
-        706,
-        786
+        2182,
+        1336,
+        1238,
+        1167,
+        894
       ],
       "resolveMicros": [
-        3396,
-        1885,
-        1350,
-        1365,
-        1270
+        4208,
+        1353,
+        1679,
+        1331,
+        1273
+      ],
+      "restoreMicros": [
+        2057,
+        1173,
+        1708,
+        1050,
+        1099
       ]
     },
     {
       "screen": "lists",
       "nodes": 311,
-      "opaqueNodes": 0,
-      "opaqueKinds": [],
-      "opsBytes": 25402,
-      "pumpMicros": 45267,
+      "opaqueNodes": 16,
+      "opaqueKinds": [
+        "RenderDecoratedBox(path)"
+      ],
+      "unverifiedGeometryNodes": 0,
+      "opaqueRegions": [
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 163.0, 390.0, 166.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 208.0, 390.0, 211.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 253.0, 390.0, 256.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 298.0, 390.0, 301.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 343.0, 390.0, 346.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 388.0, 390.0, 391.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 433.0, 390.0, 436.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 478.0, 390.0, 481.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 523.0, 390.0, 526.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 568.0, 390.0, 571.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 613.0, 390.0, 616.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 658.0, 390.0, 661.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 703.0, 390.0, 706.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 748.0, 390.0, 751.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 793.0, 390.0, 796.0)",
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 838.0, 390.0, 841.0)"
+      ],
+      "opaqueAreaShare": 0.05687203791469194,
+      "opsBytes": 27186,
+      "pumpMicros": [
+        53454,
+        60984,
+        53853,
+        45439,
+        47810
+      ],
       "pumpInCaptureMicros": [
-        145518,
-        71070,
-        52880,
-        45141,
-        40996
+        180809,
+        60420,
+        56872,
+        50852,
+        46290
       ],
       "rasterMicros": [
-        9429,
-        12878,
-        13771,
-        12212,
-        12513
+        12221,
+        10411,
+        9015,
+        8862,
+        16380
       ],
       "recordMicros": [
-        3717,
-        5732,
-        2529,
-        2242,
-        2459
+        13492,
+        9347,
+        6964,
+        4512,
+        8891
       ],
       "resolveMicros": [
-        3429,
-        3217,
-        3151,
-        5256,
-        2786
+        14658,
+        14129,
+        14374,
+        12775,
+        16456
+      ],
+      "restoreMicros": [
+        3595,
+        3243,
+        3485,
+        3053,
+        2983
       ]
     },
     {
       "screen": "chart",
       "nodes": 46,
-      "opaqueNodes": 1,
+      "opaqueNodes": 2,
       "opaqueKinds": [
-        "RenderCustomPaint(unknownShader+unknownTextSource)"
+        "RenderCustomPaint(path+unknownShader+unknownTextSource)",
+        "RenderCustomPaint(path)"
       ],
-      "opsBytes": 5229,
-      "pumpMicros": 21965,
+      "unverifiedGeometryNodes": 0,
+      "opaqueRegions": [
+        "RenderCustomPaint Rect.fromLTRB(12.0, 12.0, 376.0, 197.0)",
+        "RenderCustomPaint Rect.fromLTRB(133.3, 208.3, 259.0, 227.8)"
+      ],
+      "opaqueAreaShare": 0.21203100315955767,
+      "opsBytes": 5368,
+      "pumpMicros": [
+        16564,
+        14041,
+        12171,
+        14112,
+        14392
+      ],
       "pumpInCaptureMicros": [
-        21268,
-        15752,
-        17921,
-        18224,
-        21665
+        19978,
+        15382,
+        17209,
+        13270,
+        23677
       ],
       "rasterMicros": [
-        9875,
-        9731,
-        13596,
-        17681,
-        15204
+        14771,
+        12042,
+        9034,
+        8984,
+        12274
       ],
       "recordMicros": [
-        932,
-        695,
-        722,
-        967,
-        789
+        1906,
+        1262,
+        1710,
+        916,
+        1446
       ],
       "resolveMicros": [
-        30702,
-        29372,
-        31184,
-        35684,
-        29513
+        40773,
+        34048,
+        36725,
+        34341,
+        45265
+      ],
+      "restoreMicros": [
+        1175,
+        1210,
+        1348,
+        1297,
+        1739
       ]
     },
     {
@@ -1185,146 +1364,230 @@
       "opaqueKinds": [
         "TextureBox(texture)"
       ],
-      "opsBytes": 1741,
-      "pumpMicros": 22321,
+      "unverifiedGeometryNodes": 0,
+      "opaqueRegions": [
+        "TextureBox Rect.fromLTRB(0.0, 120.0, 390.0, 420.0)"
+      ],
+      "opaqueAreaShare": 0.35545023696682465,
+      "opsBytes": 1766,
+      "pumpMicros": [
+        16014,
+        12115,
+        11016,
+        13868,
+        11122
+      ],
       "pumpInCaptureMicros": [
-        16566,
-        15370,
-        17064,
-        18716,
-        20715
+        26820,
+        19616,
+        14458,
+        15400,
+        14407
       ],
       "rasterMicros": [
-        19071,
-        18188,
-        18976,
-        33107,
-        30480
+        24242,
+        21039,
+        17944,
+        18095,
+        17952
       ],
       "recordMicros": [
-        1422,
-        479,
-        534,
-        845,
-        680
+        1550,
+        774,
+        796,
+        703,
+        1191
       ],
       "resolveMicros": [
-        156929,
-        165050,
-        226594,
-        298414,
-        213022
+        72839,
+        54507,
+        59876,
+        54819,
+        56206
+      ],
+      "restoreMicros": [
+        1853,
+        1593,
+        1710,
+        1549,
+        1688
       ]
     },
     {
       "screen": "themed",
       "nodes": 128,
-      "opaqueNodes": 0,
-      "opaqueKinds": [],
-      "opsBytes": 9007,
-      "pumpMicros": 41409,
+      "opaqueNodes": 3,
+      "opaqueKinds": [
+        "RenderDecoratedBox(path)",
+        "RenderPhysicalShape(path)"
+      ],
+      "unverifiedGeometryNodes": 0,
+      "opaqueRegions": [
+        "RenderDecoratedBox Rect.fromLTRB(0.0, 62.5, 390.0, 65.5)",
+        "RenderPhysicalShape Rect.fromLTRB(15.0, 91.0, 375.0, 133.0)",
+        "RenderPhysicalShape Rect.fromLTRB(14.0, 166.0, 376.0, 222.0)"
+      ],
+      "opaqueAreaShare": 0.111076680034026,
+      "opsBytes": 9365,
+      "pumpMicros": [
+        40217,
+        29104,
+        32901,
+        34321,
+        25622
+      ],
       "pumpInCaptureMicros": [
-        136697,
-        43085,
-        35166,
-        52862,
-        39974
+        160415,
+        48110,
+        39769,
+        47529,
+        30936
       ],
       "rasterMicros": [
-        8944,
-        7973,
-        8558,
-        10875,
-        15446
+        12982,
+        14700,
+        13876,
+        18944,
+        8856
       ],
       "recordMicros": [
-        1918,
-        1592,
-        1393,
-        1616,
-        1478
+        3117,
+        4462,
+        2804,
+        4632,
+        2253
       ],
       "resolveMicros": [
-        1710,
-        1393,
-        1163,
-        1144,
-        1339
+        20177,
+        26691,
+        25833,
+        44617,
+        19793
+      ],
+      "restoreMicros": [
+        2442,
+        2606,
+        2813,
+        2746,
+        2587
       ]
     },
     {
       "screen": "overlay",
       "nodes": 60,
-      "opaqueNodes": 0,
-      "opaqueKinds": [],
-      "opsBytes": 5641,
-      "pumpMicros": 29323,
+      "opaqueNodes": 1,
+      "opaqueKinds": [
+        "RenderPhysicalShape(path)"
+      ],
+      "unverifiedGeometryNodes": 0,
+      "opaqueRegions": [
+        "RenderPhysicalShape Rect.fromLTRB(45.4, 378.0, 344.6, 466.0)"
+      ],
+      "opaqueAreaShare": 0.08000364564345606,
+      "opsBytes": 5781,
+      "pumpMicros": [
+        19736,
+        17098,
+        14724,
+        14190,
+        11417
+      ],
       "pumpInCaptureMicros": [
-        29680,
-        33283,
-        34482,
-        21453,
-        20319
+        18641,
+        27093,
+        18381,
+        23055,
+        17095
       ],
       "rasterMicros": [
-        77421,
-        85450,
-        22622,
-        23280,
-        23218
+        63254,
+        16285,
+        16751,
+        18426,
+        22420
       ],
       "recordMicros": [
-        1071,
-        1569,
-        1040,
-        1025,
-        1080
+        1078,
+        826,
+        1175,
+        1148,
+        1118
       ],
       "resolveMicros": [
-        791,
-        3515,
-        1258,
-        1106,
-        1104
+        15115,
+        14276,
+        14378,
+        27305,
+        25850
+      ],
+      "restoreMicros": [
+        1218,
+        868,
+        994,
+        1079,
+        944
       ]
     },
     {
       "screen": "kinds",
       "nodes": 147,
-      "opaqueNodes": 2,
+      "opaqueNodes": 4,
       "opaqueKinds": [
+        "RenderClipPath(path)",
+        "RenderPhysicalShape(path)",
         "RenderCustomPaint(fragmentShader)",
         "PlatformViewRenderBox(platformView)"
       ],
-      "opsBytes": 7684,
-      "pumpMicros": 28270,
+      "unverifiedGeometryNodes": 0,
+      "opaqueRegions": [
+        "RenderClipPath Rect.fromLTRB(15.0, 83.0, 375.0, 157.0)",
+        "RenderPhysicalShape Rect.fromLTRB(11.0, 151.0, 379.0, 201.0)",
+        "RenderCustomPaint Rect.fromLTRB(15.0, 433.0, 375.0, 475.0)",
+        "PlatformViewRenderBox Rect.fromLTRB(16.0, 486.0, 374.0, 566.0)"
+      ],
+      "opaqueAreaShare": 0.26977761574917974,
+      "opsBytes": 8000,
+      "pumpMicros": [
+        48009,
+        26596,
+        33187,
+        30358,
+        50435
+      ],
       "pumpInCaptureMicros": [
-        112492,
-        36082,
-        27269,
-        26965,
-        27508
+        142931,
+        34395,
+        26759,
+        38575,
+        30451
       ],
       "rasterMicros": [
-        9918,
-        10136,
-        12122,
-        12688,
-        23553
+        14420,
+        13388,
+        55518,
+        56873,
+        58019
       ],
       "recordMicros": [
-        1866,
-        1128,
-        1588,
-        1066,
-        1144
+        5471,
+        2112,
+        2579,
+        2362,
+        3612
       ],
       "resolveMicros": [
-        22440,
-        22171,
-        20838,
-        20455,
-        29426
+        43167,
+        41551,
+        57176,
+        62897,
+        54102
+      ],
+      "restoreMicros": [
+        17834,
+        6190,
+        7325,
+        7193,
+        6438
       ]
     }
   ],
@@ -1456,8 +1719,10 @@
     },
     "RenderDecoratedBox": {
       "nodes": 109,
-      "opaque": 0,
-      "reasons": []
+      "opaque": 72,
+      "reasons": [
+        "path"
+      ]
     },
     "RenderLimitedBox": {
       "nodes": 121,
@@ -1508,8 +1773,10 @@
     },
     "RenderClipOval": {
       "nodes": 1,
-      "opaque": 0,
-      "reasons": []
+      "opaque": 1,
+      "reasons": [
+        "path"
+      ]
     },
     "RenderImage": {
       "nodes": 6,
@@ -1563,9 +1830,10 @@
     },
     "RenderCustomPaint": {
       "nodes": 66,
-      "opaque": 15,
+      "opaque": 22,
       "reasons": [
         "fragmentShader",
+        "path",
         "unknownShader",
         "unknownTextSource"
       ]
@@ -1594,8 +1862,10 @@
     },
     "RenderPhysicalShape": {
       "nodes": 29,
-      "opaque": 0,
-      "reasons": []
+      "opaque": 29,
+      "reasons": [
+        "path"
+      ]
     },
     "RenderTapRegion": {
       "nodes": 18,
@@ -1634,8 +1904,10 @@
     },
     "RenderClipPath": {
       "nodes": 9,
-      "opaque": 0,
-      "reasons": []
+      "opaque": 9,
+      "reasons": [
+        "path"
+      ]
     },
     "RenderFittedBox": {
       "nodes": 9,
