@@ -2,7 +2,7 @@ touchstone-snapshot 1
 id	"text/all"
 inputs	viewport="390.0x844.0@3.0"	platform="android"	locale="en-US"	textScale="1.0"	brightness="light"	theme="light"	state="all"
 toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	library="0.0.1-dev.0"	fonts="FlutterTest"
-limit	"text: the FlutterTest font draws glyphs as boxes; wrapping, truncation and overflow are checked against its metrics"
+limit	"text: the FlutterTest font draws glyphs as boxes, and icon fonts are not loaded, so glyph shape, font weight and which icon is drawn are not in the pixels; the recorded text and code points are. Wrapping, truncation and overflow follow the test font's metrics"
 limit	"shadows: flutter_test sets debugDisableShadows, so shadow blur is not drawn"
 rootHash	ad0a86f3dbfe50b357455268d3bf59a930494e62ecd22ac115157de912c9180a
 nodes

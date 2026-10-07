@@ -65,8 +65,19 @@ Future<Map<String, Object?>> _run(Entry e, String base, bool noOp) async {
       'snapshotChanged': snapshot,
       if (!noOp) 'missed': (pixels || semantics) && !snapshot,
       if (!noOp) 'falseAlarmCandidate': !pixels && !semantics && snapshot,
+      // A6 input: the edited component is among the nodes whose own paint or
+      // semantics changed, or that were added or removed.
       if (e.expectNode != null)
-        'attributed': firstNodes.isNotEmpty && firstNodes.every((String n) => typeOf(n) == e.expectNode),
+        'landsOnExpected': scenes.every(
+          (Map<String, Object?> s) =>
+              s['snapshotChanged'] != true ||
+              (s['nodes']! as List<Object?>).cast<Map<String, Object?>>().any(
+                (Map<String, Object?> n) =>
+                    typeOf(n['node']! as String) == e.expectNode &&
+                    (n['change'] != 'changed' ||
+                        (n['fields']! as List<Object?>).any((Object? f) => f == 'paint' || f == 'semantics')),
+              ),
+        ),
       'firstNodes': firstNodes,
       'scenes': scenes,
     };
@@ -89,12 +100,15 @@ Future<void> main(List<String> args) async {
   File('build/catalogs/report.json').writeAsStringSync(const JsonEncoder.withIndent('  ').convert(results));
 
   final md = StringBuffer()
-    ..writeln('| Entry | Kind | Oracle expected | Oracle saw | Snapshot changed | Missed | First differing node |')
-    ..writeln('| --- | --- | --- | --- | --- | --- | --- |');
+    ..writeln(
+      '| Entry | Kind | Oracle expected | Oracle saw | Snapshot changed | Missed | Lands on expected component '
+      '| First differing node |',
+    )
+    ..writeln('| --- | --- | --- | --- | --- | --- | --- | --- |');
   for (final r in results) {
     md.writeln(
       '| ${r['id']} | ${r['kind']} | ${r['expectedOracle']} | ${r['oracle']} | ${r['snapshotChanged']} | '
-      '${r['missed'] ?? 'n/a'} | ${(r['firstNodes']! as List<Object?>).join('<br>')} |',
+      '${r['missed'] ?? 'n/a'} | ${r['landsOnExpected'] ?? 'n/a'} | ${(r['firstNodes']! as List<Object?>).join('<br>')} |',
     );
   }
   File('build/catalogs/report.md').writeAsStringSync(md.toString());

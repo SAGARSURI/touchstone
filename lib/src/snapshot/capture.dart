@@ -317,8 +317,9 @@ List<String> _limits(PaintRecording recording) {
   bool any(bool Function(RenderObject) test) => recording.nodes.any((RecordedNode n) => test(n.renderObject));
   return <String>[
     if (SnapshotFonts.usingTestFont)
-      'text: the FlutterTest font draws glyphs as boxes; wrapping, truncation and overflow are checked against '
-          'its metrics',
+      'text: the FlutterTest font draws glyphs as boxes, and icon fonts are not loaded, so glyph shape, font '
+          'weight and which icon is drawn are not in the pixels; the recorded text and code points are. Wrapping, '
+          'truncation and overflow follow the test font\'s metrics',
     if (debugDisableShadows) 'shadows: flutter_test sets debugDisableShadows, so shadow blur is not drawn',
     if (any((RenderObject r) => r is RenderSliverMultiBoxAdaptor))
       'unbuilt: list items outside the viewport are not built and not in this snapshot',
