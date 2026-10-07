@@ -64,6 +64,13 @@ void main(List<String> args) {
     ..writeln()
     ..writeln('Toolchains: ${toolchains.map((String os, Set<String> t) => MapEntry(os, t.join(' | ')))}');
   stdout.write(out);
+  // Annotations make the result readable from the checks API as well.
+  if (Platform.environment['GITHUB_ACTIONS'] == 'true') {
+    for (final String line
+        in out.toString().split('\n').where((String l) => l.startsWith('|') || l.startsWith('Across'))) {
+      stdout.writeln('::notice title=A3::$line');
+    }
+  }
   final String? summary = Platform.environment['GITHUB_STEP_SUMMARY'];
   if (summary != null) {
     File(summary).writeAsStringSync(out.toString(), mode: FileMode.append);

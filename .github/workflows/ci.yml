@@ -40,7 +40,12 @@ jobs:
           flutter pub get
           dart format --output=none --set-exit-if-changed lib test tool
           flutter analyze
-          flutter test
+          flutter test --file-reporter json:build/test_results.json
+      - name: Annotate catalogue failures
+        if: failure()
+        run: |
+          cp corpus/catalogue_app/tool/annotate_failures.dart "$RUNNER_TEMP/annotate_failures.dart"
+          dart "$RUNNER_TEMP/annotate_failures.dart" corpus/catalogue_app/build/test_results.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
