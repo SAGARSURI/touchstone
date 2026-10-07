@@ -1,0 +1,1663 @@
+{
+  "flutter": "see flutter --version",
+  "os": "linux",
+  "osVersion": "Linux 6.18.44-fc-v77 #1 SMP PREEMPT_DYNAMIC @0",
+  "repeatsPerScreen": 5,
+  "repeatDiffs": {
+    "text": 0,
+    "decorated": 0,
+    "effects": 0,
+    "images": 0,
+    "lists": 0,
+    "chart": 0,
+    "platform_view": 0,
+    "themed": 0,
+    "overlay": 0,
+    "kinds": 0
+  },
+  "rootHashes": {
+    "text": "a5e00b249b8c8546146398a6931f852f904b841a2ea5cd079483fa33bc6709c1",
+    "decorated": "4934b4d3408429d0b44ae78734d799d890ab8163e5a7b6d2448706a079b7ae42",
+    "effects": "24540e9787d48f880815ef5ddb5fbc60263b15623e7e3fc14625109c8b975283",
+    "images": "4e677817705152535d3853e1bc0ae34a8813495f0bebdf8ff9d30bd6cf5759e1",
+    "lists": "d86f4c0c60f589d049ad1e495f3052ff1be379276e3994c497e757e62ded51be",
+    "chart": "ae0e424744d0f07ab16801bf564935884236e8180cddf3a0e411bf2931f5bd8b",
+    "platform_view": "0372593cdfac099464755e8ee870dc4966e2d706d5851133ce17310fa1d1f852",
+    "themed": "04cb8c6ca6011a705a51700369be49ed81deedca0a78ec25988e9b5e192ab7a7",
+    "overlay": "97bb755195e90cc0a13aee5337b5bd5a1f1c686612a4215b3f18a7aeac37d947",
+    "kinds": "751bc5a72341d48072563b4c3fdf30f25790913f1419b82bb62099e01eb35a32"
+  },
+  "mutations": [
+    {
+      "screen": "text",
+      "mutation": "text content",
+      "kind": "paint",
+      "pixelExpectation": "outsideOracle",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": false,
+      "differingPixels": 0,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": true,
+      "expectationWrong": false
+    },
+    {
+      "screen": "text",
+      "mutation": "text length",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 5626,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "text",
+      "mutation": "font weight",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 5168,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "text",
+      "mutation": "text colour",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 64890,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "text",
+      "mutation": "truncation",
+      "kind": "layout",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 73516,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "text",
+      "mutation": "letter spacing",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 17019,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "text",
+      "mutation": "decoration",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 3864,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "text",
+      "mutation": "span colour",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 11350,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "decorated",
+      "mutation": "colour token",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 177633,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "decorated",
+      "mutation": "corner radius",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 858,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "decorated",
+      "mutation": "border width",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 7420,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "decorated",
+      "mutation": "gradient colour",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 135337,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "decorated",
+      "mutation": "gradient stop",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 96294,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "decorated",
+      "mutation": "shadow blur",
+      "kind": "paint",
+      "pixelExpectation": "unchanged",
+      "recordingChanged": false,
+      "targetPaintChanged": false,
+      "targetSubtreeChanged": false,
+      "pixelsChanged": false,
+      "differingPixels": 0,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "decorated",
+      "mutation": "shape",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 3328,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "effects",
+      "mutation": "opacity",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 32400,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "effects",
+      "mutation": "clip radius",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 619,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "effects",
+      "mutation": "clip shape",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 5484,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "effects",
+      "mutation": "rotation",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 1287,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "effects",
+      "mutation": "scale",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 7530,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "effects",
+      "mutation": "paint order",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": false,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 8100,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "effects",
+      "mutation": "colour filter",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 30594,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "effects",
+      "mutation": "blur sigma",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 56185,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "effects",
+      "mutation": "shader mask",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 31514,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "effects",
+      "mutation": "widget removed",
+      "kind": "structure",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 32400,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "images",
+      "mutation": "image pixel",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 144,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "images",
+      "mutation": "image fit",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 39580,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "images",
+      "mutation": "icon glyph",
+      "kind": "paint",
+      "pixelExpectation": "outsideOracle",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": false,
+      "differingPixels": 0,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": true,
+      "expectationWrong": false
+    },
+    {
+      "screen": "images",
+      "mutation": "icon colour",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 2880,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "images",
+      "mutation": "icon size",
+      "kind": "layout",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 636,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "lists",
+      "mutation": "row colour",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 2363868,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "lists",
+      "mutation": "divider height",
+      "kind": "layout",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": false,
+      "targetSubtreeChanged": false,
+      "pixelsChanged": true,
+      "differingPixels": 297752,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "lists",
+      "mutation": "app bar title",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 4356,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "chart",
+      "mutation": "data point",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 34805,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "chart",
+      "mutation": "stroke width",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 5913,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "chart",
+      "mutation": "gradient fill",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 133012,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "chart",
+      "mutation": "painter label",
+      "kind": "paint",
+      "pixelExpectation": "outsideOracle",
+      "recordingChanged": false,
+      "targetPaintChanged": false,
+      "targetSubtreeChanged": false,
+      "pixelsChanged": false,
+      "differingPixels": 0,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": true,
+      "expectationWrong": false
+    },
+    {
+      "screen": "chart",
+      "mutation": "curve control point",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 282,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "platform_view",
+      "mutation": "header colour",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 276863,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "platform_view",
+      "mutation": "header alpha below output precision",
+      "kind": "paint",
+      "pixelExpectation": "unchanged",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": false,
+      "differingPixels": 0,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": true,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "themed",
+      "mutation": "dark theme",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 2955480,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "themed",
+      "mutation": "theme seed",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 2944614,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "themed",
+      "mutation": "switch state",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 13161,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "themed",
+      "mutation": "disabled state",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 125989,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "themed",
+      "mutation": "padding 1px",
+      "kind": "layout",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 15490,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "themed",
+      "mutation": "selected state",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 2896,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "themed",
+      "mutation": "semantics label",
+      "kind": "semantics",
+      "pixelExpectation": "unchanged",
+      "recordingChanged": false,
+      "targetPaintChanged": false,
+      "targetSubtreeChanged": false,
+      "pixelsChanged": false,
+      "differingPixels": 0,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "overlay",
+      "mutation": "scrim opacity",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 2188974,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "overlay",
+      "mutation": "dialog text",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 20726,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "overlay",
+      "mutation": "sheet height",
+      "kind": "layout",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 7448,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "kinds",
+      "mutation": "editable text",
+      "kind": "paint",
+      "pixelExpectation": "outsideOracle",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": false,
+      "differingPixels": 0,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": true,
+      "expectationWrong": false
+    },
+    {
+      "screen": "kinds",
+      "mutation": "clip path",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 2030,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "kinds",
+      "mutation": "physical shape colour",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 125790,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "kinds",
+      "mutation": "fitted box",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 114480,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "kinds",
+      "mutation": "rotated box",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 501264,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "kinds",
+      "mutation": "follower offset",
+      "kind": "layout",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 720,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "kinds",
+      "mutation": "fade opacity",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 96660,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    },
+    {
+      "screen": "kinds",
+      "mutation": "fragment uniform",
+      "kind": "paint",
+      "pixelExpectation": "changes",
+      "recordingChanged": true,
+      "targetPaintChanged": true,
+      "targetSubtreeChanged": true,
+      "pixelsChanged": true,
+      "differingPixels": 128400,
+      "captureGap": false,
+      "missed": false,
+      "falseAlarm": false,
+      "outsideOracle": false,
+      "expectationWrong": false
+    }
+  ],
+  "screens": [
+    {
+      "screen": "text",
+      "nodes": 48,
+      "opaqueNodes": 0,
+      "opaqueKinds": [],
+      "opsBytes": 2863,
+      "pumpMicros": 21534,
+      "pumpInCaptureMicros": [
+        273235,
+        39859,
+        21784,
+        29634,
+        21604
+      ],
+      "rasterMicros": [
+        22890,
+        19388,
+        14210,
+        11198,
+        11054
+      ],
+      "recordMicros": [
+        14263,
+        839,
+        928,
+        806,
+        670
+      ],
+      "resolveMicros": [
+        13869,
+        2020,
+        2127,
+        1697,
+        1362
+      ]
+    },
+    {
+      "screen": "decorated",
+      "nodes": 66,
+      "opaqueNodes": 0,
+      "opaqueKinds": [],
+      "opsBytes": 2045,
+      "pumpMicros": 24160,
+      "pumpInCaptureMicros": [
+        36336,
+        20994,
+        20358,
+        24076,
+        18762
+      ],
+      "rasterMicros": [
+        14959,
+        11504,
+        17276,
+        7633,
+        6868
+      ],
+      "recordMicros": [
+        2185,
+        649,
+        847,
+        626,
+        701
+      ],
+      "resolveMicros": [
+        1704,
+        1512,
+        2025,
+        1481,
+        1431
+      ]
+    },
+    {
+      "screen": "effects",
+      "nodes": 87,
+      "opaqueNodes": 1,
+      "opaqueKinds": [
+        "RenderShaderMask(unknownShader)"
+      ],
+      "opsBytes": 8591,
+      "pumpMicros": 23190,
+      "pumpInCaptureMicros": [
+        55950,
+        23400,
+        32290,
+        29489,
+        33779
+      ],
+      "rasterMicros": [
+        14231,
+        13964,
+        17041,
+        16757,
+        16416
+      ],
+      "recordMicros": [
+        7212,
+        1615,
+        2608,
+        2378,
+        1914
+      ],
+      "resolveMicros": [
+        5067,
+        6995,
+        6340,
+        5913,
+        5592
+      ]
+    },
+    {
+      "screen": "images",
+      "nodes": 55,
+      "opaqueNodes": 0,
+      "opaqueKinds": [],
+      "opsBytes": 1584,
+      "pumpMicros": 24062,
+      "pumpInCaptureMicros": [
+        65237,
+        23391,
+        19052,
+        19421,
+        17875
+      ],
+      "rasterMicros": [
+        13986,
+        13508,
+        12234,
+        11490,
+        11836
+      ],
+      "recordMicros": [
+        1460,
+        1028,
+        788,
+        706,
+        786
+      ],
+      "resolveMicros": [
+        3396,
+        1885,
+        1350,
+        1365,
+        1270
+      ]
+    },
+    {
+      "screen": "lists",
+      "nodes": 311,
+      "opaqueNodes": 0,
+      "opaqueKinds": [],
+      "opsBytes": 25402,
+      "pumpMicros": 45267,
+      "pumpInCaptureMicros": [
+        145518,
+        71070,
+        52880,
+        45141,
+        40996
+      ],
+      "rasterMicros": [
+        9429,
+        12878,
+        13771,
+        12212,
+        12513
+      ],
+      "recordMicros": [
+        3717,
+        5732,
+        2529,
+        2242,
+        2459
+      ],
+      "resolveMicros": [
+        3429,
+        3217,
+        3151,
+        5256,
+        2786
+      ]
+    },
+    {
+      "screen": "chart",
+      "nodes": 46,
+      "opaqueNodes": 1,
+      "opaqueKinds": [
+        "RenderCustomPaint(unknownShader+unknownTextSource)"
+      ],
+      "opsBytes": 5229,
+      "pumpMicros": 21965,
+      "pumpInCaptureMicros": [
+        21268,
+        15752,
+        17921,
+        18224,
+        21665
+      ],
+      "rasterMicros": [
+        9875,
+        9731,
+        13596,
+        17681,
+        15204
+      ],
+      "recordMicros": [
+        932,
+        695,
+        722,
+        967,
+        789
+      ],
+      "resolveMicros": [
+        30702,
+        29372,
+        31184,
+        35684,
+        29513
+      ]
+    },
+    {
+      "screen": "platform_view",
+      "nodes": 48,
+      "opaqueNodes": 1,
+      "opaqueKinds": [
+        "TextureBox(texture)"
+      ],
+      "opsBytes": 1741,
+      "pumpMicros": 22321,
+      "pumpInCaptureMicros": [
+        16566,
+        15370,
+        17064,
+        18716,
+        20715
+      ],
+      "rasterMicros": [
+        19071,
+        18188,
+        18976,
+        33107,
+        30480
+      ],
+      "recordMicros": [
+        1422,
+        479,
+        534,
+        845,
+        680
+      ],
+      "resolveMicros": [
+        156929,
+        165050,
+        226594,
+        298414,
+        213022
+      ]
+    },
+    {
+      "screen": "themed",
+      "nodes": 128,
+      "opaqueNodes": 0,
+      "opaqueKinds": [],
+      "opsBytes": 9007,
+      "pumpMicros": 41409,
+      "pumpInCaptureMicros": [
+        136697,
+        43085,
+        35166,
+        52862,
+        39974
+      ],
+      "rasterMicros": [
+        8944,
+        7973,
+        8558,
+        10875,
+        15446
+      ],
+      "recordMicros": [
+        1918,
+        1592,
+        1393,
+        1616,
+        1478
+      ],
+      "resolveMicros": [
+        1710,
+        1393,
+        1163,
+        1144,
+        1339
+      ]
+    },
+    {
+      "screen": "overlay",
+      "nodes": 60,
+      "opaqueNodes": 0,
+      "opaqueKinds": [],
+      "opsBytes": 5641,
+      "pumpMicros": 29323,
+      "pumpInCaptureMicros": [
+        29680,
+        33283,
+        34482,
+        21453,
+        20319
+      ],
+      "rasterMicros": [
+        77421,
+        85450,
+        22622,
+        23280,
+        23218
+      ],
+      "recordMicros": [
+        1071,
+        1569,
+        1040,
+        1025,
+        1080
+      ],
+      "resolveMicros": [
+        791,
+        3515,
+        1258,
+        1106,
+        1104
+      ]
+    },
+    {
+      "screen": "kinds",
+      "nodes": 147,
+      "opaqueNodes": 2,
+      "opaqueKinds": [
+        "RenderCustomPaint(fragmentShader)",
+        "PlatformViewRenderBox(platformView)"
+      ],
+      "opsBytes": 7684,
+      "pumpMicros": 28270,
+      "pumpInCaptureMicros": [
+        112492,
+        36082,
+        27269,
+        26965,
+        27508
+      ],
+      "rasterMicros": [
+        9918,
+        10136,
+        12122,
+        12688,
+        23553
+      ],
+      "recordMicros": [
+        1866,
+        1128,
+        1588,
+        1066,
+        1144
+      ],
+      "resolveMicros": [
+        22440,
+        22171,
+        20838,
+        20455,
+        29426
+      ]
+    }
+  ],
+  "nodeKinds": {
+    "_ReusableRenderView": {
+      "nodes": 68,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderSemanticsAnnotations": {
+      "nodes": 893,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderTapRegionSurface": {
+      "nodes": 68,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderPointerListener": {
+      "nodes": 245,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderAbsorbPointer": {
+      "nodes": 68,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_RenderTheater": {
+      "nodes": 68,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderIgnorePointer": {
+      "nodes": 243,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderBlockSemantics": {
+      "nodes": 68,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderExcludeSemantics": {
+      "nodes": 82,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderSemanticsGestureHandler": {
+      "nodes": 105,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderMouseRegion": {
+      "nodes": 118,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderConstrainedBox": {
+      "nodes": 835,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderOffstage": {
+      "nodes": 68,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderRepaintBoundary": {
+      "nodes": 467,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderAnimatedOpacity": {
+      "nodes": 290,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderFractionalTranslation": {
+      "nodes": 272,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_RenderColoredBox": {
+      "nodes": 309,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderPhysicalModel": {
+      "nodes": 84,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_RenderInkFeatures": {
+      "nodes": 104,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderCustomMultiChildLayoutBox": {
+      "nodes": 72,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderPadding": {
+      "nodes": 280,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderFlex": {
+      "nodes": 29,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderParagraph": {
+      "nodes": 269,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderStack": {
+      "nodes": 106,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderTransform": {
+      "nodes": 120,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderDecoratedBox": {
+      "nodes": 109,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderLimitedBox": {
+      "nodes": 121,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderWrap": {
+      "nodes": 11,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderOpacity": {
+      "nodes": 19,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderClipRRect": {
+      "nodes": 10,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_ColorFilterRenderObject": {
+      "nodes": 11,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_ImageFilterRenderObject": {
+      "nodes": 11,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderShaderMask": {
+      "nodes": 11,
+      "opaque": 11,
+      "reasons": [
+        "unknownShader"
+      ]
+    },
+    "RenderClipRect": {
+      "nodes": 39,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderBackdropFilter": {
+      "nodes": 14,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderClipOval": {
+      "nodes": 1,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderImage": {
+      "nodes": 6,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderPositionedBox": {
+      "nodes": 183,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_RenderScrollSemantics": {
+      "nodes": 21,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderViewport": {
+      "nodes": 21,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderSliverList": {
+      "nodes": 21,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderIndexedSemantics": {
+      "nodes": 259,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_RenderSliverPinnedPersistentHeaderForWidgets": {
+      "nodes": 4,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderAnnotatedRegion<SystemUiOverlayStyle>": {
+      "nodes": 4,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderCustomSingleChildLayoutBox": {
+      "nodes": 4,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_RenderAppBarTitleBox": {
+      "nodes": 4,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderCustomPaint": {
+      "nodes": 66,
+      "opaque": 15,
+      "reasons": [
+        "fragmentShader",
+        "unknownShader",
+        "unknownTextSource"
+      ]
+    },
+    "TextureBox": {
+      "nodes": 3,
+      "opaque": 3,
+      "reasons": [
+        "texture"
+      ]
+    },
+    "RenderSliverPadding": {
+      "nodes": 17,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_RenderListTile": {
+      "nodes": 8,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_RenderInputPadding": {
+      "nodes": 8,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderPhysicalShape": {
+      "nodes": 29,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderTapRegion": {
+      "nodes": 18,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_RenderDecoration": {
+      "nodes": 9,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_RenderCompositionCallback": {
+      "nodes": 9,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderLeaderLayer": {
+      "nodes": 18,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_RenderSizeChangedWithCallback": {
+      "nodes": 9,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderEditable": {
+      "nodes": 9,
+      "opaque": 0,
+      "reasons": []
+    },
+    "_RenderEditableCustomPaint": {
+      "nodes": 18,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderClipPath": {
+      "nodes": 9,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderFittedBox": {
+      "nodes": 9,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderRotatedBox": {
+      "nodes": 9,
+      "opaque": 0,
+      "reasons": []
+    },
+    "RenderFollowerLayer": {
+      "nodes": 9,
+      "opaque": 0,
+      "reasons": []
+    },
+    "PlatformViewRenderBox": {
+      "nodes": 9,
+      "opaque": 9,
+      "reasons": [
+        "platformView"
+      ]
+    }
+  }
+}

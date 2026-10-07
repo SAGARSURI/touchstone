@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.6
+          channel: stable
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test
+      - name: Phase 0 harness
+        working-directory: corpus/fixture_app
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase0-${{ matrix.os }}
+          path: corpus/fixture_app/build/phase0/
