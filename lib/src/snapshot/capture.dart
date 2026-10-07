@@ -16,6 +16,7 @@ import '../audit/pixels.dart';
 import '../recorder/canonical.dart' as c;
 import '../recorder/paint_recorder.dart';
 import 'components.dart';
+import 'difference.dart';
 import 'snapshot.dart';
 import 'toolchain.dart';
 
@@ -44,16 +45,22 @@ class SnapshotOptions {
   /// The frame's time stamp is recorded in `inputs` as `frameTime`, and the
   /// capture's own pumps do not advance time.
   final bool atPumpedTime;
+
+  SnapshotOptions _atPumpedTime() =>
+      SnapshotOptions(policy: policy, state: state, theme: theme, tokenResolver: tokenResolver, atPumpedTime: true);
 }
 
 /// The capture could not produce a deterministic snapshot.
 class CaptureFailure implements Exception {
-  CaptureFailure(this.message);
+  CaptureFailure(this.message, {this.difference});
 
   final String message;
 
+  /// The node the failure was traced to, when it could be.
+  final SnapshotDifference? difference;
+
   @override
-  String toString() => 'Touchstone capture failed: $message';
+  String toString() => 'Touchstone capture failed: $message${difference == null ? '' : '\n$difference'}';
 }
 
 /// A snapshot together with what produced it, for audits.
@@ -82,15 +89,100 @@ Future<Capture> captureWithDetails(
   String id, {
   SnapshotOptions options = const SnapshotOptions(),
 }) async {
+  if (!options.atPumpedTime && tester.binding.hasScheduledFrame) {
+    throw CaptureFailure(
+      'a frame is scheduled before capture. Capture only when settled (pumpAndSettle) or at an explicitly pumped '
+      'time (SnapshotOptions.atPumpedTime); an animation, a ticker or a timer is still running.',
+      difference: await diagnoseUnsettled(tester, id, options),
+    );
+  }
+  final List<Element> pending = _pendingImages(tester);
+  if (pending.isNotEmpty) {
+    throw CaptureFailure(
+      'an image is not decoded: ${pending.map((Element e) => (e.widget as Image).image).join(', ')}. Precache it '
+      'before capture (precacheImages, or precacheImage inside tester.runAsync, then pump).',
+      difference: await _diagnoseImages(tester, id, options, pending),
+    );
+  }
+  return _capture(tester, id, options);
+}
+
+/// Traces a scheduled frame to the node it changes: captures at the current
+/// time, pumps 100 ms, captures again and compares. Advances the test's
+/// clock, so it runs only once a capture has already failed.
+Future<SnapshotDifference> diagnoseUnsettled(WidgetTester tester, String id, SnapshotOptions options) async {
+  final SnapshotOptions pumped = options._atPumpedTime();
+  try {
+    final String before = (await captureWithDetails(tester, id, options: pumped)).snapshot.toCanonical();
+    await tester.pump(const Duration(milliseconds: 100));
+    final Snapshot later = (await captureWithDetails(tester, id, options: pumped)).snapshot;
+    // Compare the trees only: the frame time in the inputs always differs.
+    final String after = Snapshot(
+      id: later.id,
+      inputs: Snapshot.parse(before).inputs,
+      toolchain: later.toolchain,
+      coverage: later.coverage,
+      root: later.root,
+    ).toCanonical();
+    final SnapshotDifference d = firstDifference(before, after);
+    if (before == after) {
+      return SnapshotDifference(
+        '-',
+        const <String>['frame'],
+        'a frame is scheduled but nothing changes over 100 ms: a timer or ticker that does not repaint',
+        '',
+        '',
+      );
+    }
+    return SnapshotDifference(
+      d.nodeId,
+      d.fields,
+      'an animation, ticker or timer is still running and changes this node over time',
+      d.before,
+      d.after,
+    );
+  } on CaptureFailure catch (e) {
+    // An image still loading takes precedence.
+    return e.difference ?? SnapshotDifference('-', const <String>['capture'], e.message, '', '');
+  }
+}
+
+/// Names the components whose images are not decoded yet.
+Future<SnapshotDifference> _diagnoseImages(
+  WidgetTester tester,
+  String id,
+  SnapshotOptions options,
+  List<Element> pending,
+) async {
+  final Capture capture = await _capture(tester, id, options._atPumpedTime());
+  final kept = capture.tree.all.toSet();
+  String owner(Element e) {
+    // A component that paints nothing but the placeholder may be pruned.
+    Component c = capture.tree.ownerOfRenderObject(e.findRenderObject()!);
+    while (!kept.contains(c) && c.parent != null) {
+      c = c.parent!;
+    }
+    return c.fullId;
+  }
+
+  final List<String> owners = <String>{for (final Element e in pending) owner(e)}.toList();
+  return SnapshotDifference(
+    owners.first,
+    const <String>['paint'],
+    'an image load: ${(pending.first.widget as Image).image} is not decoded yet, so its placeholder would be '
+        'recorded${owners.length > 1 ? ' (also in ${owners.skip(1).join(', ')})' : ''}',
+    '',
+    '',
+  );
+}
+
+Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options) async {
   final ComponentPolicy policy = options.policy ?? (_defaultPolicy ??= ComponentPolicy());
   void checkSettled(String when) {
     if (!options.atPumpedTime) {
       _checkSettled(tester, when);
     }
   }
-
-  checkSettled('before capture');
-  _checkImagesLoaded(tester);
 
   final SemanticsHandle semanticsHandle = tester.ensureSemantics();
   try {
@@ -178,9 +270,9 @@ void _checkSettled(WidgetTester tester, String when) {
 }
 
 /// Images must be decoded before capture; a pending load would record a
-/// placeholder.
-void _checkImagesLoaded(WidgetTester tester) {
-  final pending = <String>[];
+/// placeholder. Returns the `Image` elements still waiting.
+List<Element> _pendingImages(WidgetTester tester) {
+  final pending = <Element>[];
   for (final Element e in find.byType(Image, skipOffstage: true).evaluate()) {
     var hasImage = false;
     var raw = false;
@@ -195,15 +287,10 @@ void _checkImagesLoaded(WidgetTester tester) {
 
     e.visitChildren(visit);
     if (!raw || !hasImage) {
-      pending.add((e.widget as Image).image.toString());
+      pending.add(e);
     }
   }
-  if (pending.isNotEmpty) {
-    throw CaptureFailure(
-      'an image is not decoded: ${pending.join(', ')}. Precache it before capture (precacheImage inside '
-      'tester.runAsync, then pump).',
-    );
-  }
+  return pending;
 }
 
 String _rect(Rect r) => '${c.d(r.left)},${c.d(r.top)},${c.d(r.width)},${c.d(r.height)}';

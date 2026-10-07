@@ -21,7 +21,7 @@ class StatusView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Icon(icon, size: 48, color: t.textSecondary),
-            const SizedBox(height: Space.m),
+            SizedBox(height: Space.m),
             Text(
               title,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: t.textPrimary),

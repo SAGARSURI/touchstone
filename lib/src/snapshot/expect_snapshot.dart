@@ -13,6 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../testing/helpers.dart';
 import 'capture.dart';
+import 'difference.dart';
 import 'snapshot.dart';
 
 /// Captures needed for a baseline, all byte-identical.
@@ -32,30 +33,6 @@ class DeterminismReport {
   final SnapshotDifference? firstDifference;
 
   bool get deterministic => firstDifference == null;
-}
-
-/// The first node whose canonical line differs between two captures.
-class SnapshotDifference {
-  SnapshotDifference(this.nodeId, this.fields, this.cause, this.before, this.after);
-
-  /// Full node id, or the header field that differs.
-  final String nodeId;
-
-  /// Detection fields that differ.
-  final List<String> fields;
-
-  /// The likely cause, in words.
-  final String cause;
-  final String before;
-  final String after;
-
-  @override
-  String toString() =>
-      'first differing node: $nodeId (${fields.join(', ')}). Likely cause: $cause\n'
-      '  capture 1: ${_clip(before)}\n'
-      '  capture 2: ${_clip(after)}';
-
-  static String _clip(String s) => s.length > 400 ? '${s.substring(0, 400)}…' : s;
 }
 
 /// Rebuilds every widget, relayouts and repaints everything, then pumps, as a
@@ -89,7 +66,7 @@ Future<DeterminismReport> checkDeterminism(
           return DeterminismReport(
             captures,
             SnapshotDifference(
-              '-',
+              await _nodeForTrace(tester, id, options, reads.first),
               const <String>['clock'],
               'the wall clock was read while building (package:clock). Wrap the test body in withFixedClock.',
               _firstAppFrame(reads.first),
@@ -99,24 +76,54 @@ Future<DeterminismReport> checkDeterminism(
         }
       }
       if (!options.atPumpedTime && tester.binding.hasScheduledFrame) {
+        final SnapshotDifference d = await diagnoseUnsettled(tester, id, options);
         return DeterminismReport(
           captures,
           SnapshotDifference(
-            '-',
-            const <String>['frame'],
-            'an animation, ticker or timer started again after a rebuild, so the tree never settles',
-            '',
-            '',
+            d.nodeId,
+            d.fields,
+            'it settled before the rebuild but not after: an animation, ticker or timer started again. ${d.cause}',
+            d.before,
+            d.after,
           ),
         );
       }
     }
-    captures.add((await captureSnapshot(tester, id, options: options)).toCanonical());
+    try {
+      captures.add((await captureSnapshot(tester, id, options: options)).toCanonical());
+    } on CaptureFailure catch (e) {
+      return DeterminismReport(
+        captures,
+        e.difference ?? SnapshotDifference('-', const <String>['capture'], e.message, '', ''),
+      );
+    }
     if (i > 0 && captures[i] != captures[0]) {
       return DeterminismReport(captures, firstDifference(captures[0], captures[i]));
     }
   }
   return DeterminismReport(captures, null);
+}
+
+/// The component whose code is on [trace], found by class name: the first
+/// frame whose class is a component's type.
+Future<String> _nodeForTrace(WidgetTester tester, String id, SnapshotOptions options, StackTrace trace) async {
+  final Snapshot snapshot;
+  try {
+    snapshot = await captureSnapshot(tester, id, options: options);
+  } on CaptureFailure {
+    return '-';
+  }
+  final List<(String, String)> classes = <(String, String)>[
+    for (final (String fullId, SnapshotNode node) in snapshot.walk()) (fullId, node.type.split(' (').first),
+  ];
+  for (final String line in '$trace'.split('\n')) {
+    for (final (String fullId, String cls) in classes) {
+      if (RegExp('(^|[^\\w\$])${RegExp.escape(cls)}\\.').hasMatch(line)) {
+        return fullId;
+      }
+    }
+  }
+  return '-';
 }
 
 String _firstAppFrame(StackTrace trace) {
@@ -125,65 +132,6 @@ String _firstAppFrame(StackTrace trace) {
     (String l) => !l.contains('package:clock/') && !l.contains('package:touchstone/') && !l.contains('dart:'),
     orElse: () => lines.first,
   );
-}
-
-/// The first difference between two canonical snapshot texts.
-SnapshotDifference firstDifference(String a, String b) {
-  final Snapshot sa = Snapshot.parse(a);
-  final Snapshot sb = Snapshot.parse(b);
-  for (final String field in <String>['inputs', 'toolchain']) {
-    final Map<String, String> fa = field == 'inputs' ? sa.inputs : sa.toolchain;
-    final Map<String, String> fb = field == 'inputs' ? sb.inputs : sb.toolchain;
-    if (fa.toString() != fb.toString()) {
-      return SnapshotDifference(field, <String>[field], 'the $field changed between captures', '$fa', '$fb');
-    }
-  }
-  final List<(String, SnapshotNode)> na = sa.walk().toList();
-  final List<(String, SnapshotNode)> nb = sb.walk().toList();
-  for (var i = 0; i < na.length && i < nb.length; i++) {
-    final (String idA, SnapshotNode x) = na[i];
-    final (String idB, SnapshotNode y) = nb[i];
-    if (idA != idB) {
-      return SnapshotDifference(idA, const <String>['tree'], 'the component tree changed', idA, idB);
-    }
-    final fields = <String>[
-      if (x.bounds != y.bounds) 'bounds',
-      if (x.paint != y.paint) 'paint',
-      if (x.semantics != y.semantics) 'semantics',
-      if (x.opaque != y.opaque) 'opaque',
-      if (x.type != y.type) 'type',
-      if (x.style != y.style) 'style',
-    ];
-    if (fields.isNotEmpty) {
-      return SnapshotDifference(idA, fields, _cause(fields, x, y), x.line, y.line);
-    }
-  }
-  if (na.length != nb.length) {
-    return SnapshotDifference(
-      na.length < nb.length ? nb[na.length].$1 : na[nb.length].$1,
-      const <String>['tree'],
-      'a component appeared or disappeared between captures',
-      '${na.length} nodes',
-      '${nb.length} nodes',
-    );
-  }
-  return SnapshotDifference('-', const <String>['coverage'], 'the coverage section changed', a, b);
-}
-
-String _cause(List<String> fields, SnapshotNode x, SnapshotNode y) {
-  if (fields.contains('opaque') || (x.opaque != '-' && fields.contains('paint'))) {
-    return 'an opaque node\'s pixels changed: an image still loading, a shader reading time, or a platform view';
-  }
-  if (fields.contains('bounds')) {
-    return 'layout changed between captures: content that depends on the clock, random values or an async load';
-  }
-  if (fields.contains('paint')) {
-    return 'paint changed with the same layout: a colour, text or image that depends on the clock or random values';
-  }
-  if (fields.contains('semantics')) {
-    return 'semantics changed: a label or value that depends on the clock or random values';
-  }
-  return 'an explanation field changed: a diagnostics property that is not deterministic';
 }
 
 /// Where the baseline for [id] lives: `snapshots/<id>.snapshot` beside the
@@ -231,7 +179,7 @@ Future<void> expectSnapshot(
     final SnapshotDifference d = firstDifference(baseline.toCanonical(), capture.toCanonical());
     fail(
       'Snapshot $id differs from its baseline. First differing node: ${d.nodeId} (${d.fields.join(', ')}).\n'
-      '  baseline: ${SnapshotDifference._clip(d.before)}\n  this run: ${SnapshotDifference._clip(d.after)}',
+      '  baseline: ${clipLine(d.before)}\n  this run: ${clipLine(d.after)}',
     );
   }
 }

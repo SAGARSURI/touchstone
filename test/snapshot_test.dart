@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
@@ -173,12 +175,33 @@ void main() {
     expect(s.root.semantics, isNot(contains('Price')));
   });
 
-  testWidgets('capture fails while an animation is running', (WidgetTester tester) async {
-    await tester.pumpWidget(app(const SizedBox(width: 20, height: 20, child: CircularProgressIndicator())));
-    expect(
-      () => captureSnapshot(tester, 'x', options: options),
-      throwsA(isA<CaptureFailure>().having((CaptureFailure f) => f.message, 'message', contains('frame is scheduled'))),
+  testWidgets('capture fails while an animation is running and names the animating node', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      app(const Card2(child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()))),
     );
+    await expectLater(
+      () => captureSnapshot(tester, 'x', options: options),
+      throwsA(
+        isA<CaptureFailure>()
+            .having((CaptureFailure f) => f.message, 'message', contains('frame is scheduled'))
+            .having((CaptureFailure f) => f.difference?.nodeId, 'node', 'root/Card2@0'),
+      ),
+    );
+  });
+
+  testWidgets('capture fails on an image that is not decoded and names its component', (WidgetTester tester) async {
+    final Uint8List png = (await tester.runAsync(() async {
+      final recorder = ui.PictureRecorder();
+      Canvas(recorder).drawRect(const Rect.fromLTWH(0, 0, 4, 4), Paint()..color = const Color(0xFF00FF00));
+      final ui.Image image = await recorder.endRecording().toImage(4, 4);
+      final ByteData? data = await image.toByteData(format: ui.ImageByteFormat.png);
+      image.dispose();
+      return data!.buffer.asUint8List();
+    }))!;
+    await tester.pumpWidget(app(Card2(child: Image.memory(png, width: 4, height: 4))));
+    final DeterminismReport report = await checkDeterminism(tester, 'x', options: options);
+    expect(report.firstDifference!.nodeId, 'root/Card2@0');
+    expect(report.firstDifference!.cause, contains('image load'));
   });
 
   testWidgets('atPumpedTime captures a running animation and records the frame time', (WidgetTester tester) async {
@@ -205,6 +228,7 @@ void main() {
     final DeterminismReport report = await checkDeterminism(tester, 'x', options: options);
     expect(report.deterministic, isFalse);
     expect(report.firstDifference!.cause, contains('wall clock'));
+    expect(report.firstDifference!.nodeId, 'root/ClockLabel@0');
 
     await withFixedClock(DateTime.utc(2026, 10, 7), () async {
       await tester.pumpWidget(app(const ClockLabel(key: ValueKey<int>(1))));
