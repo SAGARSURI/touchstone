@@ -154,12 +154,42 @@ void main() {
     expect(a.rootHash, isNot(b.rootHash));
   });
 
+  testWidgets('a label merged into a list item boundary belongs to the component that set it', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      app(
+        SizedBox(
+          width: 200,
+          height: 200,
+          child: ListView(children: const <Widget>[Label('a', semantics: 'Price')]),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final Snapshot s = await captureSnapshot(tester, 'test', options: options);
+    final SnapshotNode label = s.root.children.single;
+    expect(label.semantics, contains('"label":"Price\\na"'));
+    expect(s.root.semantics, isNot(contains('Price')));
+  });
+
   testWidgets('capture fails while an animation is running', (WidgetTester tester) async {
     await tester.pumpWidget(app(const SizedBox(width: 20, height: 20, child: CircularProgressIndicator())));
     expect(
       () => captureSnapshot(tester, 'x', options: options),
       throwsA(isA<CaptureFailure>().having((CaptureFailure f) => f.message, 'message', contains('frame is scheduled'))),
     );
+  });
+
+  testWidgets('atPumpedTime captures a running animation and records the frame time', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      app(const Card2(child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()))),
+    );
+    await tester.pump(const Duration(milliseconds: 250));
+    final pumped = SnapshotOptions(policy: policy, atPumpedTime: true);
+    final DeterminismReport report = await checkDeterminism(tester, 'x', options: pumped);
+    expect(report.deterministic, isTrue, reason: '${report.firstDifference}');
+    expect(Snapshot.parse(report.captures.first).inputs['frameTime'], isNotNull);
   });
 
   testWidgets('the determinism gate names a node painted with random values', (WidgetTester tester) async {

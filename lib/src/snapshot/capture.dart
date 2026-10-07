@@ -24,7 +24,7 @@ import 'toolchain.dart';
 typedef TokenResolver = String? Function(Object value);
 
 class SnapshotOptions {
-  const SnapshotOptions({this.policy, this.state, this.theme, this.tokenResolver});
+  const SnapshotOptions({this.policy, this.state, this.theme, this.tokenResolver, this.atPumpedTime = false});
 
   /// Which widgets are components. Defaults to classes declared in the
   /// package under test.
@@ -37,6 +37,13 @@ class SnapshotOptions {
   final String? theme;
 
   final TokenResolver? tokenResolver;
+
+  /// Captures at the frame the test last pumped, though a frame is scheduled
+  /// (spec: "Capture only when no frame is scheduled, or at an explicitly
+  /// pumped time"). For content that animates forever, such as a shimmer.
+  /// The frame's time stamp is recorded in `inputs` as `frameTime`, and the
+  /// capture's own pumps do not advance time.
+  final bool atPumpedTime;
 }
 
 /// The capture could not produce a deterministic snapshot.
@@ -76,13 +83,19 @@ Future<Capture> captureWithDetails(
   SnapshotOptions options = const SnapshotOptions(),
 }) async {
   final ComponentPolicy policy = options.policy ?? (_defaultPolicy ??= ComponentPolicy());
-  _checkSettled(tester, 'before capture');
+  void checkSettled(String when) {
+    if (!options.atPumpedTime) {
+      _checkSettled(tester, when);
+    }
+  }
+
+  checkSettled('before capture');
   _checkImagesLoaded(tester);
 
   final SemanticsHandle semanticsHandle = tester.ensureSemantics();
   try {
     await tester.pump();
-    _checkSettled(tester, 'after building semantics');
+    checkSettled('after building semantics');
 
     final RenderView view = tester.binding.renderViews.first;
     final PaintRecording recording = PaintRecorder.record(view);
@@ -108,7 +121,7 @@ Future<Capture> captureWithDetails(
       for (var i = 0; i < 3; i++) {
         await tester.pump();
       }
-      _checkSettled(tester, 'after rasterizing opaque nodes');
+      checkSettled('after rasterizing opaque nodes');
     }
 
     final tree = ComponentTree.build(tester.binding.rootElement!, policy);
@@ -210,6 +223,7 @@ Map<String, String> _inputs(WidgetTester tester, RenderView view, SnapshotOption
   'brightness': tester.platformDispatcher.platformBrightness.name,
   'theme': options.theme ?? '-',
   'state': options.state ?? '-',
+  if (options.atPumpedTime) 'frameTime': '${tester.binding.currentSystemFrameTimeStamp.inMicroseconds}us',
 };
 
 List<String> _limits(PaintRecording recording) {
@@ -299,13 +313,124 @@ Map<Component, List<Map<String, Object?>>> _semanticsByComponent(RenderView view
   void visit(RenderObject ro) {
     final SemanticsNode? node = ro.debugSemantics;
     if (node != null && node.attached && !node.isMergedIntoParent && seen.add(node)) {
-      (out[tree.ownerOfRenderObject(ro)] ??= <Map<String, Object?>>[]).add(_describeSemantics(node));
+      (out[_semanticsOwner(ro, node, tree)] ??= <Map<String, Object?>>[]).add(_describeSemantics(node));
     }
     ro.visitChildren(visit);
   }
 
   visit(view);
   return out;
+}
+
+/// The component a semantics node belongs to: the nearest component that
+/// contains every render object contributing content to it.
+///
+/// A node is formed at a boundary render object, which is often a framework
+/// wrapper above the component that supplied its label (a list item's
+/// IndexedSemantics, for example). Attributing the node to the boundary's
+/// component would name the screen instead of the item (A6).
+Component _semanticsOwner(RenderObject boundary, SemanticsNode node, ComponentTree tree) {
+  final contributors = <Component>{};
+  if (_contributesContent(boundary)) {
+    contributors.add(tree.ownerOfRenderObject(boundary));
+  }
+  void visit(RenderObject ro) {
+    final SemanticsNode? own = ro.debugSemantics;
+    if (own != null && own != node && own.attached && !own.isMergedIntoParent) {
+      return; // A node of its own.
+    }
+    if (_contributesContent(ro)) {
+      contributors.add(tree.ownerOfRenderObject(ro));
+    }
+    ro.visitChildrenForSemantics(visit);
+  }
+
+  boundary.visitChildrenForSemantics(visit);
+  if (contributors.isEmpty) {
+    return tree.ownerOfRenderObject(boundary);
+  }
+  return contributors.reduce(_commonAncestor);
+}
+
+Component _commonAncestor(Component a, Component b) {
+  final ancestors = <Component>{};
+  for (Component? c = a; c != null; c = c.parent) {
+    ancestors.add(c);
+  }
+  for (Component? c = b; c != null; c = c.parent) {
+    if (ancestors.contains(c)) {
+      return c;
+    }
+  }
+  return b;
+}
+
+/// Whether [ro] adds content to the semantics tree: text, a role, a flag
+/// or an action. Structure alone (a boundary, an index among scrolled
+/// children, a sort key, a text direction) is not content.
+bool _contributesContent(RenderObject ro) {
+  final config = SemanticsConfiguration();
+  // ignore: invalid_use_of_protected_member
+  ro.describeSemanticsConfiguration(config);
+  if (!config.hasBeenAnnotated) {
+    return false;
+  }
+  return config.label.isNotEmpty ||
+      config.value.isNotEmpty ||
+      config.increasedValue.isNotEmpty ||
+      config.decreasedValue.isNotEmpty ||
+      config.hint.isNotEmpty ||
+      config.tooltip.isNotEmpty ||
+      config.identifier.isNotEmpty ||
+      config.role != SemanticsRole.none ||
+      config.isButton ||
+      config.isLink ||
+      config.isHeader ||
+      config.isImage ||
+      config.isSlider ||
+      config.isKeyboardKey ||
+      config.isHidden ||
+      config.isTextField ||
+      config.isReadOnly ||
+      config.isObscured ||
+      config.isMultiline ||
+      config.isSelected ||
+      config.liveRegion ||
+      config.scopesRoute ||
+      config.namesRoute ||
+      config.isInMutuallyExclusiveGroup ||
+      config.hasImplicitScrolling ||
+      config.isExpanded != null ||
+      config.isEnabled != null ||
+      config.isChecked != null ||
+      config.isToggled != null ||
+      config.isFocused != null ||
+      config.isRequired != null ||
+      config.maxValue != null ||
+      config.minValue != null ||
+      config.linkUrl != null ||
+      config.textSelection != null ||
+      config.platformViewId != null ||
+      config.scrollPosition != null ||
+      config.customSemanticsActions.isNotEmpty ||
+      config.onTap != null ||
+      config.onLongPress != null ||
+      config.onScrollLeft != null ||
+      config.onScrollRight != null ||
+      config.onScrollUp != null ||
+      config.onScrollDown != null ||
+      config.onScrollToOffset != null ||
+      config.onIncrease != null ||
+      config.onDecrease != null ||
+      config.onCopy != null ||
+      config.onCut != null ||
+      config.onPaste != null ||
+      config.onDismiss != null ||
+      config.onSetText != null ||
+      config.onSetSelection != null ||
+      config.onFocus != null ||
+      config.onExpand != null ||
+      config.onCollapse != null;
 }
 
 Map<String, Object?> _describeSemantics(SemanticsNode node) {

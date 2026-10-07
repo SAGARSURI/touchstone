@@ -98,7 +98,7 @@ Future<DeterminismReport> checkDeterminism(
           );
         }
       }
-      if (tester.binding.hasScheduledFrame) {
+      if (!options.atPumpedTime && tester.binding.hasScheduledFrame) {
         return DeterminismReport(
           captures,
           SnapshotDifference(
