@@ -144,6 +144,10 @@ changes sit outside the oracle's sight (same-length text or icon glyph changes
 under the box font); three of them were recorded, and the fourth is the
 `CustomPainter` label above.
 
+An opaque node's pixel hash covers its paint bounds. Paint that a render
+object draws outside its own paint bounds is not in that region; the shadow
+audit is what would expose it, and no fixture did.
+
 This is a small, hand-written corpus. Phase 1 adds the mutation generator, and
 Phase 3 the catalogue history, before A4 is trusted on real code.
 
