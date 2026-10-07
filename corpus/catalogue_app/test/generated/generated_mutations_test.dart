@@ -57,7 +57,7 @@ void main() {
       final bool pixels = oracle.pixels != base.oracle.pixels;
       final bool semantics = oracle.semantics != base.oracle.semantics;
       final bool snapshot = after.rootHash != base.snapshot.rootHash;
-      final String owner = capture.tree.ownerOfRenderObject(m.target).fullId;
+      final String owner = capture.tree.shownOwnerOf(m.target).fullId;
       final changed = <String>{};
       if (snapshot) {
         final Map<String, SnapshotNode> a = <String, SnapshotNode>{

@@ -154,6 +154,18 @@ class ComponentTree {
     return root;
   }
 
+  /// The nearest component of [ro] that is still in the tree after
+  /// [pruneAndName]: content that was not shown belongs to the shown
+  /// component around it.
+  Component shownOwnerOf(RenderObject ro) {
+    bool shown(Component c) => c.parent == null || (c.parent!.children.contains(c) && shown(c.parent!));
+    Component c = ownerOfRenderObject(ro);
+    while (!shown(c)) {
+      c = c.parent!;
+    }
+    return c;
+  }
+
   Iterable<Component> get all sync* {
     Iterable<Component> visit(Component c) sync* {
       yield c;

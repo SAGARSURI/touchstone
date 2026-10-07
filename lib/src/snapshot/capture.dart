@@ -155,17 +155,10 @@ Future<SnapshotDifference> _diagnoseImages(
   List<Element> pending,
 ) async {
   final Capture capture = await _capture(tester, id, options._atPumpedTime());
-  final kept = capture.tree.all.toSet();
-  String owner(Element e) {
-    // A component that paints nothing but the placeholder may be pruned.
-    Component c = capture.tree.ownerOfRenderObject(e.findRenderObject()!);
-    while (!kept.contains(c) && c.parent != null) {
-      c = c.parent!;
-    }
-    return c.fullId;
-  }
-
-  final List<String> owners = <String>{for (final Element e in pending) owner(e)}.toList();
+  final List<String> owners = <String>{
+    // A component that paints only the placeholder may have been pruned.
+    for (final Element e in pending) capture.tree.shownOwnerOf(e.findRenderObject()!).fullId,
+  }.toList();
   return SnapshotDifference(
     owners.first,
     const <String>['paint'],
