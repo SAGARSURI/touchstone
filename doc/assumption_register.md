@@ -192,17 +192,18 @@ from Phase 1 on.
 A gradient in a `BoxDecoration` or `ShapeDecoration` is recorded by value, from
 the decoration that built it.
 
-### Open decisions for Sagar
+### Decisions from Phase 0 review
 
-These came out of Phase 0 and would change the spec, so they are not built.
+Sagar decided these on 2026-10-07, and the spec was updated to match.
 
-1. **Renderer in the toolchain fingerprint.** The widget tree differs between
-   Skia and Impeller in widget tests, not only the pixels. Proposal: add the
-   renderer to `toolchain`, so a baseline from one renderer routes a run on the
-   other to migration.
-2. **Material and Cupertino in 3.47.** The spec says they ship as standalone
-   packages from 3.47. In 3.47.6 they are still in the Flutter SDK
-   (`package:flutter/material.dart`). The core imports only foundation,
-   painting, rendering and widgets either way, so nothing changes in the design.
-3. **Shadows in tests.** Should the coverage report declare that box-shadow blur
-   is not drawn in widget tests (`debugDisableShadows`)?
+1. **Renderer in the toolchain fingerprint: yes.** The widget tree differs
+   between Skia and Impeller in widget tests, not only the pixels, so the
+   toolchain field records the renderer and a run on the other renderer is
+   routed to migration. Built in Phase 1 with the toolchain fingerprint.
+2. **Material and Cupertino in 3.47: spec corrected.** They still ship inside
+   the Flutter SDK in 3.47.6. The core imports only foundation, painting,
+   rendering and widgets, so the design is unchanged.
+3. **Shadows in tests: declared.** The coverage limits now state that
+   `flutter_test` sets `debugDisableShadows`, so shadow blur is invisible to
+   both the snapshot and the pixel oracle. Built in Phase 1 with the coverage
+   report.
