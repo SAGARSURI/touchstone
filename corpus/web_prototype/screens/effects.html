@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>effects</title><link rel="stylesheet" href="base.css">
+<style>
+  .wrap { padding: 16px; display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; }
+  .sq { width: 60px; height: 60px; }
+  .opacity { opacity: 0.5; }
+  .clip { border-radius: 16px; overflow: hidden; }
+  .transform { transform: rotate(0.1rad); }
+  .order { position: relative; width: 90px; height: 90px; }
+  .order .sq { position: absolute; }
+  .filter { filter: url(#modulate); }
+  .blur { filter: blur(2px); }
+  .mask { -webkit-mask-image: linear-gradient(to right, #fff, rgba(255, 255, 255, 0)); }
+  .backdrop { position: relative; width: 80px; height: 80px; }
+  .backdrop .glass { position: absolute; inset: 0; backdrop-filter: blur(2px); }
+  canvas { display: block; }
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute"><filter id="modulate"><feColorMatrix type="matrix"
+  values="0.557 0 0 0 0  0 0.141 0 0 0  0 0 0.667 0 0  0 0 0 1 0"/></filter></svg>
+<main class="wrap" data-component="EffectsScreen">
+  <div class="opacity" data-component="Tagged" data-key="opacity"><div class="sq" style="background:#43a047">O</div></div>
+  <div class="clip" data-component="Tagged" data-key="clip"><div class="sq" style="background:#fb8c00">C</div></div>
+  <div class="transform" data-component="Tagged" data-key="transform"><div class="sq" style="background:#00897b">T</div></div>
+  <div class="order" data-component="Tagged" data-key="order">
+    <div class="sq" style="left:0;top:0;background:#e53935">A</div>
+    <div class="sq" style="left:30px;top:30px;background:#1e88e5">B</div>
+  </div>
+  <div class="filter" data-component="Tagged" data-key="colorFilter"><div class="sq" style="background:#fff">F</div></div>
+  <div class="blur" data-component="Tagged" data-key="imageFilter"><div class="sq" style="background:#3949ab">I</div></div>
+  <div class="mask" data-component="Tagged" data-key="shaderMask"><div class="sq" style="background:#6d4c41">S</div></div>
+  <div class="backdrop" data-component="Tagged" data-key="backdrop"><div class="sq" style="background:#d81b60">X</div><div class="glass"></div></div>
+  <div data-component="Tagged" data-key="canvas"><canvas width="60" height="60" aria-label="Sparkline"></canvas></div>
+</main>
+<script>
+  // Drawn by script, like a CustomPainter: the snapshot can only hash its pixels.
+  const ctx = document.querySelector('canvas').getContext('2d');
+  ctx.strokeStyle = '#1e88e5'; ctx.lineWidth = 2; ctx.beginPath();
+  [50, 30, 40, 10, 20].forEach((y, i) => (i ? ctx.lineTo(i * 15, y) : ctx.moveTo(0, y)));
+  ctx.stroke();
+</script>
+</body></html>

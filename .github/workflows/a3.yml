@@ -1,0 +1,50 @@
+# A3: 1,000 repeats of every catalogue snapshot per operating system, spread
+# over 10 shards of 100 (spec, Assumption register and Phase 1 exit gate).
+name: a3-repeats
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  repeat:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.6
+          channel: stable
+      - name: 100 repeats
+        working-directory: corpus/catalogue_app
+        run: |
+          flutter pub get
+          flutter test test/a3 --dart-define=REPEATS=100 \
+            --dart-define=LABEL=${{ startsWith(matrix.os, 'macos') && 'macos' || 'linux' }}-${{ matrix.shard }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: a3-${{ matrix.os }}-${{ matrix.shard }}
+          path: corpus/catalogue_app/build/a3/
+
+  summary:
+    needs: repeat
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: a3-*
+          path: a3
+      - name: Compare repeats
+        # A plain Dart script: run it outside the Flutter package.
+        run: |
+          cp corpus/catalogue_app/tool/a3_summary.dart "$RUNNER_TEMP/a3_summary.dart"
+          dart "$RUNNER_TEMP/a3_summary.dart" a3

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>decorated</title><link rel="stylesheet" href="base.css">
+<style>
+  .pad { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .box { height: 60px; background: var(--box); border-radius: 12px; border: 2px solid var(--box-border); }
+  .gradient { height: 60px; background: linear-gradient(to right, var(--gradient-start) 0%, var(--gradient-end) 60%); }
+  .shadow { height: 40px; background: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 1); }
+  .shape { height: 40px; background: #ff7043; border-radius: 20px; }
+</style></head>
+<body><main class="pad" data-component="DecoratedScreen">
+  <div class="box" data-component="Tagged" data-key="box"></div>
+  <div class="gradient" data-component="Tagged" data-key="gradient"></div>
+  <div class="shadow" data-component="Tagged" data-key="shadow"></div>
+  <div class="shape" data-component="Tagged" data-key="shape"></div>
+</main></body></html>

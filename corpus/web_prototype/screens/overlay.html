@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>overlay</title><link rel="stylesheet" href="base.css">
+<style>
+  .screen { position: absolute; inset: 0; background: #eceff1; display: grid; place-items: center; }
+  .scrim { position: absolute; inset: 0; background: var(--scrim); }
+  .dialog { position: absolute; left: 40px; right: 40px; top: 50%; transform: translateY(-50%);
+    background: #fff; border-radius: 28px; padding: 24px; font-size: 18px; }
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; height: 160px; background: #fff;
+    display: grid; place-items: center; box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2); }
+</style></head>
+<body><div data-component="OverlayScreen">
+  <div class="screen">Screen</div>
+  <div class="scrim" data-component="Tagged" data-key="scrim"></div>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="t" data-component="Tagged" data-key="dialog"><span id="t">Delete order?</span></div>
+  <div class="sheet" data-component="Tagged" data-key="sheet">Sheet</div>
+</div></body></html>

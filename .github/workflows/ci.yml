@@ -33,3 +33,16 @@ jobs:
         with:
           name: phase0-${{ matrix.os }}
           path: corpus/fixture_app/build/phase0/
+      - name: Catalogue (snapshots, A13, generated mutations)
+        if: always()
+        working-directory: corpus/catalogue_app
+        run: |
+          flutter pub get
+          dart format --output=none --set-exit-if-changed lib test tool
+          flutter analyze
+          flutter test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: catalogue-${{ matrix.os }}
+          path: corpus/catalogue_app/build/

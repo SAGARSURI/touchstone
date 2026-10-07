@@ -1,0 +1,97 @@
+[
+  {
+    "test": "buttons/all",
+    "deterministic": true,
+    "golden": "match"
+  },
+  {
+    "test": "text/all",
+    "deterministic": true,
+    "golden": "match"
+  },
+  {
+    "test": "settings/default",
+    "deterministic": true,
+    "golden": "match"
+  },
+  {
+    "test": "sign_in/empty",
+    "deterministic": true,
+    "golden": "match"
+  },
+  {
+    "test": "sign_in/focused",
+    "deterministic": true,
+    "golden": "match"
+  },
+  {
+    "test": "sign_in/error",
+    "deterministic": true,
+    "golden": "match"
+  },
+  {
+    "test": "sign_in/submitting",
+    "deterministic": true,
+    "golden": "match"
+  },
+  {
+    "test": "watchlist/top",
+    "deterministic": true,
+    "golden": "match"
+  },
+  {
+    "test": "watchlist/scrolled",
+    "deterministic": true,
+    "golden": "match"
+  },
+  {
+    "test": "detail/overview",
+    "deterministic": false,
+    "golden": "match",
+    "node": "root/DetailScreen@0/HeaderImage@0",
+    "fields": [
+      "paint"
+    ],
+    "cause": "an image load: MemoryImage(_Uint8ArrayView#128b2, scale: 1.0) is not decoded yet, so its placeholder would be recorded"
+  },
+  {
+    "test": "detail/news",
+    "deterministic": false,
+    "golden": "match",
+    "node": "root/DetailScreen@0/HeaderImage@0",
+    "fields": [
+      "paint"
+    ],
+    "cause": "an image load: MemoryImage(_Uint8ArrayView#d40d4, scale: 1.0) is not decoded yet, so its placeholder would be recorded"
+  },
+  {
+    "test": "detail/collapsed",
+    "deterministic": false,
+    "golden": "match",
+    "node": "root/DetailScreen@0/HeaderImage@0",
+    "fields": [
+      "paint"
+    ],
+    "cause": "an image load: MemoryImage(_Uint8ArrayView#172f6, scale: 1.0) is not decoded yet, so its placeholder would be recorded"
+  },
+  {
+    "test": "states/empty",
+    "deterministic": true,
+    "golden": "match"
+  },
+  {
+    "test": "states/error",
+    "deterministic": true,
+    "golden": "match"
+  },
+  {
+    "test": "states/loading",
+    "deterministic": false,
+    "golden": "match",
+    "node": "root/StatesScreen@0/Shimmer@0",
+    "fields": [
+      "paint"
+    ],
+    "cause": "an animation, ticker or timer is still running and changes this node over time"
+  }
+]

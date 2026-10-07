@@ -32,9 +32,9 @@ nodes
 | --- | --- |
 | schema version | `touchstone-snapshot 1`; raised on any change to the canonical form |
 | `id` | Test name plus state and variant |
-| `inputs` | `viewport` (logical size and device pixel ratio), `platform`, `locale`, `textScale`, `brightness`, `theme` and `state` as declared by the test |
+| `inputs` | `viewport` (logical size and device pixel ratio), `platform`, `locale`, `textScale`, `brightness`, `theme` and `state` as declared by the test; `frameTime` (the frame's time stamp in the test's fake clock) when captured at a pumped time |
 | `toolchain` | Flutter version, framework and engine revisions, Dart version, renderer (Skia or Impeller), library version, fonts (`FlutterTest`, or a hash of fonts loaded through `SnapshotFonts.load`) |
-| `limit` lines | Declared coverage limits that applied to this capture (box font, shadows disabled, unbuilt list items, platform views and textures) |
+| `limit` lines | Declared coverage limits that applied to this capture (box font and unloaded icon fonts, shadows disabled, unbuilt list items, platform views and textures) |
 | `opaque` lines | Each node whose paint is a pixel hash, with its reasons |
 | `rootHash` | The root node's `sub` |
 | `nodes` | The component tree |
@@ -46,7 +46,7 @@ nodes
 | id | Detection | `Type#key` for a `ValueKey` of a string, number, boolean or enum; otherwise `Type@n`, the n-th sibling component of that type. The full id joins segments from the root with `/` |
 | `bounds` | Detection | `x,y,width,height` of the component's top render object in global logical pixels, exact doubles |
 | `paint` | Detection | SHA-256 of the component's own paint text (below) |
-| `sem` | Detection | The semantics nodes the component owns: rect, transform, label, value, hint, tooltip, role, flags, actions and every other non-default `SemanticsData` field, as canonical JSON |
+| `sem` | Detection | The semantics nodes the component owns: rect, transform, label, value, hint, tooltip, role, flags, actions and every other non-default `SemanticsData` field, as canonical JSON. A node belongs to the nearest component containing every render object that gave it content, not to the framework boundary that formed it (a list item's `IndexedSemantics`, for example) |
 | `opaque` | Detection | Why paint is a pixel hash (`path`, `platformView`, …), `-` if none |
 | `type` | Explanation | Widget class and the library that declares it |
 | `style` | Explanation | Diagnostics properties of the render objects that drew the component's paint, with a token name when the project's resolver returns one |
@@ -99,17 +99,33 @@ an `Image` has not decoded, enables semantics, records paint, repaints to undo
 what recording touched, rasterizes the view only if a node is opaque, then
 builds the component tree and hashes bottom-up.
 
+Content that never settles (a shimmer) is captured with
+`SnapshotOptions(atPumpedTime: true)` after the test pumps an explicit time;
+the capture's own pumps do not advance the clock, and `frameTime` records the
+frame.
+
+A failed capture names the node it was traced to. For a scheduled frame, the
+tool captures at the current time, pumps 100 ms, captures again and reports
+the first node that changed. For an image still loading, it names the
+component that shows the image.
+
 `expectSnapshot` compares the root hash with the baseline (a different
 toolchain is reported, not compared). With `--update-goldens` it writes the
 baseline only after the determinism gate: 3 captures with every widget
 rebuilt, relaid out and repainted in between must be byte-identical; otherwise
 the first differing node and its likely cause are reported. Outside
 `withFixedClock`, any read of `package:clock` time during the rebuild fails the
-gate and names the reading frame.
+gate and names the component whose code read it.
 
 ## Open points before freezing v1
 
-- A14: every required field must have a web equivalent.
+- A14 passed: every field has a web equivalent and five web captures parse as
+  v1 ([phase1/a14_web_mapping.md](phase1/a14_web_mapping.md)).
 - A6: whether class-declaration scanning picks the tree developers recognise,
-  measured on the catalogue app.
+  pending two engineers' review of the catalogue mutations.
 - The style field's size and usefulness, measured in A10 and Phase 2.
+- Paint structure under pixel-neutral refactors: wrapping a child in a
+  `RepaintBoundary` changes the parent's paint text (a composite and a new
+  coordinate origin) though no pixel changes. Phase 2's no-op gate decides
+  whether the diff handles this or the paint text elides pass-through render
+  objects.

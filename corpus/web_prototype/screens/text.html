@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>text</title><link rel="stylesheet" href="base.css">
+<style>
+  .pad { padding: 16px; display: flex; flex-direction: column; align-items: flex-start; }
+  .heading { font-size: 24px; font-weight: 700; }
+  .body { color: #333333; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .money { color: #1565c0; font-weight: bold; }
+</style></head>
+<body><main class="pad" data-component="TextScreen">
+  <h1 class="heading" data-component="Tagged" data-key="heading">Order summary</h1>
+  <div style="height: 8px"></div>
+  <p class="body" data-component="Tagged" data-key="body">A long paragraph that wraps across lines and is cut with an ellipsis when it runs past the line limit set for this fixture screen.</p>
+  <div style="height: 8px"></div>
+  <p data-component="Tagged" data-key="rich">Total <span class="money">$42.00</span></p>
+</main></body></html>
