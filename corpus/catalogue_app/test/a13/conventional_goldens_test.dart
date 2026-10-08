@@ -9,6 +9,8 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:catalogue_app/catalogue.dart';
 import 'package:flutter/material.dart';
@@ -63,15 +65,8 @@ void main() {
         scene.id,
         options: SnapshotOptions(state: scene.state, theme: scene.theme),
       );
-      String golden = 'match';
-      try {
-        await expectLater(find.byType(MaterialApp), matchesGoldenFile('goldens/${scene.id}.png'));
-      } on TestFailure catch (e) {
-        golden = 'mismatch: ${e.message?.split('\n').first}';
-      } on FlutterError catch (e) {
-        // LocalFileComparator reports a pixel mismatch as a FlutterError.
-        golden = 'mismatch: ${e.message.split('\n').first}';
-      }
+      final Future<ui.Image> image = captureImage(find.byType(MaterialApp).evaluate().single);
+      final String golden = await tester.runAsync(() => _compareGolden(image, 'goldens/${scene.id}.png')) ?? '-';
       final SnapshotDifference? d = report.firstDifference;
       results.add(<String, Object?>{
         'test': scene.id,
@@ -92,4 +87,29 @@ void main() {
     ];
     expect(unnamed, isEmpty, reason: 'gate failures without a named node');
   });
+}
+
+/// matchesGoldenFile's comparison with the result returned instead of thrown.
+/// LocalFileComparator throws a FlutterError on a mismatch, and runAsync
+/// reports it as a test failure before any caller could catch it; a golden
+/// mismatch is a result here, not a failure.
+Future<String> _compareGolden(Future<ui.Image> capture, String path) async {
+  final ui.Image image = await capture;
+  try {
+    final Uint8List bytes = (await image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+    final Uri uri = goldenFileComparator.getTestUri(Uri.parse(path), null);
+    if (autoUpdateGoldenFiles) {
+      await goldenFileComparator.update(uri, bytes);
+      return 'match';
+    }
+    try {
+      return await goldenFileComparator.compare(bytes, uri) ? 'match' : 'mismatch';
+    } on TestFailure catch (e) {
+      return 'mismatch: ${e.message?.split('\n').first}';
+    } on FlutterError catch (e) {
+      return 'mismatch: ${e.message.split('\n').first}';
+    }
+  } finally {
+    image.dispose();
+  }
 }
