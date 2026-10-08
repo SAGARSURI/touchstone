@@ -196,12 +196,14 @@ final Map<String, _Mutate> _kinds = <String, _Mutate>{
   'size 1px': (RenderObject ro, Random random) {
     if (ro is! RenderConstrainedBox) return null;
     final BoxConstraints c = ro.additionalConstraints;
+    // Not BoxConstraints.tighten, which clamps to the old maximum and so
+    // leaves a tight size unchanged.
     if (c.hasTightWidth && c.maxWidth.isFinite) {
-      ro.additionalConstraints = c.tighten(width: c.maxWidth + 1);
+      ro.additionalConstraints = c.copyWith(minWidth: c.maxWidth + 1, maxWidth: c.maxWidth + 1);
       return 'width ${c.maxWidth} + 1';
     }
     if (c.hasTightHeight && c.maxHeight.isFinite) {
-      ro.additionalConstraints = c.tighten(height: c.maxHeight + 1);
+      ro.additionalConstraints = c.copyWith(minHeight: c.maxHeight + 1, maxHeight: c.maxHeight + 1);
       return 'height ${c.maxHeight} + 1';
     }
     return null;
