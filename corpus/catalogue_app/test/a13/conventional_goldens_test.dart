@@ -68,6 +68,9 @@ void main() {
         await expectLater(find.byType(MaterialApp), matchesGoldenFile('goldens/${scene.id}.png'));
       } on TestFailure catch (e) {
         golden = 'mismatch: ${e.message?.split('\n').first}';
+      } on FlutterError catch (e) {
+        // LocalFileComparator reports a pixel mismatch as a FlutterError.
+        golden = 'mismatch: ${e.message.split('\n').first}';
       }
       final SnapshotDifference? d = report.firstDifference;
       results.add(<String, Object?>{

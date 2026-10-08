@@ -1,10 +1,10 @@
 // Summarises A3 repeat runs: dart run tool/a3_summary.dart <dir>
 //
 // Reads every <label>.json written by test/a3/repeat_test.dart, where the
-// label starts with the operating system (linux-3, macos-7). Prints a
-// Markdown table and exits non-zero if any operating system saw two
-// different snapshots of one scene. Agreement between operating systems is
-// reported but is not part of the gate.
+// label starts with the host (linux-3, macos-7, macosintel-0, linuxarm-0).
+// Prints a Markdown table and exits non-zero if any host saw two different
+// snapshots of one scene. Agreement between hosts is reported for each pair
+// but is not part of the gate.
 
 import 'dart:convert';
 import 'dart:io';
@@ -46,19 +46,25 @@ void main(List<String> args) {
       '${unstable.isEmpty ? 0 : unstable.join(', ')} |',
     );
   }
-  if (distinct.length > 1) {
-    final List<String> oses = distinct.keys.toList()..sort();
-    final Set<String> scenes = distinct[oses.first]!.keys.toSet();
-    final List<String> differ = <String>[
-      for (final String scene in scenes)
-        if (oses.map((String os) => (distinct[os]![scene] ?? <String>{}).join()).toSet().length > 1) scene,
-    ];
-    out
-      ..writeln()
-      ..writeln(
-        'Across ${oses.join(' and ')}: ${differ.isEmpty ? 'every scene identical' : 'differ on ${differ.join(', ')}'} '
-        '(informative; baselines are valid on one OS).',
+  // Each pair of hosts: the scenes whose snapshots differ between them.
+  final List<String> hosts = distinct.keys.toList()..sort();
+  for (var i = 0; i < hosts.length; i++) {
+    for (var j = i + 1; j < hosts.length; j++) {
+      final String a = hosts[i], b = hosts[j];
+      final List<String> differ = <String>[
+        for (final String scene in distinct[a]!.keys)
+          if ((distinct[a]![scene]!.toList()..sort()).join() !=
+              ((distinct[b]![scene] ?? <String>{}).toList()..sort()).join())
+            scene,
+      ];
+      if (i == 0 && j == 1) {
+        out.writeln();
+      }
+      out.writeln(
+        'Across $a and $b: ${differ.isEmpty ? 'every scene identical' : '${differ.length} differ: ${differ.join(', ')}'} '
+        '(informative; a baseline is compared only on its own host).',
       );
+    }
   }
   out
     ..writeln()

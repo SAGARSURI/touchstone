@@ -1,0 +1,35 @@
+# Records catalogue baselines on macOS, the only host they are valid on
+# (spec, A3), and commits them to the pushed branch for review. Push a branch
+# named record-baselines/<anything> to run it; the recorded files are then
+# brought into the working branch by a normal commit.
+name: record-baselines
+
+on:
+  push:
+    branches: ['record-baselines/**']
+
+permissions:
+  contents: write
+
+jobs:
+  record:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.6
+          channel: stable
+      - name: Record, then compare against what was recorded
+        working-directory: corpus/catalogue_app
+        run: |
+          flutter pub get
+          flutter test --update-goldens test/snapshots_test.dart test/a13
+          flutter test test/snapshots_test.dart test/a13
+      - name: Commit baselines
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add corpus/catalogue_app/test/snapshots corpus/catalogue_app/test/a13/goldens
+          git commit -m "Record catalogue baselines on $(uname -sm)" || echo 'No baseline changed'
+          git push

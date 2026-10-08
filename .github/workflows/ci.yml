@@ -40,7 +40,10 @@ jobs:
           flutter pub get
           dart format --output=none --set-exit-if-changed lib test tool
           flutter analyze
-          flutter test --file-reporter json:build/test_results.json
+          # Baselines are valid on macOS only (spec, A3); other hosts run
+          # everything except the baseline comparisons.
+          flutter test ${{ runner.os != 'macOS' && '--exclude-tags baseline' || '' }} \
+            --file-reporter json:build/test_results.json
       - name: Annotate catalogue failures
         if: failure()
         run: |

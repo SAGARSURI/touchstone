@@ -1,0 +1,3 @@
+tags:
+  # Compares with baselines recorded on macOS; other hosts exclude it.
+  baseline:

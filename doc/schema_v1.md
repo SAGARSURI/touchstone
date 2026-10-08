@@ -16,7 +16,7 @@ rounding; the tree is given by two-space indentation.
 touchstone-snapshot 1
 id	"order_ticket/idle"
 inputs	viewport="390.0x844.0@3.0"	platform="android"	locale="en-US"	textScale="1.0"	brightness="light"	theme="light"	state="idle"
-toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	library="0.0.1-dev.0"	fonts="FlutterTest"
+toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
 limit	"shadows: flutter_test sets debugDisableShadows, so shadow blur is not drawn"
 opaque	"root/OrderTicket@0/SparklineChart@0"	path
 rootHash	9f2c…
@@ -33,7 +33,7 @@ nodes
 | schema version | `touchstone-snapshot 1`; raised on any change to the canonical form |
 | `id` | Test name plus state and variant |
 | `inputs` | `viewport` (logical size and device pixel ratio), `platform`, `locale`, `textScale`, `brightness`, `theme` and `state` as declared by the test; `frameTime` (the frame's time stamp in the test's fake clock) when captured at a pumped time |
-| `toolchain` | Flutter version, framework and engine revisions, Dart version, renderer (Skia or Impeller), library version, fonts (`FlutterTest`, or a hash of fonts loaded through `SnapshotFonts.load`) |
+| `toolchain` | Flutter version, framework and engine revisions, Dart version, renderer (Skia or Impeller), host OS and CPU architecture (`macos_arm64`; path edges rasterize differently per host, so opaque nodes' pixel hashes differ), library version, fonts (`FlutterTest`, or a hash of fonts loaded through `SnapshotFonts.load`) |
 | `limit` lines | Declared coverage limits that applied to this capture (box font and unloaded icon fonts, shadows disabled, unbuilt list items, platform views and textures) |
 | `opaque` lines | Each node whose paint is a pixel hash, with its reasons |
 | `rootHash` | The root node's `sub` |
@@ -129,3 +129,8 @@ gate and names the component whose code read it.
   coordinate origin) though no pixel changes. Phase 2's no-op gate decides
   whether the diff handles this or the paint text elides pass-through render
   objects.
+- The `host` toolchain field (pending Sagar's decision): opaque nodes' pixel
+  hashes differ between Linux x64 and macOS arm64, so a baseline is compared
+  only on the host that recorded it. Baselines are recorded on macOS by the
+  `record-baselines` workflow. A3's Intel Mac and ARM Linux runs show whether
+  the OS or the CPU architecture is the cause.
