@@ -43,10 +43,10 @@ nodes
 
 | Field | Layer | Content |
 | --- | --- | --- |
-| id | Detection | `Type#key` for a `ValueKey` of a string, number, boolean or enum; otherwise `Type@n`, the n-th sibling component of that type. The full id joins segments from the root with `/` |
+| id | Detection | `Type#key` for a `ValueKey` of a string, number, boolean or enum, with `%`, `/`, `#` and `@` in the key percent-encoded; otherwise `Type@n`, the n-th sibling component of that type. Siblings whose segments are still equal (keys `'7'` and `7`) get `@1`, `@2` in order. The full id joins segments from the root with `/` |
 | `bounds` | Detection | `x,y,width,height` of the component's top render object in global logical pixels, exact doubles |
 | `paint` | Detection | SHA-256 of the component's own paint text (below) |
-| `sem` | Detection | The semantics nodes the component owns: rect, transform, label, value, hint, tooltip, role, flags, actions and every other non-default `SemanticsData` field, as canonical JSON. A node belongs to the nearest component containing every render object that gave it content, not to the framework boundary that formed it (a list item's `IndexedSemantics`, for example) |
+| `sem` | Detection | The semantics nodes the component owns: rect, transform, label, value, hint, tooltip, role, flags, actions and every other non-default `SemanticsData` field, as canonical JSON. A node belongs to the nearest component containing every render object that gave it content, not to the framework boundary that formed it (a list item's `IndexedSemantics`, for example). Nodes no render object owns (one per text span with a recognizer) go with the node that built them. Sort keys and traversal links are recorded, so reading order follows from the node. A custom action is recorded by its label, or `hint <action>: <hint>` for a hint override |
 | `opaque` | Detection | Why paint is a pixel hash (`path`, `platformView`, …), `-` if none |
 | `type` | Explanation | Widget class and the library that declares it |
 | `style` | Explanation | Diagnostics properties of the render objects that drew the component's paint, with a token name when the project's resolver returns one |
@@ -94,8 +94,13 @@ do.
 
 ## Capture
 
-`captureSnapshot` runs after the last pump: it fails if a frame is scheduled or
-an `Image` has not decoded, enables semantics, records paint, repaints to undo
+`captureSnapshot` runs after the last pump: it fails if a frame is scheduled,
+if an image shown by an `Image`, an `Ink` or a decorated box is still loading
+(checked against the image cache, so a gapless image waiting for its next
+frame fails and a load that failed with an error widget does not), or if text
+uses a font family that renders with a font not loaded through
+`SnapshotFonts.load`, which the fingerprint could not record. It then enables
+semantics, records paint, repaints to undo
 what recording touched, rasterizes the view only if a node is opaque, then
 builds the component tree and hashes bottom-up.
 
@@ -115,7 +120,16 @@ baseline only after the determinism gate: 3 captures with every widget
 rebuilt, relaid out and repainted in between must be byte-identical; otherwise
 the first differing node and its likely cause are reported. Outside
 `withFixedClock`, any read of `package:clock` time during the rebuild fails the
-gate and names the component whose code read it.
+gate and names the component whose code read it, in its widget class or its
+`State` class.
+
+The gate rebuilds but does not mount the tree again, so a value fixed when a
+widget is first mounted (an unseeded `Random` in a `State` field) passes it.
+The spec's control for random values is seeding through the test helper; a
+baseline captured from such a value differs on the next run, so the
+comparison against the baseline and the A3 repeats, which mount every scene
+afresh, catch it. Images drawn by a custom painter are not checked for
+loading.
 
 ## Open points before freezing v1
 
@@ -129,8 +143,8 @@ gate and names the component whose code read it.
   coordinate origin) though no pixel changes. Phase 2's no-op gate decides
   whether the diff handles this or the paint text elides pass-through render
   objects.
-- The `host` toolchain field (pending Sagar's decision): opaque nodes' pixel
-  hashes differ between Linux x64 and macOS arm64, so a baseline is compared
-  only on the host that recorded it. Baselines are recorded on macOS by the
+- The `host` toolchain field (Sagar chose it on 2026-10-08): opaque nodes'
+  pixel hashes differ between Linux x64 and macOS arm64, so a baseline is
+  compared only on the host that recorded it. Baselines are recorded on macOS by the
   `record-baselines` workflow. A3's Intel Mac and ARM Linux runs show whether
   the OS or the CPU architecture is the cause.

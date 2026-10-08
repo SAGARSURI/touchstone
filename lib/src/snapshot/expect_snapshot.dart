@@ -13,6 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../testing/helpers.dart';
 import 'capture.dart';
+import 'components.dart';
 import 'difference.dart';
 import 'snapshot.dart';
 
@@ -105,17 +106,28 @@ Future<DeterminismReport> checkDeterminism(
 }
 
 /// The component whose code is on [trace], found by class name: the first
-/// frame whose class is a component's type.
+/// frame whose class is a component's widget class or its State class.
 Future<String> _nodeForTrace(WidgetTester tester, String id, SnapshotOptions options, StackTrace trace) async {
-  final Snapshot snapshot;
+  final Capture capture;
   try {
-    snapshot = await captureSnapshot(tester, id, options: options);
+    capture = await captureWithDetails(tester, id, options: options);
   } on CaptureFailure {
     return '-';
   }
-  final List<(String, String)> classes = <(String, String)>[
-    for (final (String fullId, SnapshotNode node) in snapshot.walk()) (fullId, node.type.split(' (').first),
-  ];
+  String name(Type t) => t.toString().split('<').first;
+  final classes = <(String, String)>[];
+  void visit(Component c) {
+    final Element? e = c.element;
+    if (e != null) {
+      classes.add((c.fullId, name(e.widget.runtimeType)));
+      if (e is StatefulElement) {
+        classes.add((c.fullId, name(e.state.runtimeType)));
+      }
+    }
+    c.children.forEach(visit);
+  }
+
+  visit(capture.tree.root);
   for (final String line in '$trace'.split('\n')) {
     for (final (String fullId, String cls) in classes) {
       if (RegExp('(^|[^\\w\$])${RegExp.escape(cls)}\\.').hasMatch(line)) {

@@ -32,6 +32,9 @@ abstract final class SnapshotFonts {
     _loaded[family] = digest.toString();
   }
 
+  /// Whether [family] was loaded through [load].
+  static bool isLoaded(String family) => _loaded.containsKey(family);
+
   /// True when no font was loaded through [load].
   static bool get usingTestFont => _loaded.isEmpty;
 

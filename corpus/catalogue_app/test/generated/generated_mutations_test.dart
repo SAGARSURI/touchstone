@@ -65,7 +65,8 @@ void main() {
         };
         for (final (String id, SnapshotNode n) in after.walk()) {
           final SnapshotNode? o = a.remove(id);
-          if (o == null || o.line != n.line) {
+          // The node's own fields: an ancestor's subtree hash always changes.
+          if (o == null || o.line.split('\tsub=').first != n.line.split('\tsub=').first) {
             changed.add(id);
           }
         }

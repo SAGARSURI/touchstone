@@ -32,6 +32,11 @@ void main() {
           expect(value, isNotEmpty, reason: '$id.$field');
         }
       }
+      // Non-empty is not enough: every screen has text, so some node must
+      // carry an accessible name (the web's label, per the A14 mapping) and
+      // some node a style.
+      expect(s.walk().any(((String, SnapshotNode) e) => e.$2.semantics.contains('"name"')), isTrue);
+      expect(s.walk().any(((String, SnapshotNode) e) => e.$2.style != '{}' && e.$2.style != '-'), isTrue);
     });
   }
 }

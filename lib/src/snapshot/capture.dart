@@ -8,6 +8,7 @@ import 'dart:ui' as ui;
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart' show Ink;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -96,15 +97,92 @@ Future<Capture> captureWithDetails(
       difference: await diagnoseUnsettled(tester, id, options),
     );
   }
-  final List<Element> pending = _pendingImages(tester);
+  final List<_PendingImage> pending = await _pendingImages(tester);
   if (pending.isNotEmpty) {
     throw CaptureFailure(
-      'an image is not decoded: ${pending.map((Element e) => (e.widget as Image).image).join(', ')}. Precache it '
+      'an image is not decoded: ${pending.map((_PendingImage p) => p.describe()).join(', ')}. Precache it '
       'before capture (precacheImages, or precacheImage inside tester.runAsync, then pump).',
       difference: await _diagnoseImages(tester, id, options, pending),
     );
   }
+  final List<String> unregistered = await _fontsLoadedElsewhere(tester);
+  if (unregistered.isNotEmpty) {
+    throw CaptureFailure(
+      'text in ${unregistered.join(', ')} renders with a font that was not loaded through SnapshotFonts.load, so '
+      'the toolchain fingerprint cannot record it. Load fonts for snapshot tests with SnapshotFonts.load.',
+    );
+  }
   return _capture(tester, id, options);
+}
+
+/// Font families the shown text uses that render with a font loaded outside
+/// [SnapshotFonts.load] (a FontLoader or loadFontFromList). Each family is
+/// drawn with the code points it shows and compared with the same text in a
+/// family that is not loaded, which falls back to the test font.
+Future<List<String>> _fontsLoadedElsewhere(WidgetTester tester) async {
+  final codePoints = <String, Set<int>>{};
+  void addSpan(InlineSpan span, String? inherited) {
+    final String? family = span.style?.fontFamily ?? inherited;
+    if (span is TextSpan) {
+      final String? text = span.text;
+      if (family != null && text != null) {
+        (codePoints[family] ??= <int>{}).addAll(text.runes);
+      }
+      for (final InlineSpan child in span.children ?? const <InlineSpan>[]) {
+        addSpan(child, family);
+      }
+    }
+  }
+
+  void visit(RenderObject ro) {
+    if (ro is RenderParagraph) {
+      addSpan(ro.text, null);
+    } else if (ro is RenderEditable && ro.text != null) {
+      addSpan(ro.text!, null);
+    }
+    ro.visitChildren(visit);
+  }
+
+  visit(tester.binding.renderViews.first);
+  final out = <String>[];
+  var probed = false;
+  for (final MapEntry<String, Set<int>> e in codePoints.entries) {
+    if (_testFonts.contains(e.key) || SnapshotFonts.isLoaded(e.key) || e.value.isEmpty) {
+      continue;
+    }
+    final String text = String.fromCharCodes((e.value.toList()..sort()).take(64));
+    final bool differs = (await tester.runAsync(
+      () async => await _drawText(text, e.key) != await _drawText(text, '_touchstone_unloaded_family'),
+    ))!;
+    if (differs) {
+      out.add(e.key);
+    }
+    probed = true;
+  }
+  if (probed) {
+    // Drawing in real async time leaves a frame scheduled with a focused
+    // text field, as rasterizing does; pump it without advancing the clock.
+    await tester.pump();
+  }
+  return out..sort();
+}
+
+/// The fonts flutter_tester registers itself; they are part of its version.
+const Set<String> _testFonts = <String>{'FlutterTest', 'Ahem'};
+
+Future<String> _drawText(String text, String family) async {
+  final builder = ui.ParagraphBuilder(ui.ParagraphStyle(fontFamily: family, fontSize: 20))..addText(text);
+  final ui.Paragraph paragraph = builder.build()..layout(const ui.ParagraphConstraints(width: 1000));
+  final recorder = ui.PictureRecorder();
+  Canvas(recorder).drawParagraph(paragraph, Offset.zero);
+  final ui.Picture picture = recorder.endRecording();
+  final String metrics = '${paragraph.longestLine} ${paragraph.height}';
+  final ui.Image image = await picture.toImage(1000, paragraph.height.ceil().clamp(1, 2000));
+  final ByteData? bytes = await image.toByteData();
+  image.dispose();
+  picture.dispose();
+  paragraph.dispose();
+  return '$metrics ${sha256.convert(bytes!.buffer.asUint8List())}';
 }
 
 /// Traces a scheduled frame to the node it changes: captures at the current
@@ -152,17 +230,18 @@ Future<SnapshotDifference> _diagnoseImages(
   WidgetTester tester,
   String id,
   SnapshotOptions options,
-  List<Element> pending,
+  List<_PendingImage> pending,
 ) async {
   final Capture capture = await _capture(tester, id, options._atPumpedTime());
   final List<String> owners = <String>{
     // A component that paints only the placeholder may have been pruned.
-    for (final Element e in pending) capture.tree.shownOwnerOf(e.findRenderObject()!).fullId,
+    for (final _PendingImage p in pending)
+      p.shownBy == null ? capture.tree.root.fullId : capture.tree.shownOwnerOf(p.shownBy!).fullId,
   }.toList();
   return SnapshotDifference(
     owners.first,
     const <String>['paint'],
-    'an image load: ${(pending.first.widget as Image).image} is not decoded yet, so its placeholder would be '
+    'an image load: ${pending.first.describe()} is not decoded yet, so its placeholder would be '
         'recorded${owners.length > 1 ? ' (also in ${owners.skip(1).join(', ')})' : ''}',
     '',
     '',
@@ -262,25 +341,77 @@ void _checkSettled(WidgetTester tester, String when) {
   }
 }
 
-/// Images must be decoded before capture; a pending load would record a
-/// placeholder. Returns the `Image` elements still waiting.
-List<Element> _pendingImages(WidgetTester tester) {
-  final pending = <Element>[];
-  for (final Element e in find.byType(Image, skipOffstage: true).evaluate()) {
-    var hasImage = false;
-    var raw = false;
-    void visit(Element child) {
-      if (child.widget is RawImage) {
-        raw = true;
-        hasImage = hasImage || (child.widget as RawImage).image != null;
-        return;
-      }
-      child.visitChildren(visit);
-    }
+/// An image still loading and the render object that would show it.
+class _PendingImage {
+  _PendingImage(this.provider, this.shownBy);
+  final ImageProvider provider;
+  final RenderObject? shownBy;
 
-    e.visitChildren(visit);
-    if (!raw || !hasImage) {
-      pending.add(e);
+  String describe() => provider.toString();
+}
+
+/// Images must be decoded before capture; a pending load would record a
+/// placeholder, or with gaplessPlayback the previous image. Checks the images
+/// of `Image` and `Ink` widgets and of decorated boxes (Container,
+/// DecoratedBox, CircleAvatar) against the image cache. A load that failed
+/// stays pending in the cache but has reported its error, so an error widget
+/// can be captured.
+Future<List<_PendingImage>> _pendingImages(WidgetTester tester) async {
+  final ImageCache cache = PaintingBinding.instance.imageCache;
+  if (cache.pendingImageCount == 0) {
+    return const <_PendingImage>[];
+  }
+  Future<bool> isPending(ImageProvider provider, ImageConfiguration configuration) async {
+    final Object? key = await tester.runAsync(() => provider.obtainKey(configuration));
+    if (key == null || !cache.statusForKey(key).pending) {
+      return false;
+    }
+    // The stream completer replays an error it already reported to a new
+    // listener, synchronously.
+    var failed = false;
+    final ImageStream stream = provider.resolve(configuration);
+    final listener = ImageStreamListener((_, _) {}, onError: (_, _) => failed = true);
+    stream.addListener(listener);
+    stream.removeListener(listener);
+    return !failed;
+  }
+
+  DecorationImage? imageOf(Decoration? decoration) => switch (decoration) {
+    BoxDecoration(:final DecorationImage? image) => image,
+    ShapeDecoration(:final DecorationImage? image) => image,
+    _ => null,
+  };
+
+  final pending = <_PendingImage>[];
+  for (final Element e in find.byType(Image, skipOffstage: false).evaluate()) {
+    final image = e.widget as Image;
+    final ImageConfiguration configuration = createLocalImageConfiguration(
+      e,
+      size: image.width != null && image.height != null ? Size(image.width!, image.height!) : null,
+    );
+    if (await isPending(image.image, configuration)) {
+      pending.add(_PendingImage(image.image, e.findRenderObject()));
+    }
+  }
+  for (final Element e in find.byType(Ink, skipOffstage: false).evaluate()) {
+    final DecorationImage? image = imageOf((e.widget as Ink).decoration);
+    if (image != null && await isPending(image.image, createLocalImageConfiguration(e))) {
+      pending.add(_PendingImage(image.image, e.findRenderObject()));
+    }
+  }
+  final decorated = <RenderDecoratedBox>[];
+  void visit(RenderObject ro) {
+    if (ro is RenderDecoratedBox) {
+      decorated.add(ro);
+    }
+    ro.visitChildren(visit);
+  }
+
+  visit(tester.binding.renderViews.first);
+  for (final RenderDecoratedBox ro in decorated) {
+    final DecorationImage? image = imageOf(ro.decoration);
+    if (image != null && await isPending(image.image, ro.configuration.copyWith(size: ro.size))) {
+      pending.add(_PendingImage(image.image, ro));
     }
   }
   return pending;
@@ -388,13 +519,39 @@ class _PaintAssembly {
 /// Every semantics node in the tree, grouped by the component that owns the
 /// render object that created it. A node merged into its parent is described
 /// by the parent's data instead.
+///
+/// Some nodes belong to no render object: a paragraph builds one child node
+/// per text span with a recognizer. Those are described with the node whose
+/// render object built them.
 Map<Component, List<Map<String, Object?>>> _semanticsByComponent(RenderView view, ComponentTree tree) {
+  final owned = <SemanticsNode, RenderObject>{};
+  void collect(RenderObject ro) {
+    final SemanticsNode? node = ro.debugSemantics;
+    if (node != null) {
+      owned.putIfAbsent(node, () => ro);
+    }
+    ro.visitChildren(collect);
+  }
+
+  collect(view);
   final out = <Component, List<Map<String, Object?>>>{};
   final seen = <SemanticsNode>{};
   void visit(RenderObject ro) {
     final SemanticsNode? node = ro.debugSemantics;
-    if (node != null && node.attached && !node.isMergedIntoParent && seen.add(node)) {
-      (out[_semanticsOwner(ro, node, tree)] ??= <Map<String, Object?>>[]).add(_describeSemantics(node));
+    if (node != null && owned[node] == ro && node.attached && !node.isMergedIntoParent && seen.add(node)) {
+      final List<Map<String, Object?>> list = out[_semanticsOwner(ro, node, tree)] ??= <Map<String, Object?>>[];
+      list.add(_describeSemantics(node));
+      void unowned(SemanticsNode parent) {
+        parent.visitChildren((SemanticsNode child) {
+          if (!owned.containsKey(child) && !child.isMergedIntoParent && seen.add(child)) {
+            list.add(_describeSemantics(child));
+            unowned(child);
+          }
+          return true;
+        });
+      }
+
+      unowned(node);
     }
     ro.visitChildren(visit);
   }
@@ -545,9 +702,12 @@ Map<String, Object?> _describeSemantics(SemanticsNode node) {
     for (final SemanticsAction a in SemanticsAction.values)
       if ((d.actions & a.index) != 0) a.name,
   ]);
+  // By label, or by the action whose hint it overrides: the action's id is a
+  // counter that depends on what the test built before.
   put('customActions', <String>[
     for (final int id in d.customSemanticsActionIds ?? const <int>[])
-      CustomSemanticsAction.getAction(id)?.label ?? CustomSemanticsAction.getAction(id).toString(),
+      if (CustomSemanticsAction.getAction(id) case final CustomSemanticsAction a)
+        a.label ?? 'hint ${a.action?.name}: ${a.hint}',
   ]);
   put('textDirection', d.textDirection?.name);
   put('textSelection', d.textSelection == null ? null : '${d.textSelection!.start},${d.textSelection!.end}');
@@ -568,8 +728,19 @@ Map<String, Object?> _describeSemantics(SemanticsNode node) {
   put('maxValue', d.maxValue);
   put('controls', d.controlsNodes == null ? null : (d.controlsNodes!.toList()..sort()));
   put('tags', d.tags == null ? null : (d.tags!.map((t) => t.name).toList()..sort()));
+  // Reading order follows from the rects and text direction above, plus sort
+  // keys and traversal links.
+  put('sortKey', _sortKey(node.sortKey));
+  put('traversalParentIdentifier', node.traversalParentIdentifier?.toString());
+  put('traversalChildIdentifier', node.traversalChildIdentifier?.toString());
   return out;
 }
+
+String? _sortKey(SemanticsSortKey? key) => switch (key) {
+  null => null,
+  OrdinalSortKey(:final String? name, :final double order) => 'ordinal${name == null ? '' : ' $name'} ${c.d(order)}',
+  _ => '${key.runtimeType}${key.name == null ? '' : ' ${key.name}'}',
+};
 
 const Set<String> _styleSkip = <String>{
   'creator',

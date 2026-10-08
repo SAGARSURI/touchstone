@@ -83,8 +83,9 @@ class Snapshot {
 
   static String _pairs(Map<String, String> m) => m.entries.map((e) => '${e.key}=${jsonEncode(e.value)}').join('\t');
 
-  /// Parses [text] written by [toCanonical]. Hashes are recomputed and must
-  /// match the ones written, so a hand-edited baseline is rejected.
+  /// Parses [text] written by [toCanonical]. Node hashes are recomputed and
+  /// must match the ones written, so a hand-edited node is rejected. The
+  /// header lines (inputs, toolchain, limits) are not hashed.
   static Snapshot parse(String text) {
     final List<String> lines = const LineSplitter().convert(text);
     var i = 0;

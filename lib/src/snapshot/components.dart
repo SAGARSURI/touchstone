@@ -41,10 +41,102 @@ class ComponentPolicy {
     return lt < 0 ? t : t.substring(0, lt);
   }
 
+  /// A class declaration with a supertype: a widget class always has one, so
+  /// a plain class that shares a framework widget's name is not taken.
   static final RegExp _classDecl = RegExp(
-    r'^\s*(?:(?:abstract|base|final|sealed|interface|mixin)\s+)*class\s+([A-Za-z_$][\w$]*)',
+    r'^\s*(?:(?:abstract|base|final|sealed|interface|mixin)\s+)*class\s+([A-Za-z_$][\w$]*)'
+    r'(?:\s*<[^{]*?>)?\s+(?:extends|with|implements)\b',
     multiLine: true,
   );
+
+  /// [source] with comments and string literals blanked, so a class
+  /// declaration quoted in a string or comment is not read as one. Line breaks
+  /// are kept.
+  static String _code(String source) {
+    final out = StringBuffer();
+    var i = 0;
+    while (i < source.length) {
+      final int end = _skipNonCode(source, i);
+      if (end == i) {
+        out.write(source[i]);
+        i++;
+        continue;
+      }
+      for (final int unit in source.substring(i, end).codeUnits) {
+        out.writeCharCode(unit == 0x0A ? 0x0A : 0x20);
+      }
+      i = end;
+    }
+    return out.toString();
+  }
+
+  /// The index after the comment or string literal starting at [i], or [i].
+  static int _skipNonCode(String s, int i) {
+    if (s.startsWith('//', i)) {
+      final int end = s.indexOf('\n', i);
+      return end < 0 ? s.length : end;
+    }
+    if (s.startsWith('/*', i)) {
+      var depth = 0;
+      var j = i;
+      while (j < s.length) {
+        if (s.startsWith('/*', j)) {
+          depth++;
+          j += 2;
+        } else if (s.startsWith('*/', j)) {
+          j += 2;
+          if (--depth == 0) {
+            return j;
+          }
+        } else {
+          j++;
+        }
+      }
+      return j;
+    }
+    final bool raw =
+        s[i] == 'r' &&
+        i + 1 < s.length &&
+        (s[i + 1] == "'" || s[i + 1] == '"') &&
+        (i == 0 || !RegExp(r'[\w$]').hasMatch(s[i - 1]));
+    final int q = raw ? i + 1 : i;
+    if (s[q] != "'" && s[q] != '"') {
+      return i;
+    }
+    final String quote = s.startsWith(s[q] * 3, q) ? s[q] * 3 : s[q];
+    var j = q + quote.length;
+    while (j < s.length && !s.startsWith(quote, j)) {
+      if (!raw && s[j] == r'\') {
+        j += 2;
+      } else if (!raw && s.startsWith(r'${', j)) {
+        j = _skipBraces(s, j + 2);
+      } else {
+        j++;
+      }
+    }
+    return j + quote.length > s.length ? s.length : j + quote.length;
+  }
+
+  /// The index after the `}` that closes a block whose body starts at [i].
+  static int _skipBraces(String s, int i) {
+    var depth = 1;
+    var j = i;
+    while (j < s.length) {
+      final int k = _skipNonCode(s, j);
+      if (k != j) {
+        j = k;
+        continue;
+      }
+      if (s[j] == '{') {
+        depth++;
+      } else if (s[j] == '}' && --depth == 0) {
+        return j + 1;
+      }
+      j++;
+    }
+    return j;
+  }
+
   static final RegExp _pubspecName = RegExp(r'^name:\s*([\w]+)', multiLine: true);
 
   static final Map<String, Map<String, String>> _cache = <String, Map<String, String>>{};
@@ -67,7 +159,7 @@ class ComponentPolicy {
               ..sort((File a, File b) => a.path.compareTo(b.path));
         for (final file in files) {
           final String rel = file.path.substring(lib.path.length + 1).replaceAll(r'\', '/');
-          for (final Match m in _classDecl.allMatches(file.readAsStringSync())) {
+          for (final Match m in _classDecl.allMatches(_code(file.readAsStringSync()))) {
             out.putIfAbsent(m.group(1)!, () => 'package:$package/$rel');
           }
         }
@@ -227,6 +319,8 @@ class ComponentTree {
       final Enum e => '${e.runtimeType}.${e.name}',
       _ => null,
     };
-    return text?.replaceAll('%', '%25').replaceAll('/', '%2F');
+    // Escaped so a key cannot read as a path step, a key marker or the
+    // ordinal suffix that tells equal segments apart.
+    return text?.replaceAll('%', '%25').replaceAll('/', '%2F').replaceAll('#', '%23').replaceAll('@', '%40');
   }
 }
