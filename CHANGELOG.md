@@ -12,9 +12,9 @@
   semantics, style), `expectSnapshot` with the determinism gate, capture at an
   explicitly pumped time, failures traced to the node they affect (animation,
   image load, wall clock), toolchain fingerprint with the renderer and the
-  host OS and CPU architecture, coverage
-  limits, and test helpers for a fixed clock, settling, images and seeds.
-* Catalogue app levels 1 to 3 with 15 snapshots recorded on macOS, the mutation and
-  no-op catalogs, a seeded render-level mutation generator with a pixel and
-  semantics oracle, A13 and A3 experiments, the A14 web prototype, and the
-  frozen catalogue history changes 1 to 6.
+  host OS and CPU architecture, coverage limits, and test helpers for a fixed
+  clock, settling, images and seeds.
+* Catalogue app levels 1 to 3 with 15 snapshots recorded on macOS, the
+  mutation and no-op catalogs, a seeded render-level mutation generator with
+  a pixel and semantics oracle, A13 and A3 experiments, the A14 web
+  prototype, and the frozen catalogue history changes 1 to 6.
