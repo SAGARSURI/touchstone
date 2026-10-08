@@ -28,12 +28,17 @@ void main(List<String> args) {
   final distinct = <String, Map<String, Set<String>>>{};
   final captures = <String, int>{};
   final repeats = <String, int>{};
+  // os -> scene -> the first snapshot's canonical text.
+  final snapshots = <String, Map<String, String>>{};
   final toolchains = <String, Set<String>>{};
   for (final File f in files) {
     final json = jsonDecode(f.readAsStringSync()) as Map<String, Object?>;
     final String os = (json['label']! as String).split('-').first;
     toolchains.putIfAbsent(os, () => <String>{}).add(jsonEncode(json['toolchain']));
     repeats[os] = (repeats[os] ?? 0) + (json['repeats']! as int);
+    (json['snapshots'] as Map<String, Object?>? ?? const <String, Object?>{}).forEach(
+      (String scene, Object? text) => (snapshots[os] ??= <String, String>{}).putIfAbsent(scene, () => text! as String),
+    );
     (json['hashes']! as Map<String, Object?>).forEach((String scene, Object? list) {
       final List<String> hashes = (list! as List<Object?>).cast<String>();
       distinct.putIfAbsent(os, () => <String, Set<String>>{}).putIfAbsent(scene, () => <String>{}).addAll(hashes);
@@ -109,6 +114,21 @@ void main(List<String> args) {
           ? 'pass'
           : 'FAIL on ${macDiffer.join(', ')}'}',
     );
+  // Which nodes and fields differ between the Macs, scene by scene.
+  if (macs.length > 1 && macDiffer.isNotEmpty) {
+    out
+      ..writeln()
+      ..writeln('### Where ${macs.join(' and ')} differ')
+      ..writeln();
+    for (final String scene in macDiffer) {
+      final String? a = snapshots[macs[0]]?[scene], b = snapshots[macs[1]]?[scene];
+      if (a == null || b == null) {
+        continue;
+      }
+      final List<String> nodes = nodeDifferences(a, b);
+      out.writeln('- $scene: ${nodes.take(8).join('; ')}${nodes.length > 8 ? '; and ${nodes.length - 8} more' : ''}');
+    }
+  }
   out
     ..writeln()
     ..writeln('Toolchains: ${toolchains.map((String os, Set<String> t) => MapEntry(os, t.join(' | ')))}');
@@ -127,4 +147,48 @@ void main(List<String> args) {
   if (failed) {
     exitCode = 1;
   }
+}
+
+/// Node ids whose own fields differ between two canonical snapshots, each
+/// with the differing fields; a paint difference names the node's opaque
+/// reason, since an opaque node's paint is a pixel hash.
+List<String> nodeDifferences(String a, String b) {
+  Map<String, Map<String, String>> nodes(String text) {
+    final List<String> lines = const LineSplitter().convert(text);
+    final out = <String, Map<String, String>>{};
+    final path = <String>[];
+    for (final String line in lines.skipWhile((String l) => l != 'nodes').skip(1)) {
+      if (line.trim().isEmpty) {
+        break;
+      }
+      final int depth = (line.length - line.trimLeft().length) ~/ 2;
+      final List<String> parts = line.trimLeft().split('\t');
+      path
+        ..length = depth
+        ..add(jsonDecode(parts.first) as String);
+      out[path.join('/')] = <String, String>{
+        for (final String p in parts.skip(1))
+          if (p.contains('=')) p.substring(0, p.indexOf('=')): p.substring(p.indexOf('=') + 1),
+      };
+    }
+    return out;
+  }
+
+  final Map<String, Map<String, String>> na = nodes(a), nb = nodes(b);
+  final out = <String>[];
+  for (final String id in <String>{...na.keys, ...nb.keys}) {
+    final Map<String, String>? fa = na[id], fb = nb[id];
+    if (fa == null || fb == null) {
+      out.add('$id ${fa == null ? 'added' : 'removed'}');
+      continue;
+    }
+    final List<String> fields = <String>[
+      for (final String k in fa.keys)
+        if (k != 'sub' && fa[k] != fb[k]) k == 'paint' ? 'paint (opaque=${fa['opaque']})' : k,
+    ];
+    if (fields.isNotEmpty) {
+      out.add('$id: ${fields.join(', ')}');
+    }
+  }
+  return out;
 }
