@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../components/app_button.dart';
+import '../components/section_header.dart';
 import '../components/form_field.dart';
 import '../tokens.dart';
 
@@ -51,6 +52,7 @@ class _SignInScreenState extends State<SignInScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            const SectionHeader('Welcome back'),
             LabeledField(
               key: const ValueKey<String>('email'),
               label: 'Email',
