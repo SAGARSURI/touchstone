@@ -628,11 +628,41 @@ String _flat(Component comp, _PaintAssembly assembly, _Semantics semantics) {
   }
 
   visit(comp);
+  // A node whose parent node is outside the subtree is placed relative to
+  // the component instead of to that parent, so the subtree's output does not
+  // depend on where the component sits.
+  final RenderObject? ro = comp.renderObject;
+  final Matrix4? origin = ro == null || !ro.attached ? null : Matrix4.tryInvert(ro.getTransformTo(_root(ro)));
   final List<Map<String, Object?>> nodes = <Map<String, Object?>>[
-    for (final (Component owner, Map<String, Object?> node) in semantics.ordered)
-      if (inside.contains(owner)) node,
+    for (final (Component owner, Map<String, Object?> node, SemanticsNode sn) in semantics.ordered)
+      if (inside.contains(owner))
+        if (origin == null || inside.contains(semantics.owners[sn.parent]))
+          node
+        else
+          <String, Object?>{...node, 'transform': c.float64s((origin.clone()..multiply(_globalTransform(sn))).storage)},
   ];
   return sha256.convert(utf8.encode('$out\n${jsonEncode(nodes)}')).toString();
+}
+
+RenderObject _root(RenderObject ro) {
+  var root = ro;
+  while (root.parent != null) {
+    root = root.parent!;
+  }
+  return root;
+}
+
+/// [node]'s transform to the root semantics node's coordinates: the render
+/// view's, in physical pixels, the same as [RenderObject.getTransformTo] the
+/// render view.
+Matrix4 _globalTransform(SemanticsNode node) {
+  final m = Matrix4.identity();
+  for (SemanticsNode? n = node; n?.parent != null; n = n.parent) {
+    if (n!.transform != null) {
+      m.leftMultiply(n.transform!);
+    }
+  }
+  return m;
 }
 
 bool _passThrough(RecordedNode node) =>
@@ -653,11 +683,16 @@ class _Semantics {
   final Map<Component, List<Map<String, Object?>>> byComponent = <Component, List<Map<String, Object?>>>{};
 
   /// Every node with its owner, in the order the render tree is walked.
-  final List<(Component, Map<String, Object?>)> ordered = <(Component, Map<String, Object?>)>[];
+  final List<(Component, Map<String, Object?>, SemanticsNode)> ordered =
+      <(Component, Map<String, Object?>, SemanticsNode)>[];
 
-  void add(Component owner, Map<String, Object?> node) {
+  /// The owner of each described node.
+  final Map<SemanticsNode, Component> owners = <SemanticsNode, Component>{};
+
+  void add(Component owner, Map<String, Object?> node, SemanticsNode semanticsNode) {
     (byComponent[owner] ??= <Map<String, Object?>>[]).add(node);
-    ordered.add((owner, node));
+    ordered.add((owner, node, semanticsNode));
+    owners[semanticsNode] = owner;
   }
 }
 
@@ -679,11 +714,11 @@ _Semantics _semanticsByComponent(RenderView view, ComponentTree tree) {
     final SemanticsNode? node = ro.debugSemantics;
     if (node != null && owned[node] == ro && node.attached && !node.isMergedIntoParent && seen.add(node)) {
       final Component owner = _semanticsOwner(ro, node, tree);
-      out.add(owner, _describeSemantics(node, links));
+      out.add(owner, _describeSemantics(node, links), node);
       void unowned(SemanticsNode parent) {
         parent.visitChildren((SemanticsNode child) {
           if (!owned.containsKey(child) && !child.isMergedIntoParent && seen.add(child)) {
-            out.add(owner, _describeSemantics(child, links));
+            out.add(owner, _describeSemantics(child, links), child);
             unowned(child);
           }
           return true;

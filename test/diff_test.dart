@@ -341,6 +341,42 @@ void main() {
     expect(Policy.defaults().decide(r).verdict, Verdict.pass);
   });
 
+  testWidgets('a new component around framework widgets, with the same output, is one identity change (A5)', (
+    WidgetTester tester,
+  ) async {
+    Widget tile(bool extracted) => Holder(
+      child: Row(
+        children: <Widget>[
+          const Text('title'),
+          if (extracted) const Holder2(child: Text('value')) else const Text('value'),
+        ],
+      ),
+    );
+    final ChangeReport r = await diffOf(tester, tile(false), tile(true));
+    expect(top(r), <String>['Identity root/Holder@0']);
+    expect(r.items.single.change!.detail, 'same output; added Holder2');
+    expect(Policy.defaults().decide(r).verdict, Verdict.pass);
+  });
+
+  testWidgets('an extraction inside a component that also moved is still an identity change', (
+    WidgetTester tester,
+  ) async {
+    Widget screen(bool extracted, double height) => column(<Widget>[
+      Card2(height: height),
+      Holder(
+        child: Row(
+          children: <Widget>[
+            const Text('title'),
+            if (extracted) const Holder2(child: Text('value')) else const Text('value'),
+          ],
+        ),
+      ),
+    ]);
+    final ChangeReport r = await diffOf(tester, screen(false, 40), screen(true, 41));
+    expect(top(r), unorderedEquals(<String>['Layout root/Card2@0', 'Identity root/Holder@0']));
+    expect(r.changes.where((Change c) => c.type == ChangeType.added), isEmpty);
+  });
+
   testWidgets('a different toolchain goes to migration', (WidgetTester tester) async {
     await tester.pumpWidget(app(const Card2()));
     final Snapshot a = await captureSnapshot(tester, 'x', options: options);

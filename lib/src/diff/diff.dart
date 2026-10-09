@@ -273,8 +273,13 @@ class _Diff {
   /// replaced by one identity change on it, naming what came, went or was
   /// renamed.
   void _collapseRefactors(List<Change> changes) {
+    // Where the component sits is not part of the refactor: a component that
+    // moved, with the same size and output, is the same.
     bool same(DiffNode a) =>
-        a.match != null && a.node.bounds == a.match!.node.bounds && a.node.flat == a.match!.node.flat;
+        a.match != null &&
+        a.bounds?.w == a.match!.bounds?.w &&
+        a.bounds?.h == a.match!.bounds?.h &&
+        a.node.flat == a.match!.node.flat;
     final structural = <DiffNode, List<String>>{};
     for (final Change c in changes) {
       DiffNode? start;
