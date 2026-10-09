@@ -14,6 +14,42 @@
 import 'changes.dart';
 import 'diff.dart';
 import 'policy.dart';
+import 'summary.dart';
+
+/// The style changes that share a cause in more than one of [reports], keyed
+/// by snapshot: one line per cause, such as a token whose value changed, with
+/// how many components of each type it changed and in how many snapshots.
+/// Empty when no cause spans two snapshots.
+String renderCauses(Map<String, ChangeReport> reports) {
+  final byCause = <String, List<(String, Change)>>{};
+  for (final MapEntry<String, ChangeReport> r in reports.entries) {
+    for (final Change c in r.value.changes) {
+      if (c.type == ChangeType.style && c.fields.isNotEmpty) {
+        (byCause[fieldValues(c.fields)] ??= <(String, Change)>[]).add((r.key, c));
+      }
+    }
+  }
+  final out = StringBuffer();
+  for (final MapEntry<String, List<(String, Change)>> e in byCause.entries) {
+    final int snapshots = <String>{for (final (String id, _) in e.value) id}.length;
+    if (snapshots < 2) {
+      continue;
+    }
+    final types = <String, int>{};
+    for (final (_, Change c) in e.value) {
+      types.update(c.node.typeName, (int n) => n + 1, ifAbsent: () => 1);
+    }
+    final String components =
+        (types.entries.toList()..sort((MapEntry<String, int> x, MapEntry<String, int> y) {
+              final int byCount = y.value.compareTo(x.value);
+              return byCount != 0 ? byCount : x.key.compareTo(y.key);
+            }))
+            .map((MapEntry<String, int> t) => '${t.value} ${t.key}')
+            .join(', ');
+    out.write('  ${e.key}: style change on $components in $snapshots snapshots\n');
+  }
+  return out.isEmpty ? '' : 'Causes in more than one snapshot:\n$out';
+}
 
 /// Renders [report] with [decision]'s verdict on the first line.
 String renderReport(ChangeReport report, Decision decision) {

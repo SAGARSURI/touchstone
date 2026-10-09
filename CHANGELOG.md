@@ -56,3 +56,17 @@
   `traversalChildIdentifier`) is recorded as `link <n>`, numbered in the order
   met, instead of its identifier's text, which held a run-dependent hash. Found
   by the repeat gate on the order flow's back button.
+* Fixes after the first catalogue history run (doc/phase3/history.md):
+  - list rows that a shift moves into or out of a list's built range, and the
+    list's own bookkeeping, are the shift's consequences and never its cause;
+  - an opaque node whose reasons can be painted alone is pixel-hashed on its
+    own drawing, so a component painted over it or inside its clip no longer
+    changes its paint (baselines re-recorded);
+  - each node records `shape`, its paint without child placement, so content
+    a component draws that only moved with its children is a layout change,
+    not unexplained paint;
+  - `flat` places the subtree's top semantics nodes relative to the
+    component, so a refactor inside a component that also moved is still an
+    identity change;
+  - a colour whose token is the same on both sides keeps the token name, and
+    the review lists each style cause that spans several snapshots once.

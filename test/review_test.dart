@@ -91,6 +91,58 @@ void main() {
     expect(same.exitCode, 0);
   });
 
+  testWidgets('one token change in several snapshots is grouped under that token', (WidgetTester tester) async {
+    const Color before = Color(0xFF000000);
+    const Color after = Color(0xFFFF0000);
+    final tokens = SnapshotOptions(
+      policy: ComponentPolicy(include: <Type>{Tile}),
+      tokenResolver: (Object v) => v == before || v == after ? 'brand.accent' : null,
+    );
+    Future<String> scene(Widget w) async {
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Align(alignment: Alignment.topLeft, child: w),
+        ),
+      );
+      return (await captureSnapshot(tester, 'tile', options: tokens)).toCanonical();
+    }
+
+    final String one = await scene(const Tile());
+    final String two = await scene(const Column(children: <Widget>[Tile(), Tile(height: 30)]));
+    final String oneAfter = await scene(const Tile(color: after));
+    final String twoAfter = await scene(
+      const Column(
+        children: <Widget>[
+          Tile(color: after),
+          Tile(height: 30, color: after),
+        ],
+      ),
+    );
+
+    final Directory dir = Directory.systemTemp.createTempSync('touchstone_tokens');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    final String root = dir.resolveSymbolicLinksSync();
+    File('$root/test/snapshots/one.snapshot')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(one);
+    File('$root/test/snapshots/two.snapshot').writeAsStringSync(two);
+    git(root, <String>['init', '-q']);
+    git(root, <String>['add', '.']);
+    git(root, <String>['commit', '-q', '-m', 'base']);
+    File('$root/test/snapshots/one.snapshot').writeAsStringSync(oneAfter);
+    File('$root/test/snapshots/two.snapshot').writeAsStringSync(twoAfter);
+
+    final ReviewResult r = review(base: 'HEAD', policy: Policy.defaults(), root: root);
+    expect(r.reviews.first.text, contains('brand.accent #FF000000 -> #FFFF0000'));
+    expect(
+      r.render(),
+      contains(
+        'Causes in more than one snapshot:\n  brand.accent #FF000000 -> #FFFF0000: style change on 3 Tile in 2 snapshots\n',
+      ),
+    );
+  });
+
   test('declared expectations hold only expect lines', () {
     final Directory dir = Directory.systemTemp.createTempSync('touchstone_expect');
     addTearDown(() => dir.deleteSync(recursive: true));

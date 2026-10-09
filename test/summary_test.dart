@@ -31,13 +31,13 @@ void main() {
       );
     });
 
-    test('a colour with the same token on both sides shows the values that changed', () {
+    test('a colour with the same token on both sides keeps the token and shows the values that changed', () {
       expect(
         shortenValue(
           'positive (Color(alpha: 1.0000, red: 0.1176, green: 0.5569, blue: 0.2431, colorSpace: ColorSpace.sRGB)) -> '
           'positive (Color(alpha: 1.0000, red: 0.1176, green: 0.5569, blue: 0.2471, colorSpace: ColorSpace.sRGB))',
         ),
-        '#FF1E8E3E -> #FF1E8E3F',
+        'positive #FF1E8E3E -> #FF1E8E3F',
       );
     });
 

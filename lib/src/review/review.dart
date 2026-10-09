@@ -15,11 +15,14 @@ const String defaultRulesFile = 'touchstone.rules';
 
 /// One snapshot file's outcome.
 class SnapshotReview {
-  SnapshotReview(this.path, this.decision, this.text);
+  SnapshotReview(this.path, this.decision, this.text, [this.report]);
 
   /// The file's path relative to the package root.
   final String path;
   final Decision decision;
+
+  /// The change report, when both versions could be read.
+  final ChangeReport? report;
 
   /// What the reviewer reads: the change report, or why there is none.
   final String text;
@@ -52,6 +55,12 @@ class ReviewResult {
         ..write(r.text)
         ..writeln();
     }
+    out.write(
+      renderCauses(<String, ChangeReport>{
+        for (final SnapshotReview r in reviews)
+          if (r.report case final ChangeReport report) r.path: report,
+      }),
+    );
     int count(Verdict v) => reviews.where((SnapshotReview r) => r.decision.verdict == v).length;
     out.writeln(
       reviews.isEmpty
@@ -102,7 +111,7 @@ ReviewResult review({required String base, required Policy policy, String root =
     }
     final ChangeReport report = diffSnapshots(a, b);
     final Decision decision = policy.decide(report);
-    reviews.add(SnapshotReview(shown, decision, renderReport(report, decision)));
+    reviews.add(SnapshotReview(shown, decision, renderReport(report, decision), report));
   }
   return ReviewResult(base, reviews);
 }

@@ -7,8 +7,9 @@
 // 1. Fields that changed to the same value are one entry, named by the field
 //    a developer is likeliest to recognise (a public widget's over a render
 //    object's or a private one's), with the rest counted.
-// 2. Colours are written as their token, or as #AARRGGBB when they have none
-//    or both sides have the same token.
+// 2. Colours are written as their token, or as #AARRGGBB when they have none.
+//    When both sides have the same token, it is written once, before the two
+//    values: `brand.accent #FF3949AB -> #FF4050B0`.
 // 3. When a value is a constructor call and one named argument changed, only
 //    that argument is written: `bg.color: #1F1E8E3E -> #1F1E8E3F`.
 
@@ -33,6 +34,12 @@ String summarizeFields(Map<String, String> fields) {
       .join('; ');
 }
 
+/// What changed in [fields], without the fields' names: the same change on
+/// several components, under whichever fields each one records it.
+String fieldValues(Map<String, String> fields) => (<String>{
+  for (final MapEntry<String, String> e in fields.entries) _narrow(e.key, shortenValue(e.value)).$2,
+}.toList()..sort()).join('; ');
+
 /// [text] with colours written as tokens or hex.
 String shortenValue(String text) {
   final String hex = text.replaceAllMapped(_color, (Match m) {
@@ -41,8 +48,14 @@ String shortenValue(String text) {
   });
   final List<RegExpMatch> tokens = _token.allMatches(hex).toList();
   if (tokens.length == 2 && tokens[0][1] == tokens[1][1]) {
-    // Same token on both sides: only the value it resolves to changed.
-    return hex.replaceAllMapped(_token, (Match m) => m[2]!);
+    // Same token on both sides: the value it resolves to changed. The token
+    // is written once, as the cause.
+    var first = true;
+    return hex.replaceAllMapped(_token, (Match m) {
+      final String out = first ? '${m[1]} ${m[2]}' : m[2]!;
+      first = false;
+      return out;
+    });
   }
   return hex.replaceAllMapped(_token, (Match m) => m[1]!);
 }

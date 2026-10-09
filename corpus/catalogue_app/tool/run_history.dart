@@ -81,6 +81,7 @@ Map<String, Object?> _score(
   final text = StringBuffer('Change ${step.number}: ${step.title}\n\n');
   final scenes = <Map<String, Object?>>[];
   var items = 0;
+  final reports = <String, ChangeReport>{};
   var flagged = 0;
   final wrongCertain = <String>[];
   for (final String id in after.keys.toList()..sort()) {
@@ -125,6 +126,7 @@ Map<String, Object?> _score(
     if (snapshot) {
       items += r.items.length;
       flagged += r.items.where((ReportItem i) => i.flagged).length;
+      reports[id] = r;
       text
         ..writeln('== $id')
         ..writeln(renderReport(r, d));
@@ -139,6 +141,7 @@ Map<String, Object?> _score(
     scenes.add(row);
   }
   Directory('build/history/${step.number}').createSync(recursive: true);
+  text.write(renderCauses(reports));
   File('build/history/${step.number}/report.txt').writeAsStringSync(text.toString());
   bool all(String k) => scenes.any((Map<String, Object?> s) => s[k] == true);
   return <String, Object?>{
