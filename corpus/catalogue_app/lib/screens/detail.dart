@@ -60,7 +60,10 @@ class HeaderImage extends StatelessWidget {
   final ImageProvider image;
 
   @override
-  Widget build(BuildContext context) => Image(image: image, fit: BoxFit.cover, semanticLabel: 'Company headquarters');
+  Widget build(BuildContext context) => ClipRRect(
+    borderRadius: BorderRadius.circular(24),
+    child: Image(image: image, fit: BoxFit.cover, semanticLabel: 'Company headquarters'),
+  );
 }
 
 class OverviewTab extends StatelessWidget {
