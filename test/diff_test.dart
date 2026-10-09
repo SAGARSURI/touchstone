@@ -392,6 +392,43 @@ void main() {
     expect(r.changes.where((Change c) => c.type == ChangeType.semantics), isEmpty);
   });
 
+  testWidgets('a pixel-hashed component keeps its paint when a component painted over it changes', (
+    WidgetTester tester,
+  ) async {
+    Widget tree(Color color) => SizedBox(
+      height: 60,
+      child: Stack(
+        children: <Widget>[
+          const Wave(),
+          Positioned(left: 10, top: 5, width: 20, child: Card2(height: 10, color: color)),
+        ],
+      ),
+    );
+    final ChangeReport r = await diffOf(tester, tree(const Color(0xFF2196F3)), tree(const Color(0xFFF44336)));
+    expect(top(r), <String>['Style root/Card2@0']);
+    expect(r.changes.where((Change c) => c.type == ChangeType.paint), isEmpty);
+  });
+
+  testWidgets('a clip path keeps its paint when a child inside it changes, and a new clip shape is a change', (
+    WidgetTester tester,
+  ) async {
+    Widget tree(Color color, {bool oval = true}) => Holder2(
+      child: ClipPath(
+        clipper: _Shape(oval),
+        child: Card2(color: color),
+      ),
+    );
+    final ChangeReport child = await diffOf(tester, tree(const Color(0xFF2196F3)), tree(const Color(0xFFF44336)));
+    expect(top(child), <String>['Style root/Holder2@0/Card2@0']);
+    expect(child.changes.where((Change c) => c.type == ChangeType.paint), isEmpty);
+    final ChangeReport shape = await diffOf(
+      tester,
+      tree(const Color(0xFF2196F3)),
+      tree(const Color(0xFF2196F3), oval: false),
+    );
+    expect(top(shape), <String>['Paint root/Holder2@0']);
+  });
+
   group('policy', () {
     test('rules parse, and a pass rule must name a component and a type', () {
       final p = Policy.parse('# comment\npass Chart Paint\nforbid * Semantics\n');
@@ -433,4 +470,20 @@ class Holder2 extends StatelessWidget {
   final Widget child;
   @override
   Widget build(BuildContext context) => child;
+}
+
+/// An oval, or a triangle inside the same bounds.
+class _Shape extends CustomClipper<Path> {
+  _Shape(this.oval);
+  final bool oval;
+  @override
+  Path getClip(Size size) => oval
+      ? (Path()..addOval(Offset.zero & size))
+      : (Path()
+          ..moveTo(size.width / 2, 0)
+          ..lineTo(size.width, size.height)
+          ..lineTo(0, size.height)
+          ..close());
+  @override
+  bool shouldReclip(_Shape old) => old.oval != oval;
 }

@@ -93,9 +93,25 @@ in paint order:
   `getTransformTo`, offsets and transforms are written explicitly instead of
   relying on bounds.
 
-An opaque render object's paint ends with the pixel hash of its reach (see the
-Phase 0 register), so an opaque component's `paint` changes whenever its pixels
-do.
+An opaque render object's paint ends with a pixel hash, so an opaque
+component's `paint` changes whenever its pixels do.
+
+- Phase 3: when every reason is in the render object's own drawing or in a
+  clip or mask it applies (`path`, `picture`, `vertices`, a shader, a mask
+  filter, a text source, a platform view or texture), and its transform is a
+  plain translation, the render object is painted alone, without its
+  children, and the hash is of that drawing over what it covers in its own
+  coordinates: `pixels(own;<rect>;<hash>)`. A clip path is drawn as its
+  filled area, a shader mask as its shader, and a platform view or texture
+  as nothing (they have no pixels in a widget test; their rects are in the
+  commands). What other components draw over it or inside its clip, and
+  where an ancestor's clip cuts it, no longer change its hash: the catalogue
+  history showed every such change reported again as unexplained paint on
+  the clipping or covered component.
+- Otherwise (an unknown layer or filter, which may act on the children's
+  pixels, or a rotated or scaled transform), the hash is of the composited
+  view over the render object's reach (see the Phase 0 register):
+  `pixels(<rect>;<hash>)`.
 
 ## Capture
 
@@ -106,7 +122,8 @@ frame fails and a load that failed with an error widget does not), or if text
 uses a font family that renders with a font not loaded through
 `SnapshotFonts.load`, which the fingerprint could not record. It then enables
 semantics, records paint, repaints to undo
-what recording touched, rasterizes the view only if a node is opaque, then
+what recording touched, rasterizes opaque nodes (alone, or the view when one
+must be hashed composited), then
 builds the component tree and hashes bottom-up.
 
 Content that never settles (a shimmer) is captured with
