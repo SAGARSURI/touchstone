@@ -13,7 +13,7 @@ A phase starts only after the previous phase's exit gate is recorded here.
 | A3 | Snapshots are byte-identical across macOS machines | Fails: macOS arm64 and Intel differ on the pixel hashes of path-drawn nodes in 12 of 15 scenes. Fallback taken (baselines pinned to one host, recorded in the fingerprint) | 2026-10-08 |
 | A4 | Equal hashes imply equal pixels | 0 capture gaps on fixtures and on the 14 review cases, after the review fixes | 2026-10-07 |
 | A5 | Node identity survives refactors | Fails as first built (3 of 6 refactors needs-review). Fallback amended (flattened matching, Sagar 2026-10-09): 6 of 6 pass, each with no change or identity changes only; 0 mutations absorbed | 2026-10-09 |
-| A6 | Keeping only app-owned widgets gives a recognisable tree | Review sheet rebuilt from Phase 2 change reports; waiting on two engineers' review | 2026-10-09 |
+| A6 | Keeping only app-owned widgets gives a recognisable tree | Review sheet rebuilt from Phase 2 change reports; two engineers reviewing, Unsure answers remain | 2026-10-09 |
 | A7 | A change in the widget-test environment is a change users see | Not yet tested (Phase 3) | |
 | A8 | Cascade grouping names the true root cause | Holds. Generated: 748 single causes, 0 wrong. Catalog: 19 of 19 with the corrected expectations Sagar accepted (17 of 19 and 1 wrong certain as first written) | 2026-10-09 |
 | A9 | Affected-test selection never skips a changed test | Not yet tested (Phase 4) | |
@@ -329,7 +329,7 @@ No measurement on developer Macs was needed: the CI hosts already disagree.
 
 ### A6: a recognisable tree
 
-Two engineers are to review the sheet, which has not happened yet. The sheet
+Two engineers review the sheet. The Phase 1 sheet
 ([a6_review.md](phase1/a6_review.md)) covers every catalog mutation and a
 seeded sample of 50 generated mutations.
 
@@ -339,6 +339,13 @@ Data so far:
   component.
 - The other 47 are a screen-owned padding or size that only moves the
   components below it. That is cascade grouping, which belongs to Phase 2.
+
+Phase 2 (2026-10-09): the sheet is rebuilt from the change reports
+([a6_review.md](phase2/a6_review.md)) and the review is in progress in the
+Claude Doc "A6 attribution review". Two causes of Unsure answers were fixed:
+verbose reports (now shortened, see diff.md "Report wording") and a row
+reported as changed when only another row was edited (seed 945, capture
+change 5). Not yet met: Unsure answers remain.
 
 ### A13: conventional goldens made deterministic
 

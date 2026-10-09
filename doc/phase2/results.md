@@ -47,7 +47,7 @@ against `expectTypes`. Every report's verdict is needs-review.
 
 | Entry | Expected | Correct | Extra top-level items |
 | --- | --- | --- | --- |
-| colour-token | Style on ChangeBadge | yes | 1: `Paint WatchRow#LUM0`, the last row, whose pixel hash covers the badge drawn over it |
+| colour-token | Style on ChangeBadge | yes | 0 (1 before the off-screen fix below: `Paint WatchRow#LUM0`, the last row, cut off by the viewport) |
 | text | Content on SettingsTile | yes | 0 |
 | padding-1px | Layout on SectionHeader | yes | 6: five shift lines with possible causes, and `Paint SettingsScreen`, whose framework children moved under several causes |
 | size | Layout on SettingsIcon | yes | 0 |
@@ -135,6 +135,11 @@ mutation. The pixel and semantics oracle decides whether anything changed.
 Rerun with flattened matching on 2026-10-09: every number below is the same
 as in the first run, and no generated mutation was reported as Identity.
 
+Rerun again after the off-screen pixel fix (diff.md, capture change 5;
+f63820b, baseline c9e9063): every number below is still the same. 262
+reports lost a false `Paint WatchRow#LUM0` item, and in one (seed 4286) the
+same row's item became Semantics instead of Content. Nothing else changed.
+
 - **0 missed** at verdict level. 7,407 mutations changed pixels or semantics,
   and every one got needs-review. 1,391 more changed the snapshot but not the
   oracle. 1,202 changed nothing and passed.
@@ -195,6 +200,12 @@ Unsure with notes that the report was too verbose. The report now uses the
 shorter wording in [diff.md](diff.md), "Report wording", which cuts the 17
 catalog reports from 25,104 to 7,146 characters. The catalog rerun with it
 scored every entry exactly as before, and the sheet shows the new reports.
+
+The review of generated seed 945 found the last watchlist row reported as
+changed by an edit to another row. Its border is drawn entirely below the
+viewport, and its pixel hash covered the whole list. That is fixed (diff.md,
+capture change 5). Seed 945 now names only `WatchRow#FJO0`, the edited row,
+and the catalog and generated runs were repeated with the results above.
 
 ## What the runs changed
 

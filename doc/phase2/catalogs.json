@@ -14,7 +14,6 @@
     ],
     "verdict": "needs-review",
     "items": [
-      "Paint root/WatchlistScreen@0/WatchRow#LUM0",
       "Style root/WatchlistScreen@0/WatchRow#BOR0/PriceLabel@0/ChangeBadge@0",
       "Style root/WatchlistScreen@0/WatchRow#DEL0/PriceLabel@0/ChangeBadge@0",
       "Style root/WatchlistScreen@0/WatchRow#EMB0/PriceLabel@0/ChangeBadge@0",
@@ -23,9 +22,7 @@
     ],
     "groups": [],
     "correct": true,
-    "extraItems": [
-      "Paint root/WatchlistScreen@0/WatchRow#LUM0"
-    ],
+    "extraItems": [],
     "missedVerdict": false,
     "scenes": [
       {
@@ -79,14 +76,6 @@
               "style"
             ],
             "type": "ChangeBadge (package:catalogue_app/components/price_label.dart)"
-          },
-          {
-            "node": "root/WatchlistScreen@0/WatchRow#LUM0",
-            "change": "changed",
-            "fields": [
-              "paint"
-            ],
-            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
           }
         ]
       }

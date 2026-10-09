@@ -22,5 +22,5 @@
   "possibleCauses": 0,
   "unknownCause": 252,
   "identityItems": 0,
-  "note": "Rerun 2026-10-09 04:00-04:50Z with flattened matching (A5): every number unchanged from the first run; no generated mutation was reported as Identity."
+  "note": "Rerun 2026-10-09 04:00-04:50Z with flattened matching (A5): every number unchanged from the first run; no generated mutation was reported as Identity. Rerun again 2026-10-09 06:30-07:30Z after the off-screen pixel fix (f63820b): every number unchanged; 262 reports lost a false Paint item on the last watchlist row."
 }
