@@ -27,14 +27,22 @@ An equal root hash passes without a diff, as the spec's architecture says.
    same shape: its size, own paint, semantics and the shapes of its children.
    Of the paired siblings, those outside the longest run that kept its order
    are **Reordered**. A pair with different ids is an **Identity** change.
-5. **Second matching pass (spec).** Nodes still unpaired anywhere are paired
-   when exactly one node on each side has the same type, bounds and paint
-   hash. The pair is an **Identity** change under the same parent, otherwise
-   **Moved**.
+5. **Second matching pass (spec, amended for A5 on 2026-10-09).** Nodes still
+   unpaired anywhere are paired when exactly one node on each side has the
+   same type, bounds and paint hash. Those still unpaired are then paired
+   when exactly one node on each side has the same bounds and flattened
+   output (`flat`), whatever its type. The pair is an **Identity** change
+   under the same parent, otherwise **Moved**.
 6. **Classify** each pair, and report unpaired nodes as **Added** or
    **Removed** (the top-most only, with a count of components inside).
-7. **Group cascades** (below).
-8. **Label unexplained**: a paint change with no named cause is **Paint**,
+7. **Collapse refactors (A5).** A component added, removed or renamed inside
+   a paired component whose bounds and flattened output are unchanged is a
+   refactor. Every change in the nearest such component's subtree is
+   replaced by one **Identity** change on it, such as `same output; added
+   QuoteNames`. Equal flattened output means the subtree draws the same
+   commands and exposes the same semantics, so nothing in it is visible (A4).
+8. **Group cascades** (below).
+9. **Label unexplained**: a paint change with no named cause is **Paint**,
    flagged and listed first.
 
 ## Classifying a pair
@@ -130,8 +138,9 @@ file, so committed baselines must be re-recorded.
 ## Capture changes made in Phase 2
 
 The catalog runs found three capture properties that kept the diff from
-working as the spec describes. Each is a change to what is hashed, so
-committed baselines are re-recorded on macOS.
+working as the spec describes, and the A5 amendment added a fourth field.
+Each is a change to what is hashed, so committed baselines are re-recorded
+on macOS.
 
 1. **Child markers carry an index, not an id** (interpretation 1 below).
 2. **A move alone keeps a pixel-hashed paint.**
@@ -154,6 +163,13 @@ committed baselines are re-recorded on macOS.
    - The spec's no-op "wrap in a layout-neutral widget" then leaves the
      snapshot as it was (A5). The fixture suite and the capture-gap
      regression tests pass unchanged.
+
+4. **Each node records its flattened output** (`flat`, added with the A5
+   amendment). It hashes the subtree's paint as if it were one component,
+   and the subtree's semantics in semantics tree order. It is a detection
+   field, so it feeds the subtree hash. The fields it is built from are the
+   same ones the paint and semantics hashes cover. See
+   [schema_v1.md](../schema_v1.md).
 
 ## Interpretations
 
@@ -216,5 +232,8 @@ changes a gate or a definition.
    - At test time any difference is a failure. The report is printed with the
      verdict `fail`, and the default policy is not applied.
    - The spec's "Pass, with identity changes listed as info" applies at review
-     time. A refactor that only renames ids still needs its baseline updated,
-     because the file's bytes changed.
+     time. A refactor (an extracted, inlined or renamed widget, or a renamed
+     id) still needs its baseline updated, because the file's bytes changed.
+     The spec's verdict table makes any difference from the committed
+     baseline a fail. Review then shows the update as identity changes only,
+     which pass.

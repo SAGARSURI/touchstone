@@ -32,3 +32,9 @@
   style field describes nested values, text span styles, the framework
   widgets inside each component, drawn image fingerprints, and layout-only
   render objects under a `layout.` prefix.
+* A5 flattened matching (spec amended 2026-10-09; baselines re-recorded): each
+  node records `flat`, its subtree's output with component boundaries
+  removed. Nodes still unmatched after the second pass are paired by bounds
+  and flattened output, so a renamed class is an identity change, and a
+  component added, removed or renamed inside a component whose bounds and
+  flattened output are unchanged is one info-level identity change.
