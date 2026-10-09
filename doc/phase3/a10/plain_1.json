@@ -1,0 +1,125 @@
+{
+  "buttons/all": {
+    "pumpUs": 463076
+  },
+  "text/all": {
+    "pumpUs": 77684
+  },
+  "settings/default": {
+    "pumpUs": 185468
+  },
+  "sign_in/empty": {
+    "pumpUs": 181791
+  },
+  "sign_in/focused": {
+    "pumpUs": 160187
+  },
+  "sign_in/error": {
+    "pumpUs": 68398
+  },
+  "sign_in/submitting": {
+    "pumpUs": 48143
+  },
+  "watchlist/top": {
+    "pumpUs": 152309
+  },
+  "watchlist/scrolled": {
+    "pumpUs": 222605
+  },
+  "detail/overview": {
+    "pumpUs": 157277
+  },
+  "detail/news": {
+    "pumpUs": 117989
+  },
+  "detail/collapsed": {
+    "pumpUs": 84737
+  },
+  "states/empty": {
+    "pumpUs": 30172
+  },
+  "states/error": {
+    "pumpUs": 23941
+  },
+  "states/loading": {
+    "pumpUs": 38080
+  },
+  "overlays/dialog": {
+    "pumpUs": 122489
+  },
+  "overlays/sheet": {
+    "pumpUs": 187963
+  },
+  "overlays/snackbar": {
+    "pumpUs": 106749
+  },
+  "overlays/dropdown": {
+    "pumpUs": 232001
+  },
+  "matrix/settings_dark": {
+    "pumpUs": 291050
+  },
+  "matrix/sign_in_dark": {
+    "pumpUs": 60985
+  },
+  "matrix/settings_rtl": {
+    "pumpUs": 73822
+  },
+  "matrix/sign_in_rtl": {
+    "pumpUs": 54297
+  },
+  "matrix/settings_text_2x": {
+    "pumpUs": 61786
+  },
+  "matrix/sign_in_text_2x": {
+    "pumpUs": 48193
+  },
+  "matrix/settings_small": {
+    "pumpUs": 60091
+  },
+  "matrix/sign_in_small": {
+    "pumpUs": 45808
+  },
+  "matrix/settings_large": {
+    "pumpUs": 62750
+  },
+  "matrix/sign_in_large": {
+    "pumpUs": 38124
+  },
+  "chart/default": {
+    "pumpUs": 28629
+  },
+  "chart/tooltip": {
+    "pumpUs": 28159
+  },
+  "live/initial": {
+    "pumpUs": 60297
+  },
+  "live/ticked": {
+    "pumpUs": 83081
+  },
+  "live/flashing": {
+    "pumpUs": 55788
+  },
+  "map/default": {
+    "pumpUs": 44140
+  },
+  "order/symbol": {
+    "pumpUs": 56730
+  },
+  "order/amount": {
+    "pumpUs": 307224
+  },
+  "order/review": {
+    "pumpUs": 275986
+  },
+  "order/done": {
+    "pumpUs": 350011
+  },
+  "order/transition": {
+    "pumpUs": 259341
+  },
+  "order/dragging": {
+    "pumpUs": 292476
+  }
+}
