@@ -33,8 +33,12 @@ the written expectation wrong. That is a judgement for review, below.
 | `stack-resize-first` | Root cause: Layout on `AppButton#sizing` | Root cause: Layout inside the scene: `SizedBox.width: 300.0 -> 320.0`, with the button's resize as a consequence | The edit changes the `SizedBox` around the button, which belongs to the scene's own code, not to `AppButton`. The report names the edited line. This is the "wrong certain" row: certain, and different from what was written. |
 
 Read with those three corrected, every gate is met: 32 of 32, 19 of 19 and 0
-wrong. Whether to accept the corrections is the reviewer's call. They are not
-applied anywhere.
+wrong.
+
+**Review decision (Sagar, 2026-10-09 03:38Z): the three corrections are
+accepted.** The gate is recorded as met in the assumption register. The
+expectations in expectations.md stay as first written, and the tables below
+keep scoring against them.
 
 ## Mutation catalog (component and change type)
 

@@ -12,10 +12,10 @@ A phase starts only after the previous phase's exit gate is recorded here.
 | A2 | Paths, images and text can be fingerprinted without rasterizing | Fails for paths: fallback taken (pixel hash for nodes that draw paths). Holds for images, and for text with a readable source | 2026-10-07 |
 | A3 | Snapshots are byte-identical across macOS machines | Fails: macOS arm64 and Intel differ on the pixel hashes of path-drawn nodes in 12 of 15 scenes. Fallback taken (baselines pinned to one host, recorded in the fingerprint) | 2026-10-08 |
 | A4 | Equal hashes imply equal pixels | 0 capture gaps on fixtures and on the 14 review cases, after the review fixes | 2026-10-07 |
-| A5 | Node identity survives refactors | Fails for 3 of 6 refactors (extract, inline, rename a class: needs-review, never fail); the spec's fallback is built and does not absorb them. Decision pending | 2026-10-09 |
+| A5 | Node identity survives refactors | Fails for 3 of 6 refactors (extract, inline, rename a class: needs-review, never fail); the spec's fallback is built and does not absorb them. Sagar chose to amend the fallback (flattened matching) in Phase 2; being built | 2026-10-09 |
 | A6 | Keeping only app-owned widgets gives a recognisable tree | Review sheet rebuilt from Phase 2 change reports; waiting on two engineers' review | 2026-10-09 |
 | A7 | A change in the widget-test environment is a change users see | Not yet tested (Phase 3) | |
-| A8 | Cascade grouping names the true root cause | Generated: 748 single causes, 0 wrong. Catalog as written: 17 of 19, 1 wrong certain; both misses are disputed expectations. Pending review | 2026-10-09 |
+| A8 | Cascade grouping names the true root cause | Holds. Generated: 748 single causes, 0 wrong. Catalog: 19 of 19 with the corrected expectations Sagar accepted (17 of 19 and 1 wrong certain as first written) | 2026-10-09 |
 | A9 | Affected-test selection never skips a changed test | Not yet tested (Phase 4) | |
 | A10 | Capture and diff are cheap enough for every pull request | First numbers recorded, after the review fixes | 2026-10-07 |
 | A11 | Pairwise variants catch what the full matrix catches | Not yet tested (Phase 4) | |
@@ -399,13 +399,20 @@ The review also corrected two harness claims:
 corrected: met.** The results are in PR #3 on branch `phase2-diff`, with
 details in [results.md](phase2/results.md).
 
-| Gate | Target | As written |
-| --- | --- | --- |
-| Missed changes (catalog; 10,000 generated, at verdict level) | 0 | 0; 0 |
-| Fail verdicts on no-op refactors | 0 | 0 of 6 |
-| Correct component and change type | ≥99% | 30 of 32 |
-| Correct root cause on cascade mutations | ≥95% | 17 of 19 |
-| Wrong root causes stated as certain | 0 | 1 (catalog); 0 of 748 (generated) |
+**Review decision (Sagar, 2026-10-09 03:38Z): the three corrections are
+accepted, and the gate is recorded as met.** The original expectations stay
+unedited in [expectations.md](phase2/expectations.md); the numbers as first
+written stay in the table below. Sagar also chose to amend the spec's A5
+fallback and build flattened matching in this phase, so every gate is rerun
+before Phase 2 is handed back (see A5 below).
+
+| Gate | Target | As written | Corrections accepted |
+| --- | --- | --- | --- |
+| Missed changes (catalog; 10,000 generated, at verdict level) | 0 | 0; 0 | 0; 0 |
+| Fail verdicts on no-op refactors | 0 | 0 of 6 | 0 of 6 |
+| Correct component and change type | ≥99% | 30 of 32 | 32 of 32 |
+| Correct root cause on cascade mutations | ≥95% | 17 of 19 | 19 of 19 |
+| Wrong root causes stated as certain | 0 | 1 (catalog); 0 of 748 (generated) | 0; 0 |
 
 The three disputed entries are `custom-painter`, `padding-1px` and
 `stack-resize-first`. For each one, the report looks right and the written
