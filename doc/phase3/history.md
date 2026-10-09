@@ -159,7 +159,7 @@ that is still animating.
 
 **1. Colour token: met, with two gaps.**
 - Met: one line groups the change across snapshots: `brand.accent #FF3949AB -> #FF3F51B5: style change on 31 SymbolAvatar, 30 SettingsIcon, 17 AppButton, 1 BranchCard, 1 MapPin in 25 snapshots`.
-- Not met: two more lines group theme colours that change with brand.accent but have no token (`#FF525A92 -> #FF515B92`), on 6 components in 6 snapshots.
+- Not met: two more lines group theme colours that change with brand.accent but have no token (`#FF525A92 -> #FF515B92`), on 6 components (in 2 and in 4 snapshots).
 - Not met: the spinners and the chart draw the accent colour inside a painter, which style does not record, so they are unexplained paint.
 - Fixed since the first run: `MapSurface@0` is no longer changed.
 
