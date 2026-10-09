@@ -75,7 +75,13 @@ const String dynamicInputKey = 'dynamic';
 /// Compares [before] (the baseline) with [after] (the capture).
 ChangeReport diffSnapshots(Snapshot before, Snapshot after) {
   if (before.toolchain.toString() != after.toolchain.toString()) {
-    return ChangeReport.migration(after.id, before.toolchain, after.toolchain);
+    return ChangeReport.migration(
+      after.id,
+      before.toolchain,
+      after.toolchain,
+      beforeRoot: before.rootHash,
+      afterRoot: after.rootHash,
+    );
   }
   if (before.rootHash == after.rootHash && before.inputs.toString() == after.inputs.toString()) {
     return ChangeReport.equal(after.id);

@@ -194,22 +194,48 @@ class ReportItem {
 
 /// What differs between a baseline and a capture.
 class ChangeReport {
-  ChangeReport._(this.snapshotId, this.kind, {this.beforeToolchain, this.afterToolchain});
+  ChangeReport._(
+    this.snapshotId,
+    this.kind, {
+    this.beforeToolchain,
+    this.afterToolchain,
+    this.beforeRoot,
+    this.afterRoot,
+  });
 
   ChangeReport.equal(String snapshotId) : this._(snapshotId, ReportKind.equal);
 
-  ChangeReport.migration(String snapshotId, Map<String, String> before, Map<String, String> after)
-    : this._(snapshotId, ReportKind.migration, beforeToolchain: before, afterToolchain: after);
+  ChangeReport.migration(
+    String snapshotId,
+    Map<String, String> before,
+    Map<String, String> after, {
+    String? beforeRoot,
+    String? afterRoot,
+  }) : this._(
+         snapshotId,
+         ReportKind.migration,
+         beforeToolchain: before,
+         afterToolchain: after,
+         beforeRoot: beforeRoot,
+         afterRoot: afterRoot,
+       );
 
   ChangeReport.diff(this.snapshotId, this.changes, this.groups, this.items, this.inputChanges)
     : kind = ReportKind.diff,
       beforeToolchain = null,
-      afterToolchain = null;
+      afterToolchain = null,
+      beforeRoot = null,
+      afterRoot = null;
 
   final String snapshotId;
   final ReportKind kind;
   final Map<String, String>? beforeToolchain;
   final Map<String, String>? afterToolchain;
+
+  /// For a migration: the two baselines' root hashes, which a pixel proof
+  /// must name.
+  final String? beforeRoot;
+  final String? afterRoot;
 
   /// Every change found, including consequences.
   List<Change> changes = <Change>[];

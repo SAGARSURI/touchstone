@@ -70,3 +70,10 @@
     identity change;
   - a colour whose token is the same on both sides keeps the token name, and
     the review lists each style cause that spans several snapshots once.
+* A10 (doc/phase3/a10.md): pixels are digested with a 128-bit non-cryptographic
+  hash instead of SHA-256, and `expectSnapshot` captures only the detection
+  fields until a snapshot differs (baselines re-recorded).
+* Toolchain migration (A12): `dart run touchstone:migrate --from <old flutter>`
+  rewrites baselines from the old release with a pixel proof beside each, and
+  review passes a migrated snapshot whose pixels are identical on both
+  releases.

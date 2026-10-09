@@ -13,12 +13,14 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../diff/changes.dart';
 import '../diff/diff.dart';
+import '../diff/migration_proof.dart';
 import '../diff/policy.dart';
 import '../diff/report.dart';
 import '../testing/helpers.dart';
 import 'capture.dart';
 import 'components.dart';
 import 'difference.dart';
+import 'migration.dart';
 import 'snapshot.dart';
 
 /// Captures needed for a baseline, all byte-identical.
@@ -212,7 +214,15 @@ Future<void> expectSnapshot(
   // The usual case on a pull request is an unchanged snapshot, which needs
   // only the hashes. The explanation fields are described when it differs.
   final Snapshot check = await captureDetectionOnly(tester, id, options: options);
-  if (baseline.rootHash == check.rootHash && baseline.toolchain.toString() == check.toolchain.toString()) {
+  final bool sameToolchain = baseline.toolchain.toString() == check.toolchain.toString();
+  if (baseline.rootHash == check.rootHash && sameToolchain) {
+    if (migrationMode == MigrationMode.prove) {
+      await writePendingProof(tester, baseline);
+    }
+    return;
+  }
+  if (!sameToolchain && migrationMode == MigrationMode.apply) {
+    await _migrate(tester, file, baseline, options, rebuild);
     return;
   }
   final Snapshot capture = await captureSnapshot(tester, id, options: options);
@@ -220,6 +230,35 @@ Future<void> expectSnapshot(
   if (message != null) {
     fail(message);
   }
+}
+
+/// Rewrites [baseline], recorded with another toolchain, after the
+/// determinism gate passes, and writes the pixel proof beside it. Whether it
+/// passes is decided in review.
+Future<void> _migrate(
+  WidgetTester tester,
+  File file,
+  Snapshot baseline,
+  SnapshotOptions options,
+  Rebuild rebuild,
+) async {
+  final DeterminismReport report = await checkDeterminism(tester, baseline.id, options: options, rebuild: rebuild);
+  if (!report.deterministic) {
+    fail('Snapshot ${baseline.id} is not deterministic, so it was not migrated.\n${report.firstDifference}');
+  }
+  final Snapshot updated = Snapshot.parse(report.captures.first);
+  final MigrationProof proof = await completeProof(tester, baseline, updated);
+  file.writeAsStringSync(report.captures.first);
+  proofFileFor(file).writeAsStringSync(proof.toText());
+  // ignore: avoid_print
+  print(
+    'Snapshot ${baseline.id}: migrated to the new toolchain. '
+    '${switch (proof) {
+      _ when proof.pixelsIdentical => 'Pixels identical, so review passes it.',
+      _ when proof.before.pixels == null => 'No pixels from the old toolchain, so it needs review.',
+      _ => 'Pixels differ, so it needs review.',
+    }}',
+  );
 }
 
 /// A committed baseline, or why it could not be parsed: written by an older

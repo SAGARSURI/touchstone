@@ -6,6 +6,7 @@ import 'dart:io';
 
 import '../diff/changes.dart';
 import '../diff/diff.dart';
+import '../diff/migration_proof.dart';
 import '../diff/policy.dart';
 import '../diff/report.dart';
 import '../snapshot/snapshot.dart';
@@ -110,7 +111,7 @@ ReviewResult review({required String base, required Policy policy, String root =
       continue;
     }
     final ChangeReport report = diffSnapshots(a, b);
-    final Decision decision = policy.decide(report);
+    final Decision decision = policy.decide(report, proof: _proof(report, '$top/$path'));
     reviews.add(SnapshotReview(shown, decision, renderReport(report, decision), report));
   }
   return ReviewResult(base, reviews);
@@ -148,6 +149,23 @@ Policy loadPolicy({String? rules, String? expectations}) {
     ruleList.addAll(p.rules);
   }
   return Policy(ruleList);
+}
+
+/// The pixel proof migration wrote beside the snapshot at [path], for a
+/// migration report. A proof that cannot be read is no proof.
+MigrationProof? _proof(ChangeReport report, String path) {
+  if (report.kind != ReportKind.migration) {
+    return null;
+  }
+  final file = File('${path.substring(0, path.length - '.snapshot'.length)}.migration');
+  if (!file.existsSync()) {
+    return null;
+  }
+  try {
+    return MigrationProof.parse(file.readAsStringSync());
+  } on FormatException {
+    return null;
+  }
 }
 
 Set<String> _snapshotPaths(String listing) => <String>{

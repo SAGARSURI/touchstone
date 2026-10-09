@@ -4,6 +4,7 @@
 // verdict depends on a numeric tolerance.
 
 import 'changes.dart';
+import 'migration_proof.dart';
 
 enum Verdict {
   pass('pass'),
@@ -117,14 +118,31 @@ class Policy {
   Iterable<Rule> _of(RuleAction a) => rules.where((Rule r) => r.action == a);
 
   /// The verdict for a comparison of a committed baseline with the target
-  /// branch's baseline (spec, Verdicts).
-  Decision decide(ChangeReport report) {
+  /// branch's baseline (spec, Verdicts). A migration passes only with a
+  /// [proof] that covers both baselines and shows identical pixels (A12).
+  Decision decide(ChangeReport report, {MigrationProof? proof}) {
     switch (report.kind) {
       case ReportKind.equal:
         return Decision(Verdict.pass, const <String>[]);
       case ReportKind.migration:
+        const routed = 'recorded with a different toolchain: routed to migration, not compared';
+        if (proof == null || !proof.covers(report)) {
+          return Decision(Verdict.needsReview, <String>[
+            routed,
+            proof == null ? 'no pixel proof' : 'the pixel proof is for other baselines',
+          ]);
+        }
+        if (proof.pixelsIdentical) {
+          return Decision(Verdict.pass, <String>[
+            routed,
+            'pixels identical on both toolchains (${proof.after!.pixels}): re-baselined automatically',
+          ]);
+        }
         return Decision(Verdict.needsReview, <String>[
-          'recorded with a different toolchain: routed to migration, not compared',
+          routed,
+          proof.before.pixels == null
+              ? 'no pixels from the old toolchain: the old baseline did not match its capture there'
+              : 'pixels differ: ${proof.before.pixels} -> ${proof.after!.pixels}',
         ]);
       case ReportKind.diff:
         break;

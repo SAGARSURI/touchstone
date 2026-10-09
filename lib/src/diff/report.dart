@@ -77,6 +77,9 @@ String renderReport(ChangeReport report, Decision decision) {
           out.write('  $k: ${report.beforeToolchain![k] ?? '(none)'} -> ${report.afterToolchain![k] ?? '(none)'}\n');
         }
       }
+      for (final String reason in decision.reasons.skip(1)) {
+        out.write('${reason[0].toUpperCase()}${reason.substring(1)}.\n');
+      }
       return out.toString();
     case ReportKind.diff:
       break;

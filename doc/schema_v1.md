@@ -157,6 +157,19 @@ the first differing node and its likely cause are reported. Outside
 gate and names the component whose code read it, in its widget class or its
 `State` class.
 
+A Flutter upgrade changes the toolchain fingerprint, so every baseline is
+routed to migration (A12). `dart run touchstone:migrate --from <old flutter>`
+runs the tests twice. On the old release, each snapshot that matches its
+baseline rasterizes the whole test view and keeps its pixel digest under
+`build/touchstone/migration`. On the new release, each baseline from the old
+toolchain is rewritten after the determinism gate, and a
+`snapshots/<id>.migration` file beside it records both toolchains, both root
+hashes and both views' size and digest. Review passes a migration only when
+that file names both baselines exactly and the pixels are identical; every
+other migration needs review, with the reason. The two runs can also be made
+by hand with `--dart-define=TOUCHSTONE_MIGRATION=prove` and `=apply`. The
+schema is unchanged: the old pixels come from rendering on the old release.
+
 The gate rebuilds but does not mount the tree again, so a value fixed when a
 widget is first mounted (an unseeded `Random` in a `State` field) passes it.
 The spec's control for random values is seeding through the test helper; a
