@@ -51,6 +51,7 @@ nodes
 | `flat` | Detection | SHA-256 of the subtree's output with component boundaries removed (added 2026-10-09 for A5): the paint text of this component and every component inside it, written as if they were one component (a child component's commands where its marker would be, after its paint offset; render objects that only pass one child through left out, whoever built them; paint of a component outside the subtree as `foreign` plus its offset; a subtree component whose paint starts outside the subtree after its global transform), then the subtree's semantics nodes in semantics tree order, whoever owns each. Equal when a refactor changed the widget structure but not the output |
 | `type` | Explanation | Widget class and the library that declares it |
 | `style` | Explanation | Diagnostics properties of the render objects that drew the component's paint, with a token name when the project's resolver returns one |
+| `shape` | Explanation | Optional (added in Phase 3, 2026-10-09). SHA-256 of the paint text with every child's placement left out: the offset after each `child` marker and each `comp(<index>)` marker. Equal on both sides when the component's paint changed only because children inside it moved, which the diff reports as a layout change inside it, not as unexplained paint. Left out of the line when unknown, so files written before it stay canonical |
 | `sub` | Detection | SHA-256 over the detection fields and the children's `sub`, in order |
 
 Explanation fields are written to the file, so they must be deterministic, but

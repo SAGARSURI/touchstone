@@ -331,6 +331,9 @@ Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options
         id: comp.segment,
         bounds: comp.parent == null ? _rect(Offset.zero & view.size) : _bounds(comp.renderObject),
         paint: sha256.convert(utf8.encode(assembly.text(comp))).toString(),
+        shape: sha256
+            .convert(utf8.encode(assembly.text(comp).replaceAllMapped(_placement, (Match m) => m[1]!)))
+            .toString(),
         semantics: jsonEncode(semantics[comp] ?? const <Object?>[]),
         opaque: reasons.isEmpty ? '-' : reasons.join('+'),
         flat: _flat(comp, assembly, semanticsIndex),
@@ -476,6 +479,10 @@ List<String> _limits(PaintRecording recording) {
       'platform views and textures: their pixels do not exist in a widget test; bounds only',
   ];
 }
+
+/// Where a child is placed in a component's paint text: the offset after a
+/// framework child's `child` marker or a child component's `comp(<index>)`.
+final RegExp _placement = RegExp(r'\b(child|comp\(\d+\))\([^(){}\n]*\)');
 
 /// Builds each component's paint text from the per-render-object recording.
 ///

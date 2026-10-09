@@ -64,7 +64,7 @@ class _Wave extends CustomPainter {
   bool shouldRepaint(_Wave old) => false;
 }
 
-final options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Card2, Holder, Holder2, Dots, Wave}));
+final options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Card2, Holder, Holder2, Dots, Wave, Screen}));
 
 Widget app(Widget child) => Directionality(
   textDirection: TextDirection.ltr,
@@ -429,6 +429,19 @@ void main() {
     expect(top(shape), <String>['Paint root/Holder2@0']);
   });
 
+  testWidgets('a component\'s own content moved by its growing children is a layout change, not unexplained paint', (
+    WidgetTester tester,
+  ) async {
+    // The footer is the screen's own text: it moves when either card grows,
+    // and nothing the screen draws changes.
+    final ChangeReport one = await diffOf(tester, const Screen(), const Screen(a: 50));
+    expect(top(one), <String>['Layout root/Screen@0/Card2@0']);
+    final ChangeReport two = await diffOf(tester, const Screen(), const Screen(a: 50, b: 45));
+    expect(two.items.where((ReportItem i) => i.flagged), isEmpty);
+    expect(top(two), contains('Layout root/Screen@0'));
+    expect(two.changes.where((Change c) => c.type == ChangeType.paint && c.causedBy == null), isEmpty);
+  });
+
   group('policy', () {
     test('rules parse, and a pass rule must name a component and a type', () {
       final p = Policy.parse('# comment\npass Chart Paint\nforbid * Semantics\n');
@@ -486,4 +499,16 @@ class _Shape extends CustomClipper<Path> {
           ..close());
   @override
   bool shouldReclip(_Shape old) => old.oval != oval;
+}
+
+/// Two cards and a footer the screen draws itself.
+class Screen extends StatelessWidget {
+  const Screen({super.key, this.a = 40, this.b = 40});
+  final double a;
+  final double b;
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    height: 200,
+    child: column(<Widget>[Card2(height: a, label: 'a'), Card2(height: b, label: 'b'), const Text('footer')]),
+  );
 }

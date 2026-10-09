@@ -90,6 +90,9 @@ String renderReport(ChangeReport report, Decision decision) {
 
 String _detail(Change c) => switch (c.type) {
   ChangeType.added || ChangeType.removed => c.summary.replaceFirst(RegExp(r'^(at|was at) '), ''),
+  _ when c.contentMoved && c.possibleCauses.isNotEmpty =>
+    '${c.summary}; possible causes: ${c.possibleCauses.map((Change x) => '${x.type.label} ${x.node.segment}').join(', ')}',
+  _ when c.contentMoved => '${c.summary}; cause unknown, needs review',
   _ => c.summary,
 };
 
@@ -99,6 +102,7 @@ String _consequenceDetail(Change c) => switch (c.type) {
   ChangeType.paint when c.causedBy != null && identical(c.causedBy!.node, c.node) => c.summary,
   ChangeType.paint => 'paint changed where its children moved or changed (not verified: paint is compared by hash)',
   _ when c.presenceOnly => '${c.summary} (came or went with the child)',
+  _ when c.contentMoved => c.summary,
   ChangeType.layout => '${c.summary}, grew with its child',
   _ => c.summary,
 };

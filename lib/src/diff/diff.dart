@@ -467,6 +467,20 @@ class _Diff {
         );
       } else if (b.node.opaque != a.node.opaque) {
         out.add(Change(ChangeType.paint, a, b, 'unexplained (opaque reasons ${b.node.opaque} -> ${a.node.opaque})'));
+      } else if (a.node.shape != '-' && a.node.shape == b.node.shape) {
+        // The paint differs only in where children are placed inside the
+        // component: framework children it lays out moved, and nothing it
+        // draws changed.
+        out.add(
+          Change(
+            ChangeType.layout,
+            a,
+            b,
+            'inside: its content moved; nothing it draws changed',
+            lead: 'inside: ',
+            contentMoved: true,
+          ),
+        );
       } else {
         out.add(
           Change(

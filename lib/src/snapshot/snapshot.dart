@@ -2,7 +2,7 @@
 //
 // A snapshot is a tree of component nodes with a hash at every node. Detection
 // fields (id, bounds, paint, semantics, opaque, flat) feed the hashes; explanation
-// fields (type, style) only name causes and never affect a hash.
+// fields (type, style, shape) only name causes and never affect a hash.
 //
 // Canonical form: UTF-8 text, a fixed header, then one node per line with its
 // fields in a fixed order separated by tabs. Free text is JSON-encoded, doubles
@@ -189,6 +189,7 @@ class SnapshotNode {
     required this.flat,
     required this.type,
     required this.style,
+    this.shape = '-',
     required this.children,
   }) : subtreeHash = _subtreeHash(id, bounds, paint, semantics, opaque, flat, children);
 
@@ -224,6 +225,12 @@ class SnapshotNode {
   /// Explanation: resolved visual properties, canonical JSON.
   final String style;
 
+  /// Explanation: SHA-256 of the paint commands with every child's placement
+  /// left out. Equal on both sides when the paint changed only because
+  /// children inside the component moved, so the diff can say so instead of
+  /// reporting unexplained paint. `-` in files written before Phase 3.
+  final String shape;
+
   final List<SnapshotNode> children;
 
   /// SHA-256 over the detection fields and the children's subtree hashes.
@@ -242,6 +249,9 @@ class SnapshotNode {
     'flat=$flat',
     'type=${jsonEncode(type)}',
     'style=$style',
+    // Optional: left out when unknown, so files written before it stay
+    // canonical.
+    if (shape != '-') 'shape=$shape',
     'sub=$subtreeHash',
   ].join('\t');
 
@@ -285,8 +295,9 @@ class SnapshotNode {
       flat: value(5, 'flat'),
       type: jsonDecode(value(6, 'type')) as String,
       style: value(7, 'style'),
+      shape: parts.length > 9 ? value(8, 'shape') : '-',
       children: const <SnapshotNode>[],
-    ).._parsedSub = value(8, 'sub');
+    ).._parsedSub = value(parts.length > 9 ? 9 : 8, 'sub');
   }
 
   SnapshotNode _withChildren(List<SnapshotNode> children) => SnapshotNode(
@@ -298,6 +309,7 @@ class SnapshotNode {
     flat: flat,
     type: type,
     style: style,
+    shape: shape,
     children: children,
   );
 }

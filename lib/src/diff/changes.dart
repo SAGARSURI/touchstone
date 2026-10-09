@@ -54,7 +54,18 @@ class Change {
     this.ownLayoutChanged = false,
     this.lead = '',
     this.fields = const <String, String>{},
+    this.contentMoved = false,
   });
+
+  /// A layout change in which nothing the component draws changed, but
+  /// framework children inside it moved: its paint differs only in where
+  /// children are placed (the node's `shape` is equal on both sides).
+  final bool contentMoved;
+
+  /// For [contentMoved] with more than one child that could have moved them:
+  /// those children's changes. Empty when there is one, which is then
+  /// [causedBy], or none.
+  List<Change> possibleCauses = <Change>[];
 
   /// The changed properties [detail] lists, each "old -> new"; empty when it
   /// lists none.

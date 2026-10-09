@@ -211,7 +211,7 @@ ChangeReport groupCascades(
     bool insideMemberBefore(DiffNode n) => g.members.any((DiffNode m) => identical(n, m.match) || n.isUnder(m.match!));
     final Map<DiffNode, Change> candidateByNode = <DiffNode, Change>{};
     for (final Change c in changes) {
-      if (!_causeTypes.contains(c.type) || edge.contains(c)) {
+      if (!_causeTypes.contains(c.type) || edge.contains(c) || c.contentMoved) {
         continue;
       }
       final bool eligible = c.type == ChangeType.removed
@@ -260,6 +260,41 @@ ChangeReport groupCascades(
       c.causedBy = cause;
     } else {
       c.withShift = holder;
+    }
+  }
+
+  // Content that moved inside a component, with nothing it draws changed,
+  // was moved by its child components: one that was added, removed, resized
+  // or reordered, or the cause of a shift its children are in.
+  for (final Change c in changes) {
+    if (!c.contentMoved || c.causedBy != null) {
+      continue;
+    }
+    final DiffNode x = c.after!;
+    final roots = <DiffNode, Change>{};
+    for (final DiffNode child in x.children) {
+      for (final Change cc in byNode[child] ?? const <Change>[]) {
+        if (_causeTypes.contains(cc.type) && !cc.contentMoved) {
+          roots.putIfAbsent(cc.root.node, () => cc.root);
+        }
+      }
+    }
+    for (final Change cc in changes) {
+      if (cc.type == ChangeType.removed && x.match != null && identical(cc.before!.parent, x.match)) {
+        roots.putIfAbsent(cc.before!, () => cc);
+      }
+    }
+    for (final ShiftGroup g in groups) {
+      if (g.members.any((DiffNode m) => identical(m.parent, x))) {
+        for (final Change cause in g.candidates) {
+          roots.putIfAbsent(cause.root.node, () => cause.root);
+        }
+      }
+    }
+    if (roots.length == 1) {
+      c.causedBy = roots.values.single;
+    } else {
+      c.possibleCauses = roots.values.toList();
     }
   }
 
@@ -315,7 +350,10 @@ ChangeReport groupCascades(
     if (c.causedBy != null || c.withShift != null) {
       continue;
     }
-    final item = ReportItem.change(c, flagged: c.type == ChangeType.paint);
+    final item = ReportItem.change(
+      c,
+      flagged: c.type == ChangeType.paint || (c.contentMoved && c.possibleCauses.isEmpty),
+    );
     itemFor[c] = item;
     items.add(item);
   }
