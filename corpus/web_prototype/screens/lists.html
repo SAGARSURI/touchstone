@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>lists</title><link rel="stylesheet" href="base.css">
+<style>
+  main { height: 844px; overflow-y: auto; }
+  header { position: sticky; top: 0; height: 120px; background: #e8eaf6; display: flex; align-items: flex-end; padding: 16px; z-index: 1; }
+  .row { height: 44px; background: #fafafa; display: flex; align-items: center; }
+  hr { border: 0; border-top: 1px solid #e0e0e0; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .grid div { aspect-ratio: 1; }
+</style></head>
+<body><main data-component="ListScreen">
+  <header><h1 data-component="Tagged" data-key="title" style="font-size:20px">Watchlist</h1></header>
+  <ul id="rows" style="list-style:none"></ul>
+  <div class="grid" id="grid"></div>
+</main>
+<script>
+  const rows = document.getElementById('rows');
+  for (let i = 0; i < 30; i++) {
+    if (i) rows.insertAdjacentHTML('beforeend', '<li role="separator"><hr></li>');
+    rows.insertAdjacentHTML('beforeend', `<li class="row" data-component="Tagged" data-key="row${i}">Row ${i}</li>`);
+  }
+  const grid = document.getElementById('grid');
+  for (let i = 0; i < 6; i++) {
+    const c = 0x26a69a + i * 8;
+    grid.insertAdjacentHTML('beforeend', `<div style="background:#${c.toString(16)}">${i}</div>`);
+  }
+</script>
+</body></html>

@@ -1,0 +1,14 @@
+/* Shared reset for the A14 prototype screens: a 390 x 844 phone viewport,
+   one fixed font so text layout does not depend on installed fonts. */
+:root {
+  --surface: #ffffff;
+  --text-primary: #1b1d24;
+  --box: #4caf50;
+  --box-border: #1b5e20;
+  --gradient-start: #90caf9;
+  --gradient-end: #0d47a1;
+  --scrim: rgba(0, 0, 0, 0.541);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 390px; height: 844px; background: var(--surface); color: var(--text-primary);
+  font: 14px/1.43 monospace; overflow: hidden; }

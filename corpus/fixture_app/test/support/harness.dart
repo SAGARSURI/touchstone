@@ -8,7 +8,7 @@ import 'package:fixture_app/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:touchstone/touchstone.dart';
+import 'package:touchstone/touchstone.dart' hide Capture;
 
 /// Logical viewport for every fixture capture.
 const Size fixtureViewport = Size(390, 844);

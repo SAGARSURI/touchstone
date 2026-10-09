@@ -33,3 +33,24 @@ jobs:
         with:
           name: phase0-${{ matrix.os }}
           path: corpus/fixture_app/build/phase0/
+      - name: Catalogue (snapshots, A13, generated mutations)
+        if: always()
+        working-directory: corpus/catalogue_app
+        run: |
+          flutter pub get
+          dart format --output=none --set-exit-if-changed lib test tool
+          flutter analyze
+          # Baselines are valid on macOS only (spec, A3); other hosts run
+          # everything except the baseline comparisons.
+          flutter test ${{ runner.os != 'macOS' && '--exclude-tags baseline' || '' }} \
+            --file-reporter json:build/test_results.json
+      - name: Annotate catalogue failures
+        if: failure()
+        run: |
+          cp corpus/catalogue_app/tool/annotate_failures.dart "$RUNNER_TEMP/annotate_failures.dart"
+          dart "$RUNNER_TEMP/annotate_failures.dart" corpus/catalogue_app/build/test_results.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: catalogue-${{ matrix.os }}
+          path: corpus/catalogue_app/build/

@@ -1,0 +1,65 @@
+# A3: 1,000 repeats of every catalogue snapshot per operating system, spread
+# over 10 shards of 100 (spec, Assumption register and Phase 1 exit gate).
+# Besides the macOS arm64 and Linux x64 images, an Intel Mac covers the other
+# CPU architecture in use on Macs, and ARM Linux separates the operating
+# system from the architecture when hosts disagree.
+name: a3-repeats
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  repeat:
+    strategy:
+      fail-fast: false
+      matrix:
+        host:
+          - { runner: ubuntu-latest, label: linux }
+          - { runner: macos-latest, label: macos }
+          - { runner: macos-15-intel, label: macosintel }
+          - { runner: ubuntu-24.04-arm, label: linuxarm }
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    runs-on: ${{ matrix.host.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        if: matrix.host.label != 'linuxarm'
+        with:
+          flutter-version: 3.47.6
+          channel: stable
+      # Flutter publishes no Linux arm64 SDK archive; the git checkout of the
+      # same release downloads the arm64 host artifacts on first run.
+      - name: Flutter 3.47.6 from git (Linux arm64)
+        if: matrix.host.label == 'linuxarm'
+        run: |
+          git clone --depth 1 --branch 3.47.6 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+      - name: 100 repeats
+        working-directory: corpus/catalogue_app
+        run: |
+          flutter pub get
+          flutter test test/a3 --dart-define=REPEATS=100 \
+            --dart-define=LABEL=${{ matrix.host.label }}-${{ matrix.shard }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: a3-${{ matrix.host.label }}-${{ matrix.shard }}
+          path: corpus/catalogue_app/build/a3/
+
+  summary:
+    needs: repeat
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: a3-*
+          path: a3
+      - name: Compare repeats
+        # A plain Dart script: run it outside the Flutter package.
+        run: |
+          cp corpus/catalogue_app/tool/a3_summary.dart "$RUNNER_TEMP/a3_summary.dart"
+          dart "$RUNNER_TEMP/a3_summary.dart" a3

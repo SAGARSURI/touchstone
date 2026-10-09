@@ -1,0 +1,2073 @@
+[
+  {
+    "id": "colour-token",
+    "kind": "colour or token",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/WatchlistScreen@0/WatchRow#BOR0/PriceLabel@0/ChangeBadge@0"
+    ],
+    "scenes": [
+      {
+        "scene": "watchlist/top",
+        "pixelsChanged": true,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/WatchlistScreen@0/WatchRow#BOR0/PriceLabel@0/ChangeBadge@0",
+        "nodes": [
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#BOR0/PriceLabel@0/ChangeBadge@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "ChangeBadge (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#DEL0/PriceLabel@0/ChangeBadge@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "ChangeBadge (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#EMB0/PriceLabel@0/ChangeBadge@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "ChangeBadge (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#FJO0/PriceLabel@0/ChangeBadge@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "ChangeBadge (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#IND0/PriceLabel@0/ChangeBadge@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "ChangeBadge (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#LUM0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "text",
+    "kind": "text",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/SettingsScreen@0"
+    ],
+    "scenes": [
+      {
+        "scene": "settings/default",
+        "pixelsChanged": true,
+        "semanticsChanged": true,
+        "snapshotChanged": true,
+        "firstNode": "root/SettingsScreen@0",
+        "nodes": [
+          {
+            "node": "root/SettingsScreen@0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "semantics"
+            ],
+            "type": "SettingsScreen (package:catalogue_app/screens/settings.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@1",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@1/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SectionHeader@1",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SectionHeader (package:catalogue_app/components/section_header.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@2",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@2/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@3",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@3/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@4",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@4/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SectionHeader@2",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SectionHeader (package:catalogue_app/components/section_header.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@5",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@5/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@6",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@6/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "padding-1px",
+    "kind": "padding by 1 px",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/ButtonSetScreen@0",
+      "root/SettingsScreen@0"
+    ],
+    "scenes": [
+      {
+        "scene": "buttons/all",
+        "pixelsChanged": true,
+        "semanticsChanged": true,
+        "snapshotChanged": true,
+        "firstNode": "root/ButtonSetScreen@0",
+        "nodes": [
+          {
+            "node": "root/ButtonSetScreen@0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "semantics"
+            ],
+            "type": "ButtonSetScreen (package:catalogue_app/screens/button_set.dart)"
+          },
+          {
+            "node": "root/ButtonSetScreen@0/SectionHeader@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SectionHeader (package:catalogue_app/components/section_header.dart)"
+          },
+          {
+            "node": "root/ButtonSetScreen@0/AppButton#primary",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "AppButton (package:catalogue_app/components/app_button.dart)"
+          },
+          {
+            "node": "root/ButtonSetScreen@0/SectionHeader@1",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SectionHeader (package:catalogue_app/components/section_header.dart)"
+          },
+          {
+            "node": "root/ButtonSetScreen@0/AppButton#secondary",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "AppButton (package:catalogue_app/components/app_button.dart)"
+          },
+          {
+            "node": "root/ButtonSetScreen@0/SectionHeader@2",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SectionHeader (package:catalogue_app/components/section_header.dart)"
+          },
+          {
+            "node": "root/ButtonSetScreen@0/AppButton#disabled",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "AppButton (package:catalogue_app/components/app_button.dart)"
+          },
+          {
+            "node": "root/ButtonSetScreen@0/SectionHeader@3",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SectionHeader (package:catalogue_app/components/section_header.dart)"
+          },
+          {
+            "node": "root/ButtonSetScreen@0/AppButton#loading",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint",
+              "semantics"
+            ],
+            "type": "AppButton (package:catalogue_app/components/app_button.dart)"
+          },
+          {
+            "node": "root/ButtonSetScreen@0/AppButton#loading/_Spinner@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "_Spinner (package:catalogue_app/components/app_button.dart)"
+          }
+        ]
+      },
+      {
+        "scene": "settings/default",
+        "pixelsChanged": true,
+        "semanticsChanged": true,
+        "snapshotChanged": true,
+        "firstNode": "root/SettingsScreen@0",
+        "nodes": [
+          {
+            "node": "root/SettingsScreen@0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "semantics"
+            ],
+            "type": "SettingsScreen (package:catalogue_app/screens/settings.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SectionHeader@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SectionHeader (package:catalogue_app/components/section_header.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@0/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@1",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@1/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SectionHeader@1",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SectionHeader (package:catalogue_app/components/section_header.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@2",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@2/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@3",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@3/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@4",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@4/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SectionHeader@2",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SectionHeader (package:catalogue_app/components/section_header.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@5",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@5/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@6",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@6/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "size",
+    "kind": "size",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/SettingsScreen@0/SettingsTile@0"
+    ],
+    "scenes": [
+      {
+        "scene": "settings/default",
+        "pixelsChanged": true,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/SettingsScreen@0/SettingsTile@0",
+        "nodes": [
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@0/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@1",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@1/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@2",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@2/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@3",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@3/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@4",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@4/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@5",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@5/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@6",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@6/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "widget-added",
+    "kind": "widget added",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/SettingsScreen@0"
+    ],
+    "scenes": [
+      {
+        "scene": "settings/default",
+        "pixelsChanged": true,
+        "semanticsChanged": true,
+        "snapshotChanged": true,
+        "firstNode": "root/SettingsScreen@0",
+        "nodes": [
+          {
+            "node": "root/SettingsScreen@0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "semantics"
+            ],
+            "type": "SettingsScreen (package:catalogue_app/screens/settings.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@5",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@5/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@6",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint",
+              "semantics",
+              "style"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@6/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@7",
+            "change": "added",
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@7/SettingsIcon@0",
+            "change": "added",
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "widget-removed",
+    "kind": "widget removed",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/SettingsScreen@0"
+    ],
+    "scenes": [
+      {
+        "scene": "settings/default",
+        "pixelsChanged": true,
+        "semanticsChanged": true,
+        "snapshotChanged": true,
+        "firstNode": "root/SettingsScreen@0",
+        "nodes": [
+          {
+            "node": "root/SettingsScreen@0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "semantics",
+              "style"
+            ],
+            "type": "SettingsScreen (package:catalogue_app/screens/settings.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@5",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint",
+              "semantics",
+              "style"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@5/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@6",
+            "change": "removed",
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@6/SettingsIcon@0",
+            "change": "removed",
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "widget-reordered",
+    "kind": "widget reordered",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/SettingsScreen@0"
+    ],
+    "scenes": [
+      {
+        "scene": "settings/default",
+        "pixelsChanged": true,
+        "semanticsChanged": true,
+        "snapshotChanged": true,
+        "firstNode": "root/SettingsScreen@0",
+        "nodes": [
+          {
+            "node": "root/SettingsScreen@0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "semantics"
+            ],
+            "type": "SettingsScreen (package:catalogue_app/screens/settings.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint",
+              "semantics",
+              "style"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@0/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@1",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint",
+              "semantics",
+              "style"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@1/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "bounds",
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "opacity",
+    "kind": "opacity",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/StatesScreen@0/StatusView@0",
+      "root/StatesScreen@0/StatusView@0"
+    ],
+    "scenes": [
+      {
+        "scene": "states/empty",
+        "pixelsChanged": true,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/StatesScreen@0/StatusView@0",
+        "nodes": [
+          {
+            "node": "root/StatesScreen@0/StatusView@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "StatusView (package:catalogue_app/components/status_view.dart)"
+          }
+        ]
+      },
+      {
+        "scene": "states/error",
+        "pixelsChanged": true,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/StatesScreen@0/StatusView@0",
+        "nodes": [
+          {
+            "node": "root/StatesScreen@0/StatusView@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "StatusView (package:catalogue_app/components/status_view.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "clip",
+    "kind": "clip",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/DetailScreen@0/HeaderImage@0"
+    ],
+    "scenes": [
+      {
+        "scene": "detail/overview",
+        "pixelsChanged": true,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/DetailScreen@0/HeaderImage@0",
+        "nodes": [
+          {
+            "node": "root/DetailScreen@0/HeaderImage@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "HeaderImage (package:catalogue_app/screens/detail.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "font-weight",
+    "kind": "font weight",
+    "expectedOracle": "none",
+    "oracle": "none",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": true,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/WatchlistScreen@0/WatchRow#ACM0/PriceLabel@0"
+    ],
+    "scenes": [
+      {
+        "scene": "watchlist/top",
+        "pixelsChanged": false,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/WatchlistScreen@0/WatchRow#ACM0/PriceLabel@0",
+        "nodes": [
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#ACM0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#BOR0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#COB0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#DEL0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#EMB0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#FJO0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#GRA0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#HAR0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#IND0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#JUN0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#KES0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#LUM0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "icon",
+    "kind": "icon",
+    "expectedOracle": "pixels",
+    "oracle": "none",
+    "expectationHeld": false,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": true,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/SettingsScreen@0/SettingsTile@4/SettingsIcon@0"
+    ],
+    "scenes": [
+      {
+        "scene": "settings/default",
+        "pixelsChanged": false,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/SettingsScreen@0/SettingsTile@4/SettingsIcon@0",
+        "nodes": [
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@4/SettingsIcon@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "image",
+    "kind": "image",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/DetailScreen@0/HeaderImage@0"
+    ],
+    "scenes": [
+      {
+        "scene": "detail/overview",
+        "pixelsChanged": true,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/DetailScreen@0/HeaderImage@0",
+        "nodes": [
+          {
+            "node": "root/DetailScreen@0/HeaderImage@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "HeaderImage (package:catalogue_app/screens/detail.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "enabled-state",
+    "kind": "enabled state",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/ButtonSetScreen@0/AppButton#disabled"
+    ],
+    "scenes": [
+      {
+        "scene": "buttons/all",
+        "pixelsChanged": true,
+        "semanticsChanged": true,
+        "snapshotChanged": true,
+        "firstNode": "root/ButtonSetScreen@0/AppButton#disabled",
+        "nodes": [
+          {
+            "node": "root/ButtonSetScreen@0/AppButton#disabled",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "semantics",
+              "style"
+            ],
+            "type": "AppButton (package:catalogue_app/components/app_button.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "selected-state",
+    "kind": "selected state",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/SettingsScreen@0/SettingsTile@2"
+    ],
+    "scenes": [
+      {
+        "scene": "settings/default",
+        "pixelsChanged": true,
+        "semanticsChanged": true,
+        "snapshotChanged": true,
+        "firstNode": "root/SettingsScreen@0/SettingsTile@2",
+        "nodes": [
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@2",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "semantics"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "semantics-label",
+    "kind": "semantics label",
+    "expectedOracle": "semantics",
+    "oracle": "semantics",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/DetailScreen@0/HeaderImage@0"
+    ],
+    "scenes": [
+      {
+        "scene": "detail/overview",
+        "pixelsChanged": false,
+        "semanticsChanged": true,
+        "snapshotChanged": true,
+        "firstNode": "root/DetailScreen@0/HeaderImage@0",
+        "nodes": [
+          {
+            "node": "root/DetailScreen@0/HeaderImage@0",
+            "change": "changed",
+            "fields": [
+              "semantics"
+            ],
+            "type": "HeaderImage (package:catalogue_app/screens/detail.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "custom-painter",
+    "kind": "CustomPainter output",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "landsOnExpected": true,
+    "firstNodes": [
+      "root/ButtonSetScreen@0/AppButton#loading"
+    ],
+    "scenes": [
+      {
+        "scene": "buttons/all",
+        "pixelsChanged": true,
+        "semanticsChanged": true,
+        "snapshotChanged": true,
+        "firstNode": "root/ButtonSetScreen@0/AppButton#loading",
+        "nodes": [
+          {
+            "node": "root/ButtonSetScreen@0/AppButton#loading",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "semantics"
+            ],
+            "type": "AppButton (package:catalogue_app/components/app_button.dart)"
+          },
+          {
+            "node": "root/ButtonSetScreen@0/AppButton#loading/_Spinner@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "_Spinner (package:catalogue_app/components/app_button.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "theme",
+    "kind": "theme",
+    "expectedOracle": "pixels",
+    "oracle": "pixels",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "missed": false,
+    "falseAlarmCandidate": false,
+    "firstNodes": [
+      "root/TextStylesScreen@0",
+      "root/SettingsScreen@0"
+    ],
+    "scenes": [
+      {
+        "scene": "text/all",
+        "pixelsChanged": true,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/TextStylesScreen@0",
+        "nodes": [
+          {
+            "node": "root/TextStylesScreen@0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "TextStylesScreen (package:catalogue_app/screens/text_styles.dart)"
+          }
+        ]
+      },
+      {
+        "scene": "settings/default",
+        "pixelsChanged": true,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/SettingsScreen@0",
+        "nodes": [
+          {
+            "node": "root/SettingsScreen@0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "SettingsScreen (package:catalogue_app/screens/settings.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "extract-widget",
+    "kind": "extract a widget",
+    "expectedOracle": "none",
+    "oracle": "none",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "firstNodes": [
+      "root/WatchlistScreen@0/WatchRow#ACM0"
+    ],
+    "scenes": [
+      {
+        "scene": "watchlist/top",
+        "pixelsChanged": false,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/WatchlistScreen@0/WatchRow#ACM0",
+        "nodes": [
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#ACM0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#BOR0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#COB0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#DEL0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#EMB0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#FJO0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#GRA0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#HAR0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#IND0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#JUN0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#KES0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#LUM0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#ACM0/QuoteNames@0",
+            "change": "added",
+            "type": "QuoteNames (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#BOR0/QuoteNames@0",
+            "change": "added",
+            "type": "QuoteNames (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#COB0/QuoteNames@0",
+            "change": "added",
+            "type": "QuoteNames (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#DEL0/QuoteNames@0",
+            "change": "added",
+            "type": "QuoteNames (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#EMB0/QuoteNames@0",
+            "change": "added",
+            "type": "QuoteNames (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#FJO0/QuoteNames@0",
+            "change": "added",
+            "type": "QuoteNames (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#GRA0/QuoteNames@0",
+            "change": "added",
+            "type": "QuoteNames (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#HAR0/QuoteNames@0",
+            "change": "added",
+            "type": "QuoteNames (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#IND0/QuoteNames@0",
+            "change": "added",
+            "type": "QuoteNames (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#JUN0/QuoteNames@0",
+            "change": "added",
+            "type": "QuoteNames (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#KES0/QuoteNames@0",
+            "change": "added",
+            "type": "QuoteNames (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#LUM0/QuoteNames@0",
+            "change": "added",
+            "type": "QuoteNames (package:catalogue_app/components/watch_row.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "inline-widget",
+    "kind": "inline a widget",
+    "expectedOracle": "none",
+    "oracle": "none",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "firstNodes": [
+      "root/SettingsScreen@0/SettingsTile@0"
+    ],
+    "scenes": [
+      {
+        "scene": "settings/default",
+        "pixelsChanged": false,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/SettingsScreen@0/SettingsTile@0",
+        "nodes": [
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@0",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@0/SettingsIcon@0",
+            "change": "removed",
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@1",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@1/SettingsIcon@0",
+            "change": "removed",
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@2",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@2/SettingsIcon@0",
+            "change": "removed",
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@3",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@3/SettingsIcon@0",
+            "change": "removed",
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@4",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@4/SettingsIcon@0",
+            "change": "removed",
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@5",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@5/SettingsIcon@0",
+            "change": "removed",
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@6",
+            "change": "changed",
+            "fields": [
+              "paint",
+              "style"
+            ],
+            "type": "SettingsTile (package:catalogue_app/components/settings_tile.dart)"
+          },
+          {
+            "node": "root/SettingsScreen@0/SettingsTile@6/SettingsIcon@0",
+            "change": "removed",
+            "type": "SettingsIcon (package:catalogue_app/components/settings_tile.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "wrap-layout-neutral",
+    "kind": "wrap in a layout-neutral widget",
+    "expectedOracle": "none",
+    "oracle": "none",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "firstNodes": [
+      "root/WatchlistScreen@0/WatchRow#ACM0/PriceLabel@0",
+      "root/DetailScreen@0/OverviewTab@0/PriceLabel@0"
+    ],
+    "scenes": [
+      {
+        "scene": "watchlist/top",
+        "pixelsChanged": false,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/WatchlistScreen@0/WatchRow#ACM0/PriceLabel@0",
+        "nodes": [
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#ACM0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#BOR0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#COB0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#DEL0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#EMB0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#FJO0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#GRA0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#HAR0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#IND0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#JUN0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#KES0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#LUM0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          }
+        ]
+      },
+      {
+        "scene": "detail/overview",
+        "pixelsChanged": false,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/DetailScreen@0/OverviewTab@0/PriceLabel@0",
+        "nodes": [
+          {
+            "node": "root/DetailScreen@0/OverviewTab@0/PriceLabel@0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "PriceLabel (package:catalogue_app/components/price_label.dart)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "add-const",
+    "kind": "add const",
+    "expectedOracle": "none",
+    "oracle": "none",
+    "expectationHeld": true,
+    "snapshotChanged": false,
+    "firstNodes": [],
+    "scenes": [
+      {
+        "scene": "states/empty",
+        "pixelsChanged": false,
+        "semanticsChanged": false,
+        "snapshotChanged": false
+      },
+      {
+        "scene": "states/error",
+        "pixelsChanged": false,
+        "semanticsChanged": false,
+        "snapshotChanged": false
+      }
+    ]
+  },
+  {
+    "id": "stateless-to-stateful",
+    "kind": "convert stateless to stateful",
+    "expectedOracle": "none",
+    "oracle": "none",
+    "expectationHeld": true,
+    "snapshotChanged": false,
+    "firstNodes": [],
+    "scenes": [
+      {
+        "scene": "buttons/all",
+        "pixelsChanged": false,
+        "semanticsChanged": false,
+        "snapshotChanged": false
+      },
+      {
+        "scene": "settings/default",
+        "pixelsChanged": false,
+        "semanticsChanged": false,
+        "snapshotChanged": false
+      }
+    ]
+  },
+  {
+    "id": "rename-class",
+    "kind": "rename a class",
+    "expectedOracle": "none",
+    "oracle": "none",
+    "expectationHeld": true,
+    "snapshotChanged": true,
+    "firstNodes": [
+      "root/WatchlistScreen@0/WatchRow#ACM0"
+    ],
+    "scenes": [
+      {
+        "scene": "watchlist/top",
+        "pixelsChanged": false,
+        "semanticsChanged": false,
+        "snapshotChanged": true,
+        "firstNode": "root/WatchlistScreen@0/WatchRow#ACM0",
+        "nodes": [
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#ACM0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#ACM0/SymbolAvatar@0",
+            "change": "removed",
+            "type": "SymbolAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#BOR0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#BOR0/SymbolAvatar@0",
+            "change": "removed",
+            "type": "SymbolAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#COB0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#COB0/SymbolAvatar@0",
+            "change": "removed",
+            "type": "SymbolAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#DEL0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#DEL0/SymbolAvatar@0",
+            "change": "removed",
+            "type": "SymbolAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#EMB0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#EMB0/SymbolAvatar@0",
+            "change": "removed",
+            "type": "SymbolAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#FJO0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#FJO0/SymbolAvatar@0",
+            "change": "removed",
+            "type": "SymbolAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#GRA0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#GRA0/SymbolAvatar@0",
+            "change": "removed",
+            "type": "SymbolAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#HAR0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#HAR0/SymbolAvatar@0",
+            "change": "removed",
+            "type": "SymbolAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#IND0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#IND0/SymbolAvatar@0",
+            "change": "removed",
+            "type": "SymbolAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#JUN0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#JUN0/SymbolAvatar@0",
+            "change": "removed",
+            "type": "SymbolAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#KES0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#KES0/SymbolAvatar@0",
+            "change": "removed",
+            "type": "SymbolAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#LUM0",
+            "change": "changed",
+            "fields": [
+              "paint"
+            ],
+            "type": "WatchRow (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#LUM0/SymbolAvatar@0",
+            "change": "removed",
+            "type": "SymbolAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#ACM0/TickerAvatar@0",
+            "change": "added",
+            "type": "TickerAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#BOR0/TickerAvatar@0",
+            "change": "added",
+            "type": "TickerAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#COB0/TickerAvatar@0",
+            "change": "added",
+            "type": "TickerAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#DEL0/TickerAvatar@0",
+            "change": "added",
+            "type": "TickerAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#EMB0/TickerAvatar@0",
+            "change": "added",
+            "type": "TickerAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#FJO0/TickerAvatar@0",
+            "change": "added",
+            "type": "TickerAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#GRA0/TickerAvatar@0",
+            "change": "added",
+            "type": "TickerAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#HAR0/TickerAvatar@0",
+            "change": "added",
+            "type": "TickerAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#IND0/TickerAvatar@0",
+            "change": "added",
+            "type": "TickerAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#JUN0/TickerAvatar@0",
+            "change": "added",
+            "type": "TickerAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#KES0/TickerAvatar@0",
+            "change": "added",
+            "type": "TickerAvatar (package:catalogue_app/components/watch_row.dart)"
+          },
+          {
+            "node": "root/WatchlistScreen@0/WatchRow#LUM0/TickerAvatar@0",
+            "change": "added",
+            "type": "TickerAvatar (package:catalogue_app/components/watch_row.dart)"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-08",
+  "flutter": "3.47.6",
+  "host": "linux_x64",
+  "seeds": "0-9999",
+  "total": 10000,
+  "missed": 0,
+  "oracleChanged": 7407,
+  "snapshotOnly": 1391,
+  "unchanged": 1202,
+  "ownerChanged": 8751
+}

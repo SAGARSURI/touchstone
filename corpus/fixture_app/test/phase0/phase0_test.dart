@@ -17,7 +17,7 @@ import 'dart:io';
 import 'package:fixture_app/screens.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:touchstone/touchstone.dart';
+import 'package:touchstone/touchstone.dart' hide Capture;
 
 import '../support/harness.dart';
 

@@ -10,18 +10,18 @@ A phase starts only after the previous phase's exit gate is recorded here.
 | --- | --- | --- | --- |
 | A1 | A custom recording context captures each node's own paint, including opacity and layer effects | Holds on fixtures; 3 of 50 paint mutations change no own paint hash, each explained below | 2026-10-07 |
 | A2 | Paths, images and text can be fingerprinted without rasterizing | Fails for paths: fallback taken (pixel hash for nodes that draw paths). Holds for images, and for text with a readable source | 2026-10-07 |
-| A3 | Snapshots are byte-identical across macOS machines | Not yet tested (Phase 1) | |
+| A3 | Snapshots are byte-identical across macOS machines | Fails: macOS arm64 and Intel differ on the pixel hashes of path-drawn nodes in 12 of 15 scenes. Fallback taken (baselines pinned to one host, recorded in the fingerprint) | 2026-10-08 |
 | A4 | Equal hashes imply equal pixels | 0 capture gaps on fixtures and on the 14 review cases, after the review fixes | 2026-10-07 |
 | A5 | Node identity survives refactors | Not yet tested (Phase 2) | |
-| A6 | Keeping only app-owned widgets gives a recognisable tree | Not yet tested (Phase 1) | |
+| A6 | Keeping only app-owned widgets gives a recognisable tree | Review sheet ready; waiting on two engineers' review | 2026-10-08 |
 | A7 | A change in the widget-test environment is a change users see | Not yet tested (Phase 3) | |
 | A8 | Cascade grouping names the true root cause | Not yet tested (Phase 2) | |
 | A9 | Affected-test selection never skips a changed test | Not yet tested (Phase 4) | |
 | A10 | Capture and diff are cheap enough for every pull request | First numbers recorded, after the review fixes | 2026-10-07 |
 | A11 | Pairwise variants catch what the full matrix catches | Not yet tested (Phase 4) | |
 | A12 | A Flutter upgrade can be absorbed without re-reviewing every baseline | Not yet tested (Phase 3) | |
-| A13 | Existing golden tests can be made deterministic | Not yet tested (Phase 1) | |
-| A14 | The schema is not Flutter-shaped | Not yet tested (Phase 1) | |
+| A13 | Existing golden tests can be made deterministic | Holds: the gate fails 4 of 15 conventional goldens and names a node and a cause for each | 2026-10-08 |
+| A14 | The schema is not Flutter-shaped | Holds: every field has a web source; 5 web captures parse as schema v1 | 2026-10-07 |
 
 ## Phase 0: feasibility spikes
 
@@ -270,3 +270,123 @@ Sagar decided these on 2026-10-07, and the spec was updated to match.
    `flutter_test` sets `debugDisableShadows`, so shadow blur is invisible to
    both the snapshot and the pixel oracle. Built in Phase 1 with the coverage
    report.
+
+## Phase 1: capture
+
+**Exit gate (spec):** 0 differing snapshots in 1,000 repeats per operating
+system, and the schema maps to web with no missing required field.
+
+**Result (2026-10-08): passes.** PR #2, branch `phase1-capture`.
+
+- **Repeats.** The A3 workflow ran 1,000 repeats of each of the 15 catalogue
+  scenes on four hosts: macOS arm64 (`macos-latest`), macOS Intel
+  (`macos-15-intel`), Linux x64 (`ubuntu-latest`) and Linux ARM
+  (`ubuntu-24.04-arm`). That is 15,000 captures per host, with 0 scenes
+  showing more than one snapshot on any host.
+- **Web mapping.** A14 holds ([a14_web_mapping.md](phase1/a14_web_mapping.md)).
+
+Built: schema v1 draft ([schema_v1.md](schema_v1.md)), the capture pipeline,
+the determinism gate, the toolchain fingerprint, the coverage report, the
+mutation and no-op catalogs, and the mutation generator.
+
+### A3: identical across Macs
+
+**Fails.** Each host is stable on its own, but the hosts disagree with each
+other:
+
+- Every pair of hosts differs on 12 of the 15 scenes, Mac arm64 against Mac
+  Intel included.
+- The 3 scenes with no path-drawn node are identical on all four.
+- On `settings/default` and `watchlist/scrolled`, the two x64 hosts agree with
+  each other, and so do the two ARM hosts.
+
+The differences are in the pixel hashes of nodes drawn as paths: Material
+shapes, rows, buttons. Every other field matched.
+
+- **Mac arm64 against Intel.** The A3 summary lists the differing nodes. Each
+  one is a `paint` field on a node marked `opaque=path`: every `AppButton`,
+  `LabeledField` and `WatchRow`, and the settings screen. The listing was cut
+  off before the detail and states scenes, because annotations have a size
+  limit.
+- **Linux against macOS.** Comparing Linux-recorded baselines on macOS gave
+  43 changed nodes, all opaque (40 path, 3 shader). Only their paint field
+  changed. The likely cause
+is that Skia's software rasterizer antialiases path edges differently by CPU
+architecture and OS.
+
+The fallback in the spec is taken: "Pin baselines to one CI image and record
+it in the fingerprint". Sagar chose this on 2026-10-08:
+
+- The toolchain fingerprint records the host (`macos_arm64`).
+- Catalogue baselines are recorded on macOS CI by the `record-baselines`
+  workflow.
+- Other hosts run everything except the baseline comparisons, which are
+  tagged `baseline`.
+- A developer Mac with another CPU architecture reports "not compared"
+  instead of a diff.
+
+No measurement on developer Macs was needed: the CI hosts already disagree.
+
+### A6: a recognisable tree
+
+Two engineers are to review the sheet, which has not happened yet. The sheet
+([a6_review.md](phase1/a6_review.md)) covers every catalog mutation and a
+seeded sample of 50 generated mutations.
+
+Data so far:
+- Every catalog mutation that has one component to land on landed on it.
+- In the 10,000 generated mutations, 99.5% changed a field of the owning
+  component.
+- The other 47 are a screen-owned padding or size that only moves the
+  components below it. That is cascade grouping, which belongs to Phase 2.
+
+### A13: conventional goldens made deterministic
+
+**Holds** ([a13.md](phase1/a13.md)). The gate fails 4 of 15 conventional golden
+tests and names a node and a cause for each:
+- three image decode races, on `HeaderImage`;
+- one running shimmer.
+
+Re-run on 2026-10-08 after the review fixes, with the same result. Across
+hosts, all 15 conventional goldens recorded on macOS fail on Linux, while the
+3 snapshots with no path-drawn node are identical.
+
+### A14: schema not Flutter-shaped
+
+**Holds** ([a14_web_mapping.md](phase1/a14_web_mapping.md)). Every field has a
+web source, and five Chromium captures parse as schema v1.
+
+### Release gates measured in Phase 1
+
+- **0 misses in 10,000 generated mutations: met.** 7,407 of the 10,000 changed
+  pixels or semantics, and every one changed the snapshot
+  ([generated.md](phase1/generated.md)). The first full run had a generator bug
+  (size mutations were no-ops), so it was fixed and re-run.
+- **0 missed mutations: met on the mutation catalog.** 17 edits, 0 missed
+  ([catalogs.md](phase1/catalogs.md)).
+- **0 fails on no-op refactors: Phase 2.** Verdicts need the diff engine. The
+  no-op catalog's pixels and semantics were unchanged in all 6 entries; 4 of
+  them change the snapshot, which Phase 2's diff must absorb.
+- **0 differing snapshots in 1,000 repeats per OS: met** (above).
+
+### Phase 1 review
+
+An adversarial review on 2026-10-08 found 11 capture gaps. All are fixed, each
+with a regression test in `test/capture_gaps_test.dart`:
+- Semantics of text spans with a recognizer were lost. The same fix also
+  records each scrollable's position and actions, which were missing.
+- Images loading in decorations, and with `gaplessPlayback`, were captured as
+  placeholders.
+- A failed image with an error widget could never be captured.
+- Reading order (sort keys) was not recorded.
+- Hint overrides were recorded with a run-dependent id.
+- Sibling ids could collide.
+- Class names in strings, in comments and on non-widget classes became
+  components.
+- A clock read in a `State` class named no node.
+- Fonts loaded outside `SnapshotFonts.load` were missing from the
+  fingerprint.
+
+The review also corrected two harness claims:
+- The A3 summary now fails on a missing or short host.
+- The A13 note wrongly credited history change 6 with covering the clock path.
