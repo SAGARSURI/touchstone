@@ -90,6 +90,9 @@ ThemeData appTheme(Brightness brightness, {AppTokens? tokens}) {
     colorScheme: ColorScheme.fromSeed(seedColor: t.brandAccent, brightness: brightness),
     scaffoldBackgroundColor: t.surface,
     dividerColor: t.divider,
+    // Component defaults from the design library's new release.
+    listTileTheme: const ListTileThemeData(contentPadding: EdgeInsets.symmetric(horizontal: 20)),
+    inputDecorationTheme: const InputDecorationTheme(contentPadding: EdgeInsets.fromLTRB(12, 18, 12, 18)),
     extensions: <ThemeExtension<dynamic>>[t],
   );
 }
