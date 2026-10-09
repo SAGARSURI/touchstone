@@ -20,7 +20,7 @@ class ButtonSetScreen extends StatelessWidget {
           SectionHeader('Secondary'),
           AppButton(key: ValueKey<String>('secondary'), label: 'Cancel', variant: ButtonVariant.secondary),
           SectionHeader('Disabled'),
-          AppButton(key: ValueKey<String>('disabled'), label: 'Continue', enabled: false),
+          AppButton(key: ValueKey<String>('disabled'), label: 'Continue', enabled: true),
           SectionHeader('Loading'),
           AppButton(key: ValueKey<String>('loading'), label: 'Continue', loading: true),
         ],
