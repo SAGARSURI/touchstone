@@ -1,0 +1,188 @@
+Change 1: Change one colour token
+
+== buttons/all
+buttons/all    needs-review
+
+1  Paint     _Spinner@0                unexplained (paint commands changed)
+2  Style     AppButton#primary         FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+3  Style     AppButton#secondary       OutlinedButton.style: ButtonStyle#(foregroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), overlayColor: WidgetStateMapper<Color?>({Wi… -> ButtonStyle#(foregroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), overlayColor: WidgetStateMapper<Color?>({Wi…; OutlinedButton.style.foregroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); OutlinedButton.style.overlayColor: WidgetStateMapper<Color?>({WidgetState.pressed: #1A3949AB, WidgetState.hovered: Color(alpha: 0.0784, red: 0.2235, green: 0.2863, blue: 0.6706, colorSpace: Col… -> WidgetStateMapper<Color?>({WidgetState.pressed: #1A3F51B5, WidgetState.hovered: Color(alpha: 0.0784, red: 0.2471, green: 0.3176, blue: 0.7098, colorSpace: Col…; IconTheme.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== chart/default
+chart/default    needs-review
+
+1  Paint     PriceChart@0              unexplained (pixel hash changed)
+
+== chart/tooltip
+chart/tooltip    needs-review
+
+1  Paint     PriceChart@0              unexplained (pixel hash changed)
+
+== detail/collapsed
+detail/collapsed    needs-review
+
+1  Style     DetailScreen@0            PhysicalModel.color.2: #FFE3E1EC -> #FFE3E2EC (and 3 more fields); Material.surfaceTintColor: #FF525A92 -> #FF515B92
+
+== detail/news
+detail/news    needs-review
+
+1  Style     DetailScreen@0            Material.surfaceTintColor: #FF525A92 -> #FF515B92
+
+== detail/overview
+detail/overview    needs-review
+
+1  Style     DetailScreen@0            Material.surfaceTintColor: #FF525A92 -> #FF515B92
+
+== map/default
+map/default    needs-review
+
+1  Style     MapPin@1                  Icon.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field)
+2  Style     BranchCard@0              Icon.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field)
+
+== matrix/settings_large
+matrix/settings_large    needs-review
+
+1  Style     SettingsIcon in 6 places  Icon.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field)
+           at: SettingsTile@0/SettingsIcon@0, SettingsTile@1/SettingsIcon@0, SettingsTile@3/SettingsIcon@0, SettingsTile@4/SettingsIcon@0, SettingsTile@5/SettingsIcon@0, SettingsTile@6/SettingsIcon@0
+2  Style     SettingsTile@2/SettingsIcon@0  Icon.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field)
+           consequence: Paint SettingsTile@2: paint changed where its children moved or changed (not verified: paint is compared by hash)
+
+== matrix/settings_rtl
+matrix/settings_rtl    needs-review
+
+1  Style     SettingsIcon in 6 places  Icon.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field)
+           at: SettingsTile@0/SettingsIcon@0, SettingsTile@1/SettingsIcon@0, SettingsTile@3/SettingsIcon@0, SettingsTile@4/SettingsIcon@0, SettingsTile@5/SettingsIcon@0, SettingsTile@6/SettingsIcon@0
+2  Style     SettingsTile@2/SettingsIcon@0  Icon.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field)
+           consequence: Paint SettingsTile@2: paint changed where its children moved or changed (not verified: paint is compared by hash)
+
+== matrix/settings_small
+matrix/settings_small    needs-review
+
+1  Style     SettingsIcon in 4 places  Icon.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field)
+           at: SettingsTile@0/SettingsIcon@0, SettingsTile@1/SettingsIcon@0, SettingsTile@3/SettingsIcon@0, SettingsTile@4/SettingsIcon@0
+2  Style     SettingsTile@2/SettingsIcon@0  Icon.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field)
+           consequence: Paint SettingsTile@2: paint changed where its children moved or changed (not verified: paint is compared by hash)
+
+== matrix/settings_text_2x
+matrix/settings_text_2x    needs-review
+
+1  Style     SettingsIcon in 3 places  Icon.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field)
+           at: SettingsTile@0/SettingsIcon@0, SettingsTile@1/SettingsIcon@0, SettingsTile@3/SettingsIcon@0
+2  Style     SettingsTile@2/SettingsIcon@0  Icon.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field)
+           consequence: Paint SettingsTile@2: paint changed where its children moved or changed (not verified: paint is compared by hash)
+
+== matrix/sign_in_large
+matrix/sign_in_large    needs-review
+
+1  Style     AppButton#submit          FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== matrix/sign_in_rtl
+matrix/sign_in_rtl    needs-review
+
+1  Style     AppButton#submit          FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== matrix/sign_in_small
+matrix/sign_in_small    needs-review
+
+1  Style     AppButton#submit          FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== matrix/sign_in_text_2x
+matrix/sign_in_text_2x    needs-review
+
+1  Style     AppButton#submit          FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== order/amount
+order/amount    needs-review
+
+1  Style     AmountStep@0              DefaultTextStyle.color.7: #FF434559 -> #FF434659 (and 1 more field); IconTheme.color.3: #FF525A92 -> #FF515B92 (and 8 more fields)
+2  Style     AppButton#to review       FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== order/dragging
+order/dragging    needs-review
+
+1  Style     AppButton#place order     FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== order/review
+order/review    needs-review
+
+1  Style     AppButton#place order     FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== order/symbol
+order/symbol    needs-review
+
+1  Style     SymbolAvatar in 6 places  Text.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field); IconTheme.color: #FF3A4379 -> #FF394379 (and 1 more field)
+           at: WatchRow@0/SymbolAvatar@0, WatchRow@1/SymbolAvatar@0, WatchRow@2/SymbolAvatar@0, WatchRow@3/SymbolAvatar@0, WatchRow@4/SymbolAvatar@0, WatchRow@5/SymbolAvatar@0
+
+== overlays/dialog
+overlays/dialog    needs-review
+
+1  Style     AppButton@0               FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+2  Style     ConfirmOrderDialog@0      IconTheme.color: #FF525A92 -> #FF515B92 (and 25 more fields)
+
+== overlays/dropdown
+overlays/dropdown    needs-review
+
+1  Style     AppButton@0               FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== overlays/sheet
+overlays/sheet    needs-review
+
+1  Style     AppButton@0               FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== overlays/snackbar
+overlays/snackbar    needs-review
+
+1  Style     OverlaysScreen@0          IconTheme.color.3: #FF525A92 -> #FF515B92 (and 16 more fields); TextButton.style: ButtonStyle#(backgroundColor: #00000000, foregroundColor: #FFBBC3FF, overlay… -> ButtonStyle#(backgroundColor: #00000000, foregroundColor: #FFBAC3FF, overlay…; IconTheme.color.4: #FFBBC3FF -> #FFBAC3FF (and 5 more fields); TextButton.style.overlayColor: WidgetStateMapper<Color?>({WidgetState.pressed: #1ABBC3FF, WidgetState.hovered: Color(alpha: 0.0784, red: 0.7333, green: 0.7647, blue: 1.0000, colorSpace: Col… -> WidgetStateMapper<Color?>({WidgetState.pressed: #1ABAC3FF, WidgetState.hovered: Color(alpha: 0.0784, red: 0.7294, green: 0.7647, blue: 1.0000, colorSpace: Col…
+2  Style     AppButton@0               FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== settings/default
+settings/default    needs-review
+
+1  Style     SettingsIcon in 6 places  Icon.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field)
+           at: SettingsTile@0/SettingsIcon@0, SettingsTile@1/SettingsIcon@0, SettingsTile@3/SettingsIcon@0, SettingsTile@4/SettingsIcon@0, SettingsTile@5/SettingsIcon@0, SettingsTile@6/SettingsIcon@0
+2  Style     SettingsTile@2/SettingsIcon@0  Icon.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field)
+           consequence: Paint SettingsTile@2: paint changed where its children moved or changed (not verified: paint is compared by hash)
+
+== sign_in/empty
+sign_in/empty    needs-review
+
+1  Style     AppButton#submit          FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== sign_in/error
+sign_in/error    needs-review
+
+1  Style     AppButton#submit          FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== sign_in/focused
+sign_in/focused    needs-review
+
+1  Style     root                      IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+2  Style     LabeledField#email        DefaultTextStyle.color: #FF525A92 -> #FF515B92 (and 2 more fields); RenderEditable.cursorColor: #00525A92 -> #00515B92; RenderEditable.selectionColor: #66525A92 -> #66515B92
+3  Style     AppButton#submit          FilledButton.style: ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), mi… -> ButtonStyle#(textStyle: WidgetStatePropertyAll(null), backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), mi…; FilledButton.style.backgroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); Material.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== sign_in/submitting
+sign_in/submitting    needs-review
+
+1  Paint     _Spinner@0                unexplained (paint commands changed)
+
+== states/error
+states/error    needs-review
+
+1  Style     AppButton@0               OutlinedButton.style: ButtonStyle#(foregroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}), overlayColor: WidgetStateMapper<Color?>({Wi… -> ButtonStyle#(foregroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}), overlayColor: WidgetStateMapper<Color?>({Wi…; OutlinedButton.style.foregroundColor: WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3949AB}) -> WidgetStateMapper<Color?>({WidgetState.disabled: null, WidgetState.any: #FF3F51B5}); OutlinedButton.style.overlayColor: WidgetStateMapper<Color?>({WidgetState.pressed: #1A3949AB, WidgetState.hovered: Color(alpha: 0.0784, red: 0.2235, green: 0.2863, blue: 0.6706, colorSpace: Col… -> WidgetStateMapper<Color?>({WidgetState.pressed: #1A3F51B5, WidgetState.hovered: Color(alpha: 0.0784, red: 0.2471, green: 0.3176, blue: 0.7098, colorSpace: Col…; IconTheme.color: brand.accent #FF3949AB -> #FF3F51B5 (and 4 more fields); IconTheme.color.2: #FF525A92 -> #FF515B92 (and 7 more fields)
+
+== watchlist/scrolled
+watchlist/scrolled    needs-review
+
+1  Style     WatchlistScreen@0         PhysicalModel.color.2: #FFE3E1EC -> #FFE3E2EC (and 3 more fields); Material.surfaceTintColor: #FF525A92 -> #FF515B92
+2  Style     SymbolAvatar in 13 places  Text.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field); IconTheme.color: #FF3A4379 -> #FF394379 (and 1 more field)
+           at: WatchRow#COB1/SymbolAvatar@0, WatchRow#DEL1/SymbolAvatar@0, WatchRow#EMB1/SymbolAvatar@0, WatchRow#FJO1/SymbolAvatar@0, WatchRow#GRA1/SymbolAvatar@0, WatchRow#HAR1/SymbolAvatar@0, WatchRow#IND1/SymbolAvatar@0, WatchRow#JUN1/SymbolAvatar@0, WatchRow#KES1/SymbolAvatar@0, WatchRow#LUM1/SymbolAvatar@0, WatchRow#MER1/SymbolAvatar@0, WatchRow#NIM1/SymbolAvatar@0, WatchRow#ONY1/SymbolAvatar@0
+
+== watchlist/top
+watchlist/top    needs-review
+
+1  Style     SymbolAvatar in 12 places  Text.color: brand.accent #FF3949AB -> #FF3F51B5 (and 1 more field); IconTheme.color: #FF3A4379 -> #FF394379 (and 1 more field)
+           at: WatchRow#ACM0/SymbolAvatar@0, WatchRow#BOR0/SymbolAvatar@0, WatchRow#COB0/SymbolAvatar@0, WatchRow#DEL0/SymbolAvatar@0, WatchRow#EMB0/SymbolAvatar@0, WatchRow#FJO0/SymbolAvatar@0, WatchRow#GRA0/SymbolAvatar@0, WatchRow#HAR0/SymbolAvatar@0, WatchRow#IND0/SymbolAvatar@0, WatchRow#JUN0/SymbolAvatar@0, WatchRow#KES0/SymbolAvatar@0, WatchRow#LUM0/SymbolAvatar@0
+
+Causes in more than one snapshot:
+  brand.accent #FF3949AB -> #FF3F51B5: style change on 31 SymbolAvatar, 30 SettingsIcon, 17 AppButton, 1 BranchCard, 1 MapPin in 25 snapshots
+  #FF525A92 -> #FF515B92; #FFE3E1EC -> #FFE3E2EC: style change on 1 DetailScreen, 1 WatchlistScreen in 2 snapshots
+  #FF525A92 -> #FF515B92: style change on 2 DetailScreen, 1 ConfirmOrderDialog, 1 root in 4 snapshots

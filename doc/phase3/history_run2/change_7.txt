@@ -1,0 +1,214 @@
+Change 7: Upgrade a design-library dependency that shifts default paddings
+
+== detail/news
+detail/news    needs-review
+
+1  Layout    _ListTab@0                inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 23 more fields)
+
+== map/default
+map/default    needs-review
+
+1  Layout    BranchCard@0              inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+
+== matrix/settings_dark
+matrix/settings_dark    needs-review
+
+1  Layout    SettingsTile@0            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+2  Layout    SettingsTile@1            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+3  Layout    SettingsTile@2            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+4  Layout    SettingsTile@3            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+5  Layout    SettingsTile@4            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+6  Layout    SettingsTile@5            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+7  Layout    SettingsTile@6            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+
+== matrix/settings_large
+matrix/settings_large    needs-review
+
+1  Layout    SettingsTile@0            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+2  Layout    SettingsTile@1            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+3  Layout    SettingsTile@2            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+4  Layout    SettingsTile@3            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+5  Layout    SettingsTile@4            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+6  Layout    SettingsTile@5            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+7  Layout    SettingsTile@6            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+
+== matrix/settings_rtl
+matrix/settings_rtl    needs-review
+
+1  Layout    SettingsTile@0            inside: Padding.padding.2: EdgeInsets(24.0, 0.0, 16.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted left 4 px
+2  Layout    SettingsTile@1            inside: Padding.padding.2: EdgeInsets(24.0, 0.0, 16.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted left 4 px
+3  Layout    SettingsTile@2            inside: Padding.padding.2: EdgeInsets(24.0, 0.0, 16.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted left 4 px
+4  Layout    SettingsTile@3            inside: Padding.padding.2: EdgeInsets(24.0, 0.0, 16.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted left 4 px
+5  Layout    SettingsTile@4            inside: Padding.padding.2: EdgeInsets(24.0, 0.0, 16.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted left 4 px
+6  Layout    SettingsTile@5            inside: Padding.padding.2: EdgeInsets(24.0, 0.0, 16.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted left 4 px
+7  Layout    SettingsTile@6            inside: Padding.padding.2: EdgeInsets(24.0, 0.0, 16.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted left 4 px
+
+== matrix/settings_small
+matrix/settings_small    needs-review
+
+1  Layout    SettingsTile@0            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+2  Layout    SettingsTile@1            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+3  Layout    SettingsTile@2            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+4  Layout    SettingsTile@3            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+5  Layout    SettingsTile@4            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+
+== matrix/settings_text_2x
+matrix/settings_text_2x    needs-review
+
+1  Layout    SettingsTile@0            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+2  Layout    SettingsTile@1            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+3  Layout    SettingsTile@2            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+
+== matrix/sign_in_dark
+matrix/sign_in_dark    needs-review
+
+1  Layout    SignInScreen@0            inside: its content moved; nothing it draws changed; possible causes: Layout LabeledField#email, Layout LabeledField#password
+2  Layout    LabeledField#email        size 358x92 -> 358x96
+3  Style     LabeledField#email        InputDecorator.decoration: InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: … -> InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0,…
+4  Layout    LabeledField#password     size 358x72 -> 358x76
+5  Style     LabeledField#password     InputDecorator.decoration: InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.1176, green: 0.1255, blu… -> InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: …
+6  Shift     SignInScreen@0            1 component shifted down 8 px; possible causes: Layout LabeledField#email, Layout LabeledField#password
+
+== matrix/sign_in_large
+matrix/sign_in_large    needs-review
+
+1  Layout    SignInScreen@0            inside: its content moved; nothing it draws changed; possible causes: Layout LabeledField#email, Layout LabeledField#password
+2  Layout    LabeledField#email        size 992x92 -> 992x96
+3  Style     LabeledField#email        InputDecorator.decoration: InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: … -> InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0,…
+4  Layout    LabeledField#password     size 992x72 -> 992x76
+5  Style     LabeledField#password     InputDecorator.decoration: InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blu… -> InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: …
+6  Shift     SignInScreen@0            1 component shifted down 8 px; possible causes: Layout LabeledField#email, Layout LabeledField#password
+
+== matrix/sign_in_rtl
+matrix/sign_in_rtl    needs-review
+
+1  Layout    SignInScreen@0            inside: its content moved; nothing it draws changed; possible causes: Layout LabeledField#email, Layout LabeledField#password
+2  Layout    LabeledField#email        size 358x92 -> 358x96
+3  Style     LabeledField#email        InputDecorator.decoration: InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: … -> InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0,…
+4  Layout    LabeledField#password     size 358x72 -> 358x76
+5  Style     LabeledField#password     InputDecorator.decoration: InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blu… -> InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: …
+6  Shift     SignInScreen@0            1 component shifted down 8 px; possible causes: Layout LabeledField#email, Layout LabeledField#password
+
+== matrix/sign_in_small
+matrix/sign_in_small    needs-review
+
+1  Layout    SignInScreen@0            inside: its content moved; nothing it draws changed; possible causes: Layout LabeledField#email, Layout LabeledField#password
+2  Layout    LabeledField#email        size 288x92 -> 288x96
+3  Style     LabeledField#email        InputDecorator.decoration: InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: … -> InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0,…
+4  Layout    LabeledField#password     size 288x72 -> 288x76
+5  Style     LabeledField#password     InputDecorator.decoration: InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blu… -> InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: …
+6  Shift     SignInScreen@0            1 component shifted down 8 px; possible causes: Layout LabeledField#email, Layout LabeledField#password
+
+== matrix/sign_in_text_2x
+matrix/sign_in_text_2x    needs-review
+
+1  Layout    SignInScreen@0            inside: its content moved; nothing it draws changed; possible causes: Layout LabeledField#email, Layout LabeledField#password
+2  Layout    LabeledField#email        size 358x132 -> 358x136
+3  Style     LabeledField#email        InputDecorator.decoration: InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: … -> InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0,…
+4  Layout    LabeledField#password     size 358x96 -> 358x100
+5  Style     LabeledField#password     InputDecorator.decoration: InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blu… -> InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: …
+6  Shift     SignInScreen@0            1 component shifted down 8 px; possible causes: Layout LabeledField#email, Layout LabeledField#password
+
+== overlays/sheet
+overlays/sheet    needs-review
+
+1  Layout    TradeSheet@0              inside: Padding.padding.3: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 5 more fields)
+
+== settings/default
+settings/default    needs-review
+
+1  Layout    SettingsTile@0            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+2  Layout    SettingsTile@1            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+3  Layout    SettingsTile@2            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+4  Layout    SettingsTile@3            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+5  Layout    SettingsTile@4            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+6  Layout    SettingsTile@5            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+7  Layout    SettingsTile@6            inside: Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> EdgeInsets(20.0, 0.0, 20.0, 0.0) (and 1 more field)
+           consequence: 1 component shifted right 4 px
+
+== sign_in/empty
+sign_in/empty    needs-review
+
+1  Layout    SignInScreen@0            inside: its content moved; nothing it draws changed; possible causes: Layout LabeledField#email, Layout LabeledField#password
+2  Layout    LabeledField in 2 places  size 358x72 -> 358x76
+           at: LabeledField#email, LabeledField#password
+3  Style     LabeledField#email        InputDecorator.decoration: InputDecoration(labelText: "Email", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: … -> InputDecoration(labelText: "Email", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: Col…
+4  Style     LabeledField#password     InputDecorator.decoration: InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blu… -> InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: …
+5  Shift     SignInScreen@0            1 component shifted down 8 px; possible causes: Layout LabeledField#email, Layout LabeledField#password
+
+== sign_in/error
+sign_in/error    needs-review
+
+1  Layout    SignInScreen@0            inside: its content moved; nothing it draws changed; possible causes: Layout LabeledField#email, Layout LabeledField#password
+2  Layout    LabeledField#email        size 358x92 -> 358x96
+3  Style     LabeledField#email        InputDecorator.decoration: InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: … -> InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0,…
+4  Layout    LabeledField#password     size 358x72 -> 358x76
+5  Style     LabeledField#password     InputDecorator.decoration: InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blu… -> InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: …
+6  Shift     SignInScreen@0            1 component shifted down 8 px; possible causes: Layout LabeledField#email, Layout LabeledField#password
+
+== sign_in/focused
+sign_in/focused    needs-review
+
+1  Style     root                      RenderFollowerLayer.current transform matrix: [0] 1.0,0.0,0.0,255.8
+[1] 0.0,1.0,0.0,103.0
+[2] 0.0,0.0,1.0,0.0
+[3] 0.0,0.0,0.0,1.0 -> [0] 1.0,0.0,0.0,255.8
+[1] 0.0,1.0,0.0,105.0
+[2] 0.0,0.0,1.0,0.0
+[3] 0.0,0.0,0.0,1.0
+2  Layout    SignInScreen@0            inside: its content moved; nothing it draws changed; possible causes: Layout LabeledField#email, Layout LabeledField#password
+3  Layout    LabeledField in 2 places  size 358x72 -> 358x76
+           at: LabeledField#email, LabeledField#password
+4  Style     LabeledField#email        InputDecorator.decoration: InputDecoration(labelText: "Email", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: … -> InputDecoration(labelText: "Email", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: Col…
+5  Style     LabeledField#password     InputDecorator.decoration: InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blu… -> InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: …
+6  Shift     SignInScreen@0            1 component shifted down 8 px; possible causes: Layout LabeledField#email, Layout LabeledField#password
+
+== sign_in/submitting
+sign_in/submitting    needs-review
+
+1  Layout    SignInScreen@0            inside: its content moved; nothing it draws changed; possible causes: Layout LabeledField#email, Layout LabeledField#password
+2  Layout    LabeledField in 2 places  size 358x72 -> 358x76
+           at: LabeledField#email, LabeledField#password
+3  Style     LabeledField#email        InputDecorator.decoration: InputDecoration(labelText: "Email", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: … -> InputDecoration(labelText: "Email", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: Col…
+4  Style     LabeledField#password     InputDecorator.decoration: InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blu… -> InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: …
+5  Shift     SignInScreen@0            2 components shifted down 8 px; possible causes: Layout LabeledField#email, Layout LabeledField#password
+
+Causes in more than one snapshot:
+  InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: … -> InputDecoration(labelText: "Email", hintMaxLines: "1", errorText: "Enter a valid email address", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0,…: style change on 6 LabeledField in 6 snapshots
+  InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blu… -> InputDecoration(labelText: "Password", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: …: style change on 8 LabeledField in 8 snapshots
+  InputDecoration(labelText: "Email", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, filled: true, fillColor: Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: … -> InputDecoration(labelText: "Email", hintMaxLines: "1", floatingLabelBehavior: FloatingLabelBehavior.auto, floatingLabelAlignment: FloatingLabelAlignment.start, contentPadding: EdgeInsets(12.0, 18.0, 12.0, 18.0), filled: true, fillColor: Col…: style change on 3 LabeledField in 3 snapshots
