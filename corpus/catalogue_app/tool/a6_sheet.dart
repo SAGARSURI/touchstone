@@ -4,13 +4,22 @@
 // recognise. Two engineers review, for every catalog mutation and a seeded
 // sample of generated mutations, whether the change is attributed to the
 // nearest app-owned widget without looking at the raw element tree. This
-// tool writes the sheet they fill in.
+// tool writes the sheet they fill in. Since Phase 2 the sheet shows the change
+// report, which is what a developer reads.
 
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
 import 'catalogs.dart';
+
+/// The Phase 2 change report as one table cell: each scene's verdict line
+/// and its numbered items, with consequences indented.
+String _report(String text) => text
+    .split('\n')
+    .where((String l) => l.trim().isNotEmpty)
+    .map((String l) => '`${l.trim().replaceAll('|', '\\|').replaceAll('`', "'")}`')
+    .join('<br>');
 
 String _nodes(List<Map<String, Object?>> nodes) {
   final own = <String>[];
@@ -54,7 +63,9 @@ void main(List<String> args) {
               '`${x.file.split('/').last}`: ${x.find.trim().split('\n').first} → ${x.replace.trim().split('\n').first}',
         )
         .join('; ');
-    out.writeln('| ${++i} | ${e.kind}: ${edit.replaceAll('|', '\\|')} | ${_nodes(nodes)} |  |  |');
+    final File report = File('build/catalogs/${e.id}/report.txt');
+    final String shown = report.existsSync() ? _report(report.readAsStringSync()) : _nodes(nodes);
+    out.writeln('| ${++i} | ${e.kind}: ${edit.replaceAll('|', '\\|')} | $shown |  |  |');
   }
   if (args.isNotEmpty) {
     final generated = (jsonDecode(File(args.first).readAsStringSync()) as List<Object?>)
@@ -76,13 +87,14 @@ void main(List<String> args) {
       )
       ..writeln()
       ..writeln(
-        '| Seed | Scene | Mutation | Mutated render object belongs to | First node reported | Reviewer A | Reviewer B |',
+        '| Seed | Scene | Mutation | Mutated render object belongs to | Change report (top-level items) '
+        '| Reviewer A | Reviewer B |',
       )
       ..writeln('| --- | --- | --- | --- | --- | --- | --- |');
     for (final r in sample) {
       out.writeln(
         '| ${r['seed']} | ${r['scene']} | ${r['mutation'].toString().replaceAll('|', '\\|')} on ${r['target']} | '
-        '`${r['owner']}` | `${r['firstNode']}` |  |  |',
+        '`${r['owner']}` | ${r['items'] == null ? '`${r['firstNode']}`' : (r['items']! as List<Object?>).map((Object? x) => '`$x`').join('<br>')} |  |  |',
       );
     }
   }

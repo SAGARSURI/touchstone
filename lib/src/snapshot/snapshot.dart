@@ -1,7 +1,7 @@
 // Snapshot schema v1 and its canonical text form (spec: Snapshot schema).
 //
 // A snapshot is a tree of component nodes with a hash at every node. Detection
-// fields (id, bounds, paint, semantics, opaque) feed the hashes; explanation
+// fields (id, bounds, paint, semantics, opaque, flat) feed the hashes; explanation
 // fields (type, style) only name causes and never affect a hash.
 //
 // Canonical form: UTF-8 text, a fixed header, then one node per line with its
@@ -17,6 +17,11 @@ import 'package:crypto/crypto.dart';
 const int schemaVersion = 1;
 
 const String _magic = 'touchstone-snapshot';
+
+/// The `style` key prefix for render objects that draw nothing and only
+/// place or size their children: their properties explain a layout change
+/// inside a component, not a style change.
+const String layoutStylePrefix = 'layout.';
 
 class Snapshot {
   Snapshot({
@@ -181,10 +186,11 @@ class SnapshotNode {
     required this.paint,
     required this.semantics,
     required this.opaque,
+    required this.flat,
     required this.type,
     required this.style,
     required this.children,
-  }) : subtreeHash = _subtreeHash(id, bounds, paint, semantics, opaque, children);
+  }) : subtreeHash = _subtreeHash(id, bounds, paint, semantics, opaque, flat, children);
 
   /// This node's segment of its id: `Type#key` for an explicit key, otherwise
   /// `Type@n`, the n-th component of that type among its siblings. The full
@@ -205,6 +211,13 @@ class SnapshotNode {
   /// Why paint could not be recorded by value, `+`-separated; `-` if it could.
   final String opaque;
 
+  /// SHA-256 of the subtree's output with component boundaries removed: the
+  /// paint commands of this component and every component inside it, written
+  /// as if they were one component, and their semantics nodes in semantics
+  /// tree order. Equal on both sides when a refactor changed the widget
+  /// structure but not the output (A5).
+  final String flat;
+
   /// Explanation: widget class and the package it comes from.
   final String type;
 
@@ -218,7 +231,7 @@ class SnapshotNode {
 
   String? _parsedSub;
 
-  String get detectionText => _detection(id, bounds, paint, semantics, opaque);
+  String get detectionText => _detection(id, bounds, paint, semantics, opaque, flat);
 
   String get line => <String>[
     jsonEncode(id),
@@ -226,13 +239,14 @@ class SnapshotNode {
     'paint=$paint',
     'sem=$semantics',
     'opaque=$opaque',
+    'flat=$flat',
     'type=${jsonEncode(type)}',
     'style=$style',
     'sub=$subtreeHash',
   ].join('\t');
 
-  static String _detection(String id, String bounds, String paint, String semantics, String opaque) =>
-      <String>[jsonEncode(id), bounds, paint, semantics, opaque].join('\t');
+  static String _detection(String id, String bounds, String paint, String semantics, String opaque, String flat) =>
+      <String>[jsonEncode(id), bounds, paint, semantics, opaque, flat].join('\t');
 
   static String _subtreeHash(
     String id,
@@ -240,12 +254,13 @@ class SnapshotNode {
     String paint,
     String semantics,
     String opaque,
+    String flat,
     List<SnapshotNode> children,
   ) => sha256
       .convert(
         utf8.encode(
           <String>[
-            _detection(id, bounds, paint, semantics, opaque),
+            _detection(id, bounds, paint, semantics, opaque, flat),
             for (final SnapshotNode c in children) c.subtreeHash,
           ].join('\n'),
         ),
@@ -267,10 +282,11 @@ class SnapshotNode {
       paint: value(2, 'paint'),
       semantics: value(3, 'sem'),
       opaque: value(4, 'opaque'),
-      type: jsonDecode(value(5, 'type')) as String,
-      style: value(6, 'style'),
+      flat: value(5, 'flat'),
+      type: jsonDecode(value(6, 'type')) as String,
+      style: value(7, 'style'),
       children: const <SnapshotNode>[],
-    ).._parsedSub = value(7, 'sub');
+    ).._parsedSub = value(8, 'sub');
   }
 
   SnapshotNode _withChildren(List<SnapshotNode> children) => SnapshotNode(
@@ -279,6 +295,7 @@ class SnapshotNode {
     paint: paint,
     semantics: semantics,
     opaque: opaque,
+    flat: flat,
     type: type,
     style: style,
     children: children,

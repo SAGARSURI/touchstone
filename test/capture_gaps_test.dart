@@ -41,6 +41,8 @@ class _Ticker2State extends State<Ticker2> {
 final policy = ComponentPolicy(include: <Type>{Box, Label, Ticker2});
 final options = SnapshotOptions(policy: policy);
 
+SnapshotNode node(Snapshot s, String id) => s.walk().firstWhere(((String, SnapshotNode) e) => e.$1 == id).$2;
+
 Widget app(Widget child) => Directionality(
   textDirection: TextDirection.ltr,
   child: ColoredBox(
@@ -265,5 +267,51 @@ void main() {
     final CaptureFailure failure = await captureFails(tester);
     expect(failure.message, contains('ExtraIcons'));
     expect(failure.message, contains('SnapshotFonts.load'));
+  });
+  testWidgets('a path drawn only outside the clip hashes no pixels, so changes elsewhere do not touch it', (
+    WidgetTester tester,
+  ) async {
+    // The last row of a list, cut off by the viewport, whose bottom border is
+    // drawn with a path below the visible area (A6 review, seed 945).
+    Widget scene(Color top) => app(
+      SizedBox(
+        width: 100,
+        height: 100,
+        child: ClipRect(
+          child: OverflowBox(
+            alignment: Alignment.topLeft,
+            maxHeight: 400,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Box(
+                  child: SizedBox(width: 100, height: 50, child: ColoredBox(color: top)),
+                ),
+                const SizedBox(height: 100),
+                const Box(
+                  child: SizedBox(
+                    width: 100,
+                    height: 50,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Color(0xFF888888))),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpWidget(scene(const Color(0xFF000000)));
+    final Snapshot a = await captureSnapshot(tester, 'x', options: options);
+    expect(node(a, 'root/Box@1').opaque, isNot('-'));
+    await tester.pumpWidget(scene(const Color(0xFF0000FF)));
+    final Snapshot b = await captureSnapshot(tester, 'x', options: options);
+    expect(node(b, 'root/Box@1').paint, node(a, 'root/Box@1').paint);
+    final ChangeReport r = diffSnapshots(a, b);
+    expect(<String>[for (final ReportItem i in r.items) i.change!.nodeId], <String>['root/Box@0']);
   });
 }

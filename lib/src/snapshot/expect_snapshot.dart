@@ -3,14 +3,18 @@
 //
 // A baseline is written only after 3 consecutive captures are byte-identical;
 // otherwise the first differing node is reported with its likely cause.
-// Comparing a capture with its baseline is a root-hash check. The typed
-// change report comes with the diff engine (Phase 2).
+// Comparing a capture with its baseline is a root-hash check; only a mismatch
+// reaches the diff, and the failure message is the change report.
 
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../diff/changes.dart';
+import '../diff/diff.dart';
+import '../diff/policy.dart';
+import '../diff/report.dart';
 import '../testing/helpers.dart';
 import 'capture.dart';
 import 'components.dart';
@@ -157,7 +161,11 @@ File baselineFile(String id) {
 /// Captures [id] and compares it with its baseline. With
 /// `flutter test --update-goldens`, or when no baseline exists yet and
 /// [recordMissing] is true, the baseline is written after the determinism
-/// gate passes.
+/// gate passes, and the change report against the old baseline is printed.
+///
+/// A capture that differs from its baseline fails (spec: Verdicts), with the
+/// change report as the message. The one difference that passes is content
+/// of a component declared in [SnapshotOptions.dynamicComponents].
 Future<void> expectSnapshot(
   WidgetTester tester,
   String id, {
@@ -172,26 +180,86 @@ Future<void> expectSnapshot(
     if (!report.deterministic) {
       fail('Snapshot $id is not deterministic, so no baseline was written.\n${report.firstDifference}');
     }
+    final String text = report.captures.first;
+    final String? old = exists ? file.readAsStringSync() : null;
+    if (old == text) {
+      return;
+    }
     file.parent.createSync(recursive: true);
-    file.writeAsStringSync(report.captures.first);
+    file.writeAsStringSync(text);
+    final (Snapshot? previous, String? unreadable) = old == null ? (null, null) : _read(old);
+    // ignore: avoid_print
+    print(switch (old) {
+      null => 'Snapshot $id: new baseline written.',
+      _ when previous == null =>
+        'Snapshot $id: baseline rewritten. The old one could not be read ($unreadable), '
+            'so there is no change report.',
+      _ => updateReport(previous, Snapshot.parse(text)),
+    });
     return;
   }
   if (!exists) {
     fail('No baseline for snapshot $id at ${file.path}. Run flutter test --update-goldens to record it.');
   }
-  final Snapshot baseline = Snapshot.parse(file.readAsStringSync());
+  final (Snapshot? read, String? unreadable) = _read(file.readAsStringSync());
+  if (read == null) {
+    fail(
+      'The baseline for snapshot $id at ${file.path} could not be read ($unreadable). '
+      'Re-record it with flutter test --update-goldens.',
+    );
+  }
+  final Snapshot baseline = read;
   final Snapshot capture = await captureSnapshot(tester, id, options: options);
-  if (baseline.toolchain.toString() != capture.toolchain.toString()) {
-    fail(
-      'Snapshot $id was recorded with a different toolchain, so it is not compared.\n'
-      '  baseline: ${baseline.toolchain}\n  this run: ${capture.toolchain}',
-    );
+  if (baseline.rootHash == capture.rootHash && baseline.toolchain.toString() == capture.toolchain.toString()) {
+    return;
   }
-  if (baseline.rootHash != capture.rootHash) {
+  final String? message = compareWithBaseline(baseline, capture);
+  if (message != null) {
+    fail(message);
+  }
+}
+
+/// A committed baseline, or why it could not be parsed: written by an older
+/// schema, or edited by hand.
+(Snapshot?, String?) _read(String text) {
+  try {
+    return (Snapshot.parse(text), null);
+  } on FormatException catch (e) {
+    return (null, clipLine(e.message));
+  }
+}
+
+/// The failure message for [capture] against its [baseline], or null when
+/// the only differences are content of declared dynamic components.
+String? compareWithBaseline(Snapshot baseline, Snapshot capture) {
+  final ChangeReport report = diffSnapshots(baseline, capture);
+  switch (report.kind) {
+    case ReportKind.equal:
+      return null;
+    case ReportKind.migration:
+      return '${renderReport(report, Decision(Verdict.fail, const <String>[]))}'
+          'Re-record it with flutter test --update-goldens on the new toolchain.';
+    case ReportKind.diff:
+      break;
+  }
+  if (report.items.isEmpty && report.inputChanges.isEmpty) {
+    if (report.skippedContent.isNotEmpty) {
+      return null;
+    }
+    // Bytes differ but no change was typed: report the bytes, never pass.
     final SnapshotDifference d = firstDifference(baseline.toCanonical(), capture.toCanonical());
-    fail(
-      'Snapshot $id differs from its baseline. First differing node: ${d.nodeId} (${d.fields.join(', ')}).\n'
-      '  baseline: ${clipLine(d.before)}\n  this run: ${clipLine(d.after)}',
-    );
+    return 'Snapshot ${capture.id} differs from its baseline, and the diff named no change. '
+        'First differing node: ${d.nodeId} (${d.fields.join(', ')}).\n'
+        '  baseline: ${clipLine(d.before)}\n  this run: ${clipLine(d.after)}';
   }
+  return '${renderReport(report, Decision(Verdict.fail, const <String>[]))}'
+      'The capture differs from its baseline. If the change is intended, run flutter test --update-goldens '
+      'to record it.';
+}
+
+/// What `--update-goldens` prints for a rewritten baseline: the change report
+/// a reviewer will see, with the default policy's verdict.
+String updateReport(Snapshot old, Snapshot updated) {
+  final ChangeReport report = diffSnapshots(old, updated);
+  return renderReport(report, Policy.defaults().decide(report));
 }

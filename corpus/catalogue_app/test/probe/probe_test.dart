@@ -15,6 +15,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:touchstone/touchstone.dart';
 
 import '../support/oracle.dart';
+import '../support/cascade_stack.dart';
 import '../support/scenes.dart';
 
 const String _scenes = String.fromEnvironment('PROBE_SCENES');
@@ -54,7 +55,7 @@ void main() {
     return;
   }
   for (final String id in _scenes.split(',')) {
-    final Scene scene = scenes.firstWhere((Scene s) => s.id == id);
+    final Scene scene = <Scene>[...scenes, ...experimentScenes].firstWhere((Scene s) => s.id == id);
     testWidgets(id, (WidgetTester tester) async {
       final SemanticsHandle handle = tester.ensureSemantics();
       await pumpScene(tester, scene);

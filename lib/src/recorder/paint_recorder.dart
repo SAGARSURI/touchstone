@@ -79,12 +79,22 @@ class RecordedNode implements OpSink {
   /// Global bounds of every pixel this node's own paint can change: what it
   /// drew, widened for stroke and blur, inside the clip in effect, plus the
   /// whole clip for effects with no bounded geometry. Null when it drew
-  /// nothing.
+  /// nothing, or drew only outside its clip.
   Rect? get reachBounds => _reach;
   Rect? _reach;
 
+  /// The node drew, but nothing it drew is inside its clip: no visible pixel
+  /// can change, so there is nothing to hash (an opaque row scrolled past the
+  /// bottom of a list, for example).
+  bool get drewOnlyOutsideClip => _reached && _reach == null;
+  bool _reached = false;
+
   /// Hash of [ops] after image fingerprints are resolved.
   late final String paintHash;
+
+  /// The fingerprint of each image this node drew, in order. Set by
+  /// [PaintRecording.resolve].
+  final List<String> imageFingerprints = <String>[];
 
   /// Hash of this node's ops, child placements and children's subtree hashes.
   late final String subtreeHash;
@@ -102,6 +112,7 @@ class RecordedNode implements OpSink {
 
   @override
   void reach(Rect globalRect) {
+    _reached = true;
     final Rect r = geometryVerified ? globalRect : _recording.viewRect;
     if (!(r.width > 0 && r.height > 0)) {
       return;
@@ -152,13 +163,25 @@ class PaintRecording {
     for (final RecordedNode node in nodes.reversed) {
       final List<String> ops = node.ops
           .map(
-            (String op) =>
-                op.replaceAllMapped(_imagePlaceholder, (Match m) => _imageFingerprints[int.parse(m.group(1)!)]!),
+            (String op) => op.replaceAllMapped(_imagePlaceholder, (Match m) {
+              final String fingerprint = _imageFingerprints[int.parse(m.group(1)!)]!;
+              node.imageFingerprints.add(fingerprint);
+              return fingerprint;
+            }),
           )
           .toList();
       final Rect? region = opaqueRegions[node];
       if (region != null) {
-        ops.add('pixels(${c.rect(region)};${await pixelHash(region)})');
+        // The region is written relative to the node's own origin, so a node
+        // that only moves keeps its paint hash: its position is its bounds
+        // (spec, Diff engine: a shifted component's "paint unchanged"). An
+        // unverified transform keeps global coordinates.
+        final Offset origin = node.geometryVerified
+            ? MatrixUtils.transformPoint(node.toGlobal, Offset.zero)
+            : Offset.zero;
+        ops.add(
+          region.isEmpty ? 'pixels(none)' : 'pixels(${c.rect(region.shift(-origin))};${await pixelHash(region)})',
+        );
       }
       node.ops
         ..clear()
@@ -174,8 +197,11 @@ class PaintRecording {
 
   /// The pixels an opaque node's paint can change: its reach (or, if it drew
   /// nothing, the clip it was given) inside the view, grown by every backdrop
-  /// filter it overlaps.
+  /// filter it overlaps. Empty when everything it drew is outside its clip.
   Rect opaqueRegion(RecordedNode node) {
+    if (node.drewOnlyOutsideClip) {
+      return Rect.zero;
+    }
     Rect region = (node.reachBounds ?? node.inheritedClip).intersect(viewRect);
     for (final Rect backdrop in backdrops) {
       if (region.overlaps(backdrop)) {
@@ -335,7 +361,12 @@ class _RecordingContext extends ClipContext implements PaintingContext {
       // example). That layer's effect belongs to the child's own paint; its
       // offset is the placement already recorded above.
       final int before = childNode._opaqueMarks;
-      childNode.op(c.rec('composite', <Object?>[_describeBoundaryLayer(boundaryLayer, childNode)]));
+      final String layer = _describeBoundaryLayer(boundaryLayer, childNode);
+      // A plain offset layer only places the child, which the offset above
+      // records, so a repaint boundary alone leaves no command.
+      if (layer != 'Offset') {
+        childNode.op(c.rec('composite', <Object?>[layer]));
+      }
       if (childNode._opaqueMarks != before) {
         childNode.reach(spreadClip ?? canvas.currentClip);
       }

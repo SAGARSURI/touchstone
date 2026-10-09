@@ -30,7 +30,16 @@ enum Oracle {
 }
 
 class Entry {
-  const Entry(this.id, this.kind, this.edits, this.scenes, {required this.oracle, this.expectNode});
+  const Entry(
+    this.id,
+    this.kind,
+    this.edits,
+    this.scenes, {
+    required this.oracle,
+    this.expectNode,
+    this.expectTypes = const <String>[],
+    this.expectShift,
+  });
 
   final String id;
 
@@ -43,6 +52,18 @@ class Entry {
   /// The component type the change belongs to (A6): the first differing
   /// node should be of this type. Null for no-ops.
   final String? expectNode;
+
+  /// Phase 2: the change types (spec, Diff engine, "Change types") the report
+  /// should give [expectNode], written before the diff engine existed. A
+  /// mutation is attributed correctly when the report has a top-level item on
+  /// a component of type [expectNode] with every type listed here.
+  final List<String> expectTypes;
+
+  /// Phase 2, cascade mutations (A8): whether the edit should shift other
+  /// components. When true, every shift group in the report should name the
+  /// [expectNode] component as its single root cause; when false, the report
+  /// should have no shift group. Null for entries that are not cascades.
+  final bool? expectShift;
 }
 
 const String _settings = 'lib/screens/settings.dart';
@@ -55,6 +76,7 @@ const List<Entry> mutations = <Entry>[
     <String>['watchlist/top'],
     oracle: Oracle.pixels,
     expectNode: 'ChangeBadge',
+    expectTypes: <String>['Style'],
   ),
   Entry(
     'text',
@@ -63,6 +85,7 @@ const List<Entry> mutations = <Entry>[
     <String>['settings/default'],
     oracle: Oracle.pixels,
     expectNode: 'SettingsTile',
+    expectTypes: <String>['Content'],
   ),
   Entry(
     'padding-1px',
@@ -77,6 +100,8 @@ const List<Entry> mutations = <Entry>[
     <String>['buttons/all', 'settings/default'],
     oracle: Oracle.pixels,
     expectNode: 'SectionHeader',
+    expectTypes: <String>['Layout'],
+    expectShift: true,
   ),
   Entry(
     'size',
@@ -85,6 +110,8 @@ const List<Entry> mutations = <Entry>[
     <String>['settings/default'],
     oracle: Oracle.pixels,
     expectNode: 'SettingsIcon',
+    expectTypes: <String>['Layout'],
+    expectShift: false,
   ),
   Entry(
     'widget-added',
@@ -99,6 +126,8 @@ const List<Entry> mutations = <Entry>[
     <String>['settings/default'],
     oracle: Oracle.pixels,
     expectNode: 'SettingsTile',
+    expectTypes: <String>['Added'],
+    expectShift: true,
   ),
   Entry(
     'widget-removed',
@@ -114,6 +143,8 @@ const List<Entry> mutations = <Entry>[
     <String>['settings/default'],
     oracle: Oracle.pixels,
     expectNode: 'SettingsTile',
+    expectTypes: <String>['Removed'],
+    expectShift: true,
   ),
   Entry(
     'widget-reordered',
@@ -132,6 +163,7 @@ const List<Entry> mutations = <Entry>[
     <String>['settings/default'],
     oracle: Oracle.pixels,
     expectNode: 'SettingsTile',
+    expectTypes: <String>['Reordered'],
   ),
   Entry(
     'opacity',
@@ -146,6 +178,7 @@ const List<Entry> mutations = <Entry>[
     <String>['states/empty', 'states/error'],
     oracle: Oracle.pixels,
     expectNode: 'StatusView',
+    expectTypes: <String>['Style'],
   ),
   Entry(
     'clip',
@@ -161,6 +194,7 @@ const List<Entry> mutations = <Entry>[
     <String>['detail/overview'],
     oracle: Oracle.pixels,
     expectNode: 'HeaderImage',
+    expectTypes: <String>['Style'],
   ),
   Entry(
     'font-weight',
@@ -176,6 +210,7 @@ const List<Entry> mutations = <Entry>[
     // The FlutterTest font draws every weight the same (a declared limit).
     oracle: Oracle.none,
     expectNode: 'PriceLabel',
+    expectTypes: <String>['Style'],
   ),
   Entry(
     'icon',
@@ -184,6 +219,7 @@ const List<Entry> mutations = <Entry>[
     <String>['settings/default'],
     oracle: Oracle.pixels,
     expectNode: 'SettingsIcon',
+    expectTypes: <String>['Content'],
   ),
   Entry(
     'image',
@@ -198,6 +234,7 @@ const List<Entry> mutations = <Entry>[
     <String>['detail/overview'],
     oracle: Oracle.pixels,
     expectNode: 'HeaderImage',
+    expectTypes: <String>['Content'],
   ),
   Entry(
     'enabled-state',
@@ -208,6 +245,7 @@ const List<Entry> mutations = <Entry>[
     <String>['buttons/all'],
     oracle: Oracle.pixels,
     expectNode: 'AppButton',
+    expectTypes: <String>['Style', 'Semantics'],
   ),
   Entry(
     'selected-state',
@@ -216,6 +254,7 @@ const List<Entry> mutations = <Entry>[
     <String>['settings/default'],
     oracle: Oracle.pixels,
     expectNode: 'SettingsTile',
+    expectTypes: <String>['Style', 'Semantics'],
   ),
   Entry(
     'semantics-label',
@@ -224,6 +263,7 @@ const List<Entry> mutations = <Entry>[
     <String>['detail/overview'],
     oracle: Oracle.semantics,
     expectNode: 'HeaderImage',
+    expectTypes: <String>['Semantics'],
   ),
   Entry(
     'custom-painter',
@@ -232,6 +272,7 @@ const List<Entry> mutations = <Entry>[
     <String>['buttons/all'],
     oracle: Oracle.pixels,
     expectNode: '_Spinner',
+    expectTypes: <String>['Paint'],
   ),
   Entry(
     'theme',
@@ -240,11 +281,254 @@ const List<Entry> mutations = <Entry>[
     <String>['text/all', 'settings/default'],
     oracle: Oracle.pixels,
     expectNode: null,
+    expectTypes: <String>['Style'],
   ),
 ];
 
 /// Paint order is not in this catalog: levels 1 to 3 have no overlapping
 /// sibling components. The fixture app's paint-order mutations cover it.
+
+/// Cascade mutations for A8 (spec: "insert, remove and resize near the start
+/// of columns, lists and stacks"), written before the diff engine existed.
+/// [Entry.expectNode] is the component whose change is the root cause.
+const List<Entry> cascades = <Entry>[
+  // Column: the sign-in form.
+  Entry(
+    'column-insert-start',
+    'insert near the start of a column',
+    <Edit>[
+      Edit(
+        'lib/screens/sign_in.dart',
+        "          children: <Widget>[\n            LabeledField(\n              key: const ValueKey<String>('email'),",
+        "          children: <Widget>[\n            const SectionHeader('Welcome back'),\n"
+            "            LabeledField(\n              key: const ValueKey<String>('email'),",
+      ),
+      Edit(
+        'lib/screens/sign_in.dart',
+        "import '../components/app_button.dart';",
+        "import '../components/app_button.dart';\nimport '../components/section_header.dart';",
+      ),
+    ],
+    <String>['sign_in/empty'],
+    oracle: Oracle.pixels,
+    expectNode: 'SectionHeader',
+    expectTypes: <String>['Added'],
+    expectShift: true,
+  ),
+  Entry(
+    'column-remove-start',
+    'remove near the start of a column',
+    <Edit>[
+      Edit(
+        'lib/screens/sign_in.dart',
+        "            LabeledField(\n              key: const ValueKey<String>('password'),\n"
+            "              label: 'Password',\n              controller: _password,\n"
+            '              obscure: true,\n              enabled: !submitting,\n            ),\n',
+        '',
+      ),
+    ],
+    <String>['sign_in/empty'],
+    oracle: Oracle.pixels,
+    expectNode: 'LabeledField',
+    expectTypes: <String>['Removed'],
+    expectShift: true,
+  ),
+  // Column: the text styles screen.
+  Entry(
+    'column-resize-start',
+    'resize near the start of a column',
+    <Edit>[
+      Edit(
+        'lib/screens/text_styles.dart',
+        "Heading('Portfolio', style: text.headlineMedium),",
+        "Heading('Portfolio', style: text.headlineLarge),",
+      ),
+    ],
+    <String>['text/all'],
+    oracle: Oracle.pixels,
+    expectNode: 'Heading',
+    expectTypes: <String>['Layout'],
+    expectShift: true,
+  ),
+  Entry(
+    'column-insert-first',
+    'insert at the start of a column',
+    <Edit>[
+      Edit(
+        'lib/screens/text_styles.dart',
+        "            Heading('Portfolio', style: text.headlineMedium),",
+        "            Heading('Overview', style: text.titleSmall),\n            Heading('Portfolio', style: text.headlineMedium),",
+      ),
+    ],
+    <String>['text/all'],
+    oracle: Oracle.pixels,
+    expectNode: 'Heading',
+    expectTypes: <String>['Added'],
+    expectShift: true,
+  ),
+  Entry(
+    'column-remove-first',
+    'remove the first child of a column',
+    <Edit>[Edit('lib/screens/text_styles.dart', "            Heading('Portfolio', style: text.headlineMedium),\n", '')],
+    <String>['text/all'],
+    oracle: Oracle.pixels,
+    expectNode: 'Heading',
+    expectTypes: <String>['Removed'],
+    expectShift: true,
+  ),
+  // List: the settings list.
+  Entry(
+    'list-insert-start',
+    'insert at the start of a list',
+    <Edit>[
+      Edit(
+        _settings,
+        "          const SectionHeader('Account'),",
+        "          const SettingsTile(icon: Icons.star_outline, title: 'Upgrade'),\n          const SectionHeader('Account'),",
+      ),
+    ],
+    <String>['settings/default'],
+    oracle: Oracle.pixels,
+    expectNode: 'SettingsTile',
+    expectTypes: <String>['Added'],
+    expectShift: true,
+  ),
+  Entry(
+    'list-remove-start',
+    'remove the first child of a list',
+    <Edit>[Edit(_settings, "          const SectionHeader('Account'),\n", '')],
+    <String>['settings/default'],
+    oracle: Oracle.pixels,
+    expectNode: 'SectionHeader',
+    expectTypes: <String>['Removed'],
+    expectShift: true,
+  ),
+  Entry(
+    'list-resize-start',
+    'resize near the start of a list',
+    <Edit>[
+      Edit(
+        _settings,
+        "SettingsTile(icon: Icons.person_outline, title: 'Profile', subtitle: 'Name, email, phone'),",
+        "SettingsTile(icon: Icons.person_outline, title: 'Profile'),",
+      ),
+    ],
+    <String>['settings/default'],
+    oracle: Oracle.pixels,
+    expectNode: 'SettingsTile',
+    expectTypes: <String>['Layout'],
+    expectShift: true,
+  ),
+  // List: the button set.
+  Entry(
+    'list-insert-first',
+    'insert at the start of a list',
+    <Edit>[
+      Edit(
+        'lib/screens/button_set.dart',
+        "          SectionHeader('Primary'),",
+        "          AppButton(key: ValueKey<String>('first'), label: 'Get started'),\n          SectionHeader('Primary'),",
+      ),
+    ],
+    <String>['buttons/all'],
+    oracle: Oracle.pixels,
+    expectNode: 'AppButton',
+    expectTypes: <String>['Added'],
+    expectShift: true,
+  ),
+  Entry(
+    'list-remove-first',
+    'remove the first child of a list',
+    <Edit>[Edit('lib/screens/button_set.dart', "          SectionHeader('Primary'),\n", '')],
+    <String>['buttons/all'],
+    oracle: Oracle.pixels,
+    expectNode: 'SectionHeader',
+    expectTypes: <String>['Removed'],
+    expectShift: true,
+  ),
+  // Lazy list: the watchlist.
+  Entry(
+    'lazy-list-insert-first',
+    'insert at the start of a lazy list',
+    <Edit>[
+      Edit(
+        'lib/screens/watchlist.dart',
+        ': quotes = quotes ?? seededQuotes();',
+        ": quotes = quotes ?? <Quote>[Quote('NEW0', 'Newco Holdings', 12.5, 0.5), ...seededQuotes()];",
+      ),
+    ],
+    <String>['watchlist/top'],
+    oracle: Oracle.pixels,
+    expectNode: 'WatchRow',
+    expectTypes: <String>['Added'],
+    expectShift: true,
+  ),
+  Entry(
+    'lazy-list-remove-first',
+    'remove the first child of a lazy list',
+    <Edit>[
+      Edit(
+        'lib/screens/watchlist.dart',
+        ': quotes = quotes ?? seededQuotes();',
+        ': quotes = quotes ?? seededQuotes().skip(1).toList();',
+      ),
+    ],
+    <String>['watchlist/top'],
+    oracle: Oracle.pixels,
+    expectNode: 'WatchRow',
+    expectTypes: <String>['Removed'],
+    expectShift: true,
+  ),
+  // Stack: test/support/cascade_stack.dart, since no catalogue screen has one.
+  Entry(
+    'stack-insert-first',
+    'insert at the start of a stack',
+    <Edit>[
+      Edit(
+        'test/support/cascade_stack.dart',
+        '          // first child\n',
+        "          // first child\n          const Positioned(top: 0, right: 0, child: SectionHeader('New')),\n",
+      ),
+    ],
+    <String>['cascade/stack'],
+    oracle: Oracle.pixels,
+    expectNode: 'SectionHeader',
+    expectTypes: <String>['Added'],
+    expectShift: false,
+  ),
+  Entry(
+    'stack-remove-first',
+    'remove the first child of a stack',
+    <Edit>[
+      Edit(
+        'test/support/cascade_stack.dart',
+        "          const Positioned(top: 0, left: 0, child: SectionHeader('Pinned')),\n",
+        '',
+      ),
+    ],
+    <String>['cascade/stack'],
+    oracle: Oracle.pixels,
+    expectNode: 'SectionHeader',
+    expectTypes: <String>['Removed'],
+    expectShift: false,
+  ),
+  Entry(
+    'stack-resize-first',
+    'resize the first sizing child of a stack',
+    <Edit>[
+      Edit(
+        'test/support/cascade_stack.dart',
+        'width: 300,\n              height: 140,',
+        'width: 320,\n              height: 160,',
+      ),
+    ],
+    <String>['cascade/stack'],
+    oracle: Oracle.pixels,
+    expectNode: 'AppButton',
+    expectTypes: <String>['Layout'],
+    expectShift: true,
+  ),
+];
 
 const List<Entry> noOps = <Entry>[
   Entry(

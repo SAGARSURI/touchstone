@@ -78,7 +78,9 @@ function extract() {
 
   // Paint text: owned elements and text runs in document order, positions
   // relative to the component's own box; child components leave a marker.
-  for (const c of comps) {
+  // The flattened paint walks through child components as if they were part
+  // of this one.
+  const paintOps = (c, flat) => {
     const origin = rectOf(c.el);
     const ops = [];
     const visit = (node) => {
@@ -94,7 +96,7 @@ function extract() {
         return;
       }
       if (node.nodeType !== Node.ELEMENT_NODE) return;
-      if (node !== c.el && ownerOf.get(node) !== c) {
+      if (!flat && node !== c.el && ownerOf.get(node) !== c) {
         ops.push(['comp', ownerOf.get(node).idx]);
         return;
       }
@@ -118,7 +120,11 @@ function extract() {
       ops.push(['end']);
     };
     visit(c.el);
-    c.ops = ops;
+    return ops;
+  };
+  for (const c of comps) {
+    c.ops = paintOps(c, false);
+    c.flatOps = paintOps(c, true);
     c.bounds = c === root ? [0, 0, innerWidth, innerHeight] : (({ x, y, width, height }) => [x, y, width, height])(rectOf(c.el));
     c.canvas = c.el.localName === 'canvas' || !!c.el.querySelector?.(`canvas[data-ts-owner="${c.idx}"]`);
     c.styleOf = style(c.el);
@@ -131,6 +137,7 @@ function extract() {
       parent: c.parent ? c.parent.idx : null,
       children: c.children.map((x) => x.idx),
       ops: c.ops,
+      flatOps: c.flatOps,
       bounds: c.bounds,
       painted: painted.has(c),
       canvas: c.canvas,
@@ -156,7 +163,8 @@ function extract() {
   };
 }
 
-/// Semantics from the accessibility tree, grouped by owning component.
+/// Semantics from the accessibility tree, grouped by owning component. The
+/// map's `ordered` list keeps every entry with its owner in tree order.
 async function semantics(cdp) {
   const { root } = await cdp.send('DOM.getDocument', { depth: -1, pierce: true });
   const owner = new Map();
@@ -170,6 +178,7 @@ async function semantics(cdp) {
   })(root, 0);
   const { nodes } = await cdp.send('Accessibility.getFullAXTree');
   const out = new Map();
+  out.ordered = [];
   for (const n of nodes) {
     if (n.ignored || n.backendDOMNodeId === undefined) continue;
     const role = n.role?.value;
@@ -183,6 +192,7 @@ async function semantics(cdp) {
     const comp = owner.get(n.backendDOMNodeId) ?? 0;
     if (!out.has(comp)) out.set(comp, []);
     out.get(comp).push(entry);
+    out.ordered.push([comp, entry]);
   }
   return out;
 }
@@ -242,6 +252,8 @@ async function capture(browser, screen, mutate) {
   const fullId = (idx) => (idx === 0 ? 'root' : `${fullId(byIdx.get(idx).parent)}/${segment.get(idx)}`);
 
   const opaqueNodes = {};
+  const pixelsOf = new Map();
+  const subtree = (c) => [c.idx, ...c.children.filter((k) => shown.has(k)).flatMap((k) => subtree(byIdx.get(k)))];
   const build = async (c) => {
     const ops = c.ops.map((op) => (op[0] === 'comp' ? ['comp', segment.get(op[1]) ?? '-'] : op));
     let paintText = json(ops);
@@ -250,22 +262,28 @@ async function capture(browser, screen, mutate) {
       // Script-drawn pixels: the paint is a pixel hash, as for a CustomPainter that cannot be recorded.
       reasons.push('canvas');
       const el = await page.$(`[data-ts-owner="${c.idx}"]`);
-      paintText += `px(${sha(await el.screenshot())})`;
+      pixelsOf.set(c.idx, sha(await el.screenshot()));
+      paintText += `px(${pixelsOf.get(c.idx)})`;
     }
     if (reasons.length) opaqueNodes[fullId(c.idx)] = reasons;
     const children = [];
     for (const k of c.children.filter((k) => shown.has(k))) children.push(await build(byIdx.get(k)));
+    // The subtree's output with component boundaries removed (schema: flat).
+    const inside = new Set(subtree(c));
+    const flatText = json(c.flatOps) + [...inside].map((k) => (pixelsOf.has(k) ? `px(${pixelsOf.get(k)})` : '')).join('');
+    const flatSem = sem.ordered.filter(([k]) => inside.has(k)).map(([, e]) => e);
     const node = {
       id: segment.get(c.idx),
       bounds: c.bounds.map(d).join(','),
       paint: sha(paintText),
       sem: json(sem.get(c.idx) ?? []),
       opaque: reasons.length ? reasons.join('+') : '-',
+      flat: sha(`${flatText}\n${json(flatSem)}`),
       type: c.idx === 0 ? 'root' : `${c.type} (${screen}.html)`,
       style: json(c.style),
       children,
     };
-    const detection = [json(node.id), node.bounds, node.paint, node.sem, node.opaque].join('\t');
+    const detection = [json(node.id), node.bounds, node.paint, node.sem, node.opaque, node.flat].join('\t');
     node.sub = sha([detection, ...children.map((x) => x.sub)].join('\n'));
     return node;
   };
@@ -289,7 +307,7 @@ async function capture(browser, screen, mutate) {
   ];
   const write = (n, depth) => {
     lines.push(`${'  '.repeat(depth)}${[json(n.id), `bounds=${n.bounds}`, `paint=${n.paint}`, `sem=${n.sem}`,
-      `opaque=${n.opaque}`, `type=${json(n.type)}`, `style=${n.style}`, `sub=${n.sub}`].join('\t')}`);
+      `opaque=${n.opaque}`, `flat=${n.flat}`, `type=${json(n.type)}`, `style=${n.style}`, `sub=${n.sub}`].join('\t')}`);
     n.children.forEach((c) => write(c, depth + 1));
   };
   write(root, 0);

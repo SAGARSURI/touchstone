@@ -26,7 +26,14 @@ import 'toolchain.dart';
 typedef TokenResolver = String? Function(Object value);
 
 class SnapshotOptions {
-  const SnapshotOptions({this.policy, this.state, this.theme, this.tokenResolver, this.atPumpedTime = false});
+  const SnapshotOptions({
+    this.policy,
+    this.state,
+    this.theme,
+    this.tokenResolver,
+    this.atPumpedTime = false,
+    this.dynamicComponents = const <String>{},
+  });
 
   /// Which widgets are components. Defaults to classes declared in the
   /// package under test.
@@ -47,8 +54,21 @@ class SnapshotOptions {
   /// capture's own pumps do not advance time.
   final bool atPumpedTime;
 
-  SnapshotOptions _atPumpedTime() =>
-      SnapshotOptions(policy: policy, state: state, theme: theme, tokenResolver: tokenResolver, atPumpedTime: true);
+  /// Components whose content changes from run to run, such as a clock or a
+  /// live price: a component type, an id segment or a full id. Their content
+  /// (text and images) is not compared; their structure, layout, style and
+  /// semantics are (spec: "Dynamic content is declared in the test"). Recorded
+  /// in `inputs` as `dynamic`.
+  final Set<String> dynamicComponents;
+
+  SnapshotOptions _atPumpedTime() => SnapshotOptions(
+    policy: policy,
+    state: state,
+    theme: theme,
+    tokenResolver: tokenResolver,
+    atPumpedTime: true,
+    dynamicComponents: dynamicComponents,
+  );
 }
 
 /// The capture could not produce a deterministic snapshot.
@@ -289,7 +309,8 @@ Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options
     }
 
     final tree = ComponentTree.build(tester.binding.rootElement!, policy);
-    final Map<Component, List<Map<String, Object?>>> semantics = _semanticsByComponent(view, tree);
+    final _Semantics semanticsIndex = _semanticsByComponent(view, tree);
+    final Map<Component, List<Map<String, Object?>>> semantics = semanticsIndex.byComponent;
     final painted = <Component>{for (final RecordedNode n in recording.nodes) tree.ownerOfRenderObject(n.renderObject)};
     final shown = <Component>{};
     for (final Component comp in tree.all.toList().reversed) {
@@ -312,8 +333,11 @@ Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options
         paint: sha256.convert(utf8.encode(assembly.text(comp))).toString(),
         semantics: jsonEncode(semantics[comp] ?? const <Object?>[]),
         opaque: reasons.isEmpty ? '-' : reasons.join('+'),
+        flat: _flat(comp, assembly, semanticsIndex),
         type: comp.element == null ? 'root' : policy.typeOf(comp.element!.widget),
-        style: jsonEncode(_style(assembly.renderObjects[comp] ?? const <RecordedNode>[], options.tokenResolver)),
+        style: jsonEncode(
+          _style(assembly.renderObjects[comp] ?? const <RecordedNode>[], options.tokenResolver, comp.element),
+        ),
         children: comp.children.map(build).toList(),
       );
     }
@@ -435,6 +459,7 @@ Map<String, String> _inputs(WidgetTester tester, RenderView view, SnapshotOption
   'theme': options.theme ?? '-',
   'state': options.state ?? '-',
   if (options.atPumpedTime) 'frameTime': '${tester.binding.currentSystemFrameTimeStamp.inMicroseconds}us',
+  if (options.dynamicComponents.isNotEmpty) 'dynamic': (options.dynamicComponents.toList()..sort()).join(','),
 };
 
 List<String> _limits(PaintRecording recording) {
@@ -467,12 +492,17 @@ class _PaintAssembly {
   final Map<Component, Set<String>> opaque = <Component, Set<String>>{};
   final Map<Component, List<RecordedNode>> renderObjects = <Component, List<RecordedNode>>{};
 
+  /// Where each component's paint starts, in paint order, with the component
+  /// whose paint reached it (null for the root).
+  final Map<Component, List<(RecordedNode, Component?)>> entries = <Component, List<(RecordedNode, Component?)>>{};
+
   String text(Component comp) => _text[comp]?.toString() ?? '';
 
-  void run(PaintRecording recording) => _entry(recording.root);
+  void run(PaintRecording recording) => _entry(recording.root, null);
 
-  void _entry(RecordedNode node) {
+  void _entry(RecordedNode node, Component? from) {
     final Component comp = tree.ownerOfRenderObject(node.renderObject);
+    (entries[comp] ??= <(RecordedNode, Component?)>[]).add((node, from));
     final StringBuffer out = _text.putIfAbsent(comp, StringBuffer.new);
     final bool primary = comp.parent == null || identical(node.renderObject, comp.renderObject);
     if (!primary || !node.geometryVerified) {
@@ -495,9 +525,17 @@ class _PaintAssembly {
           ..write('\n');
         continue;
       }
-      final RecordedNode child = node.children[k];
+      RecordedNode child = node.children[k];
       final Offset offset = node.childOffsets[k];
       k++;
+      // A render object of this component that draws nothing and holds one
+      // child at its own origin (a repaint boundary, a size box) leaves no
+      // trace in the paint, so wrapping in a layout-neutral widget does not
+      // change it (A5).
+      while (identical(tree.ownerOfRenderObject(child.renderObject), comp) && _passThrough(child)) {
+        (renderObjects[comp] ??= <RecordedNode>[]).add(child);
+        child = child.children.single;
+      }
       final Component owner = tree.ownerOfRenderObject(child.renderObject);
       if (identical(owner, comp)) {
         out.write('child${c.offset(offset)}');
@@ -507,14 +545,95 @@ class _PaintAssembly {
       final Component? via = comp.childToward(owner);
       final bool primary = identical(child.renderObject, owner.renderObject);
       out
-        ..write(via == null ? 'foreign(${jsonEncode(owner.fullId)})' : 'comp(${jsonEncode(via.segment)})')
+        // A child component is named by its index among this component's
+        // children, not its id, so an id change alone leaves this paint as it
+        // was (spec: Identity is info only).
+        ..write(via == null ? 'foreign(${jsonEncode(owner.fullId)})' : 'comp(${comp.children.indexOf(via)})')
         ..write(primary && child.geometryVerified ? '' : c.offset(offset))
         ..write('\n');
-      _entry(child);
+      _entry(child, comp);
     }
     out.write('}');
   }
 }
+
+/// The flattened output of [comp]'s subtree (spec: Node fields, `flat`).
+///
+/// The paint is written as if the subtree were one component: a child
+/// component's commands appear where its marker would, after the paint offset
+/// that places it, and a render object that only passes its one child through
+/// is left out whichever component built it. Paint that a component outside
+/// the subtree draws in the middle is a `foreign` marker. A component of the
+/// subtree whose paint starts outside it, such as an overlay entry, follows
+/// with its global transform. The semantics are the subtree's nodes in
+/// semantics tree order, whichever component owns each one.
+String _flat(Component comp, _PaintAssembly assembly, _Semantics semantics) {
+  final inside = <Component>{};
+  void collect(Component member) {
+    inside.add(member);
+    member.children.forEach(collect);
+  }
+
+  collect(comp);
+  final ComponentTree tree = assembly.tree;
+  final out = StringBuffer();
+  void segment(RecordedNode node) {
+    out.write('{');
+    var k = 0;
+    for (final String op in node.ops) {
+      if (op != 'child') {
+        out
+          ..write(op)
+          ..write('\n');
+        continue;
+      }
+      RecordedNode child = node.children[k];
+      final Offset offset = node.childOffsets[k];
+      k++;
+      while (inside.contains(tree.ownerOfRenderObject(child.renderObject)) && _passThrough(child)) {
+        child = child.children.single;
+      }
+      if (inside.contains(tree.ownerOfRenderObject(child.renderObject))) {
+        out.write('child${c.offset(offset)}');
+        segment(child);
+      } else {
+        out
+          ..write('foreign${c.offset(offset)}')
+          ..write('\n');
+      }
+    }
+    out.write('}');
+  }
+
+  void visit(Component member) {
+    for (final (RecordedNode node, Component? from)
+        in assembly.entries[member] ?? const <(RecordedNode, Component?)>[]) {
+      if (from != null && inside.contains(from)) {
+        continue; // Written in place by its parent's segment.
+      }
+      final bool primary = member.parent == null || identical(node.renderObject, member.renderObject);
+      if (!identical(member, comp) || !primary || !node.geometryVerified) {
+        out.write('entry(${c.float64s(node.toGlobal.storage)})');
+      }
+      segment(node);
+    }
+    member.children.forEach(visit);
+  }
+
+  visit(comp);
+  final List<Map<String, Object?>> nodes = <Map<String, Object?>>[
+    for (final (Component owner, Map<String, Object?> node) in semantics.ordered)
+      if (inside.contains(owner)) node,
+  ];
+  return sha256.convert(utf8.encode('$out\n${jsonEncode(nodes)}')).toString();
+}
+
+bool _passThrough(RecordedNode node) =>
+    node.ops.length == 1 &&
+    node.ops.single == 'child' &&
+    node.children.length == 1 &&
+    node.childOffsets.single == Offset.zero &&
+    !node.isOpaque;
 
 /// Every semantics node in the tree, grouped by the component that owns the
 /// render object that created it. A node merged into its parent is described
@@ -523,7 +642,19 @@ class _PaintAssembly {
 /// Some nodes belong to no render object: a paragraph builds one child node
 /// per text span with a recognizer. Those are described with the node whose
 /// render object built them.
-Map<Component, List<Map<String, Object?>>> _semanticsByComponent(RenderView view, ComponentTree tree) {
+class _Semantics {
+  final Map<Component, List<Map<String, Object?>>> byComponent = <Component, List<Map<String, Object?>>>{};
+
+  /// Every node with its owner, in the order the render tree is walked.
+  final List<(Component, Map<String, Object?>)> ordered = <(Component, Map<String, Object?>)>[];
+
+  void add(Component owner, Map<String, Object?> node) {
+    (byComponent[owner] ??= <Map<String, Object?>>[]).add(node);
+    ordered.add((owner, node));
+  }
+}
+
+_Semantics _semanticsByComponent(RenderView view, ComponentTree tree) {
   final owned = <SemanticsNode, RenderObject>{};
   void collect(RenderObject ro) {
     final SemanticsNode? node = ro.debugSemantics;
@@ -534,17 +665,17 @@ Map<Component, List<Map<String, Object?>>> _semanticsByComponent(RenderView view
   }
 
   collect(view);
-  final out = <Component, List<Map<String, Object?>>>{};
+  final out = _Semantics();
   final seen = <SemanticsNode>{};
   void visit(RenderObject ro) {
     final SemanticsNode? node = ro.debugSemantics;
     if (node != null && owned[node] == ro && node.attached && !node.isMergedIntoParent && seen.add(node)) {
-      final List<Map<String, Object?>> list = out[_semanticsOwner(ro, node, tree)] ??= <Map<String, Object?>>[];
-      list.add(_describeSemantics(node));
+      final Component owner = _semanticsOwner(ro, node, tree);
+      out.add(owner, _describeSemantics(node));
       void unowned(SemanticsNode parent) {
         parent.visitChildren((SemanticsNode child) {
           if (!owned.containsKey(child) && !child.isMergedIntoParent && seen.add(child)) {
-            list.add(_describeSemantics(child));
+            out.add(owner, _describeSemantics(child));
             unowned(child);
           }
           return true;
@@ -747,6 +878,8 @@ const Set<String> _styleSkip = <String>{
   'parentData',
   'constraints',
   'size',
+  // A sliver's size: an output of layout, like `size`.
+  'geometry',
   'layer',
   'semantic boundary',
   'needs compositing',
@@ -759,41 +892,155 @@ const Set<String> _styleSkip = <String>{
   'semanticBounds',
   'debugNeedsLayout',
   'debugNeedsPaint',
+  // Recorded in the semantics field.
+  'semantics node',
 };
 
+final RegExp _notStyle = RegExp('Semantics|MouseRegion|Pointer|MetaData');
+
 bool _drawsSomething(String op) =>
-    op.startsWith('draw') || op.startsWith('clip') || op.startsWith('push') || op.startsWith('saveLayer');
+    op.startsWith('draw') ||
+    op.startsWith('clip') ||
+    op.startsWith('push') ||
+    op.startsWith('saveLayer') ||
+    op.startsWith('composite') ||
+    op.startsWith('addLayer');
 
 final RegExp _identity = RegExp(r'#[0-9a-f]{5}\b');
 
 /// Explanation field `style`: diagnostics properties of the render objects
 /// that drew this component's paint. Never hashed.
-Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver) {
+///
+/// A property whose value is itself diagnosticable, such as a decoration, is
+/// expanded one level (`RenderDecoratedBox.decoration.color`), and text is
+/// described by its spans' styles (`RenderParagraph.text.style.fontWeight`),
+/// so a change names the property that changed. The widget that created each
+/// render object is described the same way. Text content is not style; it is
+/// recorded under content keys (`RenderParagraph.plainText`, `Text.data`) that
+/// the diff reads as content.
+Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver, Element? component) {
   final out = <String, String>{};
-  for (final node in nodes) {
-    // Only render objects that drew something carry visual properties.
-    if (!node.ops.any(_drawsSomething)) {
-      continue;
+  String describe(DiagnosticsNode p) {
+    String text = p.toDescription().replaceAll(_identity, '#');
+    if (text.length > 240) {
+      text = '${text.substring(0, 240)}…';
     }
+    final Object? value = p.value;
+    final String? token = value == null || resolver == null ? null : resolver(value);
+    return token == null ? text : '$token ($text)';
+  }
+
+  void put(String key, String value) {
+    var k = key;
+    for (var n = 2; out.containsKey(k); n++) {
+      k = '$key.$n';
+    }
+    out[k] = value;
+  }
+
+  bool shown(DiagnosticsNode p) {
+    final String? name = p.name;
+    return name != null &&
+        name.isNotEmpty &&
+        !_styleSkip.contains(name) &&
+        !p.isFiltered(DiagnosticLevel.info) &&
+        // A child widget's description includes its text; children are
+        // described by their own render objects.
+        p.value is! Widget &&
+        p.value is! List<Widget> &&
+        // A scroll position describes the viewport's size, which is layout,
+        // and a child delegate describes the children, which are compared as
+        // components.
+        p.value is! ViewportOffset &&
+        p.value is! SliverChildDelegate;
+  }
+
+  final described = <Element>{};
+  for (final node in nodes) {
     final RenderObject ro = node.renderObject;
     final String type = ro.runtimeType.toString();
-    for (final DiagnosticsNode p in ro.toDiagnosticsNode().getProperties()) {
-      final String? name = p.name;
-      if (name == null || name.isEmpty || _styleSkip.contains(name) || p.isFiltered(DiagnosticLevel.info)) {
-        continue;
-      }
-      String text = p.toDescription().replaceAll(_identity, '#');
-      if (text.length > 240) {
-        text = '${text.substring(0, 240)}…';
-      }
-      final Object? value = p.value;
-      final String? token = value == null || resolver == null ? null : resolver(value);
-      String key = '$type.$name';
-      for (var n = 2; out.containsKey(key); n++) {
-        key = '$type.$name.$n';
-      }
-      out[key] = token == null ? text : '$token ($text)';
+    // Semantics and pointer handling are recorded elsewhere or not drawn.
+    // Every other render object is described. Those that only place their
+    // children (`layout.RenderPadding.padding`) explain layout, since a
+    // child's offset is part of this component's paint.
+    if (_notStyle.hasMatch(type)) {
+      continue;
     }
+    final String prefix = node.ops.any(_drawsSomething) ? '' : layoutStylePrefix;
+    void properties(String type, Diagnosticable of) {
+      for (final DiagnosticsNode p in of.toDiagnosticsNode().getProperties()) {
+        if (!shown(p)) {
+          continue;
+        }
+        final String key = '$type.${p.name}';
+        put(key, describe(p));
+        final Object? value = p.value;
+        if (value is Diagnosticable && value is! RenderObject && value is! Widget) {
+          for (final DiagnosticsNode q in value.toDiagnosticsNode().getProperties()) {
+            if (shown(q) && q.value != null) {
+              put('$key.${q.name}', describe(q));
+            }
+          }
+        }
+      }
+    }
+
+    properties('$prefix$type', ro);
+    // Some render objects report none of their paint parameters (the
+    // private one behind ColoredBox has no diagnostics), so the widget that
+    // created the render object is described too (`ColoredBox.color`).
+    // The framework widgets between the component and this render object are
+    // described too, once each: a state such as `Switch.value` is often held
+    // by a widget whose render object does not report it.
+    final Object? creator = ro.debugCreator;
+    if (creator is DebugCreator) {
+      void describeWidget(Element e, String prefix) {
+        if (!described.add(e)) {
+          return;
+        }
+        final String name = e.widget.runtimeType.toString().split('<').first;
+        if (!_notStyle.hasMatch(name)) {
+          properties('$prefix$name', e.widget);
+        }
+      }
+
+      describeWidget(creator.element, prefix);
+      creator.element.visitAncestorElements((Element e) {
+        if (identical(e, component)) {
+          return false;
+        }
+        // A render object widget is described with its own render object,
+        // when that is drawn by this component.
+        if (e.widget is! RenderObjectWidget) {
+          describeWidget(e, e.widget is ParentDataWidget ? layoutStylePrefix : '');
+        }
+        return true;
+      });
+    }
+    if (node.imageFingerprints.isNotEmpty) {
+      // Content, not style: the diff reads this key as content.
+      put('$type.images', node.imageFingerprints.join(','));
+    }
+    final InlineSpan? text = switch (ro) {
+      RenderParagraph() => ro.text,
+      RenderEditable() => ro.text,
+      _ => null,
+    };
+    if (text != null) {
+      // Content, not style: the diff reads this key as content.
+      put('$type.plainText', jsonEncode(text.toPlainText()));
+    }
+    text?.visitChildren((InlineSpan span) {
+      final TextStyle? style = span.style;
+      if (style != null) {
+        for (final DiagnosticsNode q in style.toDiagnosticsNode().getProperties()) {
+          if (shown(q) && q.value != null) {
+            put('$type.text.style.${q.name}', describe(q));
+          }
+        }
+      }
+      return true;
+    });
   }
   return out;
 }
