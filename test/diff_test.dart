@@ -318,7 +318,9 @@ void main() {
       tester,
       column(<Widget>[const Holder(child: SizedBox(height: 10)), const Card2(key: ValueKey<String>('k'))]),
       column(<Widget>[
-        const Holder(child: ColoredBox(color: Color(0xFF00FF00), child: SizedBox(height: 10))),
+        const Holder(
+          child: ColoredBox(color: Color(0xFF00FF00), child: SizedBox(height: 10)),
+        ),
         const Holder2(child: Card2(key: ValueKey<String>('k'))),
       ]),
     );
