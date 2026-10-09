@@ -26,7 +26,14 @@ import 'toolchain.dart';
 typedef TokenResolver = String? Function(Object value);
 
 class SnapshotOptions {
-  const SnapshotOptions({this.policy, this.state, this.theme, this.tokenResolver, this.atPumpedTime = false});
+  const SnapshotOptions({
+    this.policy,
+    this.state,
+    this.theme,
+    this.tokenResolver,
+    this.atPumpedTime = false,
+    this.dynamicComponents = const <String>{},
+  });
 
   /// Which widgets are components. Defaults to classes declared in the
   /// package under test.
@@ -47,8 +54,21 @@ class SnapshotOptions {
   /// capture's own pumps do not advance time.
   final bool atPumpedTime;
 
-  SnapshotOptions _atPumpedTime() =>
-      SnapshotOptions(policy: policy, state: state, theme: theme, tokenResolver: tokenResolver, atPumpedTime: true);
+  /// Components whose content changes from run to run, such as a clock or a
+  /// live price: a component type, an id segment or a full id. Their content
+  /// (text and images) is not compared; their structure, layout, style and
+  /// semantics are (spec: "Dynamic content is declared in the test"). Recorded
+  /// in `inputs` as `dynamic`.
+  final Set<String> dynamicComponents;
+
+  SnapshotOptions _atPumpedTime() => SnapshotOptions(
+    policy: policy,
+    state: state,
+    theme: theme,
+    tokenResolver: tokenResolver,
+    atPumpedTime: true,
+    dynamicComponents: dynamicComponents,
+  );
 }
 
 /// The capture could not produce a deterministic snapshot.
@@ -435,6 +455,7 @@ Map<String, String> _inputs(WidgetTester tester, RenderView view, SnapshotOption
   'theme': options.theme ?? '-',
   'state': options.state ?? '-',
   if (options.atPumpedTime) 'frameTime': '${tester.binding.currentSystemFrameTimeStamp.inMicroseconds}us',
+  if (options.dynamicComponents.isNotEmpty) 'dynamic': (options.dynamicComponents.toList()..sort()).join(','),
 };
 
 List<String> _limits(PaintRecording recording) {
@@ -777,7 +798,10 @@ final RegExp _identity = RegExp(r'#[0-9a-f]{5}\b');
 /// A property whose value is itself diagnosticable, such as a decoration, is
 /// expanded one level (`RenderDecoratedBox.decoration.color`), and text is
 /// described by its spans' styles (`RenderParagraph.text.style.fontWeight`),
-/// so a change names the property that changed. Text content is not style.
+/// so a change names the property that changed. The widget that created each
+/// render object is described the same way. Text content is not style; where
+/// a widget property holds content (`Text.data`), the diff reads that key as
+/// content, not style.
 Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver) {
   final out = <String, String>{};
   String describe(DiagnosticsNode p) {
@@ -810,20 +834,32 @@ Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver) {
     }
     final RenderObject ro = node.renderObject;
     final String type = ro.runtimeType.toString();
-    for (final DiagnosticsNode p in ro.toDiagnosticsNode().getProperties()) {
-      if (!shown(p)) {
-        continue;
-      }
-      final String key = '$type.${p.name}';
-      put(key, describe(p));
-      final Object? value = p.value;
-      if (value is Diagnosticable && value is! RenderObject) {
-        for (final DiagnosticsNode q in value.toDiagnosticsNode().getProperties()) {
-          if (shown(q) && q.value != null) {
-            put('$key.${q.name}', describe(q));
+    void properties(String type, Diagnosticable of) {
+      for (final DiagnosticsNode p in of.toDiagnosticsNode().getProperties()) {
+        if (!shown(p)) {
+          continue;
+        }
+        final String key = '$type.${p.name}';
+        put(key, describe(p));
+        final Object? value = p.value;
+        if (value is Diagnosticable && value is! RenderObject && value is! Widget) {
+          for (final DiagnosticsNode q in value.toDiagnosticsNode().getProperties()) {
+            if (shown(q) && q.value != null) {
+              put('$key.${q.name}', describe(q));
+            }
           }
         }
       }
+    }
+
+    properties(type, ro);
+    // Some render objects report none of their paint parameters (the
+    // private one behind ColoredBox has no diagnostics), so the widget that
+    // created the render object is described too (`ColoredBox.color`).
+    final Object? creator = ro.debugCreator;
+    if (creator is DebugCreator) {
+      final Widget widget = creator.element.widget;
+      properties(widget.runtimeType.toString().split('<').first, widget);
     }
     final InlineSpan? text = switch (ro) {
       RenderParagraph() => ro.text,

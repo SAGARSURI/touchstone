@@ -286,7 +286,13 @@ void main() {
     await tester.pumpWidget(app(const Card2(child: Label('b'))));
     await expectLater(
       () => expectSnapshot(tester, 'card/idle', options: options),
-      throwsA(isA<TestFailure>().having((TestFailure f) => f.message, 'message', contains('Card2@0/Label@0'))),
+      throwsA(
+        isA<TestFailure>().having(
+          (TestFailure f) => f.message,
+          'message',
+          allOf(startsWith('card/idle    fail'), contains('Content   Label@0'), contains('"a" -> "b"')),
+        ),
+      ),
     );
   });
 

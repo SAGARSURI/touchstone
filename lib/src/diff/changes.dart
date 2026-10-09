@@ -173,6 +173,10 @@ class ChangeReport {
   /// Declared inputs that differ (theme, locale, state, dynamic components).
   List<String> inputChanges = <String>[];
 
+  /// Components declared dynamic whose content changed and, as declared, was
+  /// not compared.
+  List<String> skippedContent = <String>[];
+
   /// No change at all.
   bool get isEqual => kind == ReportKind.equal || (kind == ReportKind.diff && items.isEmpty && inputChanges.isEmpty);
 

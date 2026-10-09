@@ -43,7 +43,20 @@ const Set<String> _semanticsGeometry = <String>{
 const Set<String> _semanticsText = <String>{'label', 'value'};
 
 /// Style keys whose change is a content change rather than a style change.
-bool _isContentStyleKey(String key) => key.startsWith('RenderImage.image');
+/// Style keys that hold content, not style: an image, or a widget property
+/// that holds text or an icon.
+bool _isContentStyleKey(String key) =>
+    key.startsWith('RenderImage.image') || _contentWidgetKeys.any((String k) => key == k || key.startsWith('$k.'));
+
+const Set<String> _contentWidgetKeys = <String>{
+  'Text.data',
+  'Text.textSpan',
+  'RichText.text',
+  'Icon.icon',
+  'Image.image',
+  'RawImage.image',
+  'EditableText.controller',
+};
 
 /// The input key that lists components declared dynamic in the test.
 const String dynamicInputKey = 'dynamic';
@@ -101,8 +114,12 @@ class _Diff {
         if (beforeSnapshot.inputs[k] != afterSnapshot.inputs[k])
           '$k: ${beforeSnapshot.inputs[k] ?? '(none)'} -> ${afterSnapshot.inputs[k] ?? '(none)'}',
     ];
-    return groupCascades(afterSnapshot.id, before, after, changes, inputChanges: inputs);
+    return groupCascades(afterSnapshot.id, before, after, changes, inputChanges: inputs)
+      ..skippedContent = _skippedContent;
   }
+
+  /// Dynamic components whose content changed and was not compared.
+  final List<String> _skippedContent = <String>[];
 
   bool _isDynamic(DiffNode a, Set<String> names) =>
       names.contains(a.typeName) || names.contains(a.segment) || names.contains(a.fullId);
@@ -278,6 +295,8 @@ class _Diff {
               if (_semanticsText.contains(e.key)) e.key: e.value,
           };
           out.add(Change(ChangeType.content, a, b, _describeMap(content)));
+        } else {
+          _skippedContent.add(a.fullId);
         }
       } else if (layout != null && b.node.opaque == a.node.opaque) {
         // A box painted at its new size: the paint follows the layout change.
