@@ -19,6 +19,7 @@ import 'canonical.dart' as c;
 import 'describe.dart';
 import 'fingerprint.dart';
 import 'isolated.dart';
+import 'pixel_digest.dart';
 import 'recording_canvas.dart';
 
 /// One render object's own paint.
@@ -257,7 +258,7 @@ class PaintRecording {
 
   static String _hash(List<String> lines) => sha256.convert(utf8.encode(lines.join('\n'))).toString();
 
-  /// SHA-256 of [picture]'s pixels over [local], at the device pixel ratio.
+  /// The digest of [picture]'s pixels over [local], at the device pixel ratio.
   Future<String> _rasterHash(ui.Picture picture, Rect local) async {
     final double dpr = devicePixelRatio;
     final Rect px = Rect.fromLTRB(local.left * dpr, local.top * dpr, local.right * dpr, local.bottom * dpr);
@@ -278,7 +279,7 @@ class PaintRecording {
     placed.dispose();
     final ByteData? bytes = await image.toByteData();
     image.dispose();
-    return sha256.convert(bytes!.buffer.asUint8List()).toString();
+    return pixelDigest(bytes!.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
   }
 }
 

@@ -8,7 +8,7 @@
 //
 // `plain` pumps each scene as snapshots_test.dart does. `capture` also does
 // what expectSnapshot does for an unchanged snapshot: read the baseline,
-// parse it, capture, compare root hashes and toolchains. `compare` does the
+// parse it, capture the detection fields, compare root hashes and toolchains. `compare` does the
 // same, then times the comparison alone and with the parse over 1,000 rounds,
 // so it is kept out of the wall time of `capture`. `record` writes the
 // baselines that `capture` compares against into build/a10/, since the
@@ -19,6 +19,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:touchstone/src/snapshot/capture.dart' show captureDetectionOnly;
 import 'package:touchstone/touchstone.dart';
 
 import '../support/scenes.dart';
@@ -45,7 +46,7 @@ void main() {
         case 'capture' || 'compare':
           final check = Stopwatch()..start();
           final Snapshot baseline = Snapshot.parse(_baseline(scene).readAsStringSync());
-          final Snapshot capture = await captureSnapshot(tester, scene.id, options: scene.options);
+          final Snapshot capture = await captureDetectionOnly(tester, scene.id, options: scene.options);
           final bool equal =
               baseline.rootHash == capture.rootHash && baseline.toolchain.toString() == capture.toolchain.toString();
           check.stop();

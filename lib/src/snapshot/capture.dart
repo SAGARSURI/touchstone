@@ -109,6 +109,24 @@ Future<Capture> captureWithDetails(
   WidgetTester tester,
   String id, {
   SnapshotOptions options = const SnapshotOptions(),
+}) => _checkedCapture(tester, id, options, explain: true);
+
+/// A capture for a hash check only: the detection fields, with no style or
+/// shape (spec, Node fields: explanation fields are not hashed). Describing
+/// style is most of what capture costs on a screen with no pixel-hashed node
+/// (doc/phase3/a10.md), and an unchanged snapshot never shows it. Not for
+/// writing a baseline or a report.
+Future<Snapshot> captureDetectionOnly(
+  WidgetTester tester,
+  String id, {
+  SnapshotOptions options = const SnapshotOptions(),
+}) async => (await _checkedCapture(tester, id, options, explain: false)).snapshot;
+
+Future<Capture> _checkedCapture(
+  WidgetTester tester,
+  String id,
+  SnapshotOptions options, {
+  required bool explain,
 }) async {
   if (!options.atPumpedTime && tester.binding.hasScheduledFrame) {
     throw CaptureFailure(
@@ -132,7 +150,7 @@ Future<Capture> captureWithDetails(
       'the toolchain fingerprint cannot record it. Load fonts for snapshot tests with SnapshotFonts.load.',
     );
   }
-  return _capture(tester, id, options);
+  return _capture(tester, id, options, explain: explain);
 }
 
 /// Font families the shown text uses that render with a font loaded outside
@@ -252,7 +270,7 @@ Future<SnapshotDifference> _diagnoseImages(
   SnapshotOptions options,
   List<_PendingImage> pending,
 ) async {
-  final Capture capture = await _capture(tester, id, options._atPumpedTime());
+  final Capture capture = await _capture(tester, id, options._atPumpedTime(), explain: true);
   final List<String> owners = <String>{
     // A component that paints only the placeholder may have been pruned.
     for (final _PendingImage p in pending)
@@ -268,7 +286,7 @@ Future<SnapshotDifference> _diagnoseImages(
   );
 }
 
-Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options) async {
+Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options, {required bool explain}) async {
   final ComponentPolicy policy = options.policy ?? (_defaultPolicy ??= ComponentPolicy());
   void checkSettled(String when) {
     if (!options.atPumpedTime) {
@@ -331,16 +349,20 @@ Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options
         id: comp.segment,
         bounds: comp.parent == null ? _rect(Offset.zero & view.size) : _bounds(comp.renderObject),
         paint: sha256.convert(utf8.encode(assembly.text(comp))).toString(),
-        shape: sha256
-            .convert(utf8.encode(assembly.text(comp).replaceAllMapped(_placement, (Match m) => m[1]!)))
-            .toString(),
+        shape: explain
+            ? sha256
+                  .convert(utf8.encode(assembly.text(comp).replaceAllMapped(_placement, (Match m) => m[1]!)))
+                  .toString()
+            : '-',
         semantics: jsonEncode(semantics[comp] ?? const <Object?>[]),
         opaque: reasons.isEmpty ? '-' : reasons.join('+'),
         flat: _flat(comp, assembly, semanticsIndex),
         type: comp.element == null ? 'root' : policy.typeOf(comp.element!.widget),
-        style: jsonEncode(
-          _style(assembly.renderObjects[comp] ?? const <RecordedNode>[], options.tokenResolver, comp.element),
-        ),
+        style: explain
+            ? jsonEncode(
+                _style(assembly.renderObjects[comp] ?? const <RecordedNode>[], options.tokenResolver, comp.element),
+              )
+            : '{}',
         children: comp.children.map(build).toList(),
       );
     }

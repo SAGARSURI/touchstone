@@ -113,6 +113,12 @@ component's `paint` changes whenever its pixels do.
   pixels, or a rotated or scaled transform), the hash is of the composited
   view over the render object's reach (see the Phase 0 register):
   `pixels(<rect>;<hash>)`.
+- In both forms `<hash>` is a 128-bit digest of the RGBA pixels, at the
+  device pixel ratio, from `lib/src/recorder/pixel_digest.dart` (since Phase 3
+  A10; SHA-256 before). SHA-256 over the pixels was most of the cost of a
+  capture, and the pixel digest only has to change when a pixel does: it
+  always changes when one 32-bit word changes, and two 64-bit lanes make an
+  accidental collision of larger changes negligible.
 
 ## Capture
 
@@ -126,6 +132,11 @@ semantics, records paint, repaints to undo
 what recording touched, rasterizes opaque nodes (alone, or the view when one
 must be hashed composited), then
 builds the component tree and hashes bottom-up.
+
+`expectSnapshot` checks an unchanged snapshot from its detection fields
+alone: it captures without describing `style` or `shape`, which are not
+hashed, and captures again with them only when the root hash or toolchain
+differs from the baseline, to write the change report (A10).
 
 Content that never settles (a shimmer) is captured with
 `SnapshotOptions(atPumpedTime: true)` after the test pumps an explicit time;

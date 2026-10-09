@@ -7,8 +7,9 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:crypto/crypto.dart';
 import 'package:flutter/rendering.dart';
+
+import '../recorder/pixel_digest.dart';
 
 /// Raw RGBA pixels of a region, at physical resolution.
 class PixelRegion {
@@ -18,7 +19,7 @@ class PixelRegion {
   final int height;
   final Uint8List rgba;
 
-  String get hash => 'px($width x $height:${sha256.convert(rgba)})';
+  String get hash => 'px($width x $height:${pixelDigest(rgba)})';
 
   bool sameAs(PixelRegion other) {
     if (width != other.width || height != other.height || rgba.length != other.rgba.length) {

@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:touchstone/src/snapshot/capture.dart' show captureDetectionOnly;
 import 'package:touchstone/touchstone.dart';
 
 class Card2 extends StatelessWidget {
@@ -64,6 +65,17 @@ void main() {
     expect(Snapshot.parse(text).toCanonical(), text);
     final String tampered = text.replaceFirst('"Label@0"', '"Label@1"');
     expect(() => Snapshot.parse(tampered), throwsFormatException);
+  });
+
+  testWidgets('a capture for a hash check has the same detection fields and no explanation', (
+    WidgetTester tester,
+  ) async {
+    final Snapshot full = await snap(tester, const Card2(child: Label('a')));
+    final Snapshot check = await captureDetectionOnly(tester, 'test', options: options);
+    expect(check.rootHash, full.rootHash);
+    expect(check.root.children.single.style, '{}');
+    expect(check.root.children.single.shape, '-');
+    expect(full.root.children.single.style, isNot('{}'));
   });
 
   testWidgets('components get key or ordinal ids; framework widgets are not components', (WidgetTester tester) async {

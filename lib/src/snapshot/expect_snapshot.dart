@@ -209,10 +209,13 @@ Future<void> expectSnapshot(
     );
   }
   final Snapshot baseline = read;
-  final Snapshot capture = await captureSnapshot(tester, id, options: options);
-  if (baseline.rootHash == capture.rootHash && baseline.toolchain.toString() == capture.toolchain.toString()) {
+  // The usual case on a pull request is an unchanged snapshot, which needs
+  // only the hashes. The explanation fields are described when it differs.
+  final Snapshot check = await captureDetectionOnly(tester, id, options: options);
+  if (baseline.rootHash == check.rootHash && baseline.toolchain.toString() == check.toolchain.toString()) {
     return;
   }
+  final Snapshot capture = await captureSnapshot(tester, id, options: options);
   final String? message = compareWithBaseline(baseline, capture);
   if (message != null) {
     fail(message);
