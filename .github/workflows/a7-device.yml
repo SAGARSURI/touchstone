@@ -55,13 +55,28 @@ jobs:
           xcrun simctl bootstatus "$udid" -b
           echo "SIMULATOR=$udid" >> "$GITHUB_ENV"
           xcrun simctl list devices booted | tee a7_simulator.txt
-      - name: Device run
+      - name: Probe with three seeds, verbose
+        id: probe
+        timeout-minutes: 25
         working-directory: corpus/catalogue_app
         run: |
           mkdir -p a7_out
           mv ../../a7_simulator.txt a7_out/
+          flutter test integration_test/a7_device_test.dart -d "$SIMULATOR" --dart-define=A7_COUNT=3 --verbose \
+            > a7_out/probe_verbose.txt 2>&1
+      - name: Device run
+        timeout-minutes: 60
+        working-directory: corpus/catalogue_app
+        run: |
           flutter test integration_test/a7_device_test.dart -d "$SIMULATOR" 2>&1 | tee a7_out/device.txt
           test "${PIPESTATUS[0]}" -eq 0
+      - name: Simulator log
+        if: always()
+        run: |
+          mkdir -p corpus/catalogue_app/a7_out
+          xcrun simctl spawn "$SIMULATOR" log show --last 2h --style compact \
+            --predicate 'process == "Runner" OR eventMessage CONTAINS "flutter"' \
+            | tail -n 3000 > corpus/catalogue_app/a7_out/simulator_log.txt || true
       - name: Tool runs on this runner
         if: always()
         working-directory: corpus/catalogue_app
