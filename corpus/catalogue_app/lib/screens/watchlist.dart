@@ -37,6 +37,7 @@ class WatchlistScreen extends StatelessWidget {
       body: CustomScrollView(
         controller: controller,
         slivers: <Widget>[
+          const SliverToBoxAdapter(child: PromoBanner()),
           SliverPersistentHeader(pinned: true, delegate: _HeaderDelegate(AppTokens.of(context))),
           SliverList.builder(
             itemCount: quotes.length,
@@ -66,6 +67,21 @@ class _HeaderDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(_HeaderDelegate oldDelegate) => oldDelegate.tokens != tokens;
+}
+
+class PromoBanner extends StatelessWidget {
+  const PromoBanner({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final AppTokens t = AppTokens.of(context);
+    return Container(
+      margin: const EdgeInsets.all(Space.m),
+      padding: const EdgeInsets.all(Space.m),
+      decoration: BoxDecoration(color: t.surfaceMuted, borderRadius: BorderRadius.circular(12)),
+      child: Text('Zero fees on your first 10 trades', style: TextStyle(color: t.textPrimary)),
+    );
+  }
 }
 
 class WatchlistHeader extends StatelessWidget {
