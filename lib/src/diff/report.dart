@@ -25,7 +25,7 @@ String renderCauses(Map<String, ChangeReport> reports) {
   for (final MapEntry<String, ChangeReport> r in reports.entries) {
     for (final Change c in r.value.changes) {
       if (c.type == ChangeType.style && c.fields.isNotEmpty) {
-        (byCause[fieldValues(c.fields)] ??= <(String, Change)>[]).add((r.key, c));
+        (byCause[_cause(c.fields)] ??= <(String, Change)>[]).add((r.key, c));
       }
     }
   }
@@ -49,6 +49,18 @@ String renderCauses(Map<String, ChangeReport> reports) {
     out.write('  ${e.key}: style change on $components in $snapshots snapshots\n');
   }
   return out.isEmpty ? '' : 'Causes in more than one snapshot:\n$out';
+}
+
+final RegExp _tokenValue = RegExp(r'^[A-Za-z][\w.]* #[0-9A-F]{8} -> #[0-9A-F]{8}$');
+
+/// A style change's cause: the tokens whose value changed, when it has any,
+/// since the other fields that changed with them (a colour derived from the
+/// token, a style object holding it) follow from them. Otherwise everything
+/// that changed.
+String _cause(Map<String, String> fields) {
+  final String values = fieldValues(fields);
+  final List<String> tokens = values.split('; ').where(_tokenValue.hasMatch).toList();
+  return tokens.isEmpty ? values : tokens.join('; ');
 }
 
 /// Renders [report] with [decision]'s verdict on the first line.

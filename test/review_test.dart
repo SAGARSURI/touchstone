@@ -19,6 +19,23 @@ class Tile extends StatelessWidget {
   );
 }
 
+// A tile that also draws a colour derived from its own, which has no token.
+class ShadedTile extends StatelessWidget {
+  const ShadedTile({super.key, this.color = const Color(0xFF000000)});
+  final Color color;
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    width: 100,
+    height: 20,
+    child: DecoratedBox(
+      decoration: BoxDecoration(
+        color: color,
+        border: Border.all(color: color.withAlpha(0x80)),
+      ),
+    ),
+  );
+}
+
 final options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Tile}));
 
 Future<String> capture(WidgetTester tester, Widget w) async {
@@ -95,7 +112,7 @@ void main() {
     const Color before = Color(0xFF000000);
     const Color after = Color(0xFFFF0000);
     final tokens = SnapshotOptions(
-      policy: ComponentPolicy(include: <Type>{Tile}),
+      policy: ComponentPolicy(include: <Type>{Tile, ShadedTile}),
       tokenResolver: (Object v) => v == before || v == after ? 'brand.accent' : null,
     );
     Future<String> scene(Widget w) async {
@@ -109,13 +126,14 @@ void main() {
     }
 
     final String one = await scene(const Tile());
-    final String two = await scene(const Column(children: <Widget>[Tile(), Tile(height: 30)]));
+    final String two = await scene(const Column(children: <Widget>[Tile(), Tile(height: 30), ShadedTile()]));
     final String oneAfter = await scene(const Tile(color: after));
     final String twoAfter = await scene(
       const Column(
         children: <Widget>[
           Tile(color: after),
           Tile(height: 30, color: after),
+          ShadedTile(color: after),
         ],
       ),
     );
@@ -138,7 +156,7 @@ void main() {
     expect(
       r.render(),
       contains(
-        'Causes in more than one snapshot:\n  brand.accent #FF000000 -> #FFFF0000: style change on 3 Tile in 2 snapshots\n',
+        'Causes in more than one snapshot:\n  brand.accent #FF000000 -> #FFFF0000: style change on 3 Tile, 1 ShadedTile in 2 snapshots\n',
       ),
     );
   });
