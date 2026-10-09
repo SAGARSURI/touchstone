@@ -169,6 +169,12 @@ void main() {
     expect(a.root.paint, isNot(b.root.paint));
   });
 
+  testWidgets('wrapping in a layout-neutral widget leaves the paint as it was', (WidgetTester tester) async {
+    final Snapshot a = await snap(tester, const Card2(child: Label('a')));
+    final Snapshot b = await snap(tester, const Card2(child: RepaintBoundary(child: SizedBox(child: Label('a')))));
+    expect(b.rootHash, a.rootHash);
+  });
+
   testWidgets('a key change on a child component leaves the parent paint as it was', (WidgetTester tester) async {
     final Snapshot a = await snap(
       tester,

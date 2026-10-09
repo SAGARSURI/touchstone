@@ -349,7 +349,12 @@ class _RecordingContext extends ClipContext implements PaintingContext {
       // example). That layer's effect belongs to the child's own paint; its
       // offset is the placement already recorded above.
       final int before = childNode._opaqueMarks;
-      childNode.op(c.rec('composite', <Object?>[_describeBoundaryLayer(boundaryLayer, childNode)]));
+      final String layer = _describeBoundaryLayer(boundaryLayer, childNode);
+      // A plain offset layer only places the child, which the offset above
+      // records, so a repaint boundary alone leaves no command.
+      if (layer != 'Offset') {
+        childNode.op(c.rec('composite', <Object?>[layer]));
+      }
       if (childNode._opaqueMarks != before) {
         childNode.reach(spreadClip ?? canvas.currentClip);
       }

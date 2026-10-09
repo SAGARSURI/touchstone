@@ -518,9 +518,17 @@ class _PaintAssembly {
           ..write('\n');
         continue;
       }
-      final RecordedNode child = node.children[k];
+      RecordedNode child = node.children[k];
       final Offset offset = node.childOffsets[k];
       k++;
+      // A render object of this component that draws nothing and holds one
+      // child at its own origin (a repaint boundary, a size box) leaves no
+      // trace in the paint, so wrapping in a layout-neutral widget does not
+      // change it (A5).
+      while (identical(tree.ownerOfRenderObject(child.renderObject), comp) && _passThrough(child)) {
+        (renderObjects[comp] ??= <RecordedNode>[]).add(child);
+        child = child.children.single;
+      }
       final Component owner = tree.ownerOfRenderObject(child.renderObject);
       if (identical(owner, comp)) {
         out.write('child${c.offset(offset)}');
@@ -541,6 +549,13 @@ class _PaintAssembly {
     out.write('}');
   }
 }
+
+bool _passThrough(RecordedNode node) =>
+    node.ops.length == 1 &&
+    node.ops.single == 'child' &&
+    node.children.length == 1 &&
+    node.childOffsets.single == Offset.zero &&
+    !node.isOpaque;
 
 /// Every semantics node in the tree, grouped by the component that owns the
 /// render object that created it. A node merged into its parent is described
