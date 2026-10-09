@@ -1,0 +1,43 @@
+# A12: migrate the committed macOS catalogue baselines from Flutter 3.47.6 to
+# 3.47.7 (doc/phase3/a12_expectations.md). Push a branch named
+# a12-migration/<anything> to run it. The rewritten baselines, their
+# .migration proofs and the migration's output are committed to that branch
+# for scoring; nothing from it is merged.
+name: a12-migration
+
+on:
+  push:
+    branches: ['a12-migration/**']
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.6
+          channel: stable
+      - name: Install Flutter 3.47.7 beside it
+        run: |
+          echo "OLD_FLUTTER=$(command -v flutter)" >> "$GITHUB_ENV"
+          git clone --depth 1 --branch 3.47.7 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter-3.47.7"
+          "$RUNNER_TEMP/flutter-3.47.7/bin/flutter" --version
+      - name: Migrate, with 3.47.7 first on the PATH
+        working-directory: corpus/catalogue_app
+        run: |
+          export PATH="$RUNNER_TEMP/flutter-3.47.7/bin:$PATH"
+          flutter pub get
+          dart run touchstone:migrate --from "$OLD_FLUTTER" test/snapshots_test.dart 2>&1 | tee migration.log
+          test "${PIPESTATUS[0]}" -eq 0
+      - name: Commit the migrated baselines and the output
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add corpus/catalogue_app/test/snapshots corpus/catalogue_app/migration.log
+          git commit -m "A12: migrate catalogue baselines to 3.47.7 on $(uname -sm)" || echo 'Nothing migrated'
+          git push
