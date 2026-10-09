@@ -25,7 +25,8 @@ take part.
 
 Twelve changes, each visible in pixels on a scene that both a snapshot test
 (`test/snapshots_test.dart`) and a conventional golden test
-(`test/dx/goldens_test.dart`, `matchesGoldenFile` on A13's goldens) cover,
+(`test/dx/goldens_test.dart`, `matchesGoldenFile` on goldens recorded on
+macOS, pumped as A13's conventional tests pump) cover,
 so both arms fail. Changes that leave pixels unchanged (a refactor, a
 semantics label, a font weight drawn with the test font) are left out: a
 golden test does not fail on them, so there is no failure to time.
