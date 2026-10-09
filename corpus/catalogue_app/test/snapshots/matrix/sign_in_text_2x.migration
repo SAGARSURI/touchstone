@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"matrix/sign_in_text_2x"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	425815ddc5f0cd61f736a5a1339e4791738bcb77d274f61a2accb51fe17c4e74
+before.pixels	1170x2532 6de2f2b534c4a836d337871e66e8664c
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	425815ddc5f0cd61f736a5a1339e4791738bcb77d274f61a2accb51fe17c4e74
+after.pixels	1170x2532 6de2f2b534c4a836d337871e66e8664c
+pixels	identical

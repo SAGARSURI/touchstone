@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"states/loading"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	2474410718f16dae500e472c6713b0035232fe48643f8334824eb08843e973b7
+before.pixels	1170x2532 404798155178a24b0e013245c2480b2a
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	2474410718f16dae500e472c6713b0035232fe48643f8334824eb08843e973b7
+after.pixels	1170x2532 404798155178a24b0e013245c2480b2a
+pixels	identical

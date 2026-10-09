@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"matrix/settings_dark"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	e2226f7ad01743ea28767e08e72c61b0de160246cce5e6461c6d622ea40e1225
+before.pixels	1170x2532 0c61f35c582cf5b1b88e6b694588fd9f
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	e2226f7ad01743ea28767e08e72c61b0de160246cce5e6461c6d622ea40e1225
+after.pixels	1170x2532 0c61f35c582cf5b1b88e6b694588fd9f
+pixels	identical

@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"matrix/settings_text_2x"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	ee197abba9f2af14268cae0c6002fb1c870eb6353b24782d1ba200530baab30f
+before.pixels	1170x2532 13f4776dc7141dbed3e7098c4653a75b
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	ee197abba9f2af14268cae0c6002fb1c870eb6353b24782d1ba200530baab30f
+after.pixels	1170x2532 13f4776dc7141dbed3e7098c4653a75b
+pixels	identical

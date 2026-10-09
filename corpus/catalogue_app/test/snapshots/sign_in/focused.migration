@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"sign_in/focused"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	d6bfb1ecac1c62fc0da73aabfbfb41e6169cc4abb4d7aab2a8e79b99bf993cc6
+before.pixels	1170x2532 e9e61e3e101d7789cb8e3f4cc637386b
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	d6bfb1ecac1c62fc0da73aabfbfb41e6169cc4abb4d7aab2a8e79b99bf993cc6
+after.pixels	1170x2532 e9e61e3e101d7789cb8e3f4cc637386b
+pixels	identical

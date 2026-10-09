@@ -1,0 +1,523 @@
+On the old toolchain (/Users/runner/hostedtoolcache/flutter/stable-3.47.6-arm64/flutter/bin/flutter): recording the pixels of every snapshot that matches its baseline.
+
+Resolving dependencies...
+Downloading packages...
+  material_color_utilities 0.13.0 (0.13.1 available)
+  test_api 0.7.12 (0.7.15 available)
+Got dependencies!
+2 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+
+::group::✅ Passing tests
+✅ buttons/all
+✅ text/all
+✅ settings/default
+✅ sign_in/empty
+✅ sign_in/focused
+✅ sign_in/error
+✅ sign_in/submitting
+✅ watchlist/top
+✅ watchlist/scrolled
+✅ detail/overview
+✅ detail/news
+✅ detail/collapsed
+✅ states/empty
+✅ states/error
+✅ states/loading
+✅ overlays/dialog
+✅ overlays/sheet
+✅ overlays/snackbar
+✅ overlays/dropdown
+✅ matrix/settings_dark
+✅ matrix/sign_in_dark
+✅ matrix/settings_rtl
+✅ matrix/sign_in_rtl
+✅ matrix/settings_text_2x
+✅ matrix/sign_in_text_2x
+✅ matrix/settings_small
+✅ matrix/sign_in_small
+✅ matrix/settings_large
+✅ matrix/sign_in_large
+✅ chart/default
+✅ chart/tooltip
+✅ live/initial
+✅ live/ticked
+✅ live/flashing
+✅ map/default
+✅ order/symbol
+✅ order/amount
+✅ order/review
+✅ order/done
+✅ order/transition
+✅ order/dragging
+::endgroup::
+
+🎉 41 tests passed.
+
+On this toolchain: rewriting every baseline from the old one, with its pixel proof.
+
+Resolving dependencies...
+Downloading packages...
+  material_color_utilities 0.13.0 (0.13.1 available)
+  test_api 0.7.12 (0.7.15 available)
+Got dependencies!
+2 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+
+::group::✅ buttons/all
+Snapshot buttons/all: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ text/all
+Snapshot text/all: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ settings/default
+Snapshot settings/default: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ sign_in/empty
+Snapshot sign_in/empty: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ sign_in/focused
+Snapshot sign_in/focused: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ sign_in/error
+Snapshot sign_in/error: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ sign_in/submitting
+Snapshot sign_in/submitting: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ watchlist/top
+Snapshot watchlist/top: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ watchlist/scrolled
+Snapshot watchlist/scrolled: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ detail/overview
+Snapshot detail/overview: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ detail/news
+Snapshot detail/news: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ detail/collapsed
+Snapshot detail/collapsed: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ states/empty
+Snapshot states/empty: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ states/error
+Snapshot states/error: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ states/loading
+Snapshot states/loading: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ overlays/dialog
+Snapshot overlays/dialog: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ overlays/sheet
+Snapshot overlays/sheet: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ overlays/snackbar
+Snapshot overlays/snackbar: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ overlays/dropdown
+Snapshot overlays/dropdown: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ matrix/settings_dark
+Snapshot matrix/settings_dark: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ matrix/sign_in_dark
+Snapshot matrix/sign_in_dark: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ matrix/settings_rtl
+Snapshot matrix/settings_rtl: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ matrix/sign_in_rtl
+Snapshot matrix/sign_in_rtl: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ matrix/settings_text_2x
+Snapshot matrix/settings_text_2x: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ matrix/sign_in_text_2x
+Snapshot matrix/sign_in_text_2x: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ matrix/settings_small
+Snapshot matrix/settings_small: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ matrix/sign_in_small
+Snapshot matrix/sign_in_small: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ matrix/settings_large
+Snapshot matrix/settings_large: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ matrix/sign_in_large
+Snapshot matrix/sign_in_large: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ chart/default
+Snapshot chart/default: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ chart/tooltip
+Snapshot chart/tooltip: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ live/initial
+Snapshot live/initial: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ live/ticked
+Snapshot live/ticked: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ live/flashing
+Snapshot live/flashing: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ map/default
+Snapshot map/default: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ order/symbol
+Snapshot order/symbol: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ order/amount
+Snapshot order/amount: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ order/review
+Snapshot order/review: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ order/done
+Snapshot order/done: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ order/transition
+Snapshot order/transition: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+::group::✅ order/dragging
+Snapshot order/dragging: migrated to the new toolchain. Pixels identical, so review passes it.
+::endgroup::
+
+🎉 41 tests passed.
+
+What review will show against HEAD:
+
+buttons/all    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 ee8da8fbdacaca27e507f83c2240ae61): re-baselined automatically.
+
+chart/default    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 c7237a4fdef9fa4a02970d693975bfc1): re-baselined automatically.
+
+chart/tooltip    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 215f175421d092ef4ca6c044cc7aa326): re-baselined automatically.
+
+detail/collapsed    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 69b766eb654e8af12522a8d58b9d7859): re-baselined automatically.
+
+detail/news    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 a3e77d614be7a090971612685b555ed0): re-baselined automatically.
+
+detail/overview    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 f0fd943c877a2c1b14b4f93bf23f9053): re-baselined automatically.
+
+live/flashing    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 d98fc3b0634e39a28ffb63b26bd1b164): re-baselined automatically.
+
+live/initial    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 ab871c7137641cc38d37c119e6c92609): re-baselined automatically.
+
+live/ticked    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 ab871c7137641cc38d37c119e6c92609): re-baselined automatically.
+
+map/default    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 323c401955337a6c4107dd13819773f8): re-baselined automatically.
+
+matrix/settings_dark    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 0c61f35c582cf5b1b88e6b694588fd9f): re-baselined automatically.
+
+matrix/settings_large    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (2048x2732 f22a8e693e7b1c56f93ca2406e70cf7b): re-baselined automatically.
+
+matrix/settings_rtl    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 8c23206754d363ffb8c3853a2ffea45d): re-baselined automatically.
+
+matrix/settings_small    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (640x1136 0b966dd5275850f79fa6f343a690e6d8): re-baselined automatically.
+
+matrix/settings_text_2x    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 13f4776dc7141dbed3e7098c4653a75b): re-baselined automatically.
+
+matrix/sign_in_dark    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 84bb9666e90dc2506940b992f3327f93): re-baselined automatically.
+
+matrix/sign_in_large    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (2048x2732 6095fa7e0074a7ad4af5927d8f127899): re-baselined automatically.
+
+matrix/sign_in_rtl    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 2f3a528865807740f9d003bb30ddca9e): re-baselined automatically.
+
+matrix/sign_in_small    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (640x1136 26113308111cce9651519047717a84bb): re-baselined automatically.
+
+matrix/sign_in_text_2x    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 6de2f2b534c4a836d337871e66e8664c): re-baselined automatically.
+
+order/amount    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 f6e0a497610bd172f80f1b997a13f7d4): re-baselined automatically.
+
+order/done    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 988bdfbc840c91d10610ba0e4471196d): re-baselined automatically.
+
+order/dragging    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 7cce3593f5df3418702927b606fe6924): re-baselined automatically.
+
+order/review    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 4bac362e2c434f5624b0e2440eae7648): re-baselined automatically.
+
+order/symbol    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 6a64174fbc63a7f172963326df0636cd): re-baselined automatically.
+
+order/transition    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 51edc23dc653eedc6261fa1158a72849): re-baselined automatically.
+
+overlays/dialog    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 cc4b63103e74a5e60320ac34ced4b3f3): re-baselined automatically.
+
+overlays/dropdown    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 909fdf1827f9ff5ff998ccf457cbb685): re-baselined automatically.
+
+overlays/sheet    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 61a09fe2239804397cb5b1c41d26c43a): re-baselined automatically.
+
+overlays/snackbar    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 141531802f6efd30b2c6795ea24e0a3e): re-baselined automatically.
+
+settings/default    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 7c71176e8c5dc2c539736ad2925c20bf): re-baselined automatically.
+
+sign_in/empty    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 ea7464beef2dfeda6d171939ac7114b5): re-baselined automatically.
+
+sign_in/error    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 70bc1ff7216864cffac961c8cdbb61c0): re-baselined automatically.
+
+sign_in/focused    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 e9e61e3e101d7789cb8e3f4cc637386b): re-baselined automatically.
+
+sign_in/submitting    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 b5faf13d9a2d4d679c1ccf676e923afb): re-baselined automatically.
+
+states/empty    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 94964401a9108d2094e0f28cfeb016b5): re-baselined automatically.
+
+states/error    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 92eab48a2d20477ac6ab230e326fc93c): re-baselined automatically.
+
+states/loading    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 404798155178a24b0e013245c2480b2a): re-baselined automatically.
+
+text/all    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 c911da6c6f40b760df7da33ef9443752): re-baselined automatically.
+
+watchlist/scrolled    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 846770047952c3beda35b0db01b75e5f): re-baselined automatically.
+
+watchlist/top    pass
+
+Recorded with a different toolchain, so not compared (migration).
+  flutter: 3.47.6 -> 3.47.7
+  framework: 5fc346839b -> abaf9c5237
+  engine: 692136cb65 -> deb287481e
+Pixels identical on both toolchains (1170x2532 505cc46b186a0eec23b6dc7612eded42): re-baselined automatically.
+
+41 snapshots differ from HEAD: 41 pass, 0 needs-review, 0 fail. Verdict: pass.

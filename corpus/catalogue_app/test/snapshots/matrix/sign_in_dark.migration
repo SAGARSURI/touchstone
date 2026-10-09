@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"matrix/sign_in_dark"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	f4aa259b481171652ff475b4a427625232707c97c5abb1cad3d6d409dfe4c145
+before.pixels	1170x2532 84bb9666e90dc2506940b992f3327f93
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	f4aa259b481171652ff475b4a427625232707c97c5abb1cad3d6d409dfe4c145
+after.pixels	1170x2532 84bb9666e90dc2506940b992f3327f93
+pixels	identical

@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"overlays/snackbar"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	2df70594eaaf8fd236914cceca4e224860f574dfa6e87b13978d7cf7612b8ef0
+before.pixels	1170x2532 141531802f6efd30b2c6795ea24e0a3e
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	2df70594eaaf8fd236914cceca4e224860f574dfa6e87b13978d7cf7612b8ef0
+after.pixels	1170x2532 141531802f6efd30b2c6795ea24e0a3e
+pixels	identical

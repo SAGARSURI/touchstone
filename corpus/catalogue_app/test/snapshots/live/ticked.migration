@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"live/ticked"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	1fdc8048bb2200d1fff969f1c202b2a126e67a960f00f37b2339489952ecd790
+before.pixels	1170x2532 ab871c7137641cc38d37c119e6c92609
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	1fdc8048bb2200d1fff969f1c202b2a126e67a960f00f37b2339489952ecd790
+after.pixels	1170x2532 ab871c7137641cc38d37c119e6c92609
+pixels	identical

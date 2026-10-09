@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"chart/default"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	8b49c97bc06296591d9c022c45c046486fa74001c0a784a849eb2796b2c5825a
+before.pixels	1170x2532 c7237a4fdef9fa4a02970d693975bfc1
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	8b49c97bc06296591d9c022c45c046486fa74001c0a784a849eb2796b2c5825a
+after.pixels	1170x2532 c7237a4fdef9fa4a02970d693975bfc1
+pixels	identical

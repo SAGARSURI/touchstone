@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"watchlist/scrolled"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	9cba174d2388d476f4f9ce89ec78452acb98a4842ad05a3c0769cb439d3e1510
+before.pixels	1170x2532 846770047952c3beda35b0db01b75e5f
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	9cba174d2388d476f4f9ce89ec78452acb98a4842ad05a3c0769cb439d3e1510
+after.pixels	1170x2532 846770047952c3beda35b0db01b75e5f
+pixels	identical

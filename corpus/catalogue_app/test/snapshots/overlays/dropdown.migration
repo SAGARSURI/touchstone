@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"overlays/dropdown"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	f9ff6b58a97d739b964d2de017e9629eec82dec7e0f1d3c5e3d433d339b7465d
+before.pixels	1170x2532 909fdf1827f9ff5ff998ccf457cbb685
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	f9ff6b58a97d739b964d2de017e9629eec82dec7e0f1d3c5e3d433d339b7465d
+after.pixels	1170x2532 909fdf1827f9ff5ff998ccf457cbb685
+pixels	identical

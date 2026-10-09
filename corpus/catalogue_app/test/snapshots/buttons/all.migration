@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"buttons/all"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	13c2a234a993293097a8a6c596d495e3f785f85b82ef43b9f0f04a4e80b37473
+before.pixels	1170x2532 ee8da8fbdacaca27e507f83c2240ae61
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	13c2a234a993293097a8a6c596d495e3f785f85b82ef43b9f0f04a4e80b37473
+after.pixels	1170x2532 ee8da8fbdacaca27e507f83c2240ae61
+pixels	identical

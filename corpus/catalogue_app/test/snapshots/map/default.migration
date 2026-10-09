@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"map/default"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	6c78c839f8dd19e51ce4871c26437f54f03761ea517b700f4c6e33271e6b7158
+before.pixels	1170x2532 323c401955337a6c4107dd13819773f8
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	6c78c839f8dd19e51ce4871c26437f54f03761ea517b700f4c6e33271e6b7158
+after.pixels	1170x2532 323c401955337a6c4107dd13819773f8
+pixels	identical

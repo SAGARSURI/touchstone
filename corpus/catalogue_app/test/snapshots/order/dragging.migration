@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"order/dragging"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	f44ece2660a4439e7203de828c87ea017f8d48d1647ca1718b158cf6ebeaef93
+before.pixels	1170x2532 7cce3593f5df3418702927b606fe6924
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	f44ece2660a4439e7203de828c87ea017f8d48d1647ca1718b158cf6ebeaef93
+after.pixels	1170x2532 7cce3593f5df3418702927b606fe6924
+pixels	identical

@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"overlays/dialog"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	37be595213ae6dc94e849cf252b8821de4095e48f61030336acb56bb2a5d2bf1
+before.pixels	1170x2532 cc4b63103e74a5e60320ac34ced4b3f3
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	37be595213ae6dc94e849cf252b8821de4095e48f61030336acb56bb2a5d2bf1
+after.pixels	1170x2532 cc4b63103e74a5e60320ac34ced4b3f3
+pixels	identical

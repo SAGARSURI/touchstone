@@ -1,0 +1,9 @@
+touchstone-migration 1
+id	"sign_in/error"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	23dec2dd51c1ccf7491f43d773e8465757ed4dddd4c225358a24be0a44f00478
+before.pixels	1170x2532 70bc1ff7216864cffac961c8cdbb61c0
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="macos_arm64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	23dec2dd51c1ccf7491f43d773e8465757ed4dddd4c225358a24be0a44f00478
+after.pixels	1170x2532 70bc1ff7216864cffac961c8cdbb61c0
+pixels	identical
