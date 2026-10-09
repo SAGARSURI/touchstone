@@ -14,7 +14,7 @@ A phase starts only after the previous phase's exit gate is recorded here.
 | A4 | Equal hashes imply equal pixels | 0 capture gaps on fixtures and on the 14 review cases, after the review fixes | 2026-10-07 |
 | A5 | Node identity survives refactors | Fails as first built (3 of 6 refactors needs-review). Fallback amended (flattened matching, Sagar 2026-10-09): 6 of 6 pass, each with no change or identity changes only; 0 mutations absorbed | 2026-10-09 |
 | A6 | Keeping only app-owned widgets gives a recognisable tree | Review sheet rebuilt from Phase 2 change reports; two engineers reviewing, Unsure answers remain | 2026-10-09 |
-| A7 | A change in the widget-test environment is a change users see | Not yet tested (Phase 3) | |
+| A7 | A change in the widget-test environment is a change users see | Holds on an iOS simulator sample: of 197 device-visible generated mutations, 0 missed with real fonts loaded; with the default test font, 3 missed, all rows pushed out of view by the test font's wrapping, and listed ([phase3/a7.md](phase3/a7.md)). Real fonts are needed for this to hold | 2026-10-09 |
 | A8 | Cascade grouping names the true root cause | Holds. Generated: 748 single causes, 0 wrong. Catalog: 19 of 19 with the corrected expectations Sagar accepted (17 of 19 and 1 wrong certain as first written) | 2026-10-09 |
 | A9 | Affected-test selection never skips a changed test | Not yet tested (Phase 4) | |
 | A10 | Capture and diff are cheap enough for every pull request | First numbers recorded, after the review fixes | 2026-10-07 |
