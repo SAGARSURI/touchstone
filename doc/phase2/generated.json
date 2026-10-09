@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-09",
+  "flutter": "3.47.6",
+  "host": "linux_x64",
+  "seeds": "0-9999",
+  "total": 10000,
+  "missedVerdict": 0,
+  "missedSnapshot": 0,
+  "oracleChanged": 7407,
+  "snapshotChanged": 8798,
+  "verdicts": {
+    "needs-review": 8798,
+    "pass": 1202
+  },
+  "ownerIsItem": 8798,
+  "typeAccepted": 7641,
+  "typeScored": 7874,
+  "shiftGroups": 1000,
+  "singleCause": 748,
+  "causeOk": 748,
+  "wrongCertain": 0,
+  "possibleCauses": 0,
+  "unknownCause": 252
+}
