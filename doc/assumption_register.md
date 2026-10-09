@@ -19,7 +19,7 @@ A phase starts only after the previous phase's exit gate is recorded here.
 | A9 | Affected-test selection never skips a changed test | Not yet tested (Phase 4) | |
 | A10 | Capture and diff are cheap enough for every pull request | First numbers recorded, after the review fixes | 2026-10-07 |
 | A11 | Pairwise variants catch what the full matrix catches | Not yet tested (Phase 4) | |
-| A12 | A Flutter upgrade can be absorbed without re-reviewing every baseline | Not yet tested (Phase 3) | |
+| A12 | A Flutter upgrade can be absorbed without re-reviewing every baseline | Holds for 3.47.6 to 3.47.7 (a patch release): all 41 catalogue snapshots pixel-identical on macOS arm64 and Linux x64, re-baselined automatically with a pixel proof, and review passes all ([phase3/a12.md](phase3/a12.md)). Runs again on the next minor release | 2026-10-09 |
 | A13 | Existing golden tests can be made deterministic | Holds: the gate fails 4 of 15 conventional goldens and names a node and a cause for each | 2026-10-08 |
 | A14 | The schema is not Flutter-shaped | Holds: every field has a web source, including `flat` (added for A5); 5 web captures parse as schema v1 | 2026-10-09 |
 
