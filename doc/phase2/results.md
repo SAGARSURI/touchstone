@@ -185,6 +185,17 @@ The review sheet is rebuilt from the Phase 2 reports:
 generated mutations sampled with seed 6. It is what a developer now reads,
 and it replaces the Phase 1 sheet. It is still waiting on two reviewers.
 
+Reviewers fill in the Claude Doc "A6 attribution review", which holds the
+same rows with a Yes, No or Unsure choice per reviewer. In its generated
+section, the 42 samples whose report names only the owning component share
+one row; the 7 other rows are the samples whose report names more.
+
+On 2026-10-09 Sagar reviewed the catalog rows: most were Yes, and five were
+Unsure with notes that the report was too verbose. The report now uses the
+shorter wording in [diff.md](diff.md), "Report wording", which cuts the 17
+catalog reports from 25,104 to 7,146 characters. The catalog rerun with it
+scored every entry exactly as before, and the sheet shows the new reports.
+
 ## What the runs changed
 
 The first catalog runs found three capture properties that blocked the
