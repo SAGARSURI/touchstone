@@ -16,13 +16,13 @@ class ButtonSetScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: Space.m),
         children: const <Widget>[
           SectionHeader('Primary'),
-          AppButton(key: ValueKey<String>('primary'), label: 'Continue'),
+          AppButton(key: ValueKey<String>('primary'), label: 'Weiter zur Zahlungsbestätigung'),
           SectionHeader('Secondary'),
           AppButton(key: ValueKey<String>('secondary'), label: 'Cancel', variant: ButtonVariant.secondary),
           SectionHeader('Disabled'),
-          AppButton(key: ValueKey<String>('disabled'), label: 'Continue', enabled: false),
+          AppButton(key: ValueKey<String>('disabled'), label: 'Weiter zur Zahlungsbestätigung', enabled: false),
           SectionHeader('Loading'),
-          AppButton(key: ValueKey<String>('loading'), label: 'Continue', loading: true),
+          AppButton(key: ValueKey<String>('loading'), label: 'Weiter zur Zahlungsbestätigung', loading: true),
         ],
       ),
     );

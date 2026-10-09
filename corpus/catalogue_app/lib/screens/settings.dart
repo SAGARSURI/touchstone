@@ -13,17 +13,17 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: const Text('Einstellungen')),
       body: ListView(
         children: <Widget>[
           const SectionHeader('Account'),
-          const SettingsTile(icon: Icons.person_outline, title: 'Profile', subtitle: 'Name, email, phone'),
+          const SettingsTile(icon: Icons.person_outline, title: 'Profile', subtitle: 'Name, E-Mail-Adresse, Telefonnummer'),
           const Divider(height: 1),
-          const SettingsTile(icon: Icons.account_balance_outlined, title: 'Linked accounts', trailingText: '2'),
+          const SettingsTile(icon: Icons.account_balance_outlined, title: 'Verknüpfte Bankkonten und Depots', trailingText: '2'),
           const SectionHeader('Preferences'),
           SettingsTile(icon: Icons.notifications_none, title: 'Notifications', value: notifications),
           const Divider(height: 1),
-          SettingsTile(icon: Icons.fingerprint, title: 'Unlock with biometrics', value: biometrics),
+          SettingsTile(icon: Icons.fingerprint, title: 'Mit biometrischen Daten entsperren', value: biometrics),
           const Divider(height: 1),
           const SettingsTile(icon: Icons.language, title: 'Language', trailingText: 'English'),
           const SectionHeader('About'),
