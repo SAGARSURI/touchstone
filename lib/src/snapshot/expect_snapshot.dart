@@ -187,16 +187,28 @@ Future<void> expectSnapshot(
     }
     file.parent.createSync(recursive: true);
     file.writeAsStringSync(text);
+    final (Snapshot? previous, String? unreadable) = old == null ? (null, null) : _read(old);
     // ignore: avoid_print
-    print(
-      old == null ? 'Snapshot $id: new baseline written.' : updateReport(Snapshot.parse(old), Snapshot.parse(text)),
-    );
+    print(switch (old) {
+      null => 'Snapshot $id: new baseline written.',
+      _ when previous == null =>
+        'Snapshot $id: baseline rewritten. The old one could not be read ($unreadable), '
+            'so there is no change report.',
+      _ => updateReport(previous, Snapshot.parse(text)),
+    });
     return;
   }
   if (!exists) {
     fail('No baseline for snapshot $id at ${file.path}. Run flutter test --update-goldens to record it.');
   }
-  final Snapshot baseline = Snapshot.parse(file.readAsStringSync());
+  final (Snapshot? read, String? unreadable) = _read(file.readAsStringSync());
+  if (read == null) {
+    fail(
+      'The baseline for snapshot $id at ${file.path} could not be read ($unreadable). '
+      'Re-record it with flutter test --update-goldens.',
+    );
+  }
+  final Snapshot baseline = read;
   final Snapshot capture = await captureSnapshot(tester, id, options: options);
   if (baseline.rootHash == capture.rootHash && baseline.toolchain.toString() == capture.toolchain.toString()) {
     return;
@@ -204,6 +216,16 @@ Future<void> expectSnapshot(
   final String? message = compareWithBaseline(baseline, capture);
   if (message != null) {
     fail(message);
+  }
+}
+
+/// A committed baseline, or why it could not be parsed: written by an older
+/// schema, or edited by hand.
+(Snapshot?, String?) _read(String text) {
+  try {
+    return (Snapshot.parse(text), null);
+  } on FormatException catch (e) {
+    return (null, clipLine(e.message));
   }
 }
 

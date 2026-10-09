@@ -1,6 +1,8 @@
 // expectSnapshot's comparison: the failure message is the change report, and
 // declared dynamic content is the one difference that passes.
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:touchstone/touchstone.dart';
@@ -98,5 +100,34 @@ void main() {
     final String report = updateReport(a, b);
     expect(report, startsWith('row    needs-review\n'));
     expect(report, contains('size 100x20 -> 100x30'));
+  });
+
+  testWidgets('a baseline from an older schema fails with a re-record hint, and update rewrites it', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(app(const Row2(price: Price('12.50'))));
+    const id = 'old_schema_check';
+    final File file = baselineFile(id);
+    addTearDown(() {
+      if (file.existsSync()) {
+        file.deleteSync();
+      }
+    });
+    final Snapshot current = await captureSnapshot(tester, id, options: options());
+    // A baseline written before the flat field existed.
+    file
+      ..parent.createSync(recursive: true)
+      ..writeAsStringSync(current.toCanonical().replaceAll(RegExp('\tflat=[0-9a-f]{64}'), ''));
+    await expectLater(
+      expectSnapshot(tester, id, options: options()),
+      throwsA(isA<TestFailure>().having((TestFailure f) => f.message, 'message', contains('could not be read'))),
+    );
+    autoUpdateGoldenFiles = true;
+    try {
+      await expectSnapshot(tester, id, options: options());
+    } finally {
+      autoUpdateGoldenFiles = false;
+    }
+    expect(Snapshot.parse(file.readAsStringSync()).rootHash, current.rootHash);
   });
 }

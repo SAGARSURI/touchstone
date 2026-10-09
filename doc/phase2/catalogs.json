@@ -4104,23 +4104,23 @@
     "firstNodes": [
       "root/WatchlistScreen@0/WatchRow#ACM0"
     ],
-    "verdict": "needs-review",
+    "verdict": "pass",
     "items": [
-      "Added root/WatchlistScreen@0/WatchRow#ACM0/QuoteNames@0",
-      "Added root/WatchlistScreen@0/WatchRow#BOR0/QuoteNames@0",
-      "Added root/WatchlistScreen@0/WatchRow#COB0/QuoteNames@0",
-      "Added root/WatchlistScreen@0/WatchRow#DEL0/QuoteNames@0",
-      "Added root/WatchlistScreen@0/WatchRow#EMB0/QuoteNames@0",
-      "Added root/WatchlistScreen@0/WatchRow#FJO0/QuoteNames@0",
-      "Added root/WatchlistScreen@0/WatchRow#GRA0/QuoteNames@0",
-      "Added root/WatchlistScreen@0/WatchRow#HAR0/QuoteNames@0",
-      "Added root/WatchlistScreen@0/WatchRow#IND0/QuoteNames@0",
-      "Added root/WatchlistScreen@0/WatchRow#JUN0/QuoteNames@0",
-      "Added root/WatchlistScreen@0/WatchRow#KES0/QuoteNames@0",
-      "Added root/WatchlistScreen@0/WatchRow#LUM0/QuoteNames@0"
+      "Identity root/WatchlistScreen@0/WatchRow#ACM0",
+      "Identity root/WatchlistScreen@0/WatchRow#BOR0",
+      "Identity root/WatchlistScreen@0/WatchRow#COB0",
+      "Identity root/WatchlistScreen@0/WatchRow#DEL0",
+      "Identity root/WatchlistScreen@0/WatchRow#EMB0",
+      "Identity root/WatchlistScreen@0/WatchRow#FJO0",
+      "Identity root/WatchlistScreen@0/WatchRow#GRA0",
+      "Identity root/WatchlistScreen@0/WatchRow#HAR0",
+      "Identity root/WatchlistScreen@0/WatchRow#IND0",
+      "Identity root/WatchlistScreen@0/WatchRow#JUN0",
+      "Identity root/WatchlistScreen@0/WatchRow#KES0",
+      "Identity root/WatchlistScreen@0/WatchRow#LUM0"
     ],
     "groups": [],
-    "strict": false,
+    "strict": true,
     "scenes": [
       {
         "scene": "watchlist/top",
@@ -4311,25 +4311,18 @@
     "firstNodes": [
       "root/SettingsScreen@0/SettingsTile@0"
     ],
-    "verdict": "needs-review",
+    "verdict": "pass",
     "items": [
-      "Style root/SettingsScreen@0/SettingsTile@0",
-      "Removed root/SettingsScreen@0/SettingsTile@0/SettingsIcon@0",
-      "Style root/SettingsScreen@0/SettingsTile@1",
-      "Removed root/SettingsScreen@0/SettingsTile@1/SettingsIcon@0",
-      "Style root/SettingsScreen@0/SettingsTile@2",
-      "Removed root/SettingsScreen@0/SettingsTile@2/SettingsIcon@0",
-      "Style root/SettingsScreen@0/SettingsTile@3",
-      "Removed root/SettingsScreen@0/SettingsTile@3/SettingsIcon@0",
-      "Style root/SettingsScreen@0/SettingsTile@4",
-      "Removed root/SettingsScreen@0/SettingsTile@4/SettingsIcon@0",
-      "Style root/SettingsScreen@0/SettingsTile@5",
-      "Removed root/SettingsScreen@0/SettingsTile@5/SettingsIcon@0",
-      "Style root/SettingsScreen@0/SettingsTile@6",
-      "Removed root/SettingsScreen@0/SettingsTile@6/SettingsIcon@0"
+      "Identity root/SettingsScreen@0/SettingsTile@0",
+      "Identity root/SettingsScreen@0/SettingsTile@1",
+      "Identity root/SettingsScreen@0/SettingsTile@2",
+      "Identity root/SettingsScreen@0/SettingsTile@3",
+      "Identity root/SettingsScreen@0/SettingsTile@4",
+      "Identity root/SettingsScreen@0/SettingsTile@5",
+      "Identity root/SettingsScreen@0/SettingsTile@6"
     ],
     "groups": [],
-    "strict": false,
+    "strict": true,
     "scenes": [
       {
         "scene": "settings/default",
@@ -4531,35 +4524,23 @@
     "firstNodes": [
       "root/WatchlistScreen@0/WatchRow#ACM0/SymbolAvatar@0"
     ],
-    "verdict": "needs-review",
+    "verdict": "pass",
     "items": [
-      "Removed root/WatchlistScreen@0/WatchRow#ACM0/SymbolAvatar@0",
-      "Added root/WatchlistScreen@0/WatchRow#ACM0/TickerAvatar@0",
-      "Removed root/WatchlistScreen@0/WatchRow#BOR0/SymbolAvatar@0",
-      "Added root/WatchlistScreen@0/WatchRow#BOR0/TickerAvatar@0",
-      "Removed root/WatchlistScreen@0/WatchRow#COB0/SymbolAvatar@0",
-      "Added root/WatchlistScreen@0/WatchRow#COB0/TickerAvatar@0",
-      "Removed root/WatchlistScreen@0/WatchRow#DEL0/SymbolAvatar@0",
-      "Added root/WatchlistScreen@0/WatchRow#DEL0/TickerAvatar@0",
-      "Removed root/WatchlistScreen@0/WatchRow#EMB0/SymbolAvatar@0",
-      "Added root/WatchlistScreen@0/WatchRow#EMB0/TickerAvatar@0",
-      "Removed root/WatchlistScreen@0/WatchRow#FJO0/SymbolAvatar@0",
-      "Added root/WatchlistScreen@0/WatchRow#FJO0/TickerAvatar@0",
-      "Removed root/WatchlistScreen@0/WatchRow#GRA0/SymbolAvatar@0",
-      "Added root/WatchlistScreen@0/WatchRow#GRA0/TickerAvatar@0",
-      "Removed root/WatchlistScreen@0/WatchRow#HAR0/SymbolAvatar@0",
-      "Added root/WatchlistScreen@0/WatchRow#HAR0/TickerAvatar@0",
-      "Removed root/WatchlistScreen@0/WatchRow#IND0/SymbolAvatar@0",
-      "Added root/WatchlistScreen@0/WatchRow#IND0/TickerAvatar@0",
-      "Removed root/WatchlistScreen@0/WatchRow#JUN0/SymbolAvatar@0",
-      "Added root/WatchlistScreen@0/WatchRow#JUN0/TickerAvatar@0",
-      "Removed root/WatchlistScreen@0/WatchRow#KES0/SymbolAvatar@0",
-      "Added root/WatchlistScreen@0/WatchRow#KES0/TickerAvatar@0",
-      "Removed root/WatchlistScreen@0/WatchRow#LUM0/SymbolAvatar@0",
-      "Added root/WatchlistScreen@0/WatchRow#LUM0/TickerAvatar@0"
+      "Identity root/WatchlistScreen@0/WatchRow#ACM0/TickerAvatar@0",
+      "Identity root/WatchlistScreen@0/WatchRow#BOR0/TickerAvatar@0",
+      "Identity root/WatchlistScreen@0/WatchRow#COB0/TickerAvatar@0",
+      "Identity root/WatchlistScreen@0/WatchRow#DEL0/TickerAvatar@0",
+      "Identity root/WatchlistScreen@0/WatchRow#EMB0/TickerAvatar@0",
+      "Identity root/WatchlistScreen@0/WatchRow#FJO0/TickerAvatar@0",
+      "Identity root/WatchlistScreen@0/WatchRow#GRA0/TickerAvatar@0",
+      "Identity root/WatchlistScreen@0/WatchRow#HAR0/TickerAvatar@0",
+      "Identity root/WatchlistScreen@0/WatchRow#IND0/TickerAvatar@0",
+      "Identity root/WatchlistScreen@0/WatchRow#JUN0/TickerAvatar@0",
+      "Identity root/WatchlistScreen@0/WatchRow#KES0/TickerAvatar@0",
+      "Identity root/WatchlistScreen@0/WatchRow#LUM0/TickerAvatar@0"
     ],
     "groups": [],
-    "strict": false,
+    "strict": true,
     "scenes": [
       {
         "scene": "watchlist/top",
