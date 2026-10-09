@@ -161,7 +161,8 @@ and grouping do not depend on the wording.
 ## Capture changes made in Phase 2
 
 The catalog runs found three capture properties that kept the diff from
-working as the spec describes, and the A5 amendment added a fourth field.
+working as the spec describes, the A5 amendment added a fourth field, and the
+A6 review found a fifth.
 Each is a change to what is hashed, so committed baselines are re-recorded
 on macOS.
 
@@ -193,6 +194,16 @@ on macOS.
    field, so it feeds the subtree hash. The fields it is built from are the
    same ones the paint and semantics hashes cover. See
    [schema_v1.md](../schema_v1.md).
+
+5. **A node that drew only outside its clip hashes no pixels.** Found in the
+   A6 review (generated seed 945). The last watchlist row is cut off by the
+   viewport, and its bottom border is a path drawn below the visible area.
+   Nothing it drew was inside its clip, and the region fell back to the
+   clip it was given, which is the whole list. Any change in another row
+   then changed this row's paint, reported as "pixel hash changed". Such a
+   node now writes `pixels(none)`: no visible pixel of its can change. A
+   node that drew nothing at all keeps the fallback, since an effect with
+   no geometry can reach anywhere in its clip.
 
 ## Interpretations
 

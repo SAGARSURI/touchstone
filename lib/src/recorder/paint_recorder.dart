@@ -79,9 +79,15 @@ class RecordedNode implements OpSink {
   /// Global bounds of every pixel this node's own paint can change: what it
   /// drew, widened for stroke and blur, inside the clip in effect, plus the
   /// whole clip for effects with no bounded geometry. Null when it drew
-  /// nothing.
+  /// nothing, or drew only outside its clip.
   Rect? get reachBounds => _reach;
   Rect? _reach;
+
+  /// The node drew, but nothing it drew is inside its clip: no visible pixel
+  /// can change, so there is nothing to hash (an opaque row scrolled past the
+  /// bottom of a list, for example).
+  bool get drewOnlyOutsideClip => _reached && _reach == null;
+  bool _reached = false;
 
   /// Hash of [ops] after image fingerprints are resolved.
   late final String paintHash;
@@ -106,6 +112,7 @@ class RecordedNode implements OpSink {
 
   @override
   void reach(Rect globalRect) {
+    _reached = true;
     final Rect r = geometryVerified ? globalRect : _recording.viewRect;
     if (!(r.width > 0 && r.height > 0)) {
       return;
@@ -172,7 +179,9 @@ class PaintRecording {
         final Offset origin = node.geometryVerified
             ? MatrixUtils.transformPoint(node.toGlobal, Offset.zero)
             : Offset.zero;
-        ops.add('pixels(${c.rect(region.shift(-origin))};${await pixelHash(region)})');
+        ops.add(
+          region.isEmpty ? 'pixels(none)' : 'pixels(${c.rect(region.shift(-origin))};${await pixelHash(region)})',
+        );
       }
       node.ops
         ..clear()
@@ -188,8 +197,11 @@ class PaintRecording {
 
   /// The pixels an opaque node's paint can change: its reach (or, if it drew
   /// nothing, the clip it was given) inside the view, grown by every backdrop
-  /// filter it overlaps.
+  /// filter it overlaps. Empty when everything it drew is outside its clip.
   Rect opaqueRegion(RecordedNode node) {
+    if (node.drewOnlyOutsideClip) {
+      return Rect.zero;
+    }
     Rect region = (node.reachBounds ?? node.inheritedClip).intersect(viewRect);
     for (final Rect backdrop in backdrops) {
       if (region.overlaps(backdrop)) {

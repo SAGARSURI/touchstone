@@ -43,3 +43,6 @@
   its changed argument, and the same change on several instances of one
   component is one line naming every instance. `Change.detail` keeps the full
   wording.
+* An opaque node that drew only outside its clip (a row cut off by the end
+  of a list) hashes no pixels, instead of every pixel of its clip; changes
+  elsewhere in the list no longer change its paint (baselines re-recorded).
