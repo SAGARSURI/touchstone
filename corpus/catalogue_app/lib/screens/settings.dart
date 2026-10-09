@@ -25,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
           const Divider(height: 1),
           SettingsTile(icon: Icons.fingerprint, title: 'Unlock with biometrics', value: biometrics),
           const Divider(height: 1),
-          const SettingsTile(icon: Icons.language, title: 'Language', trailingText: 'English'),
+          const SettingsTile(icon: Icons.translate, title: 'Language', trailingText: 'English'),
           const SectionHeader('About'),
           const SettingsTile(icon: Icons.description_outlined, title: 'Terms of service'),
           const Divider(height: 1),
