@@ -3,6 +3,8 @@
 // failing the usual way. The goldens are A13's, recorded on macOS.
 //
 //   flutter test test/dx/goldens_test.dart
+@Tags(<String>['baseline'])
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
