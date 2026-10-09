@@ -5,7 +5,7 @@ import '../components/settings_tile.dart';
 
 /// Level 2: list tiles, switches, icons and dividers.
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key, this.notifications = true, this.biometrics = false});
+  const SettingsScreen({super.key, this.notifications = false, this.biometrics = false});
 
   final bool notifications;
   final bool biometrics;
