@@ -23,20 +23,25 @@ take part.
 
 ## The changes
 
-Twelve changes, each on a scene that both a snapshot test (`test/snapshots`)
-and a conventional golden test (`test/a13`, `matchesGoldenFile`) cover:
+Twelve changes, each visible in pixels on a scene that both a snapshot test
+(`test/snapshots_test.dart`) and a conventional golden test
+(`test/dx/goldens_test.dart`, `matchesGoldenFile` on A13's goldens) cover,
+so both arms fail. Changes that leave pixels unchanged (a refactor, a
+semantics label, a font weight drawn with the test font) are left out: a
+golden test does not fail on them, so there is no failure to time.
+`tool/dx_items.dart` prints each one's edits and answer key:
 
 | # | Change | Source |
 | --- | --- | --- |
 | 1 | Change one colour token | history change 1 |
-| 2 | Extract a widget and rename a class, no visual effect | history change 2 |
+| 2 | A clip changed on the detail header image | catalog `clip` |
 | 3 | Add a promo banner above the watchlist | history change 3 |
-| 4 | Remove a semantics label, pixels unchanged | history change 4 |
+| 4 | An icon changed in a settings row | catalog `icon` |
 | 5 | Longer strings for a new locale | history change 5 |
 | 6 | A design-library upgrade that shifts default paddings | history change 7 |
 | 7 | A refactor, an intended restyle and an accidental 1 px padding in one pull request | history change 9 |
 | 8 | Padding by 1 px | catalog `padding-1px` |
-| 9 | Font weight | catalog `font-weight` |
+| 9 | Selected state | catalog `selected-state` |
 | 10 | A widget removed | catalog `widget-removed` |
 | 11 | Enabled state | catalog `enabled-state` |
 | 12 | Insert near the start of a column | catalog `column-insert-start` |
@@ -64,8 +69,10 @@ so practice does not favour one arm.
 
 For each change, the engineer:
 
-1. Checks out the branch and runs the failing test command printed at the
-   top of the branch's `DX.md`; the clock starts when the run ends.
+1. Checks out the branch, on a Mac (the baselines are macOS baselines),
+   and runs the test command in the branch's `DX.md`; the clock starts when
+   the run ends. The branch's last commit is the change, as if they had
+   written it.
 2. Works out the cause, using anything they like: the terminal output first,
    then golden failure images, the snapshot files, the code, the diff.
 3. Stops the clock when they write down the cause: which component, what
