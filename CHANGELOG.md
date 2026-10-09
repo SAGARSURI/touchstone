@@ -18,3 +18,17 @@
   mutation and no-op catalogs, a seeded render-level mutation generator with
   a pixel and semantics oracle, A13 and A3 experiments, the A14 web
   prototype, and the frozen catalogue history changes 1 to 6.
+* Phase 2 diff and policy: typed change report (added, removed, moved,
+  reordered, identity, layout, style, content, semantics, unexplained paint)
+  with the second matching pass and cascade grouping; the policy engine with
+  project rules, declared expectations and the spec's limits on rules;
+  `expectSnapshot` failures print the change report; dynamic components skip
+  content comparison only; `dart run touchstone:review` and
+  `dart run touchstone:update`.
+* Phase 2 capture changes (baselines re-recorded): child component markers
+  hold an index instead of an id; an opaque node's pixel region is written
+  relative to its own origin, so a move alone keeps its paint; repaint
+  boundaries and pass-through render objects leave no trace in paint; the
+  style field describes nested values, text span styles, the framework
+  widgets inside each component, drawn image fingerprints, and layout-only
+  render objects under a `layout.` prefix.

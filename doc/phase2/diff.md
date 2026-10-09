@@ -59,9 +59,20 @@ The `style` field explains changes and is never hashed. Phase 2 extended it:
 - Render objects that draw nothing and only place their children are described
   under a `layout.` prefix (`layout.RenderPadding.padding`). Their properties
   explain layout, not style.
-- Semantics, pointer and scroll-position objects are left out. Semantics has
-  its own field, and a scroll position's description includes the viewport
-  size, which is layout.
+- The framework widgets between a component and each of its render objects
+  are described once each (`Switch.value: on`). A state is often held by a
+  widget whose render object does not report it. Render object widgets are
+  described with their own render object, and parent data widgets
+  (`Positioned`, `Expanded`) count as layout.
+- The fingerprint of each image a render object drew is recorded as
+  `<type>.images`, which the diff reads as content.
+- Semantics, pointer and scroll-position objects are left out, along with
+  sliver geometry and child delegates. Semantics has its own field. A scroll
+  position's description includes the viewport size, and sliver geometry is
+  the sliver's size, both outputs of layout. The children a delegate
+  describes are compared as components.
+- A property whose value is a widget is left out, because its description
+  includes the child's text.
 
 Changing `style` changes no hash. It does change the bytes of every snapshot
 file, so committed baselines must be re-recorded.
@@ -116,6 +127,34 @@ file, so committed baselines must be re-recorded.
 - The spec's "scoped update" (accepting only style changes on one component) is
   marked "Proposed" in the spec and is not built.
 
+## Capture changes made in Phase 2
+
+The catalog runs found three capture properties that kept the diff from
+working as the spec describes. Each is a change to what is hashed, so
+committed baselines are re-recorded on macOS.
+
+1. **Child markers carry an index, not an id** (interpretation 1 below).
+2. **A move alone keeps a pixel-hashed paint.**
+   - An opaque node's paint ends with the pixel hash of its region. Phase 1
+     wrote that region in global coordinates, so a node that only moved
+     changed its paint.
+   - A shift group needs "paint unchanged", so every button and row with a
+     rounded shape broke the cascade into one unexplained paint per
+     component.
+   - The region is now written relative to the node's own origin. The pixels
+     are still read from the same place, and the position is the node's
+     bounds. A node whose transform could not be verified keeps global
+     coordinates.
+3. **Layout-neutral wrappers leave no trace.**
+   - A repaint boundary's plain offset layer recorded `composite(Offset)`.
+     That layer only places the child, which the child's offset already
+     records, so the command is no longer written.
+   - A component's render object that draws nothing and holds one child at
+     its own origin is flattened out of the paint text.
+   - The spec's no-op "wrap in a layout-neutral widget" then leaves the
+     snapshot as it was (A5). The fixture suite and the capture-gap
+     regression tests pass unchanged.
+
 ## Interpretations
 
 Each of these is a choice the spec leaves open, or a small addition. None
@@ -156,7 +195,24 @@ changes a gate or a definition.
      change is folded under the children's single root cause, when there is
      one.
    - The consequence line says "not verified: paint is compared by hash".
-6. **Test-time verdict.**
+6. **The parent's wrappers come and go with a child.**
+   - Adding a child to a list adds framework render objects to the parent
+     component: a keep-alive, an indexed semantics wrapper, a divider drawn
+     per child.
+   - A parent's style change, or layout change inside it at the same size,
+     in which every property only appeared or disappeared, is folded under
+     the one child added or removed beside it. The consequence line says
+     "(came or went with the child)".
+   - Without the fold, the parent becomes a second candidate cause of the
+     shift, and no single cause can be named.
+7. **The shift group's ancestor did not move.**
+   - The spec groups components "under a common ancestor".
+   - The group's ancestor is the nearest one that did not itself move by the
+     group's vector.
+   - A row that moved with its children but also changed (clipped at the
+     viewport's edge) is then not where its children's shift is attributed.
+     The shift is attributed to whatever moved the row.
+8. **Test-time verdict.**
    - At test time any difference is a failure. The report is printed with the
      verdict `fail`, and the default policy is not applied.
    - The spec's "Pass, with identity changes listed as info" applies at review
