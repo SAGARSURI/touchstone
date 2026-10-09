@@ -537,4 +537,7 @@ that call:
 6. **Regression set, not fixed:** `SettingsScreen@0`'s pixel hash changing
    when only its children move; a refactor in a tile cut off at the viewport
    edge; theme colours derived from a token carrying no token; style
-   recording closure names with library numbers (seen in A12).
+   recording closure names with library numbers (seen in A12, and again
+   on one toolchain when the DX goldens were recorded: three order
+   snapshots' tooltip style went from `@657220820` to `@659220820`; style
+   is not hashed, so no verdict changed).
