@@ -787,6 +787,8 @@ const Set<String> _styleSkip = <String>{
   'semantics node',
 };
 
+final RegExp _notStyle = RegExp('Semantics|MouseRegion|Pointer|MetaData');
+
 bool _drawsSomething(String op) =>
     op.startsWith('draw') || op.startsWith('clip') || op.startsWith('push') || op.startsWith('saveLayer');
 
@@ -799,9 +801,9 @@ final RegExp _identity = RegExp(r'#[0-9a-f]{5}\b');
 /// expanded one level (`RenderDecoratedBox.decoration.color`), and text is
 /// described by its spans' styles (`RenderParagraph.text.style.fontWeight`),
 /// so a change names the property that changed. The widget that created each
-/// render object is described the same way. Text content is not style; where
-/// a widget property holds content (`Text.data`), the diff reads that key as
-/// content, not style.
+/// render object is described the same way. Text content is not style; it is
+/// recorded under content keys (`RenderParagraph.plainText`, `Text.data`) that
+/// the diff reads as content.
 Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver) {
   final out = <String, String>{};
   String describe(DiagnosticsNode p) {
@@ -824,22 +826,31 @@ Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver) {
 
   bool shown(DiagnosticsNode p) {
     final String? name = p.name;
-    return name != null && name.isNotEmpty && !_styleSkip.contains(name) && !p.isFiltered(DiagnosticLevel.info);
+    return name != null &&
+        name.isNotEmpty &&
+        !_styleSkip.contains(name) &&
+        !p.isFiltered(DiagnosticLevel.info) &&
+        // A scroll position describes the viewport's size, which is layout.
+        p.value is! ViewportOffset;
   }
 
   for (final node in nodes) {
-    // Only render objects that drew something carry visual properties.
-    if (!node.ops.any(_drawsSomething)) {
-      continue;
-    }
     final RenderObject ro = node.renderObject;
     final String type = ro.runtimeType.toString();
+    // Semantics and pointer handling are recorded elsewhere or not drawn.
+    // Every other render object is described. Those that only place their
+    // children (`layout.RenderPadding.padding`) explain layout, since a
+    // child's offset is part of this component's paint.
+    if (_notStyle.hasMatch(type)) {
+      continue;
+    }
+    final String prefix = node.ops.any(_drawsSomething) ? '' : layoutStylePrefix;
     void properties(String type, Diagnosticable of) {
       for (final DiagnosticsNode p in of.toDiagnosticsNode().getProperties()) {
         if (!shown(p)) {
           continue;
         }
-        final String key = '$type.${p.name}';
+        final String key = '$prefix$type.${p.name}';
         put(key, describe(p));
         final Object? value = p.value;
         if (value is Diagnosticable && value is! RenderObject && value is! Widget) {
@@ -866,6 +877,10 @@ Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver) {
       RenderEditable() => ro.text,
       _ => null,
     };
+    if (text != null) {
+      // Content, not style: the diff reads this key as content.
+      put('$type.plainText', jsonEncode(text.toPlainText()));
+    }
     text?.visitChildren((InlineSpan span) {
       final TextStyle? style = span.style;
       if (style != null) {

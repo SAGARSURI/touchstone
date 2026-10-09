@@ -46,12 +46,15 @@ const Set<String> _semanticsText = <String>{'label', 'value'};
 /// Style keys that hold content, not style: an image, or a widget property
 /// that holds text or an icon.
 bool _isContentStyleKey(String key) =>
-    key.startsWith('RenderImage.image') || _contentWidgetKeys.any((String k) => key == k || key.startsWith('$k.'));
+    key.startsWith('RenderImage.image') || _contentKeys.contains(key.replaceFirst(RegExp(r'\.\d+$'), ''));
 
-const Set<String> _contentWidgetKeys = <String>{
+const Set<String> _contentKeys = <String>{
+  'RenderParagraph.plainText',
+  'RenderEditable.plainText',
   'Text.data',
   'Text.textSpan',
   'RichText.text',
+  'RichText.text.text',
   'Icon.icon',
   'Image.image',
   'RawImage.image',
@@ -274,7 +277,23 @@ class _Diff {
     final Bounds? ab = a.bounds;
     final bool sizeChanged = bb?.w != ab?.w || bb?.h != ab?.h;
     final bool paintChanged = b.node.paint != a.node.paint || b.node.opaque != a.node.opaque;
-    final Map<String, String> styleChanges = _mapChanges(_style(b.node.style), _style(a.node.style));
+    final Map<String, String> bStyle = _style(b.node.style);
+    final Map<String, String> aStyle = _style(a.node.style);
+    // A render object that stops or starts drawing (a painter removed) moves
+    // its keys between style and layout: compare without the prefix, and
+    // read a key as layout only where it is layout on every side it is on.
+    String bare(String k) => k.startsWith(layoutStylePrefix) ? k.substring(layoutStylePrefix.length) : k;
+    final Set<String> styleSide = <String>{
+      for (final String k in <String>{...bStyle.keys, ...aStyle.keys})
+        if (!k.startsWith(layoutStylePrefix)) k,
+    };
+    final Map<String, String> styleChanges = <String, String>{
+      for (final MapEntry<String, String> e in _mapChanges(
+        <String, String>{for (final MapEntry<String, String> x in bStyle.entries) bare(x.key): x.value},
+        <String, String>{for (final MapEntry<String, String> x in aStyle.entries) bare(x.key): x.value},
+      ).entries)
+        if (styleSide.contains(e.key)) e.key: e.value else '$layoutStylePrefix${e.key}': e.value,
+    };
     final Map<String, String> semanticsChanges = _semanticsChanges(b.node.semantics, a.node.semantics);
     final bool textChanged = semanticsChanges.keys.any(_semanticsText.contains);
     final bool otherSemantics = semanticsChanges.keys.any((String k) => !_semanticsText.contains(k));
@@ -283,14 +302,33 @@ class _Diff {
     if (sizeChanged) {
       out.add(layout = Change(ChangeType.layout, a, b, 'size ${bb?.sizeText ?? '-'} -> ${ab?.sizeText ?? '-'}'));
     }
+    final Map<String, String> layoutKeys = <String, String>{
+      for (final MapEntry<String, String> e in styleChanges.entries)
+        if (e.key.startsWith(layoutStylePrefix)) e.key.substring(layoutStylePrefix.length): e.value,
+    };
+    final Map<String, String> contentKeys = <String, String>{
+      for (final MapEntry<String, String> e in styleChanges.entries)
+        if (_isContentStyleKey(e.key)) e.key: e.value,
+    };
+    final Map<String, String> styleKeys = <String, String>{
+      for (final MapEntry<String, String> e in styleChanges.entries)
+        if (!e.key.startsWith(layoutStylePrefix) && !_isContentStyleKey(e.key)) e.key: e.value,
+    };
+    if (layout != null && layoutKeys.isNotEmpty) {
+      out[out.indexOf(layout)] = layout = Change(
+        ChangeType.layout,
+        a,
+        b,
+        '${layout.detail}; ${_describeMap(layoutKeys)}',
+      );
+    }
     if (paintChanged) {
-      final bool contentStyle = styleChanges.isNotEmpty && styleChanges.keys.every(_isContentStyleKey);
-      if (styleChanges.isNotEmpty && !contentStyle) {
-        out.add(Change(ChangeType.style, a, b, _describeMap(styleChanges)));
-      } else if (contentStyle || textChanged) {
+      if (styleKeys.isNotEmpty) {
+        out.add(Change(ChangeType.style, a, b, _describeMap(styleKeys)));
+      } else if (contentKeys.isNotEmpty || textChanged) {
         if (!dynamic) {
           final Map<String, String> content = <String, String>{
-            ...styleChanges,
+            ...contentKeys,
             for (final MapEntry<String, String> e in semanticsChanges.entries)
               if (_semanticsText.contains(e.key)) e.key: e.value,
           };
@@ -301,6 +339,10 @@ class _Diff {
       } else if (layout != null && b.node.opaque == a.node.opaque) {
         // A box painted at its new size: the paint follows the layout change.
         out.add(Change(ChangeType.paint, a, b, 'paint changed with the new size')..causedBy = layout);
+      } else if (layoutKeys.isNotEmpty && b.node.opaque == a.node.opaque) {
+        // The component kept its bounds, but a render object inside it that
+        // only places its children changed, so they moved inside it.
+        out.add(Change(ChangeType.layout, a, b, 'inside: ${_describeMap(layoutKeys)}'));
       } else if (b.node.opaque != a.node.opaque) {
         out.add(Change(ChangeType.paint, a, b, 'unexplained (opaque reasons ${b.node.opaque} -> ${a.node.opaque})'));
       } else {

@@ -114,7 +114,8 @@ void main() {
       column(<Widget>[const Card2(label: 'a', height: 50), const Card2(label: 'b')]),
     );
     expect(top(r), <String>['Layout root/Card2@0']);
-    expect(r.items.single.change!.detail, 'size 200x40 -> 200x50');
+    expect(r.items.single.change!.detail, startsWith('size 200x40 -> 200x50; '));
+    expect(r.items.single.change!.detail, contains('SizedBox.height: 40.0 -> 50.0'));
     expect(r.items.single.causedGroups.single.summary, '1 component shifted down 10 px');
   });
 
@@ -205,6 +206,35 @@ void main() {
     final ReportItem item = r.items.single;
     expect(item.consequences.map((Change c) => '${c.type.label} ${c.nodeId}'), contains('Layout root/Holder@0'));
     expect(r.groups.single.cause!.nodeId, 'root/Holder@0/Card2@0');
+  });
+
+  testWidgets('padding that moves framework children inside a component is a layout change', (
+    WidgetTester tester,
+  ) async {
+    final ChangeReport r = await diffOf(
+      tester,
+      const Holder2(
+        child: SizedBox(
+          width: 40,
+          height: 40,
+          child: Holder(child: ColoredBox(color: Color(0xFF000000))),
+        ),
+      ),
+      const Holder2(
+        child: SizedBox(
+          width: 40,
+          height: 40,
+          child: Holder(
+            child: Padding(
+              padding: EdgeInsets.only(left: 1),
+              child: ColoredBox(color: Color(0xFF000000)),
+            ),
+          ),
+        ),
+      ),
+    );
+    expect(top(r), <String>['Layout root/Holder2@0/Holder@0']);
+    expect(r.items.single.change!.detail, startsWith('inside: '));
   });
 
   testWidgets('a key change on the same output is an identity change and passes', (WidgetTester tester) async {

@@ -1,7 +1,11 @@
 // Generated mutations on the catalogue (spec: Verification strategy). Each
 // seed picks a scene and one render-level mutation; the oracle (pixels and
 // semantics) says whether anything a user could notice changed, and the
-// snapshot must then change too. A miss replays from its seed:
+// snapshot must then change too. Phase 2 measures the same at verdict level:
+// the diff and the default policy must not pass a change the oracle saw, and
+// the report's type for the mutated component is recorded against the types
+// accepted for its kind (doc/phase2/expectations.md). A miss replays from its
+// seed:
 //
 //   flutter test test/generated --dart-define=GEN_START=<seed> --dart-define=GEN_COUNT=1
 //
@@ -17,6 +21,25 @@ import 'package:touchstone/touchstone.dart';
 import '../support/oracle.dart';
 import '../support/scenes.dart';
 import 'mutator.dart';
+
+/// Accepted change types per mutation kind, from doc/phase2/expectations.md.
+const Map<String, Set<String>> _accepted = <String, Set<String>>{
+  'decoration colour': <String>{'Style'},
+  'decoration radius': <String>{'Style'},
+  'text colour': <String>{'Style'},
+  'font weight': <String>{'Style'},
+  'shape colour': <String>{'Style'},
+  'opacity': <String>{'Style'},
+  'clip radius': <String>{'Style'},
+  'text': <String>{'Content'},
+  'padding 1px': <String>{'Layout', 'Style'},
+  'size 1px': <String>{'Layout', 'Style'},
+  'flex alignment': <String>{'Layout', 'Style'},
+  'transform': <String>{'Layout', 'Style'},
+  'image': <String>{'Content', 'Style'},
+  'custom painter removed': <String>{'Paint', 'Style'},
+  'semantics label': <String>{'Semantics'},
+};
 
 const int _start = int.fromEnvironment('GEN_START');
 const int _count = int.fromEnvironment('GEN_COUNT', defaultValue: 100);
@@ -72,6 +95,16 @@ void main() {
         }
         changed.addAll(a.keys);
       }
+      final ChangeReport report = diffSnapshots(base.snapshot, after);
+      final Verdict verdict = Policy.defaults().decide(report).verdict;
+      final String kind = m.description.split(':').first;
+      // Types on the owner, as top-level items or as the cause of a group.
+      final Set<String> ownerTypes = <String>{
+        for (final ReportItem i in report.items)
+          if (i.change != null && i.change!.nodeId == owner) i.change!.type.label,
+      };
+      final bool ownerIsItem = ownerTypes.isNotEmpty;
+      bool sitsIn(String id) => owner == id || owner.startsWith('$id/');
       results.add(
         result..addAll(<String, Object?>{
           'applied': true,
@@ -84,10 +117,37 @@ void main() {
           'missed': (pixels || semantics) && !snapshot,
           'ownerChanged': changed.contains(owner),
           if (snapshot) 'firstNode': firstDifference(base.snapshot.toCanonical(), after.toCanonical()).nodeId,
+          'verdict': verdict.label,
+          'missedVerdict': (pixels || semantics) && verdict == Verdict.pass,
+          'items': <String>[
+            for (final ReportItem i in report.items)
+              i.change != null
+                  ? '${i.change!.type.label} ${i.change!.nodeId}'
+                  : 'Shift ${i.group!.ancestor.fullId}: ${i.group!.summary}',
+          ],
+          'ownerIsItem': ownerIsItem,
+          'ownerTypes': ownerTypes.toList(),
+          if (_accepted[kind] case final Set<String> accepted) 'typeAccepted': ownerTypes.any(accepted.contains),
+          'groups': <Map<String, Object?>>[
+            for (final ShiftGroup g in report.groups)
+              <String, Object?>{
+                'ancestor': g.ancestor.fullId,
+                'cause': g.cause?.nodeId,
+                'candidates': g.candidates.length,
+                // A8 on generated mutations: the single cause is the mutated
+                // component, or a component it sits in.
+                if (g.cause != null) 'causeOk': sitsIn(g.cause!.nodeId),
+              },
+          ],
         }),
       );
       handle.dispose();
       expect((pixels || semantics) && !snapshot, isFalse, reason: 'missed: ${m.description} on $owner');
+      expect(
+        (pixels || semantics) && verdict == Verdict.pass,
+        isFalse,
+        reason: 'passed by the policy: ${m.description} on $owner',
+      );
     });
   }
 

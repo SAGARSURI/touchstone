@@ -5,9 +5,15 @@
 //
 // Each entry is applied to the source in place and always restored, then the
 // probe test captures its scenes and compares them with an unedited run.
+//
+// Phase 2: each scene's snapshots also go through the diff and the default
+// policy, and the entry is scored as doc/phase2/expectations.md says. Each
+// change report is written to build/catalogs/<entry>/report.txt.
 
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:touchstone/diff.dart';
 
 import 'catalogs.dart';
 
@@ -42,6 +48,7 @@ Future<Map<String, Object?>> _run(Entry e, String base, bool noOp) async {
     }
     final out = 'build/catalogs/${e.id}';
     await _probe(e.scenes, out, base: base);
+    final Map<String, Object?> scored = _score(e, base, out, noOp);
     final scenes = <Map<String, Object?>>[];
     for (final String scene in e.scenes) {
       scenes.add(<String, Object?>{'scene': scene, ...(_read(out, scene)['compare']! as Map<String, Object?>)});
@@ -79,6 +86,8 @@ Future<Map<String, Object?>> _run(Entry e, String base, bool noOp) async {
               ),
         ),
       'firstNodes': firstNodes,
+      ...scored,
+      if (!noOp) 'missedVerdict': (pixels || semantics) && scored['verdict'] == Verdict.pass.label,
       'scenes': scenes,
     };
   } finally {
@@ -86,8 +95,79 @@ Future<Map<String, Object?>> _run(Entry e, String base, bool noOp) async {
   }
 }
 
+/// The diff, the default policy and the scores for [e] (Phase 2).
+Map<String, Object?> _score(Entry e, String base, String out, bool noOp) {
+  final reports = <ChangeReport>[];
+  final text = StringBuffer();
+  var verdict = Verdict.pass;
+  for (final String scene in e.scenes) {
+    final ChangeReport r = diffSnapshots(
+      Snapshot.parse(_read(base, scene)['snapshot']! as String),
+      Snapshot.parse(_read(out, scene)['snapshot']! as String),
+    );
+    final Decision d = Policy.defaults().decide(r);
+    if (d.verdict.index > verdict.index) {
+      verdict = d.verdict;
+    }
+    reports.add(r);
+    text
+      ..write(renderReport(r, d))
+      ..writeln();
+  }
+  File('$out/report.txt').writeAsStringSync(text.toString());
+
+  final List<ChangeReport> changed = reports.where((ChangeReport r) => r.kind != ReportKind.equal).toList();
+  final List<ReportItem> items = <ReportItem>[for (final ChangeReport r in changed) ...r.items];
+  final List<ShiftGroup> groups = <ShiftGroup>[for (final ChangeReport r in changed) ...r.groups];
+  String itemText(ReportItem i) => i.change != null
+      ? '${i.change!.type.label} ${i.change!.nodeId}'
+      : 'Shift ${i.group!.ancestor.fullId} (${i.group!.summary}, ${i.group!.candidates.length} candidates)';
+  final result = <String, Object?>{
+    'verdict': verdict.label,
+    'items': items.map(itemText).toList(),
+    'groups': <String>[
+      for (final ShiftGroup g in groups)
+        '${g.summary} under ${g.ancestor.fullId}: '
+            '${g.cause != null ? 'cause ${g.cause!.type.label} ${g.cause!.nodeId}' : '${g.candidates.length} candidates'}',
+    ],
+  };
+  if (noOp) {
+    // A5: no change, or info-level identity changes only.
+    result['strict'] = reports.every((ChangeReport r) => r.isEqual || r.infoOnly);
+    return result;
+  }
+  if (e.expectTypes.isNotEmpty) {
+    bool sceneCorrect(ChangeReport r) {
+      if (e.expectNode == null) {
+        return r.items.isNotEmpty && r.items.every((ReportItem i) => i.change?.type == ChangeType.style);
+      }
+      final Map<String, Set<String>> typesByNode = <String, Set<String>>{};
+      for (final ReportItem i in r.items) {
+        final Change? c = i.change;
+        if (c != null && c.componentType == e.expectNode) {
+          (typesByNode[c.nodeId] ??= <String>{}).add(c.type.label);
+        }
+      }
+      return typesByNode.values.any((Set<String> t) => t.containsAll(e.expectTypes));
+    }
+
+    result['correct'] = changed.isNotEmpty && changed.every(sceneCorrect);
+    result['extraItems'] = items
+        .where((ReportItem i) => i.change == null || i.change!.componentType != e.expectNode)
+        .map(itemText)
+        .toList();
+  }
+  if (e.expectShift != null) {
+    // A8.
+    bool causeIsExpected(ShiftGroup g) => g.cause != null && g.cause!.componentType == e.expectNode;
+    result['rootCauseCorrect'] = e.expectShift! ? groups.isNotEmpty && groups.every(causeIsExpected) : groups.isEmpty;
+    result['wrongCertain'] = groups.any((ShiftGroup g) => g.cause != null && !causeIsExpected(g));
+  }
+  return result;
+}
+
 Future<void> main(List<String> args) async {
-  final List<Entry> all = <Entry>[...mutations, ...noOps];
+  final List<Entry> all = <Entry>[...mutations, ...cascades, ...noOps];
   final List<Entry> chosen = args.isEmpty ? all : all.where((Entry e) => args.contains(e.id)).toList();
   final List<String> sceneIds = <String>{for (final Entry e in chosen) ...e.scenes}.toList();
   const base = 'build/catalogs/base';
@@ -101,14 +181,16 @@ Future<void> main(List<String> args) async {
 
   final md = StringBuffer()
     ..writeln(
-      '| Entry | Kind | Oracle expected | Oracle saw | Snapshot changed | Missed | Lands on expected component '
-      '| First differing node |',
+      '| Entry | Kind | Oracle saw | Verdict | Missed | Correct type | Root cause | Wrong certain | No-op strict '
+      '| Top-level items |',
     )
-    ..writeln('| --- | --- | --- | --- | --- | --- | --- | --- |');
+    ..writeln('| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |');
+  String cell(Object? v) => v == null ? 'n/a' : '$v';
   for (final r in results) {
     md.writeln(
-      '| ${r['id']} | ${r['kind']} | ${r['expectedOracle']} | ${r['oracle']} | ${r['snapshotChanged']} | '
-      '${r['missed'] ?? 'n/a'} | ${r['landsOnExpected'] ?? 'n/a'} | ${(r['firstNodes']! as List<Object?>).join('<br>')} |',
+      '| ${r['id']} | ${r['kind']} | ${r['oracle']} | ${r['verdict']} | ${cell(r['missedVerdict'])} | '
+      '${cell(r['correct'])} | ${cell(r['rootCauseCorrect'])} | ${cell(r['wrongCertain'])} | ${cell(r['strict'])} | '
+      '${(r['items']! as List<Object?>).join('<br>')} |',
     );
   }
   File('build/catalogs/report.md').writeAsStringSync(md.toString());

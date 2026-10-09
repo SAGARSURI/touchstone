@@ -18,6 +18,11 @@ const int schemaVersion = 1;
 
 const String _magic = 'touchstone-snapshot';
 
+/// The `style` key prefix for render objects that draw nothing and only
+/// place or size their children: their properties explain a layout change
+/// inside a component, not a style change.
+const String layoutStylePrefix = 'layout.';
+
 class Snapshot {
   Snapshot({
     required this.id,

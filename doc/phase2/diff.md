@@ -1,0 +1,164 @@
+# Phase 2: the diff engine, policy and commands
+
+This records how the spec's Diff engine and Policy sections were built. It also
+lists every point where the spec left a choice open and which choice was made.
+Each choice is listed under "Interpretations" so it can be reviewed on its own.
+
+## Where comparison happens
+
+The spec has two comparisons.
+
+| When | What is compared | Verdict |
+| --- | --- | --- |
+| Test time, `expectSnapshot` | The capture with its committed baseline | Pass when equal. Any difference fails ("capture differs from the committed baseline"), and the failure message is the change report. The one difference that passes is content of a component declared dynamic. |
+| Review time, `dart run touchstone:review --base <target>` | The committed baseline with the target branch's baseline | Decided by the policy: pass, needs-review or fail. |
+
+An equal root hash passes without a diff, as the spec's architecture says.
+
+## Steps (spec: Diff engine)
+
+1. **Toolchain.** If the fingerprints differ, the report is a migration and
+   nothing is compared.
+2. **Root hash.** Equal root hashes with equal inputs make the report empty.
+3. **Descend by id.** Children are paired by id. Equal subtree hashes pair
+   whole subtrees.
+4. **Sibling pairing.** Siblings that were not paired by id, or whose output
+   changed, are paired when one sibling on each side has the same type and the
+   same shape: its size, own paint, semantics and the shapes of its children.
+   Of the paired siblings, those outside the longest run that kept its order
+   are **Reordered**. A pair with different ids is an **Identity** change.
+5. **Second matching pass (spec).** Nodes still unpaired anywhere are paired
+   when exactly one node on each side has the same type, bounds and paint
+   hash. The pair is an **Identity** change under the same parent, otherwise
+   **Moved**.
+6. **Classify** each pair, and report unpaired nodes as **Added** or
+   **Removed** (the top-most only, with a count of components inside).
+7. **Group cascades** (below).
+8. **Label unexplained**: a paint change with no named cause is **Paint**,
+   flagged and listed first.
+
+## Classifying a pair
+
+| Change type | Reported when |
+| --- | --- |
+| Layout | The component's size changed. The detail adds any layout properties that changed (`SizedBox.height: 40.0 -> 50.0`). |
+| Style | The paint changed and a style property changed. |
+| Content | The paint changed, and only content changed: text (`RenderParagraph.plainText`, `Text.data`, the semantics label or value), an icon or an image. |
+| Semantics | A label, role, flag or action changed with no paint change, or alongside one. |
+| Paint | The paint changed and nothing above names why. |
+
+The `style` field explains changes and is never hashed. Phase 2 extended it:
+
+- A diagnosticable value is described one level down
+  (`RenderDecoratedBox.decoration.color`).
+- Text spans' styles are described (`RenderParagraph.text.style.fontWeight`).
+- The widget that created each render object is described too, because some
+  render objects report none of their paint parameters. For example, the
+  private render object behind `ColoredBox` reports no colour, but
+  `ColoredBox.color` names it.
+- Render objects that draw nothing and only place their children are described
+  under a `layout.` prefix (`layout.RenderPadding.padding`). Their properties
+  explain layout, not style.
+- Semantics, pointer and scroll-position objects are left out. Semantics has
+  its own field, and a scroll position's description includes the viewport
+  size, which is layout.
+
+Changing `style` changes no hash. It does change the bytes of every snapshot
+file, so committed baselines must be re-recorded.
+
+## Cascade grouping (spec: "Cascade attribution")
+
+- **Shift group.** Components under one parent whose size is unchanged, whose
+  own fields are unchanged apart from identity, and whose position moved by the
+  same vector. Only the top-most moved components are members. Their
+  descendants that moved with them are counted.
+- **Candidate cause.** A component earlier in layout order under that parent,
+  or the parent itself, that was added, removed, resized or restyled. Each
+  candidate is named by its root cause.
+- **One candidate** gives a certain root cause, and the group becomes a
+  consequence line under that change. **Several candidates** give "possible
+  causes". **None** gives "cause unknown, needs review", flagged.
+- **Upward growth.** A parent whose size changed by the same amount as exactly
+  one changed child is that child's consequence, and chains fold to the
+  deepest cause.
+
+## Policy (spec: Policy and verdicts)
+
+- The rules file is `touchstone.rules` at the package root, or the file given
+  with `--rules`. One rule per line, and `#` starts a comment:
+  - `pass <component> <change type>`
+  - `forbid <component or *> <change type or *>`
+- Declared expectations use the same form with `expect` lines, in the file
+  given with `--expect`. When any are given, a visible change outside them
+  fails.
+- A component is named by its type, its id segment (`AppButton#submit`) or the
+  end of its full id.
+- The parser rejects these rules:
+  - a pass or expect rule with `*`;
+  - any rule with more than three words, so a rule cannot carry a size or
+    tolerance;
+  - an unknown change type.
+- A pass rule passes a change only when nothing else is folded under it. A
+  rule written for a component's paint does not pass the shift it caused.
+- An input change (theme, locale, state, the dynamic list) makes the verdict
+  needs-review.
+
+## Commands
+
+- `dart run touchstone:review [--base <ref>] [--rules <file>] [--expect <file>]`
+  compares every `.snapshot` file with its version at the base ref. It prints
+  each report and a summary line. The exit code is 0 for pass, 1 for fail and
+  2 for needs-review. A new or removed snapshot file is needs-review.
+- `dart run touchstone:update [flutter test arguments]` runs
+  `flutter test --update-goldens`. That rewrites a baseline only after the
+  determinism gate passes, and prints each rewritten snapshot's change report.
+  The command then prints what review will show against HEAD.
+- The spec's "scoped update" (accepting only style changes on one component) is
+  marked "Proposed" in the spec and is not built.
+
+## Interpretations
+
+Each of these is a choice the spec leaves open, or a small addition. None
+changes a gate or a definition.
+
+1. **Child markers carry an index, not an id.**
+   - The spec says a child component "leaves a marker instead of its
+     commands". Phase 1 wrote the child's id in the marker.
+   - So any id change also changed the parent's paint hash, and an identity
+     change could never be info only, as the spec's verdict table requires.
+   - The marker now holds the child's index among the component's children
+     (`comp(2)`).
+   - Paint order is still recorded. Children are listed in the snapshot in
+     order, and when paint order differs from child order, the markers record
+     it. `test/snapshot_test.dart` checks both cases, including a `Flow` that
+     paints in reverse.
+   - This changes paint hashes, so baselines are re-recorded.
+2. **A resized box's paint follows its size.** When a component's size changed
+   and its paint changed with no style or content change, the paint change is
+   a consequence of the Layout change, not a separate unexplained Paint.
+3. **Layout inside a component.** When a component keeps its bounds but a
+   render object inside it that only places children changed (padding,
+   alignment, a size box), the change is Layout with the detail
+   `inside: ...`. The spec defines Layout as "Bounds changed". Here the bounds
+   of framework children inside the component changed.
+4. **Reordered and moved components are candidate causes.**
+   - The spec's list of candidates is added, removed, resized or restyled.
+   - When two siblings swap, one is reported Reordered and the other only
+     shifts. Under the spec's list, that shift would be "cause unknown".
+   - Reordered and moved components were added as candidates, so the shift
+     becomes a consequence of the reorder. This is a candidate-set extension,
+     so it is listed for review.
+5. **A parent's paint where its children changed.**
+   - A parent's own paint records where its framework children sit, and the
+     paint order of its child components.
+   - When a component's only change is unexplained Paint, and its direct
+     children were added, removed, reordered, resized or shifted, that paint
+     change is folded under the children's single root cause, when there is
+     one.
+   - The consequence line says "not verified: paint is compared by hash".
+6. **Test-time verdict.**
+   - At test time any difference is a failure. The report is printed with the
+     verdict `fail`, and the default policy is not applied.
+   - The spec's "Pass, with identity changes listed as info" applies at review
+     time. A refactor that only renames ids still needs its baseline updated,
+     because the file's bytes changed.

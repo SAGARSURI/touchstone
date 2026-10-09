@@ -52,7 +52,7 @@ ChangeReport groupCascades(
     ..sort((Change x, Change y) => _depth(y.node).compareTo(_depth(x.node)));
   for (final Change parent in layouts) {
     final (double, double)? delta = _sizeDelta(parent);
-    if (delta == null) {
+    if (delta == null || delta == (0.0, 0.0)) {
       continue;
     }
     final List<Change> growing = <Change>[
