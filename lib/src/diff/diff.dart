@@ -29,6 +29,9 @@ import '../snapshot/snapshot.dart';
 import 'cascade.dart';
 import 'changes.dart';
 
+/// The paint hash of a component that painted nothing: SHA-256 of no commands.
+final String _emptyPaint = sha256.convert(const <int>[]).toString();
+
 /// Semantics keys that describe where a node is, not what it is. A change
 /// in only these follows from a layout change and is not reported on its
 /// own when bounds changed in the same subtree.
@@ -368,7 +371,11 @@ class _Diff {
       ).entries)
         if (styleSide.contains(e.key)) e.key: e.value else '$layoutStylePrefix${e.key}': e.value,
     };
-    final Map<String, String> semanticsChanges = _semanticsChanges(b.node.semantics, a.node.semantics);
+    final Map<String, String> semanticsChanges = _semanticsChanges(
+      b.node.semantics,
+      a.node.semantics,
+      moved: bb != null && ab != null && (bb.x != ab.x || bb.y != ab.y),
+    );
     final bool textChanged = semanticsChanges.keys.any(_semanticsText.contains);
     final bool otherSemantics = semanticsChanges.keys.any((String k) => !_semanticsText.contains(k));
 
@@ -546,17 +553,35 @@ String _describeMap(Map<String, String> m) => m.entries.map((e) => '${e.key}: ${
 
 /// Differences in what the semantics nodes say, ignoring where they are.
 /// Keys are semantics property names; nodes are compared in order.
-Map<String, String> _semanticsChanges(String before, String after) {
+///
+/// A scroll view marks the nodes of children outside its visible area as
+/// hidden, so for a node of a viewport's child that [moved], the hidden flag
+/// says where it is, not what it is, and is ignored.
+Map<String, String> _semanticsChanges(String before, String after, {bool moved = false}) {
   if (before == after) {
     return <String, String>{};
   }
   List<Map<String, Object?>> parse(String s) => <Map<String, Object?>>[
     for (final Object? n in (jsonDecode(s) as List<Object?>)) (n! as Map<String, Object?>),
   ];
-  Map<String, Object?> meaning(Map<String, Object?> n) => <String, Object?>{
-    for (final MapEntry<String, Object?> e in n.entries)
-      if (!_semanticsGeometry.contains(e.key)) e.key: e.value,
-  };
+  bool inViewport(Map<String, Object?> n) =>
+      n['tags'] is List && (n['tags']! as List<Object?>).any((Object? t) => '$t'.startsWith('RenderViewport.'));
+  Map<String, Object?> meaning(Map<String, Object?> n) {
+    final out = <String, Object?>{
+      for (final MapEntry<String, Object?> e in n.entries)
+        if (!_semanticsGeometry.contains(e.key)) e.key: e.value,
+    };
+    if (moved && out['flags'] is List && inViewport(n)) {
+      final List<Object?> flags = (out['flags']! as List<Object?>).where((Object? f) => f != 'isHidden').toList();
+      if (flags.isEmpty) {
+        out.remove('flags');
+      } else {
+        out['flags'] = flags;
+      }
+    }
+    return out;
+  }
+
   final List<Map<String, Object?>> b = parse(before).map(meaning).where((m) => m.isNotEmpty).toList();
   final List<Map<String, Object?>> a = parse(after).map(meaning).where((m) => m.isNotEmpty).toList();
   if (jsonEncode(b) == jsonEncode(a)) {
@@ -646,6 +671,18 @@ class DiffNode {
   bool get isOrdinal => RegExp(r'@\d+$').hasMatch(segment);
 
   late final Bounds? bounds = Bounds.parse(node.bounds);
+
+  /// Built and laid out but not painted: a list item in a scroll view's cache
+  /// area, kept only for its semantics node, which is hidden.
+  late final bool unpainted = () {
+    if (node.paint != _emptyPaint || children.any((DiffNode c) => !c.unpainted)) {
+      return false;
+    }
+    final Object? nodes = node.semantics.isEmpty ? null : jsonDecode(node.semantics);
+    return nodes is List &&
+        nodes.isNotEmpty &&
+        nodes.every((Object? n) => n is Map && n['flags'] is List && (n['flags'] as List).contains('isHidden'));
+  }();
 
   String get boundsText => bounds?.toString() ?? '-';
 

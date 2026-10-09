@@ -120,6 +120,38 @@ ChangeReport groupCascades(
     }
   }
 
+  // Changes at the edge of a list's built range: on a component that is
+  // built but not painted on either side, or inside one. A shift moves list
+  // items into and out of the painted area and the cache area around it, so
+  // these are consequences of a shift, never causes. A parent's style or
+  // layout in which render objects only came or went beside such items (their
+  // keep-alive wrappers) is one too.
+  final Set<Change> edge = <Change>{
+    for (final Change c in changes)
+      if (_atRangeEdge(c.node)) c,
+  };
+  for (final Change c in changes) {
+    if (!c.presenceOnly || c.after == null || edge.contains(c)) {
+      continue;
+    }
+    final List<Change> structural = <Change>[
+      for (final Change cc in changes)
+        if ((cc.type == ChangeType.added && identical(cc.after!.parent, c.after)) ||
+            (cc.type == ChangeType.removed && c.before != null && identical(cc.before!.parent, c.before)))
+          cc,
+    ];
+    // A sliver list's keep-alive wrappers, one per built child, count the
+    // children built, so they came or went with the items at the range edge.
+    final bool listWrappers =
+        c.fields.isNotEmpty &&
+        c.fields.keys.every((String k) => k.startsWith('KeepAlive.')) &&
+        edge.any((Change e) => e.node.isUnder(c.after!) || (c.before != null && e.node.isUnder(c.before!)));
+    if (listWrappers || (structural.isNotEmpty && structural.every(edge.contains))) {
+      edge.add(c);
+      c.causedBy = null;
+    }
+  }
+
   // Shift groups.
   bool shifted(DiffNode a) {
     final DiffNode? b = a.match;
@@ -179,7 +211,7 @@ ChangeReport groupCascades(
     bool insideMemberBefore(DiffNode n) => g.members.any((DiffNode m) => identical(n, m.match) || n.isUnder(m.match!));
     final Map<DiffNode, Change> candidateByNode = <DiffNode, Change>{};
     for (final Change c in changes) {
-      if (!_causeTypes.contains(c.type)) {
+      if (!_causeTypes.contains(c.type) || edge.contains(c)) {
         continue;
       }
       final bool eligible = c.type == ChangeType.removed
@@ -205,9 +237,35 @@ ChangeReport groupCascades(
     g.candidates = candidateByNode.values.toList();
   }
 
+  // Each change at the range edge joins the shift that moved it: the
+  // deepest group whose ancestor holds it.
+  for (final Change c in edge) {
+    if (c.causedBy != null) {
+      continue;
+    }
+    ShiftGroup? holder;
+    for (final ShiftGroup g in groups) {
+      final bool holds = c.after != null
+          ? identical(c.after, g.ancestor) || c.after!.isUnder(g.ancestor)
+          : g.ancestor.match != null && c.before!.isUnder(g.ancestor.match!);
+      if (holds && (holder == null || g.ancestor.isUnder(holder.ancestor))) {
+        holder = g;
+      }
+    }
+    if (holder == null) {
+      continue;
+    }
+    c.atRangeEdge = true;
+    if (holder.cause case final Change cause) {
+      c.causedBy = cause;
+    } else {
+      c.withShift = holder;
+    }
+  }
+
   // A parent's unexplained paint where its children moved or changed.
   for (final Change c in changes) {
-    if (c.type != ChangeType.paint || c.after == null || c.causedBy != null) {
+    if (c.type != ChangeType.paint || c.after == null || c.causedBy != null || c.withShift != null) {
       continue;
     }
     final DiffNode x = c.after!;
@@ -219,7 +277,11 @@ ChangeReport groupCascades(
           continue;
         }
         childrenChanged = true;
-        roots.putIfAbsent(cc.root.node, () => cc.root);
+        if (cc.withShift != null) {
+          roots[x] = c; // moved by a shift with no single cause: keep it unexplained
+        } else {
+          roots.putIfAbsent(cc.root.node, () => cc.root);
+        }
       }
       if (shifted(child)) {
         childrenChanged = true;
@@ -250,7 +312,7 @@ ChangeReport groupCascades(
   final Map<Change, ReportItem> itemFor = <Change, ReportItem>{};
   final items = <ReportItem>[];
   for (final Change c in changes) {
-    if (c.causedBy != null) {
+    if (c.causedBy != null || c.withShift != null) {
       continue;
     }
     final item = ReportItem.change(c, flagged: c.type == ChangeType.paint);
@@ -268,7 +330,13 @@ ChangeReport groupCascades(
     if (cause != null && itemFor[cause] != null) {
       itemFor[cause]!.causedGroups.add(g);
     } else {
-      items.add(ReportItem.group(g));
+      items.add(
+        ReportItem.group(g)
+          ..consequences.addAll(<Change>[
+            for (final Change c in changes)
+              if (identical(c.withShift, g)) c,
+          ]),
+      );
     }
   }
   items.sort((ReportItem x, ReportItem y) {
@@ -284,6 +352,17 @@ bool _movedBy(DiffNode n, (double, double) v) {
   final Bounds? a = n.bounds;
   final Bounds? b = n.match?.bounds;
   return a != null && b != null && (a.x - b.x, a.y - b.y) == v;
+}
+
+/// Whether [n], or a component it sits in, is built but not painted on
+/// either side.
+bool _atRangeEdge(DiffNode n) {
+  for (DiffNode? x = n; x != null; x = x.parent) {
+    if (x.unpainted || (x.match?.unpainted ?? false)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 int _depth(DiffNode n) {

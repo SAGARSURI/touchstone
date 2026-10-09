@@ -67,6 +67,9 @@ String renderReport(ChangeReport report, Decision decision) {
           ? 'cause unknown, needs review'
           : 'possible causes: ${g.candidates.map((Change x) => '${x.type.label} ${names.of(x.node)}').join(', ')}';
       out.writeln('$number${'Shift'.padRight(10)}${names.of(g.ancestor).padRight(24)}  ${g.summary}; $causes');
+      for (final Change k in item.consequences) {
+        out.writeln('${indent}consequence: ${k.type.label} ${names.of(k.node)}: ${_consequenceDetail(k)}');
+      }
     }
   }
   if (report.items.isEmpty && report.inputChanges.isEmpty) {
@@ -91,7 +94,9 @@ String _detail(Change c) => switch (c.type) {
 };
 
 String _consequenceDetail(Change c) => switch (c.type) {
-  ChangeType.paint when identical(c.causedBy!.node, c.node) => c.summary,
+  _ when c.atRangeEdge && c.presenceOnly => '${c.summary} (list items built or dropped)',
+  _ when c.atRangeEdge => '${c.summary} (moved into or out of the painted area)',
+  ChangeType.paint when c.causedBy != null && identical(c.causedBy!.node, c.node) => c.summary,
   ChangeType.paint => 'paint changed where its children moved or changed (not verified: paint is compared by hash)',
   _ when c.presenceOnly => '${c.summary} (came or went with the child)',
   ChangeType.layout => '${c.summary}, grew with its child',

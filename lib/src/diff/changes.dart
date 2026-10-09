@@ -96,6 +96,15 @@ class Change {
   /// Set when this change is a consequence of another (cascade grouping).
   Change? causedBy;
 
+  /// Set when this change is a consequence of a shift group that has no
+  /// single cause: a list item the shift moved into or out of the painted
+  /// area.
+  ShiftGroup? withShift;
+
+  /// On a list item that is built but not painted on one side, or inside
+  /// one: it moved into or out of the painted area.
+  bool atRangeEdge = false;
+
   /// The change at the end of [causedBy].
   Change get root {
     Change c = this;

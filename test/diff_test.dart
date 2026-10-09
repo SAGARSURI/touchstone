@@ -356,6 +356,42 @@ void main() {
     expect(renderReport(r, Policy.defaults().decide(r)), contains('flutter: ${a.toolchain['flutter']} -> 9.9.9'));
   });
 
+  testWidgets('rows that a shift moves in or out of a list\'s built range are its consequences, never its cause', (
+    WidgetTester tester,
+  ) async {
+    // A banner far above the viewport pushes the visible rows down. Rows enter
+    // the cache area above the viewport (built, not painted) and leave it
+    // below. None of them caused the shift, and the banner is not built.
+    Widget list(bool banner) => SizedBox(
+      height: 200,
+      child: ListView(
+        controller: ScrollController(initialScrollOffset: 1000),
+        children: <Widget>[
+          if (banner) const SizedBox(height: 100),
+          for (int i = 0; i < 40; i++) Card2(key: ValueKey<String>('k$i'), height: 50, label: 'row $i'),
+        ],
+      ),
+    );
+    final ChangeReport r = await diffOf(tester, list(false), list(true));
+    expect(r.groups, isNotEmpty);
+    for (final ShiftGroup g in r.groups) {
+      expect(g.candidates, isEmpty, reason: g.summary);
+    }
+    expect(top(r).toSet(), <String>{'Shift root'});
+    expect(
+      r.items.expand((ReportItem i) => i.consequences).map((Change c) => '${c.type.label} ${c.nodeId}'),
+      containsAll(<String>[
+        'Added root/Card2#k14',
+        'Style root/Card2#k19',
+        'Style root/Card2#k23',
+        'Removed root/Card2#k28',
+      ]),
+    );
+    // A row that moved out of the visible area is marked hidden: that is where
+    // it is, not a semantics change.
+    expect(r.changes.where((Change c) => c.type == ChangeType.semantics), isEmpty);
+  });
+
   group('policy', () {
     test('rules parse, and a pass rule must name a component and a type', () {
       final p = Policy.parse('# comment\npass Chart Paint\nforbid * Semantics\n');
