@@ -507,7 +507,10 @@ class _PaintAssembly {
       final Component? via = comp.childToward(owner);
       final bool primary = identical(child.renderObject, owner.renderObject);
       out
-        ..write(via == null ? 'foreign(${jsonEncode(owner.fullId)})' : 'comp(${jsonEncode(via.segment)})')
+        // A child component is named by its index among this component's
+        // children, not its id, so an id change alone leaves this paint as it
+        // was (spec: Identity is info only).
+        ..write(via == null ? 'foreign(${jsonEncode(owner.fullId)})' : 'comp(${comp.children.indexOf(via)})')
         ..write(primary && child.geometryVerified ? '' : c.offset(offset))
         ..write('\n');
       _entry(child);
@@ -759,6 +762,8 @@ const Set<String> _styleSkip = <String>{
   'semanticBounds',
   'debugNeedsLayout',
   'debugNeedsPaint',
+  // Recorded in the semantics field.
+  'semantics node',
 };
 
 bool _drawsSomething(String op) =>
@@ -768,8 +773,36 @@ final RegExp _identity = RegExp(r'#[0-9a-f]{5}\b');
 
 /// Explanation field `style`: diagnostics properties of the render objects
 /// that drew this component's paint. Never hashed.
+///
+/// A property whose value is itself diagnosticable, such as a decoration, is
+/// expanded one level (`RenderDecoratedBox.decoration.color`), and text is
+/// described by its spans' styles (`RenderParagraph.text.style.fontWeight`),
+/// so a change names the property that changed. Text content is not style.
 Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver) {
   final out = <String, String>{};
+  String describe(DiagnosticsNode p) {
+    String text = p.toDescription().replaceAll(_identity, '#');
+    if (text.length > 240) {
+      text = '${text.substring(0, 240)}…';
+    }
+    final Object? value = p.value;
+    final String? token = value == null || resolver == null ? null : resolver(value);
+    return token == null ? text : '$token ($text)';
+  }
+
+  void put(String key, String value) {
+    var k = key;
+    for (var n = 2; out.containsKey(k); n++) {
+      k = '$key.$n';
+    }
+    out[k] = value;
+  }
+
+  bool shown(DiagnosticsNode p) {
+    final String? name = p.name;
+    return name != null && name.isNotEmpty && !_styleSkip.contains(name) && !p.isFiltered(DiagnosticLevel.info);
+  }
+
   for (final node in nodes) {
     // Only render objects that drew something carry visual properties.
     if (!node.ops.any(_drawsSomething)) {
@@ -778,22 +811,36 @@ Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver) {
     final RenderObject ro = node.renderObject;
     final String type = ro.runtimeType.toString();
     for (final DiagnosticsNode p in ro.toDiagnosticsNode().getProperties()) {
-      final String? name = p.name;
-      if (name == null || name.isEmpty || _styleSkip.contains(name) || p.isFiltered(DiagnosticLevel.info)) {
+      if (!shown(p)) {
         continue;
       }
-      String text = p.toDescription().replaceAll(_identity, '#');
-      if (text.length > 240) {
-        text = '${text.substring(0, 240)}…';
-      }
+      final String key = '$type.${p.name}';
+      put(key, describe(p));
       final Object? value = p.value;
-      final String? token = value == null || resolver == null ? null : resolver(value);
-      String key = '$type.$name';
-      for (var n = 2; out.containsKey(key); n++) {
-        key = '$type.$name.$n';
+      if (value is Diagnosticable && value is! RenderObject) {
+        for (final DiagnosticsNode q in value.toDiagnosticsNode().getProperties()) {
+          if (shown(q) && q.value != null) {
+            put('$key.${q.name}', describe(q));
+          }
+        }
       }
-      out[key] = token == null ? text : '$token ($text)';
     }
+    final InlineSpan? text = switch (ro) {
+      RenderParagraph() => ro.text,
+      RenderEditable() => ro.text,
+      _ => null,
+    };
+    text?.visitChildren((InlineSpan span) {
+      final TextStyle? style = span.style;
+      if (style != null) {
+        for (final DiagnosticsNode q in style.toDiagnosticsNode().getProperties()) {
+          if (shown(q) && q.value != null) {
+            put('$type.text.style.${q.name}', describe(q));
+          }
+        }
+      }
+      return true;
+    });
   }
   return out;
 }

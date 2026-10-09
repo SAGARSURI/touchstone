@@ -78,9 +78,13 @@ in paint order:
 - A framework render object's commands go to the nearest component above it.
   Its children inside the same component are written in place with their
   offset.
-- A child component leaves `comp("<segment>")` in paint order. Its position is
-  its `bounds`, so moving it changes the child's bounds, not the parent's
-  paint.
+- A child component leaves `comp(<index>)` in paint order, where the index is
+  its place among this component's child components in the snapshot. Its
+  position is its `bounds`, so moving it changes the child's bounds, not the
+  parent's paint. The marker carries no id, so a key or type change on the
+  child alone leaves the parent's paint as it was (Phase 2: until then the
+  marker held the child's id segment, and an id change also changed the
+  parent's paint, which kept an identity change from being info only).
 - Paint a component reaches through another place in the render tree (an
   overlay entry) is written in the other component as `foreign("<full id>")`
   and starts an entry in its own component with its global transform.

@@ -145,7 +145,41 @@ void main() {
 
     final Snapshot a = await snap(tester, tree(false));
     final Snapshot b = await snap(tester, tree(true));
+    // The children are listed in the new order and each keeps its own paint.
+    expect(a.rootHash, isNot(b.rootHash));
+    expect(diffSnapshots(a, b).changes.map((Change c) => c.type), contains(ChangeType.reordered));
+  });
+
+  testWidgets('paint order that differs from child order is part of the parent paint', (WidgetTester tester) async {
+    Widget tree(bool reverse) => SizedBox(
+      width: 50,
+      height: 50,
+      child: Flow(
+        delegate: _PaintOrder(reverse),
+        children: const <Widget>[
+          Card2(key: ValueKey<String>('red'), color: Color(0xFFFF0000), child: SizedBox(width: 10, height: 10)),
+          Card2(key: ValueKey<String>('blue'), child: SizedBox(width: 10, height: 10)),
+        ],
+      ),
+    );
+
+    final Snapshot a = await snap(tester, tree(false));
+    final Snapshot b = await snap(tester, tree(true));
+    expect(a.root.children.map((SnapshotNode n) => n.id), b.root.children.map((SnapshotNode n) => n.id));
     expect(a.root.paint, isNot(b.root.paint));
+  });
+
+  testWidgets('a key change on a child component leaves the parent paint as it was', (WidgetTester tester) async {
+    final Snapshot a = await snap(
+      tester,
+      Card2(key: const ValueKey<String>('a'), child: const SizedBox(width: 10, height: 10)),
+    );
+    final Snapshot b = await snap(
+      tester,
+      Card2(key: const ValueKey<String>('b'), child: const SizedBox(width: 10, height: 10)),
+    );
+    expect(a.root.children.single.id, isNot(b.root.children.single.id));
+    expect(a.root.paint, b.root.paint);
   });
 
   testWidgets('a semantics-only change changes semantics and the root hash', (WidgetTester tester) async {
@@ -260,4 +294,21 @@ void main() {
     final String pubspec = File('pubspec.yaml').readAsStringSync();
     expect(RegExp(r'^version: (.+)$', multiLine: true).firstMatch(pubspec)!.group(1), touchstoneVersion);
   });
+}
+
+/// Paints its children in reverse when [reverse] is set, so paint order and
+/// child order differ.
+class _PaintOrder extends FlowDelegate {
+  _PaintOrder(this.reverse);
+  final bool reverse;
+  @override
+  void paintChildren(FlowPaintingContext context) {
+    for (var i = 0; i < context.childCount; i++) {
+      final int k = reverse ? context.childCount - 1 - i : i;
+      context.paintChild(k, transform: Matrix4.translationValues(4.0 * k, 4.0 * k, 0));
+    }
+  }
+
+  @override
+  bool shouldRepaint(_PaintOrder old) => old.reverse != reverse;
 }
