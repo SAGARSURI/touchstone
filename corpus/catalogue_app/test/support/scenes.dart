@@ -77,6 +77,12 @@ void usePhone(WidgetTester tester) {
   addTearDown(tester.view.reset);
 }
 
+/// The scroll behaviour every host uses; null is the app's. A7 turns the
+/// overscroll indicator off, since its render objects depend on the renderer
+/// (a transform under Skia, a shader filter under Impeller) and A7 needs the
+/// same render tree on both.
+ScrollBehavior? sceneScrollBehavior;
+
 /// Wraps a screen in the app's MaterialApp with the given theme. With
 /// [localized], the locale comes from the platform as in the app (English, or
 /// Arabic for right-to-left); levels 1 to 3 predate it and keep the default
@@ -88,6 +94,7 @@ Widget Function(Widget) hostFor({
 }) =>
     (Widget screen) => MaterialApp(
       debugShowCheckedModeBanner: false,
+      scrollBehavior: sceneScrollBehavior,
       theme: appTheme(brightness, tokens: tokens),
       localizationsDelegates: localized ? GlobalMaterialLocalizations.delegates : null,
       supportedLocales: localized ? supportedLocales : const <Locale>[Locale('en', 'US')],

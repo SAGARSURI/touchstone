@@ -1,0 +1,79 @@
+# A7: the generated mutations of seeds 0 to 299 on an iOS simulator, and the
+# tool's side on the same macOS runner (doc/phase3/a7_expectations.md). Push a
+# branch named a7-device/<anything> to run it. The outputs are committed to
+# that branch for scoring; nothing from it is merged.
+name: a7-device
+
+on:
+  push:
+    branches: ['a7-device/**']
+
+permissions:
+  contents: write
+
+jobs:
+  device:
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.6
+          channel: stable
+      - name: An iOS runner, with the app's fonts bundled
+        working-directory: corpus/catalogue_app
+        run: |
+          flutter create --platforms=ios --org dev.touchstone --project-name catalogue_app .
+          fonts="$(dirname "$(dirname "$(command -v flutter)")")/bin/cache/artifacts/material_fonts"
+          mkdir -p fonts
+          cp "$fonts"/Roboto-*.ttf fonts/
+          {
+            echo '  fonts:'
+            echo '    - family: Roboto'
+            echo '      fonts:'
+            for f in fonts/Roboto-*.ttf; do
+              name=$(basename "$f" .ttf); style=${name#Roboto-}
+              case "${style%Italic}" in
+                Thin) w=100 ;; Light) w=300 ;; Medium) w=500 ;; Bold) w=700 ;; Black) w=900 ;; *) w=400 ;;
+              esac
+              echo "        - asset: $f"
+              echo "          weight: $w"
+              case "$style" in *Italic) echo '          style: italic' ;; esac
+            done
+          } >> pubspec.yaml
+          tail -40 pubspec.yaml
+          flutter pub get
+      - name: Boot a simulator
+        run: |
+          udid=$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          devices = json.load(sys.stdin)["devices"]
+          print(next(d["udid"] for runtime, ds in sorted(devices.items(), reverse=True) if "iOS" in runtime
+                     for d in ds if d["name"].startswith("iPhone")))')
+          xcrun simctl boot "$udid"
+          xcrun simctl bootstatus "$udid" -b
+          echo "SIMULATOR=$udid" >> "$GITHUB_ENV"
+          xcrun simctl list devices booted | tee a7_simulator.txt
+      - name: Device run
+        working-directory: corpus/catalogue_app
+        run: |
+          mkdir -p a7_out
+          mv ../../a7_simulator.txt a7_out/
+          flutter test integration_test/a7_device_test.dart -d "$SIMULATOR" 2>&1 | tee a7_out/device.txt
+          test "${PIPESTATUS[0]}" -eq 0
+      - name: Tool runs on this runner
+        if: always()
+        working-directory: corpus/catalogue_app
+        run: |
+          flutter test test/a7 --dart-define=A7_FONTS=default > a7_out/tool_default.txt 2>&1 || true
+          flutter test test/a7 --dart-define=A7_FONTS=real > a7_out/tool_real.txt 2>&1 || true
+          cp build/a7/*.json a7_out/ || true
+      - name: Commit the outputs
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f corpus/catalogue_app/a7_out
+          git commit -m "A7: device and tool outputs on $(uname -sm)" || echo 'No outputs'
+          git push
