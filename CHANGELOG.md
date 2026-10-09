@@ -51,7 +51,7 @@
   text scale 2.0, small and large viewports), a `CustomPainter` chart with a
   gradient fill and a tooltip, a live price list on a fixed clock, a map
   placeholder (a platform view) under a blurred header, and a four-step order
-  flow with page transitions and a reorderable list: 29 new snapshots.
+  flow with page transitions and a reorderable list: 26 new snapshots.
 * A semantics traversal link (`traversalParentIdentifier`,
   `traversalChildIdentifier`) is recorded as `link <n>`, numbered in the order
   met, instead of its identifier's text, which held a run-dependent hash. Found

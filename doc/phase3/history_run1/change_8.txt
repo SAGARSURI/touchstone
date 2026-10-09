@@ -1,0 +1,14 @@
+Change 8: Change one data point and the stroke width in the chart
+
+== chart/default
+chart/default    needs-review
+
+1  Paint     PriceChart@0              unexplained (pixel hash changed)
+2  Paint     PriceChart@1              unexplained (paint commands changed)
+
+== chart/tooltip
+chart/tooltip    needs-review
+
+1  Paint     PriceChart@0              unexplained (pixel hash changed)
+2  Paint     PriceChart@1              unexplained (paint commands changed)
+

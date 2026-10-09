@@ -1,0 +1,42 @@
+Change 3: Add a promo banner above the watchlist
+
+== watchlist/scrolled
+watchlist/scrolled    needs-review
+
+1  Removed   WatchRow#SUM1             0,1036,390,64
+2  Added     WatchRow#RIV0             0,-204,390,64
+           consequence: 64 components shifted down 104 px
+           consequence: Paint WatchRow#COB1: paint changed where its children moved or changed (not verified: paint is compared by hash)
+           consequence: Paint WatchRow#NIM1: paint changed where its children moved or changed (not verified: paint is compared by hash)
+3  Style     WatchRow#BOR1             Container.padding: (none) -> EdgeInsets(16.0, 0.0, 16.0, 0.0); Container.bg: (none) -> BoxDecoration(border: Border(bottom: BorderSide(color: #FFE1E4EC))) (and 1 more field); Container.bg.border: (none) -> Border(bottom: BorderSide(color: #FFE1E4EC)) (and 2 more fields); RenderDecoratedBox.decoration: (none) -> BoxDecoration
+4  Semantics WatchRow in 2 places      flags: ["isHidden"] -> (none)
+           at: WatchRow#BOR1, WatchRow#COB1
+5  Added     WatchRow#BOR1/TickerAvatar@0  16,65.5,36,36
+6  Added     WatchRow#BOR1/QuoteNames@0  68,52,220.5,63
+7  Added     WatchRow#BOR1/PriceLabel@0  288.5,60.5,85.5,46, with 1 component inside
+8  Style     WatchRow#ONY1             Container.padding: EdgeInsets(16.0, 0.0, 16.0, 0.0) -> (none); Container.bg: BoxDecoration(border: Border(bottom: BorderSide(color: #FFE1E4EC))) -> (none) (and 1 more field); Container.bg.border: Border(bottom: BorderSide(color: #FFE1E4EC)) -> (none) (and 2 more fields); RenderDecoratedBox.decoration: BoxDecoration -> (none)
+9  Semantics WatchRow#ONY1             flags: (none) -> ["isHidden"]
+10 Removed   WatchRow#ONY1/TickerAvatar@0  16,793.5,36,36
+11 Removed   WatchRow#ONY1/QuoteNames@0  68,780,214.5,63
+12 Removed   WatchRow#ONY1/PriceLabel@0  282.5,788.5,91.5,46, with 1 component inside
+
+== watchlist/top
+watchlist/top    needs-review
+
+1  Paint     WatchRow#JUN0             unexplained (pixel hash changed)
+2  Layout    WatchlistScreen@0         inside: KeepAlive.keepAlive.11: false -> (none) (and 1 more field)
+3  Removed   WatchRow#ONY0             0,1000,390,64
+4  Removed   WatchRow#PIO0             0,1064,390,64
+5  Added     PromoBanner@0             0,56,390,104
+6  Shift     WatchlistScreen@0         53 components shifted down 104 px; possible causes: Layout WatchlistScreen@0, Added PromoBanner@0
+7  Style     WatchRow in 2 places      Container.padding: EdgeInsets(16.0, 0.0, 16.0, 0.0) -> (none); Container.bg: BoxDecoration(border: Border(bottom: BorderSide(color: #FFE1E4EC))) -> (none) (and 1 more field); Container.bg.border: Border(bottom: BorderSide(color: #FFE1E4EC)) -> (none) (and 2 more fields); RenderDecoratedBox.decoration: BoxDecoration -> (none)
+           at: WatchRow#KES0, WatchRow#LUM0
+8  Semantics WatchRow in 2 places      flags: (none) -> ["isHidden"]
+           at: WatchRow#KES0, WatchRow#LUM0
+9  Removed   WatchRow#KES0/TickerAvatar@0  16,757.5,36,36
+10 Removed   WatchRow#KES0/QuoteNames@0  68,744,214.5,63
+11 Removed   WatchRow#KES0/PriceLabel@0  282.5,752.5,91.5,46, with 1 component inside
+12 Removed   WatchRow#LUM0/TickerAvatar@0  16,821.5,36,36
+13 Removed   WatchRow#LUM0/QuoteNames@0  68,808,214.5,63
+14 Removed   WatchRow#LUM0/PriceLabel@0  282.5,816.5,91.5,46, with 1 component inside
+

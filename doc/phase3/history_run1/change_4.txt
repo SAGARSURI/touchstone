@@ -1,0 +1,17 @@
+Change 4: Remove a semantics label, leaving pixels unchanged
+
+== detail/collapsed
+detail/collapsed    needs-review
+
+1  Semantics HeaderImage@0             label: "Company headquarters" -> (none)
+
+== detail/news
+detail/news    needs-review
+
+1  Semantics HeaderImage@0             label: "Company headquarters" -> (none)
+
+== detail/overview
+detail/overview    needs-review
+
+1  Semantics HeaderImage@0             label: "Company headquarters" -> (none)
+

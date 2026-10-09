@@ -27,7 +27,7 @@ Choices the spec leaves open:
 
 ## What the new scenes found
 
-All 29 new scenes pass the determinism gate. The repeat gate (A3) failed on
+All 26 new scenes pass the determinism gate. The repeat gate (A3) failed on
 three order-flow scenes: the back button's tooltip links its semantics node
 to an overlay portal through `traversalParentIdentifier`, and the capture
 wrote that identifier's text, which holds a run-dependent hash. A traversal

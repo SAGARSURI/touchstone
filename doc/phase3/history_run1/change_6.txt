@@ -1,0 +1,6 @@
+Change 6: Introduce an unsettled animation or a wall-clock read in a test
+
+== buttons/all: capture failed: {"node":"root/ButtonSetScreen@0/AppButton#loading","fields":["paint"],"cause":"an animation, ticker or timer is still running and changes this node over time"}
+
+== sign_in/submitting: capture failed: {"node":"root/SignInScreen@0/AppButton#submit","fields":["paint"],"cause":"an animation, ticker or timer is still running and changes this node over time"}
+
