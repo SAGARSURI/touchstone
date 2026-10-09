@@ -33,7 +33,7 @@ Future<void> _probe(List<String> scenes, String out, {String? base}) async {
 Map<String, Object?> _read(String dir, String scene) =>
     jsonDecode(File('$dir/${scene.replaceAll('/', '__')}.json').readAsStringSync()) as Map<String, Object?>;
 
-Future<Map<String, Object?>> _run(Entry e, String base, bool noOp) async {
+Future<Map<String, Object?>> _run(Entry e, String base, bool noOp, {bool scoreOnly = false}) async {
   final originals = <String, String>{};
   try {
     for (final Edit edit in e.edits) {
@@ -47,7 +47,9 @@ Future<Map<String, Object?>> _run(Entry e, String base, bool noOp) async {
       file.writeAsStringSync(text.replaceAll(edit.find, edit.replace));
     }
     final out = 'build/catalogs/${e.id}';
-    await _probe(e.scenes, out, base: base);
+    if (!scoreOnly) {
+      await _probe(e.scenes, out, base: base);
+    }
     final Map<String, Object?> scored = _score(e, base, out, noOp);
     final scenes = <Map<String, Object?>>[];
     for (final String scene in e.scenes) {
@@ -166,16 +168,21 @@ Map<String, Object?> _score(Entry e, String base, String out, bool noOp) {
   return result;
 }
 
-Future<void> main(List<String> args) async {
+Future<void> main(List<String> arguments) async {
+  // --score-only re-scores the last run's captures without capturing again.
+  final List<String> args = <String>[...arguments];
+  final bool scoreOnly = args.remove('--score-only');
   final List<Entry> all = <Entry>[...mutations, ...cascades, ...noOps];
   final List<Entry> chosen = args.isEmpty ? all : all.where((Entry e) => args.contains(e.id)).toList();
   final List<String> sceneIds = <String>{for (final Entry e in chosen) ...e.scenes}.toList();
   const base = 'build/catalogs/base';
-  await _probe(sceneIds, base);
+  if (!scoreOnly) {
+    await _probe(sceneIds, base);
+  }
   final results = <Map<String, Object?>>[];
   for (final Entry e in chosen) {
     stdout.writeln('running ${e.id}');
-    results.add(await _run(e, base, noOps.contains(e)));
+    results.add(await _run(e, base, noOps.contains(e), scoreOnly: scoreOnly));
   }
   File('build/catalogs/report.json').writeAsStringSync(const JsonEncoder.withIndent('  ').convert(results));
 

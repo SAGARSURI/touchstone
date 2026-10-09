@@ -44,7 +44,12 @@ enum ChangeType {
 
 /// One typed difference on one component.
 class Change {
-  Change(this.type, this.after, this.before, this.detail);
+  Change(this.type, this.after, this.before, this.detail, {this.presenceOnly = false});
+
+  /// A style or layout change in which every property only appeared or
+  /// disappeared: render objects were added to or removed from this
+  /// component, as a child added beside them brings its own wrappers.
+  final bool presenceOnly;
 
   final ChangeType type;
 

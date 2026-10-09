@@ -80,6 +80,7 @@ String _detail(Change c) => switch (c.type) {
 String _consequenceDetail(Change c) => switch (c.type) {
   ChangeType.paint when identical(c.causedBy!.node, c.node) => c.detail,
   ChangeType.paint => 'paint changed where its children moved or changed (not verified: paint is compared by hash)',
+  _ when c.presenceOnly => '${c.detail} (came or went with the child)',
   ChangeType.layout => '${c.detail}, grew with its child',
   _ => c.detail,
 };

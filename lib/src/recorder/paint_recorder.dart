@@ -86,6 +86,10 @@ class RecordedNode implements OpSink {
   /// Hash of [ops] after image fingerprints are resolved.
   late final String paintHash;
 
+  /// The fingerprint of each image this node drew, in order. Set by
+  /// [PaintRecording.resolve].
+  final List<String> imageFingerprints = <String>[];
+
   /// Hash of this node's ops, child placements and children's subtree hashes.
   late final String subtreeHash;
 
@@ -152,13 +156,23 @@ class PaintRecording {
     for (final RecordedNode node in nodes.reversed) {
       final List<String> ops = node.ops
           .map(
-            (String op) =>
-                op.replaceAllMapped(_imagePlaceholder, (Match m) => _imageFingerprints[int.parse(m.group(1)!)]!),
+            (String op) => op.replaceAllMapped(_imagePlaceholder, (Match m) {
+              final String fingerprint = _imageFingerprints[int.parse(m.group(1)!)]!;
+              node.imageFingerprints.add(fingerprint);
+              return fingerprint;
+            }),
           )
           .toList();
       final Rect? region = opaqueRegions[node];
       if (region != null) {
-        ops.add('pixels(${c.rect(region)};${await pixelHash(region)})');
+        // The region is written relative to the node's own origin, so a node
+        // that only moves keeps its paint hash: its position is its bounds
+        // (spec, Diff engine: a shifted component's "paint unchanged"). An
+        // unverified transform keeps global coordinates.
+        final Offset origin = node.geometryVerified
+            ? MatrixUtils.transformPoint(node.toGlobal, Offset.zero)
+            : Offset.zero;
+        ops.add('pixels(${c.rect(region.shift(-origin))};${await pixelHash(region)})');
       }
       node.ops
         ..clear()

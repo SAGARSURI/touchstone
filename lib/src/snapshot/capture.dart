@@ -333,7 +333,9 @@ Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options
         semantics: jsonEncode(semantics[comp] ?? const <Object?>[]),
         opaque: reasons.isEmpty ? '-' : reasons.join('+'),
         type: comp.element == null ? 'root' : policy.typeOf(comp.element!.widget),
-        style: jsonEncode(_style(assembly.renderObjects[comp] ?? const <RecordedNode>[], options.tokenResolver)),
+        style: jsonEncode(
+          _style(assembly.renderObjects[comp] ?? const <RecordedNode>[], options.tokenResolver, comp.element),
+        ),
         children: comp.children.map(build).toList(),
       );
     }
@@ -771,6 +773,8 @@ const Set<String> _styleSkip = <String>{
   'parentData',
   'constraints',
   'size',
+  // A sliver's size: an output of layout, like `size`.
+  'geometry',
   'layer',
   'semantic boundary',
   'needs compositing',
@@ -790,7 +794,12 @@ const Set<String> _styleSkip = <String>{
 final RegExp _notStyle = RegExp('Semantics|MouseRegion|Pointer|MetaData');
 
 bool _drawsSomething(String op) =>
-    op.startsWith('draw') || op.startsWith('clip') || op.startsWith('push') || op.startsWith('saveLayer');
+    op.startsWith('draw') ||
+    op.startsWith('clip') ||
+    op.startsWith('push') ||
+    op.startsWith('saveLayer') ||
+    op.startsWith('composite') ||
+    op.startsWith('addLayer');
 
 final RegExp _identity = RegExp(r'#[0-9a-f]{5}\b');
 
@@ -804,7 +813,7 @@ final RegExp _identity = RegExp(r'#[0-9a-f]{5}\b');
 /// render object is described the same way. Text content is not style; it is
 /// recorded under content keys (`RenderParagraph.plainText`, `Text.data`) that
 /// the diff reads as content.
-Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver) {
+Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver, Element? component) {
   final out = <String, String>{};
   String describe(DiagnosticsNode p) {
     String text = p.toDescription().replaceAll(_identity, '#');
@@ -830,10 +839,18 @@ Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver) {
         name.isNotEmpty &&
         !_styleSkip.contains(name) &&
         !p.isFiltered(DiagnosticLevel.info) &&
-        // A scroll position describes the viewport's size, which is layout.
-        p.value is! ViewportOffset;
+        // A child widget's description includes its text; children are
+        // described by their own render objects.
+        p.value is! Widget &&
+        p.value is! List<Widget> &&
+        // A scroll position describes the viewport's size, which is layout,
+        // and a child delegate describes the children, which are compared as
+        // components.
+        p.value is! ViewportOffset &&
+        p.value is! SliverChildDelegate;
   }
 
+  final described = <Element>{};
   for (final node in nodes) {
     final RenderObject ro = node.renderObject;
     final String type = ro.runtimeType.toString();
@@ -850,7 +867,7 @@ Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver) {
         if (!shown(p)) {
           continue;
         }
-        final String key = '$prefix$type.${p.name}';
+        final String key = '$type.${p.name}';
         put(key, describe(p));
         final Object? value = p.value;
         if (value is Diagnosticable && value is! RenderObject && value is! Widget) {
@@ -863,14 +880,41 @@ Map<String, String> _style(List<RecordedNode> nodes, TokenResolver? resolver) {
       }
     }
 
-    properties(type, ro);
+    properties('$prefix$type', ro);
     // Some render objects report none of their paint parameters (the
     // private one behind ColoredBox has no diagnostics), so the widget that
     // created the render object is described too (`ColoredBox.color`).
+    // The framework widgets between the component and this render object are
+    // described too, once each: a state such as `Switch.value` is often held
+    // by a widget whose render object does not report it.
     final Object? creator = ro.debugCreator;
     if (creator is DebugCreator) {
-      final Widget widget = creator.element.widget;
-      properties(widget.runtimeType.toString().split('<').first, widget);
+      void describeWidget(Element e, String prefix) {
+        if (!described.add(e)) {
+          return;
+        }
+        final String name = e.widget.runtimeType.toString().split('<').first;
+        if (!_notStyle.hasMatch(name)) {
+          properties('$prefix$name', e.widget);
+        }
+      }
+
+      describeWidget(creator.element, prefix);
+      creator.element.visitAncestorElements((Element e) {
+        if (identical(e, component)) {
+          return false;
+        }
+        // A render object widget is described with its own render object,
+        // when that is drawn by this component.
+        if (e.widget is! RenderObjectWidget) {
+          describeWidget(e, e.widget is ParentDataWidget ? layoutStylePrefix : '');
+        }
+        return true;
+      });
+    }
+    if (node.imageFingerprints.isNotEmpty) {
+      // Content, not style: the diff reads this key as content.
+      put('$type.images', node.imageFingerprints.join(','));
     }
     final InlineSpan? text = switch (ro) {
       RenderParagraph() => ro.text,

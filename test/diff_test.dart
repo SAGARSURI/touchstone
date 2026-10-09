@@ -42,7 +42,29 @@ class _Dots extends CustomPainter {
   bool shouldRepaint(_Dots old) => old.radius != radius;
 }
 
-final options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Card2, Holder, Holder2, Dots}));
+/// Draws a path, so its paint is hashed by pixels.
+class Wave extends StatelessWidget {
+  const Wave({super.key});
+  @override
+  Widget build(BuildContext context) => CustomPaint(size: const Size(40, 20), painter: _Wave());
+}
+
+class _Wave extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) => canvas.drawPath(
+    Path()
+      ..moveTo(0, 10)
+      ..quadraticBezierTo(10, 0, 20, 10)
+      ..quadraticBezierTo(30, 20, 40, 10),
+    Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2,
+  );
+  @override
+  bool shouldRepaint(_Wave old) => false;
+}
+
+final options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Card2, Holder, Holder2, Dots, Wave}));
 
 Widget app(Widget child) => Directionality(
   textDirection: TextDirection.ltr,
@@ -57,8 +79,10 @@ Widget app(Widget child) => Directionality(
 
 Future<ChangeReport> diffOf(WidgetTester tester, Widget before, Widget after) async {
   await tester.pumpWidget(app(before));
+  await tester.pumpAndSettle();
   final Snapshot a = await captureSnapshot(tester, 'x', options: options);
   await tester.pumpWidget(app(after));
+  await tester.pumpAndSettle();
   final Snapshot b = await captureSnapshot(tester, 'x', options: options);
   return diffSnapshots(a, b);
 }
@@ -235,6 +259,29 @@ void main() {
     );
     expect(top(r), <String>['Layout root/Holder2@0/Holder@0']);
     expect(r.items.single.change!.detail, startsWith('inside: '));
+  });
+
+  testWidgets('a pixel-hashed component that only moves keeps its paint and joins the shift', (
+    WidgetTester tester,
+  ) async {
+    final ChangeReport r = await diffOf(
+      tester,
+      column(<Widget>[const Card2(label: 'a'), const Wave()]),
+      column(<Widget>[const Card2(label: 'a', height: 50), const Wave()]),
+    );
+    expect(top(r), <String>['Layout root/Card2@0']);
+    expect(r.groups.single.members.single.fullId, 'root/Wave@0');
+  });
+
+  testWidgets('a switch turned off is a style change on the component that holds it', (WidgetTester tester) async {
+    Widget tile(bool on) => Holder(
+      child: Material(
+        child: Switch(value: on, onChanged: (_) {}),
+      ),
+    );
+    final ChangeReport r = await diffOf(tester, tile(true), tile(false));
+    expect(top(r), containsAll(<String>['Style root/Holder@0', 'Semantics root/Holder@0']));
+    expect(r.items.first.change!.detail, contains('Switch.value: on -> off'));
   });
 
   testWidgets('a key change on the same output is an identity change and passes', (WidgetTester tester) async {

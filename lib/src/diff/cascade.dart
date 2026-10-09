@@ -3,7 +3,8 @@
 // A causal claim is made only when exactly one candidate cause exists.
 //
 // - Shift group: components under a common ancestor whose size and paint are
-//   unchanged and whose position moved by the same vector.
+//   unchanged and whose position moved by the same vector. The ancestor is
+//   the nearest one that did not itself move by that vector.
 // - Candidate cause: a component earlier in layout order under that
 //   ancestor, or the ancestor itself, that was added, removed, resized or
 //   restyled. A reordered or moved component counts too, earlier on either
@@ -11,7 +12,9 @@
 // - Upward growth: a parent whose size changed by the same amount as one
 //   changed child is a consequence of that child.
 //
-// One addition, recorded in doc/phase2/diff.md: a component whose only change
+// Additions, recorded in doc/phase2/diff.md. A parent's style or inside
+// layout change in which properties only appeared or disappeared, beside one
+// added or removed child, is that child's consequence. And a component whose only change
 // is unexplained paint, and whose direct child components were added, removed,
 // reordered, resized or shifted, has that paint change folded under the
 // children's single root cause. A parent's own paint records where its
@@ -65,6 +68,29 @@ ChangeReport groupCascades(
     }
   }
 
+  // A parent's style, or layout inside it, where render objects only
+  // appeared or disappeared, beside exactly one child component that was
+  // added or removed: the child's wrappers (a keep-alive, a divider drawn per
+  // child) came or went with it.
+  for (final Change c in changes) {
+    final bool sameSize = c.before?.bounds?.sizeText == c.after?.bounds?.sizeText;
+    if (!c.presenceOnly ||
+        c.after == null ||
+        c.causedBy != null ||
+        !(c.type == ChangeType.style || (c.type == ChangeType.layout && sameSize))) {
+      continue;
+    }
+    final List<Change> structural = <Change>[
+      for (final Change cc in changes)
+        if ((cc.type == ChangeType.added && identical(cc.after!.parent, c.after)) ||
+            (cc.type == ChangeType.removed && c.before != null && identical(cc.before!.parent, c.before)))
+          cc,
+    ];
+    if (structural.length == 1) {
+      c.causedBy = structural.single;
+    }
+  }
+
   // Shift groups.
   bool shifted(DiffNode a) {
     final DiffNode? b = a.match;
@@ -89,9 +115,16 @@ ChangeReport groupCascades(
       continue;
     }
     final (double, double) v = vector(a);
-    final DiffNode p = a.parent!;
-    if (shifted(p) && vector(p) == v) {
+    if (shifted(a.parent!) && vector(a.parent!) == v) {
       continue;
+    }
+    // The common ancestor is the nearest one that did not move by the same
+    // vector. A parent that moved with its children but changed in another
+    // way (a row clipped at the viewport's edge) is not a member, and the
+    // shift belongs to whatever moved it.
+    DiffNode p = a.parent!;
+    while (p.parent != null && _movedBy(p, v)) {
+      p = p.parent!;
     }
     final key = '${p.fullId}\n${v.$1},${v.$2}';
     (topMost[key] ??= <DiffNode>[]).add(a);
@@ -216,6 +249,12 @@ ChangeReport groupCascades(
     return _sortOrder(x).compareTo(_sortOrder(y));
   });
   return ChangeReport.diff(snapshotId, changes, groups, items, inputChanges);
+}
+
+bool _movedBy(DiffNode n, (double, double) v) {
+  final Bounds? a = n.bounds;
+  final Bounds? b = n.match?.bounds;
+  return a != null && b != null && (a.x - b.x, a.y - b.y) == v;
 }
 
 int _depth(DiffNode n) {

@@ -46,7 +46,9 @@ const Set<String> _semanticsText = <String>{'label', 'value'};
 /// Style keys that hold content, not style: an image, or a widget property
 /// that holds text or an icon.
 bool _isContentStyleKey(String key) =>
-    key.startsWith('RenderImage.image') || _contentKeys.contains(key.replaceFirst(RegExp(r'\.\d+$'), ''));
+    key.startsWith('RenderImage.image') ||
+    key.endsWith('.images') ||
+    _contentKeys.contains(key.replaceFirst(RegExp(r'\.\d+$'), ''));
 
 const Set<String> _contentKeys = <String>{
   'RenderParagraph.plainText',
@@ -324,7 +326,7 @@ class _Diff {
     }
     if (paintChanged) {
       if (styleKeys.isNotEmpty) {
-        out.add(Change(ChangeType.style, a, b, _describeMap(styleKeys)));
+        out.add(Change(ChangeType.style, a, b, _describeMap(styleKeys), presenceOnly: _presenceOnly(styleKeys)));
       } else if (contentKeys.isNotEmpty || textChanged) {
         if (!dynamic) {
           final Map<String, String> content = <String, String>{
@@ -342,7 +344,15 @@ class _Diff {
       } else if (layoutKeys.isNotEmpty && b.node.opaque == a.node.opaque) {
         // The component kept its bounds, but a render object inside it that
         // only places its children changed, so they moved inside it.
-        out.add(Change(ChangeType.layout, a, b, 'inside: ${_describeMap(layoutKeys)}'));
+        out.add(
+          Change(
+            ChangeType.layout,
+            a,
+            b,
+            'inside: ${_describeMap(layoutKeys)}',
+            presenceOnly: _presenceOnly(layoutKeys),
+          ),
+        );
       } else if (b.node.opaque != a.node.opaque) {
         out.add(Change(ChangeType.paint, a, b, 'unexplained (opaque reasons ${b.node.opaque} -> ${a.node.opaque})'));
       } else {
@@ -417,6 +427,9 @@ Map<String, String> _style(String json) {
   }
   return <String, String>{for (final MapEntry<Object?, Object?> e in decoded.entries) '${e.key}': '${e.value}'};
 }
+
+bool _presenceOnly(Map<String, String> changes) =>
+    changes.values.every((String v) => v.startsWith('(none) -> ') || v.endsWith(' -> (none)'));
 
 /// Keys whose value differs, mapped to "old -> new".
 Map<String, String> _mapChanges(Map<String, String> before, Map<String, String> after) => <String, String>{
