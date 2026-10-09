@@ -44,7 +44,11 @@ enum ChangeType {
 
 /// One typed difference on one component.
 class Change {
-  Change(this.type, this.after, this.before, this.detail, {this.presenceOnly = false});
+  Change(this.type, this.after, this.before, this.detail, {this.presenceOnly = false, this.ownLayoutChanged = false});
+
+  /// A layout change in which a property that sizes or places children
+  /// changed on this component (`Padding.padding`), not only its size.
+  final bool ownLayoutChanged;
 
   /// A style or layout change in which every property only appeared or
   /// disappeared: render objects were added to or removed from this

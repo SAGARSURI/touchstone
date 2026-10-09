@@ -11,6 +11,9 @@
 //   side, since it moves its siblings the way an insertion or removal does.
 // - Upward growth: a parent whose size changed by the same amount as one
 //   changed child is a consequence of that child.
+// - Downward constraint (an addition, recorded in doc/phase2/diff.md): a
+//   child that was only resized, under a parent whose own layout properties
+//   changed, is a consequence of the parent.
 //
 // Additions, recorded in doc/phase2/diff.md. A parent's style or inside
 // layout change in which properties only appeared or disappeared, beside one
@@ -50,6 +53,29 @@ ChangeReport groupCascades(
     (byNode[c.node] ??= <Change>[]).add(c);
   }
 
+  // Downward constraint: a child component that was only resized, under a
+  // parent whose own layout properties changed, was resized by the parent.
+  // Top-down, so a constraint passes through children that were only resized.
+  final constraining = <Change>{
+    for (final Change c in changes)
+      if (c.ownLayoutChanged) c,
+  };
+  final List<Change> resized = changes.where((Change c) => c.type == ChangeType.layout && !c.ownLayoutChanged).toList()
+    ..sort((Change x, Change y) => _depth(x.node).compareTo(_depth(y.node)));
+  for (final Change c in resized) {
+    if (c.after?.parent == null) {
+      continue;
+    }
+    final Change? parent = (byNode[c.after!.parent!] ?? const <Change>[]).where(constraining.contains).firstOrNull;
+    final bool onlyResized = (byNode[c.node] ?? const <Change>[]).every(
+      (Change x) => x.type == ChangeType.layout || x.causedBy != null || x.type.isInfo,
+    );
+    if (parent != null && onlyResized) {
+      c.causedBy = parent;
+      constraining.add(c);
+    }
+  }
+
   // Upward growth, deepest first so chains fold to their root.
   final List<Change> layouts = changes.where((Change c) => c.type == ChangeType.layout).toList()
     ..sort((Change x, Change y) => _depth(y.node).compareTo(_depth(x.node)));
@@ -58,10 +84,13 @@ ChangeReport groupCascades(
     if (delta == null || delta == (0.0, 0.0)) {
       continue;
     }
+    if (parent.causedBy != null) {
+      continue;
+    }
     final List<Change> growing = <Change>[
       for (final DiffNode child in parent.node.children)
         for (final Change c in byNode[child] ?? const <Change>[])
-          if (c.type == ChangeType.layout && _sizeDelta(c) == delta) c,
+          if (c.type == ChangeType.layout && _sizeDelta(c) == delta && !identical(c.causedBy, parent)) c,
     ];
     if (growing.length == 1) {
       parent.causedBy = growing.single;

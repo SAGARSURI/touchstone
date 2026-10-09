@@ -284,6 +284,22 @@ void main() {
     expect(r.items.first.change!.detail, contains('Switch.value: on -> off'));
   });
 
+  testWidgets('children resized by their parent\'s padding are the parent\'s consequence', (WidgetTester tester) async {
+    Widget tree(double pad) => Holder2(
+      child: Padding(
+        padding: EdgeInsets.only(left: pad),
+        child: column(<Widget>[const Card2(label: 'a'), const Holder(child: Card2(label: 'b'))]),
+      ),
+    );
+    final ChangeReport r = await diffOf(tester, tree(0), tree(1));
+    expect(top(r), <String>['Layout root/Holder2@0']);
+    expect(r.items.single.change!.detail, startsWith('inside: '));
+    expect(
+      r.items.single.consequences.map((Change c) => '${c.type.label} ${c.nodeId}'),
+      containsAll(<String>['Layout root/Holder2@0/Card2@0', 'Layout root/Holder2@0/Holder@0']),
+    );
+  });
+
   testWidgets('a key change on the same output is an identity change and passes', (WidgetTester tester) async {
     final ChangeReport r = await diffOf(
       tester,

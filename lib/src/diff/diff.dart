@@ -322,7 +322,16 @@ class _Diff {
         a,
         b,
         '${layout.detail}; ${_describeMap(layoutKeys)}',
+        ownLayoutChanged: true,
       );
+    }
+    if (layout == null && !paintChanged && layoutKeys.isNotEmpty && !_presenceOnly(layoutKeys)) {
+      // Nothing this component draws changed, but a property that places its
+      // children did, and a child component's bounds changed with it.
+      final bool childMoved = a.children.any((DiffNode c) => c.match != null && c.match!.node.bounds != c.node.bounds);
+      if (childMoved) {
+        out.add(Change(ChangeType.layout, a, b, 'inside: ${_describeMap(layoutKeys)}', ownLayoutChanged: true));
+      }
     }
     if (paintChanged) {
       if (styleKeys.isNotEmpty) {
@@ -351,6 +360,7 @@ class _Diff {
             b,
             'inside: ${_describeMap(layoutKeys)}',
             presenceOnly: _presenceOnly(layoutKeys),
+            ownLayoutChanged: true,
           ),
         );
       } else if (b.node.opaque != a.node.opaque) {
