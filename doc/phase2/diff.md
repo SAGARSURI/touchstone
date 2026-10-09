@@ -122,6 +122,29 @@ file, so committed baselines must be re-recorded.
 - An input change (theme, locale, state, the dynamic list) makes the verdict
   needs-review.
 
+## Report wording
+
+After Sagar's A6 review found the catalog reports hard to read, each line
+carries a change's short wording (`lib/src/diff/summary.dart`). The spec's
+illustrative line, `Style OrderButton#submit background: brand.primary ->
+brand.accent`, has this shape.
+
+- Fields that changed to the same value are one entry, named by the field a
+  developer is likeliest to recognise: a public widget's over a render
+  object's or a private one's, then the shortest. The rest are counted:
+  `Material.color: #1F1B1B21 -> brand.accent (and 4 more fields)`.
+- A colour is written as its token, or as `#AARRGGBB` when it has none or both
+  sides have the same token. Colours outside sRGB are left as captured.
+- When a value is a constructor call and one named argument changed, only that
+  argument is written: `Container.bg.color: #1F1E8E3E -> #1F1E8E3F`.
+- The same change on several instances of one component, with the same
+  consequences, is one line (`PriceLabel in 12 places`) followed by an `at:`
+  line naming every instance.
+
+`Change.detail` keeps the full wording and `Change.fields` every changed
+field, and the snapshot file diff shows every field. Change types, verdicts
+and grouping do not depend on the wording.
+
 ## Commands
 
 - `dart run touchstone:review [--base <ref>] [--rules <file>] [--expect <file>]`

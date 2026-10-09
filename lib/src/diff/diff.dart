@@ -395,6 +395,8 @@ class _Diff {
         b,
         '${layout.detail}; ${_describeMap(layoutKeys)}',
         ownLayoutChanged: true,
+        lead: '${layout.detail}; ',
+        fields: layoutKeys,
       );
     }
     if (layout == null && !paintChanged && layoutKeys.isNotEmpty && !_presenceOnly(layoutKeys)) {
@@ -402,12 +404,31 @@ class _Diff {
       // children did, and a child component's bounds changed with it.
       final bool childMoved = a.children.any((DiffNode c) => c.match != null && c.match!.node.bounds != c.node.bounds);
       if (childMoved) {
-        out.add(Change(ChangeType.layout, a, b, 'inside: ${_describeMap(layoutKeys)}', ownLayoutChanged: true));
+        out.add(
+          Change(
+            ChangeType.layout,
+            a,
+            b,
+            'inside: ${_describeMap(layoutKeys)}',
+            ownLayoutChanged: true,
+            lead: 'inside: ',
+            fields: layoutKeys,
+          ),
+        );
       }
     }
     if (paintChanged) {
       if (styleKeys.isNotEmpty) {
-        out.add(Change(ChangeType.style, a, b, _describeMap(styleKeys), presenceOnly: _presenceOnly(styleKeys)));
+        out.add(
+          Change(
+            ChangeType.style,
+            a,
+            b,
+            _describeMap(styleKeys),
+            presenceOnly: _presenceOnly(styleKeys),
+            fields: styleKeys,
+          ),
+        );
       } else if (contentKeys.isNotEmpty || textChanged) {
         if (!dynamic) {
           final Map<String, String> content = <String, String>{
@@ -415,7 +436,7 @@ class _Diff {
             for (final MapEntry<String, String> e in semanticsChanges.entries)
               if (_semanticsText.contains(e.key)) e.key: e.value,
           };
-          out.add(Change(ChangeType.content, a, b, _describeMap(content)));
+          out.add(Change(ChangeType.content, a, b, _describeMap(content), fields: content));
         } else {
           _skippedContent.add(a.fullId);
         }
@@ -433,6 +454,8 @@ class _Diff {
             'inside: ${_describeMap(layoutKeys)}',
             presenceOnly: _presenceOnly(layoutKeys),
             ownLayoutChanged: true,
+            lead: 'inside: ',
+            fields: layoutKeys,
           ),
         );
       } else if (b.node.opaque != a.node.opaque) {
@@ -454,7 +477,7 @@ class _Diff {
           if (!paintChanged || !_semanticsText.contains(e.key)) e.key: e.value,
       };
       if (sem.isNotEmpty) {
-        out.add(Change(ChangeType.semantics, a, b, _describeMap(sem)));
+        out.add(Change(ChangeType.semantics, a, b, _describeMap(sem), fields: sem));
       }
     }
     final bool geometryOnly = semanticsChanges.isEmpty && b.node.semantics != a.node.semantics && !_layoutChanged;

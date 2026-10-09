@@ -2,6 +2,7 @@
 // "Report shape").
 
 import 'diff.dart';
+import 'summary.dart';
 
 /// The spec's change types.
 enum ChangeType {
@@ -44,7 +45,26 @@ enum ChangeType {
 
 /// One typed difference on one component.
 class Change {
-  Change(this.type, this.after, this.before, this.detail, {this.presenceOnly = false, this.ownLayoutChanged = false});
+  Change(
+    this.type,
+    this.after,
+    this.before,
+    this.detail, {
+    this.presenceOnly = false,
+    this.ownLayoutChanged = false,
+    this.lead = '',
+    this.fields = const <String, String>{},
+  });
+
+  /// The changed properties [detail] lists, each "old -> new"; empty when it
+  /// lists none.
+  final Map<String, String> fields;
+
+  /// The words in [detail] before [fields], such as `inside: `.
+  final String lead;
+
+  /// [detail] as the report writes it: see summary.dart.
+  String get summary => fields.isEmpty ? shortenValue(detail) : '$lead${summarizeFields(fields)}';
 
   /// A layout change in which a property that sizes or places children
   /// changed on this component (`Padding.padding`), not only its size.

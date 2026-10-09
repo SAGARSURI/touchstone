@@ -1,0 +1,130 @@
+// Short wording for the change report (spec: Diff engine, "Report shape"):
+// one line per change, as in `background: brand.primary -> brand.accent`.
+//
+// A change's full wording stays in Change.detail and the snapshot file keeps
+// every field. The report shortens it in three ways:
+//
+// 1. Fields that changed to the same value are one entry, named by the field
+//    a developer is likeliest to recognise (a public widget's over a render
+//    object's or a private one's), with the rest counted.
+// 2. Colours are written as their token, or as #AARRGGBB when they have none
+//    or both sides have the same token.
+// 3. When a value is a constructor call and one named argument changed, only
+//    that argument is written: `bg.color: #1F1E8E3E -> #1F1E8E3F`.
+
+final RegExp _color = RegExp(
+  r'Color\(alpha: ([\d.]+), red: ([\d.]+), green: ([\d.]+), blue: ([\d.]+), colorSpace: ColorSpace\.sRGB\)',
+);
+final RegExp _token = RegExp(r'([A-Za-z][\w.]*) \((#[0-9A-F]{8})\)');
+
+/// [fields] (each "old -> new") as one short line.
+String summarizeFields(Map<String, String> fields) {
+  final Map<String, List<String>> byValue = <String, List<String>>{};
+  for (final MapEntry<String, String> e in fields.entries) {
+    final (String key, String value) = _narrow(e.key, shortenValue(e.value));
+    (byValue[value] ??= <String>[]).add(key);
+  }
+  return byValue.entries
+      .map((MapEntry<String, List<String>> e) {
+        final List<String> keys = e.value..sort(_byRecognisable);
+        final int more = keys.length - 1;
+        return '${keys.first}: ${e.key}${more == 0 ? '' : ' (and $more more field${more == 1 ? '' : 's'})'}';
+      })
+      .join('; ');
+}
+
+/// [text] with colours written as tokens or hex.
+String shortenValue(String text) {
+  final String hex = text.replaceAllMapped(_color, (Match m) {
+    String byte(int i) => (double.parse(m[i]!) * 255).round().toRadixString(16).padLeft(2, '0').toUpperCase();
+    return '#${byte(1)}${byte(2)}${byte(3)}${byte(4)}';
+  });
+  final List<RegExpMatch> tokens = _token.allMatches(hex).toList();
+  if (tokens.length == 2 && tokens[0][1] == tokens[1][1]) {
+    // Same token on both sides: only the value it resolves to changed.
+    return hex.replaceAllMapped(_token, (Match m) => m[2]!);
+  }
+  return hex.replaceAllMapped(_token, (Match m) => m[1]!);
+}
+
+int _byRecognisable(String a, String b) {
+  int rank(String k) {
+    final String head = k.split('.').first;
+    return (head.startsWith('_') ? 2 : 0) + (head.startsWith('Render') ? 1 : 0);
+  }
+
+  final int byRank = rank(a).compareTo(rank(b));
+  if (byRank != 0) {
+    return byRank;
+  }
+  final int byLength = a.length.compareTo(b.length);
+  return byLength != 0 ? byLength : a.compareTo(b);
+}
+
+final RegExp _call = RegExp(r'^(\w+)\((.*)\)$');
+
+/// `Foo(a: 1, b: 2) -> Foo(a: 1, b: 3)` on [key] as `key.b: 2 -> 3`.
+(String, String) _narrow(String key, String value) {
+  final List<String> sides = value.split(' -> ');
+  if (sides.length != 2) {
+    return (key, value);
+  }
+  final RegExpMatch? b = _call.firstMatch(sides[0]);
+  final RegExpMatch? a = _call.firstMatch(sides[1]);
+  if (b == null || a == null || b[1] != a[1]) {
+    return (key, value);
+  }
+  final List<String> bArgs = _topLevel(b[2]!);
+  final List<String> aArgs = _topLevel(a[2]!);
+  if (bArgs.length != aArgs.length) {
+    return (key, value);
+  }
+  final List<int> differ = <int>[
+    for (var i = 0; i < bArgs.length; i++)
+      if (bArgs[i] != aArgs[i]) i,
+  ];
+  if (differ.length != 1) {
+    return (key, value);
+  }
+  final String bArg = bArgs[differ.single];
+  final String aArg = aArgs[differ.single];
+  final int bColon = bArg.indexOf(': ');
+  final int aColon = aArg.indexOf(': ');
+  if (bColon < 1 || aColon < 1 || bArg.substring(0, bColon) != aArg.substring(0, aColon)) {
+    return (key, value);
+  }
+  final String name = bArg.substring(0, bColon);
+  if (!RegExp(r'^\w+$').hasMatch(name)) {
+    return (key, value);
+  }
+  return ('$key.$name', '${bArg.substring(bColon + 2)} -> ${aArg.substring(aColon + 2)}');
+}
+
+/// [s] split on commas outside brackets and quotes.
+List<String> _topLevel(String s) {
+  final out = <String>[];
+  final cur = StringBuffer();
+  var depth = 0;
+  String? quote;
+  for (var i = 0; i < s.length; i++) {
+    final String ch = s[i];
+    if (quote != null) {
+      if (ch == quote && (i == 0 || s[i - 1] != r'\')) {
+        quote = null;
+      }
+    } else if (ch == '"' || ch == "'") {
+      quote = ch;
+    } else if ('([{'.contains(ch)) {
+      depth++;
+    } else if (')]}'.contains(ch)) {
+      depth--;
+    } else if (ch == ',' && depth == 0) {
+      out.add(cur.toString().trim());
+      cur.clear();
+      continue;
+    }
+    cur.write(ch);
+  }
+  out.add(cur.toString().trim());
+  return out;
+}

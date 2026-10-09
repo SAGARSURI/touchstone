@@ -38,3 +38,8 @@
   and flattened output, so a renamed class is an identity change, and a
   component added, removed or renamed inside a component whose bounds and
   flattened output are unchanged is one info-level identity change.
+* Shorter change report, after the A6 review: fields that changed to the same
+  value are one entry, colours are tokens or hex, a constructor call shows only
+  its changed argument, and the same change on several instances of one
+  component is one line naming every instance. `Change.detail` keeps the full
+  wording.
