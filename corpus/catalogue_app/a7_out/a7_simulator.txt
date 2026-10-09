@@ -1,0 +1,14 @@
+== Devices ==
+-- iOS 26.2 --
+-- iOS 26.4 --
+-- iOS 26.5 --
+    iPhone 17 Pro (22452A91-4697-4369-8812-53ADB77EB73B) (Booted) 
+-- tvOS 26.2 --
+-- tvOS 26.4 --
+-- tvOS 26.5 --
+-- watchOS 26.2 --
+-- watchOS 26.4 --
+-- watchOS 26.5 --
+-- visionOS 26.2 --
+-- visionOS 26.4 --
+-- visionOS 26.5 --
