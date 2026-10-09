@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'catalogue.dart';
 
@@ -8,8 +9,13 @@ class CatalogueApp extends StatelessWidget {
   const CatalogueApp({super.key});
 
   @override
-  Widget build(BuildContext context) =>
-      MaterialApp(theme: appTheme(Brightness.light), darkTheme: appTheme(Brightness.dark), home: const _Index());
+  Widget build(BuildContext context) => MaterialApp(
+    theme: appTheme(Brightness.light),
+    darkTheme: appTheme(Brightness.dark),
+    localizationsDelegates: GlobalMaterialLocalizations.delegates,
+    supportedLocales: supportedLocales,
+    home: const _Index(),
+  );
 }
 
 class _Index extends StatelessWidget {
@@ -30,6 +36,11 @@ class _Index extends StatelessWidget {
       'Empty': (_) => const StatesScreen(state: LoadState.empty),
       'Loading': (_) => const StatesScreen(state: LoadState.loading),
       'Error': (_) => const StatesScreen(state: LoadState.error),
+      'Overlays': (_) => OverlaysScreen(quote: seededQuotes()[3]),
+      'Chart': (_) => ChartScreen(selected: 18),
+      'Live prices': (_) => LivePricesScreen(),
+      'Map': (_) => MapScreen(),
+      'Order flow': (_) => const OrderFlowScreen(),
     };
     return Scaffold(
       appBar: AppBar(title: const Text('Catalogue')),

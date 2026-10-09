@@ -54,7 +54,8 @@ final Map<String, Future<void> Function(WidgetTester, Widget Function(Widget))> 
 void main() {
   final results = <Map<String, Object?>>[];
 
-  for (final Scene scene in scenes) {
+  // A13 was measured on levels 1 to 3; levels 4 and 5 are not part of it.
+  for (final Scene scene in levelsOneToThree) {
     testWidgets('conventional golden: ${scene.id}', (WidgetTester tester) async {
       usePhone(tester);
       await (conventional[scene.id] ?? scene.pump)(tester, hostFor());

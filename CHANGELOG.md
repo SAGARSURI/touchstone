@@ -46,3 +46,13 @@
 * An opaque node that drew only outside its clip (a row cut off by the end
   of a list) hashes no pixels, instead of every pixel of its clip; changes
   elsewhere in the list no longer change its paint (baselines re-recorded).
+* Phase 3 catalogue levels 4 and 5: overlays (dialog, bottom sheet,
+  snackbar, dropdown menu), a theme and locale matrix (dark, right-to-left,
+  text scale 2.0, small and large viewports), a `CustomPainter` chart with a
+  gradient fill and a tooltip, a live price list on a fixed clock, a map
+  placeholder (a platform view) under a blurred header, and a four-step order
+  flow with page transitions and a reorderable list: 29 new snapshots.
+* A semantics traversal link (`traversalParentIdentifier`,
+  `traversalChildIdentifier`) is recorded as `link <n>`, numbered in the order
+  met, instead of its identifier's text, which held a run-dependent hash. Found
+  by the repeat gate on the order flow's back button.

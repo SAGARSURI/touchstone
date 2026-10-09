@@ -667,15 +667,16 @@ _Semantics _semanticsByComponent(RenderView view, ComponentTree tree) {
   collect(view);
   final out = _Semantics();
   final seen = <SemanticsNode>{};
+  final links = <Object, int>{};
   void visit(RenderObject ro) {
     final SemanticsNode? node = ro.debugSemantics;
     if (node != null && owned[node] == ro && node.attached && !node.isMergedIntoParent && seen.add(node)) {
       final Component owner = _semanticsOwner(ro, node, tree);
-      out.add(owner, _describeSemantics(node));
+      out.add(owner, _describeSemantics(node, links));
       void unowned(SemanticsNode parent) {
         parent.visitChildren((SemanticsNode child) {
           if (!owned.containsKey(child) && !child.isMergedIntoParent && seen.add(child)) {
-            out.add(owner, _describeSemantics(child));
+            out.add(owner, _describeSemantics(child, links));
             unowned(child);
           }
           return true;
@@ -802,7 +803,10 @@ bool _contributesContent(RenderObject ro) {
       config.onCollapse != null;
 }
 
-Map<String, Object?> _describeSemantics(SemanticsNode node) {
+/// [links] numbers traversal identifiers in the order they are met. An
+/// identifier is an arbitrary object, such as an overlay portal's State,
+/// whose text holds a run-dependent hash; only which nodes share one matters.
+Map<String, Object?> _describeSemantics(SemanticsNode node, Map<Object, int> links) {
   final SemanticsData d = node.getSemanticsData();
   final out = <String, Object?>{'rect': c.rect(d.rect)};
   void put(String key, Object? value) {
@@ -862,8 +866,9 @@ Map<String, Object?> _describeSemantics(SemanticsNode node) {
   // Reading order follows from the rects and text direction above, plus sort
   // keys and traversal links.
   put('sortKey', _sortKey(node.sortKey));
-  put('traversalParentIdentifier', node.traversalParentIdentifier?.toString());
-  put('traversalChildIdentifier', node.traversalChildIdentifier?.toString());
+  String? link(Object? id) => id == null ? null : 'link ${links.putIfAbsent(id, () => links.length)}';
+  put('traversalParentIdentifier', link(node.traversalParentIdentifier));
+  put('traversalChildIdentifier', link(node.traversalChildIdentifier));
   return out;
 }
 
