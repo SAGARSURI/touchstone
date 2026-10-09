@@ -65,6 +65,14 @@ void main() {
       final random = Random(seed);
       final Scene scene = scenes[random.nextInt(scenes.length)];
       final SemanticsHandle handle = tester.ensureSemantics();
+      // The widget tests' view has no insets; the simulator has a notch and a
+      // home indicator, which would move the content and change which list
+      // rows are built.
+      tester.view
+        ..padding = FakeViewPadding.zero
+        ..viewPadding = FakeViewPadding.zero
+        ..viewInsets = FakeViewPadding.zero
+        ..systemGestureInsets = FakeViewPadding.zero;
       await pumpScene(tester, scene);
       final String before = await _raster(tester);
       final String again = await _raster(tester);
