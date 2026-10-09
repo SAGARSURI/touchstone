@@ -88,8 +88,10 @@ void main() {
         };
         for (final (String id, SnapshotNode n) in after.walk()) {
           final SnapshotNode? o = a.remove(id);
-          // The node's own fields: an ancestor's subtree hash always changes.
-          if (o == null || o.line.split('\tsub=').first != n.line.split('\tsub=').first) {
+          // The node's own fields: an ancestor's subtree hash and flattened
+          // output always change.
+          String own(SnapshotNode x) => x.line.split('\tsub=').first.replaceFirst('\tflat=${x.flat}', '');
+          if (o == null || own(o) != own(n)) {
             changed.add(id);
           }
         }

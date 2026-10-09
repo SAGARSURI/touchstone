@@ -68,6 +68,20 @@ SnapshotDifference firstDifference(String a, String b) {
       '${nb.length} nodes',
     );
   }
+  // Only a flattened output differs: paint inside a node that no node's own
+  // paint covers, such as a pass-through render object built by a child.
+  for (var i = 0; i < na.length; i++) {
+    if (na[i].$2.flat != nb[i].$2.flat &&
+        na[i].$2.children.every((c) => nb[i].$2.children.any((d) => d.flat == c.flat))) {
+      return SnapshotDifference(
+        na[i].$1,
+        const <String>['flat'],
+        'paint changed with the same layout: a colour, text or image that depends on the clock or random values',
+        na[i].$2.line,
+        nb[i].$2.line,
+      );
+    }
+  }
   return SnapshotDifference('-', const <String>['coverage'], 'the coverage section changed', a, b);
 }
 

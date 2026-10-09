@@ -10,7 +10,10 @@
 //    only because a sibling was added or removed are matched by content, and
 //    siblings whose order changed are reported as reordered.
 // 4. Second matching pass: unmatched nodes on both sides are paired by type,
-//    bounds and paint hash (A5).
+//    bounds and paint hash, then by bounds and flattened output (A5).
+//    A component added, removed or renamed inside a matched component whose
+//    bounds and flattened output are unchanged is a refactor: every change
+//    in that subtree is reported as one identity change on it.
 // 5. Classify each matched pair by the detection fields that differ, using
 //    the explanation fields to name the cause.
 // 6. Group cascades (cascade.dart).
@@ -114,6 +117,7 @@ class _Diff {
         changes.add(Change(ChangeType.removed, null, b, 'was at ${b.boundsText}${_descendantNote(b)}'));
       }
     }
+    _collapseRefactors(changes);
     final List<String> inputs = <String>[
       for (final String k in <String>{...beforeSnapshot.inputs.keys, ...afterSnapshot.inputs.keys})
         if (beforeSnapshot.inputs[k] != afterSnapshot.inputs[k])
@@ -218,10 +222,16 @@ class _Diff {
   }
 
   /// The second matching pass (spec, A5): pairs unmatched nodes on both sides
-  /// by type, bounds and paint hash, wherever they are in the tree.
+  /// by type, bounds and paint hash, wherever they are in the tree, then
+  /// those still unmatched by bounds and flattened output, whatever their
+  /// type, so a renamed class is not a removal plus an addition.
   void _secondPass() {
+    _passOn((DiffNode n) => '${n.typeName}\n${n.node.bounds}\n${n.node.paint}');
+    _passOn((DiffNode n) => '${n.node.bounds}\n${n.node.flat}');
+  }
+
+  void _passOn(String Function(DiffNode) key) {
     while (true) {
-      String key(DiffNode n) => '${n.typeName}\n${n.node.bounds}\n${n.node.paint}';
       final Map<String, List<DiffNode>> b = <String, List<DiffNode>>{};
       for (final DiffNode n in before.walk()) {
         if (n.match == null) {
@@ -253,6 +263,67 @@ class _Diff {
     }
   }
 
+  /// A component added, removed or renamed inside a matched component whose
+  /// bounds and flattened output are unchanged changed only the widget
+  /// structure: the subtree draws the same commands and exposes the same
+  /// semantics (A5). Every change in the nearest such component's subtree is
+  /// replaced by one identity change on it, naming what came, went or was
+  /// renamed.
+  void _collapseRefactors(List<Change> changes) {
+    bool same(DiffNode a) =>
+        a.match != null && a.node.bounds == a.match!.node.bounds && a.node.flat == a.match!.node.flat;
+    final structural = <DiffNode, List<String>>{};
+    for (final Change c in changes) {
+      DiffNode? start;
+      String what;
+      switch (c.type) {
+        case ChangeType.added:
+          start = c.after!.parent;
+          what = 'added ${c.after!.typeName}';
+        case ChangeType.removed:
+          start = c.before!.parent?.match;
+          what = 'removed ${c.before!.typeName}';
+        case ChangeType.identity when c.before!.typeName != c.after!.typeName:
+          start = c.after;
+          what = 'renamed ${c.before!.typeName} -> ${c.after!.typeName}';
+        default:
+          continue;
+      }
+      DiffNode? root = start;
+      while (root != null && !same(root)) {
+        root = root.match == null ? null : root.parent;
+      }
+      if (root != null) {
+        (structural[root] ??= <String>[]).add(what);
+      }
+    }
+    if (structural.isEmpty) {
+      return;
+    }
+    // A root inside another root is part of the outer one's refactor.
+    final List<DiffNode> roots = structural.keys.where((DiffNode r) => !structural.keys.any(r.isUnder)).toList()
+      ..sort((DiffNode x, DiffNode y) => x.order.compareTo(y.order));
+    for (final DiffNode r in structural.keys.toList()) {
+      if (!roots.contains(r)) {
+        final DiffNode outer = roots.firstWhere(r.isUnder);
+        structural[outer]!.addAll(structural[r]!);
+      }
+    }
+    bool inside(Change c, DiffNode r) =>
+        (c.after != null && (identical(c.after, r) || c.after!.isUnder(r))) ||
+        (c.before != null && (identical(c.before, r.match) || c.before!.isUnder(r.match!)));
+    for (final DiffNode r in roots) {
+      final List<Change> collapsed = changes.where((Change c) => inside(c, r)).toList();
+      final int at = changes.indexOf(collapsed.first);
+      changes.removeWhere(collapsed.contains);
+      final List<String> what = <String>[
+        if (r.match!.segment != r.segment && r.match!.typeName == r.typeName) 'id ${r.match!.segment} -> ${r.segment}',
+        ...<String>{...structural[r]!},
+      ];
+      changes.insert(at, Change(ChangeType.identity, r, r.match, 'same output; ${what.join(', ')}'));
+    }
+  }
+
   List<Change> _classify(DiffNode b, DiffNode a, {required bool dynamic}) {
     final out = <Change>[];
     final _Match how = _how[a]!;
@@ -270,9 +341,10 @@ class _Diff {
     } else if (how == _Match.identity) {
       out.add(Change(ChangeType.identity, a, b, 'id ${b.segment} -> ${a.segment}'));
     }
-    if (b.node.line.split('\tsub=').first == a.node.line.split('\tsub=').first ||
-        (b.node.detectionText.split('\t').skip(1).join('\t') == a.node.detectionText.split('\t').skip(1).join('\t') &&
-            b.node.style == a.node.style)) {
+    // The node's own fields: the flattened output also changes when anything
+    // inside the node changed, which its descendants report.
+    String own(SnapshotNode n) => <String>[n.bounds, n.paint, n.semantics, n.opaque, n.style].join('\t');
+    if (own(b.node) == own(a.node)) {
       return out;
     }
     final Bounds? bb = b.bounds;

@@ -309,7 +309,8 @@ Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options
     }
 
     final tree = ComponentTree.build(tester.binding.rootElement!, policy);
-    final Map<Component, List<Map<String, Object?>>> semantics = _semanticsByComponent(view, tree);
+    final _Semantics semanticsIndex = _semanticsByComponent(view, tree);
+    final Map<Component, List<Map<String, Object?>>> semantics = semanticsIndex.byComponent;
     final painted = <Component>{for (final RecordedNode n in recording.nodes) tree.ownerOfRenderObject(n.renderObject)};
     final shown = <Component>{};
     for (final Component comp in tree.all.toList().reversed) {
@@ -332,6 +333,7 @@ Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options
         paint: sha256.convert(utf8.encode(assembly.text(comp))).toString(),
         semantics: jsonEncode(semantics[comp] ?? const <Object?>[]),
         opaque: reasons.isEmpty ? '-' : reasons.join('+'),
+        flat: _flat(comp, assembly, semanticsIndex),
         type: comp.element == null ? 'root' : policy.typeOf(comp.element!.widget),
         style: jsonEncode(
           _style(assembly.renderObjects[comp] ?? const <RecordedNode>[], options.tokenResolver, comp.element),
@@ -490,12 +492,17 @@ class _PaintAssembly {
   final Map<Component, Set<String>> opaque = <Component, Set<String>>{};
   final Map<Component, List<RecordedNode>> renderObjects = <Component, List<RecordedNode>>{};
 
+  /// Where each component's paint starts, in paint order, with the component
+  /// whose paint reached it (null for the root).
+  final Map<Component, List<(RecordedNode, Component?)>> entries = <Component, List<(RecordedNode, Component?)>>{};
+
   String text(Component comp) => _text[comp]?.toString() ?? '';
 
-  void run(PaintRecording recording) => _entry(recording.root);
+  void run(PaintRecording recording) => _entry(recording.root, null);
 
-  void _entry(RecordedNode node) {
+  void _entry(RecordedNode node, Component? from) {
     final Component comp = tree.ownerOfRenderObject(node.renderObject);
+    (entries[comp] ??= <(RecordedNode, Component?)>[]).add((node, from));
     final StringBuffer out = _text.putIfAbsent(comp, StringBuffer.new);
     final bool primary = comp.parent == null || identical(node.renderObject, comp.renderObject);
     if (!primary || !node.geometryVerified) {
@@ -544,10 +551,81 @@ class _PaintAssembly {
         ..write(via == null ? 'foreign(${jsonEncode(owner.fullId)})' : 'comp(${comp.children.indexOf(via)})')
         ..write(primary && child.geometryVerified ? '' : c.offset(offset))
         ..write('\n');
-      _entry(child);
+      _entry(child, comp);
     }
     out.write('}');
   }
+}
+
+/// The flattened output of [comp]'s subtree (spec: Node fields, `flat`).
+///
+/// The paint is written as if the subtree were one component: a child
+/// component's commands appear where its marker would, after the paint offset
+/// that places it, and a render object that only passes its one child through
+/// is left out whichever component built it. Paint that a component outside
+/// the subtree draws in the middle is a `foreign` marker. A component of the
+/// subtree whose paint starts outside it, such as an overlay entry, follows
+/// with its global transform. The semantics are the subtree's nodes in
+/// semantics tree order, whichever component owns each one.
+String _flat(Component comp, _PaintAssembly assembly, _Semantics semantics) {
+  final inside = <Component>{};
+  void collect(Component member) {
+    inside.add(member);
+    member.children.forEach(collect);
+  }
+
+  collect(comp);
+  final ComponentTree tree = assembly.tree;
+  final out = StringBuffer();
+  void segment(RecordedNode node) {
+    out.write('{');
+    var k = 0;
+    for (final String op in node.ops) {
+      if (op != 'child') {
+        out
+          ..write(op)
+          ..write('\n');
+        continue;
+      }
+      RecordedNode child = node.children[k];
+      final Offset offset = node.childOffsets[k];
+      k++;
+      while (inside.contains(tree.ownerOfRenderObject(child.renderObject)) && _passThrough(child)) {
+        child = child.children.single;
+      }
+      if (inside.contains(tree.ownerOfRenderObject(child.renderObject))) {
+        out.write('child${c.offset(offset)}');
+        segment(child);
+      } else {
+        out
+          ..write('foreign${c.offset(offset)}')
+          ..write('\n');
+      }
+    }
+    out.write('}');
+  }
+
+  void visit(Component member) {
+    for (final (RecordedNode node, Component? from)
+        in assembly.entries[member] ?? const <(RecordedNode, Component?)>[]) {
+      if (from != null && inside.contains(from)) {
+        continue; // Written in place by its parent's segment.
+      }
+      final bool primary = member.parent == null || identical(node.renderObject, member.renderObject);
+      if (!identical(member, comp) || !primary || !node.geometryVerified) {
+        out.write('entry(${c.float64s(node.toGlobal.storage)})');
+      }
+      segment(node);
+    }
+    member.children.forEach(visit);
+  }
+
+  visit(comp);
+  final List<Map<String, Object?>> nodes = <Map<String, Object?>>[
+    for (final (Component owner, Map<String, Object?> node) in semantics.ordered)
+      if (inside.contains(owner)) node,
+  ];
+  return sha256.convert(utf8.encode('$out\n${jsonEncode(nodes)}')).toString();
 }
 
 bool _passThrough(RecordedNode node) =>
@@ -564,7 +642,19 @@ bool _passThrough(RecordedNode node) =>
 /// Some nodes belong to no render object: a paragraph builds one child node
 /// per text span with a recognizer. Those are described with the node whose
 /// render object built them.
-Map<Component, List<Map<String, Object?>>> _semanticsByComponent(RenderView view, ComponentTree tree) {
+class _Semantics {
+  final Map<Component, List<Map<String, Object?>>> byComponent = <Component, List<Map<String, Object?>>>{};
+
+  /// Every node with its owner, in the order the render tree is walked.
+  final List<(Component, Map<String, Object?>)> ordered = <(Component, Map<String, Object?>)>[];
+
+  void add(Component owner, Map<String, Object?> node) {
+    (byComponent[owner] ??= <Map<String, Object?>>[]).add(node);
+    ordered.add((owner, node));
+  }
+}
+
+_Semantics _semanticsByComponent(RenderView view, ComponentTree tree) {
   final owned = <SemanticsNode, RenderObject>{};
   void collect(RenderObject ro) {
     final SemanticsNode? node = ro.debugSemantics;
@@ -575,17 +665,17 @@ Map<Component, List<Map<String, Object?>>> _semanticsByComponent(RenderView view
   }
 
   collect(view);
-  final out = <Component, List<Map<String, Object?>>>{};
+  final out = _Semantics();
   final seen = <SemanticsNode>{};
   void visit(RenderObject ro) {
     final SemanticsNode? node = ro.debugSemantics;
     if (node != null && owned[node] == ro && node.attached && !node.isMergedIntoParent && seen.add(node)) {
-      final List<Map<String, Object?>> list = out[_semanticsOwner(ro, node, tree)] ??= <Map<String, Object?>>[];
-      list.add(_describeSemantics(node));
+      final Component owner = _semanticsOwner(ro, node, tree);
+      out.add(owner, _describeSemantics(node));
       void unowned(SemanticsNode parent) {
         parent.visitChildren((SemanticsNode child) {
           if (!owned.containsKey(child) && !child.isMergedIntoParent && seen.add(child)) {
-            list.add(_describeSemantics(child));
+            out.add(owner, _describeSemantics(child));
             unowned(child);
           }
           return true;

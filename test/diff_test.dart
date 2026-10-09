@@ -312,6 +312,20 @@ void main() {
   });
 
   testWidgets('the same output under a new parent is moved', (WidgetTester tester) async {
+    // The first Holder grows, so the screen's output changes and the new
+    // parent is not a refactor.
+    final ChangeReport r = await diffOf(
+      tester,
+      column(<Widget>[const Holder(child: SizedBox(height: 10)), const Card2(key: ValueKey<String>('k'))]),
+      column(<Widget>[
+        const Holder(child: ColoredBox(color: Color(0xFF00FF00), child: SizedBox(height: 10))),
+        const Holder2(child: Card2(key: ValueKey<String>('k'))),
+      ]),
+    );
+    expect(top(r), containsAll(<String>['Added root/Holder2@0', 'Moved root/Holder2@0/Card2#k']));
+  });
+
+  testWidgets('a new parent component with the same output is one identity change (A5)', (WidgetTester tester) async {
     final ChangeReport r = await diffOf(
       tester,
       column(<Widget>[const Holder(child: SizedBox(height: 10)), const Card2(key: ValueKey<String>('k'))]),
@@ -320,7 +334,9 @@ void main() {
         const Holder2(child: Card2(key: ValueKey<String>('k'))),
       ]),
     );
-    expect(top(r), containsAll(<String>['Added root/Holder2@0', 'Moved root/Holder2@0/Card2#k']));
+    expect(top(r), <String>['Identity root']);
+    expect(r.items.single.change!.detail, 'same output; added Holder2');
+    expect(Policy.defaults().decide(r).verdict, Verdict.pass);
   });
 
   testWidgets('a different toolchain goes to migration', (WidgetTester tester) async {
