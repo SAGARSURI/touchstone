@@ -12,7 +12,7 @@ A phase starts only after the previous phase's exit gate is recorded here.
 | A2 | Paths, images and text can be fingerprinted without rasterizing | Fails for paths: fallback taken (pixel hash for nodes that draw paths). Holds for images, and for text with a readable source | 2026-10-07 |
 | A3 | Snapshots are byte-identical across macOS machines | Fails: macOS arm64 and Intel differ on the pixel hashes of path-drawn nodes in 12 of 15 scenes. Fallback taken (baselines pinned to one host, recorded in the fingerprint) | 2026-10-08 |
 | A4 | Equal hashes imply equal pixels | 0 capture gaps on fixtures and on the 14 review cases, after the review fixes | 2026-10-07 |
-| A5 | Node identity survives refactors | Fails for 3 of 6 refactors (extract, inline, rename a class: needs-review, never fail); the spec's fallback is built and does not absorb them. Sagar chose to amend the fallback (flattened matching) in Phase 2; being built | 2026-10-09 |
+| A5 | Node identity survives refactors | Fails as first built (3 of 6 refactors needs-review). Fallback amended (flattened matching, Sagar 2026-10-09): 6 of 6 pass, each with no change or identity changes only; 0 mutations absorbed | 2026-10-09 |
 | A6 | Keeping only app-owned widgets gives a recognisable tree | Review sheet rebuilt from Phase 2 change reports; waiting on two engineers' review | 2026-10-09 |
 | A7 | A change in the widget-test environment is a change users see | Not yet tested (Phase 3) | |
 | A8 | Cascade grouping names the true root cause | Holds. Generated: 748 single causes, 0 wrong. Catalog: 19 of 19 with the corrected expectations Sagar accepted (17 of 19 and 1 wrong certain as first written) | 2026-10-09 |
@@ -21,7 +21,7 @@ A phase starts only after the previous phase's exit gate is recorded here.
 | A11 | Pairwise variants catch what the full matrix catches | Not yet tested (Phase 4) | |
 | A12 | A Flutter upgrade can be absorbed without re-reviewing every baseline | Not yet tested (Phase 3) | |
 | A13 | Existing golden tests can be made deterministic | Holds: the gate fails 4 of 15 conventional goldens and names a node and a cause for each | 2026-10-08 |
-| A14 | The schema is not Flutter-shaped | Holds: every field has a web source; 5 web captures parse as schema v1 | 2026-10-07 |
+| A14 | The schema is not Flutter-shaped | Holds: every field has a web source, including `flat` (added for A5); 5 web captures parse as schema v1 | 2026-10-09 |
 
 ## Phase 0: feasibility spikes
 
@@ -403,13 +403,14 @@ details in [results.md](phase2/results.md).
 accepted, and the gate is recorded as met.** The original expectations stay
 unedited in [expectations.md](phase2/expectations.md); the numbers as first
 written stay in the table below. Sagar also chose to amend the spec's A5
-fallback and build flattened matching in this phase, so every gate is rerun
-before Phase 2 is handed back (see A5 below).
+fallback and build flattened matching in this phase. Every gate was rerun
+with it on 2026-10-09, with the same results, and A5 now holds (see A5
+below).
 
 | Gate | Target | As written | Corrections accepted |
 | --- | --- | --- | --- |
 | Missed changes (catalog; 10,000 generated, at verdict level) | 0 | 0; 0 | 0; 0 |
-| Fail verdicts on no-op refactors | 0 | 0 of 6 | 0 of 6 |
+| Fail verdicts on no-op refactors | 0 | 0 of 6 | 0 of 6 (6 of 6 pass with the A5 amendment) |
 | Correct component and change type | ≥99% | 30 of 32 | 32 of 32 |
 | Correct root cause on cascade mutations | ≥95% | 17 of 19 | 19 of 19 |
 | Wrong root causes stated as certain | 0 | 1 (catalog); 0 of 748 (generated) | 0; 0 |
@@ -431,14 +432,31 @@ The design and every interpretation of the spec are in
 
 ### A5: identity survives refactors
 
-**Fails for 3 of 6.**
-- No change: adding const, converting to stateful, and wrapping in a
-  layout-neutral widget (fixed in Phase 2).
-- Needs-review, and so not a gate failure: extracting a widget, inlining a
-  widget and renaming a class.
-- The spec's fallback, the second matching pass, is built. It cannot pair
-  these three: extract and inline move paint across component boundaries, and
-  a rename changes the type the pass matches on.
+**First built: fails for 3 of 6.** Adding const, converting to stateful and
+wrapping in a layout-neutral widget gave no change. Extracting a widget,
+inlining a widget and renaming a class gave needs-review. The spec's
+fallback, the second matching pass on type, bounds and paint, could not pair
+them: extract and inline move paint across component boundaries, and a
+rename changes the type.
+
+**Fallback amended (Sagar, 2026-10-09 03:38Z, "Build it now"): holds for 6
+of 6.** The spec's A5 fallback, its diff step and its node fields now
+include flattened matching. Each node records `flat`, its subtree's output
+with component boundaries removed. Unpaired nodes are then paired on bounds
+and `flat`. A component added, removed or renamed inside a component whose
+bounds and `flat` are unchanged makes that subtree one info-level Identity
+change.
+
+- Expectations were committed before the code
+  ([a5_expectations.md](phase2/a5_expectations.md)), and all were met.
+- Extract: 12 Identity lines. Inline: 7. Rename: 12. One per instance of the
+  edited widget, each a pass.
+- The 32 mutation and cascade entries are unchanged, and none became
+  Identity. 10,000 generated mutations: 0 missed, 0 reported as Identity.
+- Five adversarial tests (`test/refactor_test.dart`) each change the output
+  under a refactor-shaped edit, and each gets needs-review.
+- `flat` is a detection field, so catalogue baselines were re-recorded on
+  macOS (8a8bf61), and the web prototype writes it too (A14 still holds).
 
 ### A8: cascade grouping
 

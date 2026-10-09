@@ -18,7 +18,7 @@ Data:
 | --- | --- | --- | --- |
 | Missed changes, mutation catalog | 0 | 0 of 32 entries | yes |
 | Missed changes, 10,000 generated | 0 | 0 of 10,000, at verdict level | yes |
-| Fail verdicts on no-op refactors | 0 | 0 of 6 | yes |
+| Fail verdicts on no-op refactors | 0 | 0 of 6 (6 of 6 pass after the A5 amendment) | yes |
 | Correct component and change type | ≥99% | 30 of 32 (93.8%) | **no** |
 | Correct root cause on cascade mutations | ≥95% | 17 of 19 (89.5%) | **no** |
 | Wrong root causes stated as certain | 0 | 1 of 19 catalog entries; 0 of 748 generated single causes | **no** |
@@ -97,28 +97,43 @@ verified".
 
 ## No-op refactor catalog (A5)
 
-| Entry | Verdict | No change or identity only |
+**Rerun with flattened matching (2026-10-09): 6 of 6 pass, and A5's own
+criterion holds for all six.** Sagar chose to amend the spec's A5 fallback
+and build flattened matching in this phase. Its expectations were committed
+first, in [a5_expectations.md](a5_expectations.md) (75040b3), and every one
+of them was met as written.
+
+| Entry | Verdict | Report |
 | --- | --- | --- |
-| extract-widget | needs-review | no: `Added QuoteNames` in each row, and each row's style lost the moved text |
-| inline-widget | needs-review | no: `Removed SettingsIcon` in each tile, and each tile's style gained it |
-| wrap-layout-neutral | pass | yes (no change) |
-| add-const | pass | yes (no change) |
-| stateless-to-stateful | pass | yes (no change) |
-| rename-class | needs-review | no: `Removed SymbolAvatar` and `Added TickerAvatar` in each row |
+| extract-widget | pass | 12 lines, one per `WatchRow`: `Identity WatchRow#ACM0  same output; added QuoteNames` |
+| inline-widget | pass | 7 lines, one per `SettingsTile`: `Identity SettingsTile@0  same output; removed SettingsIcon` |
+| wrap-layout-neutral | pass | no change |
+| add-const | pass | no change |
+| stateless-to-stateful | pass | no change |
+| rename-class | pass | 12 lines, one per avatar: `Identity WatchRow#ACM0/TickerAvatar@0  same output; renamed SymbolAvatar -> TickerAvatar` |
 
-0 fail verdicts, so the gate is met. A5's own criterion, "each refactor yields
-no change or one info-level identity change", fails for 3 of 6.
+- Each node now records `flat`, its subtree's paint and semantics with
+  component boundaries removed. A rename is paired on bounds and `flat`
+  instead of type.
+- An added, removed or renamed component inside a component whose bounds and
+  `flat` are unchanged makes that subtree one Identity line.
+- The 32 mutation and cascade entries gave exactly the same results as the
+  first run. None became Identity or pass.
+- Five adversarial unit tests (`test/refactor_test.dart`) make refactor-like
+  edits that change the output: a colour, padding, a size, a semantics label
+  and a clip. Each gets needs-review, with no Identity line over the changed
+  component.
 
-- The spec's fallback is built: the second matching pass on type, bounds and
-  paint hash.
-- It cannot absorb these three. Extract and inline move paint between a
-  parent and a new or removed component, so neither the tree shape nor the
-  paint hashes match. A rename changes the type, which the pass matches on.
+The first run, before the amendment, had 3 of 6 at needs-review: extract,
+inline and rename. The spec's original fallback could not pair them.
 
 ## Generated mutations
 
 Seeds 0 to 9,999. Each pumps a catalogue scene and applies one render-level
 mutation. The pixel and semantics oracle decides whether anything changed.
+
+Rerun with flattened matching on 2026-10-09: every number below is the same
+as in the first run, and no generated mutation was reported as Identity.
 
 - **0 missed** at verdict level. 7,407 mutations changed pixels or semantics,
   and every one got needs-review. 1,391 more changed the snapshot but not the

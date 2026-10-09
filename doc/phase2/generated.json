@@ -20,5 +20,7 @@
   "causeOk": 748,
   "wrongCertain": 0,
   "possibleCauses": 0,
-  "unknownCause": 252
+  "unknownCause": 252,
+  "identityItems": 0,
+  "note": "Rerun 2026-10-09 04:00-04:50Z with flattened matching (A5): every number unchanged from the first run; no generated mutation was reported as Identity."
 }
