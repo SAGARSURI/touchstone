@@ -35,3 +35,22 @@ the verdict line as the last line.
    summary, or is counted in a "+N more".
 5. The test suite passes; catalogue and history gate numbers are unchanged,
    since no gate reads the summary.
+
+## Results
+
+Run on 2026-10-10 with 749d5ea and 87252a9, against the DX review branches
+at base c22b4f3.
+
+1. Met. On items 01 and 07, everything from "All changes:" on (the overview,
+   each snapshot's report, the last verdict line) is byte for byte what
+   review-summary (3b1c9e6) prints after its first blank line; exit codes
+   (2) match.
+2. Met. Item 01's summary is five lines, the longest 100 characters.
+3. Met. Item 07's "Also:" line opens with `Layout SectionHeader (17
+   snapshots)`.
+4. Met. Item 01's summary names all 5 change and component types of its
+   overview; item 07's names 3 of 6 and counts the other 3 as "+3 more".
+   A first version wrote "(1 snapshot)" after each name, which cut item
+   01's "Also:" line to two names; the count is now shown only when it is
+   more than one.
+5. Pending: the suite passes (141 tests); the gate runs are in progress.
