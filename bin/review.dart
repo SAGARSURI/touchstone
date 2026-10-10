@@ -24,12 +24,7 @@ Future<void> main(List<String> args) async {
     final ReviewResult result = review(base: options['base'] ?? 'HEAD', policy: policy);
     stdout.write(result.render(color: useColor(out: stdout)));
     if (options['images'] != null) {
-      final List<ItemCrops> crops = await renderCrops(result);
-      stdout.writeln(
-        crops.isEmpty
-            ? 'Images: none, no snapshot needs review or fails.'
-            : 'Images: build/touchstone/review/index.html (${crops.length} changed components)',
-      );
+      await writeImages(result);
     }
     exit(result.exitCode);
   } on FormatException catch (e) {

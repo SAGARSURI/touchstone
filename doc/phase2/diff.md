@@ -166,7 +166,13 @@ and grouping do not depend on the wording.
     base.
   - Only snapshots that need review or fail are rendered.
   - Each crop is the component's bounds before and after, joined, plus 8
-    logical pixels.
+    logical pixels. A shift with no single cause is cropped where its
+    components were and are.
+  - Renders are named by baseline file, so two test directories may use the
+    same snapshot id. The test runs' output is kept beside the page, in
+    `render-after.log` and `render-before.log`, for when a render is missing.
+  - An error making the images is printed; the command's exit code is still
+    the review's. A failing test's crops are best-effort in the same way.
   - In the diff image, changed pixels are red. Items on the same area share
     one set of crops, and a semantics item says it has no pixels.
   - Crops never change the verdict or the exit code.

@@ -48,10 +48,20 @@ typedef LogicalRect = ({double left, double top, double right, double bottom});
 
 /// The area to crop for [changes]: every changed copy's bounds before and
 /// after, joined, with [margin] around them. Null when none has bounds.
-LogicalRect? cropArea(List<Change> changes, {double margin = cropMargin}) {
-  final List<Bounds> all = <Bounds>[
-    for (final Change c in changes) ...<Bounds?>[c.before?.bounds, c.after?.bounds].whereType<Bounds>(),
-  ];
+LogicalRect? cropArea(List<Change> changes, {double margin = cropMargin}) => _area(_itemBounds(changes, null), margin);
+
+/// The before and after bounds of [changes], and of [group]'s members:
+/// where they are, and that less the shift, where they were.
+List<Bounds> _itemBounds(List<Change> changes, ShiftGroup? group) => <Bounds>[
+  for (final Change c in changes) ...<Bounds?>[c.before?.bounds, c.after?.bounds].whereType<Bounds>(),
+  if (group != null)
+    for (final Bounds b in group.members.map((DiffNode m) => m.bounds).whereType<Bounds>()) ...<Bounds>[
+      b,
+      Bounds(b.x - group.dx, b.y - group.dy, b.w, b.h),
+    ],
+];
+
+LogicalRect? _area(List<Bounds> all, double margin) {
   if (all.isEmpty) {
     return null;
   }
@@ -157,17 +167,19 @@ class ItemCrops {
 }
 
 /// Writes crops for [report]'s items from the [before] and [after] renders
-/// into `<out>/<snapshot id>/`. Shifts get none: they follow the item that
-/// caused them.
-List<ItemCrops> writeCrops(ChangeReport report, Render? before, Render? after, String out) {
-  final String id = report.snapshotId;
+/// into `<out>/<name>/`, [name] being the snapshot id unless given. A shift
+/// with no single cause is cropped where its components were and are.
+List<ItemCrops> writeCrops(ChangeReport report, Render? before, Render? after, String out, {String? name}) {
+  final String id = name ?? report.snapshotId;
   final crops = <ItemCrops>[];
   final written = <LogicalRect, ItemCrops>{};
-  for (final ({int number, String type, String component, List<Change> changes}) item in numberedItems(report)) {
-    if (item.changes.isEmpty) {
+  for (final ({int number, String type, String component, List<Change> changes, ShiftGroup? group}) item
+      in numberedItems(report)) {
+    if (item.changes.isEmpty && item.group == null) {
       continue;
     }
-    final LogicalRect? area = cropArea(item.changes);
+    final List<Bounds> bounds = _itemBounds(item.changes, item.group);
+    final LogicalRect? area = _area(bounds, cropMargin);
     if (area == null) {
       crops.add(ItemCrops(id, item.number, item.type, item.component, note: 'no bounds to crop'));
       continue;
@@ -207,7 +219,7 @@ List<ItemCrops> writeCrops(ChangeReport report, Render? before, Render? after, S
     final Rgba? d = b != null && a != null ? diffImage(b, a) : null;
     // Judged on the component's own bounds: the margin may show a neighbour
     // that changed.
-    final LogicalRect own = cropArea(item.changes, margin: 0)!;
+    final LogicalRect own = _area(bounds, 0)!;
     final bool invisible = before != null && after != null && _same(crop(before, own), crop(after, own));
     crops.add(
       ItemCrops(
@@ -264,30 +276,45 @@ Future<List<ItemCrops>> renderCrops(
   if (shown.isEmpty) {
     return <ItemCrops>[];
   }
-  final List<String> ids = <String>[for (final SnapshotReview r in shown) r.report!.snapshotId];
+  // Renders are named by baseline file, not id: two test directories may
+  // each have a snapshot with the same id (render.dart, renderKey).
+  final List<String> ids = <String>[for (final SnapshotReview r in shown) _key(r)];
   final Directory tmp = Directory.systemTemp.createTempSync('touchstone_review');
   final String top = _run('git', <String>['rev-parse', '--show-toplevel'], root).trim();
   final String prefix = _run('git', <String>['rev-parse', '--show-prefix'], root).trim();
   final worktree = '${tmp.path}/base';
   try {
     log('Rendering ${ids.length} snapshots in the working tree...');
-    await _render(root, tests, '${tmp.path}/after', ids);
+    final String afterLog = await _render(root, tests, '${tmp.path}/after', ids);
     log('Rendering them at ${result.base}...');
     _run('git', <String>['worktree', 'add', '--quiet', '--detach', worktree, result.base], top);
     final String basePackage = '$worktree/$prefix';
     _useThisTouchstone(basePackage);
-    await _render(basePackage, tests, '${tmp.path}/before', ids);
+    final String beforeLog = await _render(basePackage, tests, '${tmp.path}/before', ids);
 
     final outDir = Directory(out);
     if (outDir.existsSync()) {
       outDir.deleteSync(recursive: true);
     }
+    outDir.createSync(recursive: true);
+    // The test runs' output, for when a render is missing.
+    File('$out/render-after.log').writeAsStringSync(afterLog);
+    File('$out/render-before.log').writeAsStringSync(beforeLog);
     final crops = <ItemCrops>[];
     for (final SnapshotReview r in shown) {
-      final String id = r.report!.snapshotId;
+      final String key = _key(r);
       crops.addAll(
-        writeCrops(r.report!, Render.read('${tmp.path}/before', id), Render.read('${tmp.path}/after', id), out),
+        writeCrops(
+          r.report!,
+          Render.read('${tmp.path}/before', key),
+          Render.read('${tmp.path}/after', key),
+          out,
+          name: key,
+        ),
       );
+    }
+    if (crops.any((ItemCrops c) => _missing.contains(c.note))) {
+      log('Some renders are missing; the test output is in $out/render-after.log and render-before.log.');
     }
     File('$out/index.html')
       ..parent.createSync(recursive: true)
@@ -303,18 +330,50 @@ Future<List<ItemCrops>> renderCrops(
 
 void _stderr(String line) => stderr.writeln(line);
 
-Future<void> _render(String package, String tests, String dir, List<String> ids) async {
+/// [renderCrops] for a command's --images, saying where the page is. Crops
+/// never change a command's result, so an error making them is printed and
+/// the command carries on to its own exit code.
+Future<void> writeImages(
+  ReviewResult result, {
+  String out = 'build/touchstone/review',
+  Future<List<ItemCrops>> Function(ReviewResult)? make,
+}) async {
+  try {
+    final List<ItemCrops> crops = await (make ?? (ReviewResult r) => renderCrops(r, out: out))(result);
+    stdout.writeln(
+      crops.isEmpty
+          ? 'Images: none, no snapshot needs review or fails.'
+          : 'Images: $out/index.html (${crops.length} changed components)',
+    );
+  } on Object catch (e) {
+    stderr.writeln('Images: not written: $e');
+  }
+}
+
+/// A review's render name: its baseline file, relative to the package,
+/// without `.snapshot`, as render mode names it (render.dart, renderKey).
+String _key(SnapshotReview r) =>
+    r.path.endsWith('.snapshot') ? r.path.substring(0, r.path.length - '.snapshot'.length) : r.path;
+
+/// Notes [writeCrops] gives an item whose renders are missing.
+const Set<String> _missing = <String>{'not rendered', 'no before render', 'no after render'};
+
+/// Runs [tests] in render mode for [keys] and returns the run's output.
+Future<String> _render(String package, String tests, String dir, List<String> keys) async {
   final Process p = await Process.start(
     'flutter',
     <String>['test', tests],
     workingDirectory: package,
-    environment: <String, String>{'TOUCHSTONE_RENDER_DIR': dir, 'TOUCHSTONE_RENDER_IDS': ids.join(',')},
+    environment: <String, String>{'TOUCHSTONE_RENDER_DIR': dir, 'TOUCHSTONE_RENDER_IDS': keys.join(',')},
     runInShell: Platform.isWindows,
   );
   // Render mode compares nothing, so the exit code says only whether other
   // tests failed; what matters is which renders were written.
-  await Future.wait(<Future<void>>[p.stdout.drain<void>(), p.stderr.drain<void>()]);
-  await p.exitCode;
+  final List<String> output = await Future.wait(<Future<String>>[
+    p.stdout.transform(const Utf8Decoder(allowMalformed: true)).join(),
+    p.stderr.transform(const Utf8Decoder(allowMalformed: true)).join(),
+  ]);
+  return '${output.join()}\nexit code ${await p.exitCode}\n';
 }
 
 /// Points [package]'s touchstone dependency at the touchstone running this
@@ -369,6 +428,7 @@ String indexHtml(String base, List<SnapshotReview> reviews, List<ItemCrops> crop
     );
   for (final SnapshotReview r in reviews) {
     final String id = r.report!.snapshotId;
+    final String key = _key(r);
     final List<String> head = r.text.split('\n\n').first.split('\n');
     out
       ..writeln(
@@ -376,13 +436,18 @@ String indexHtml(String base, List<SnapshotReview> reviews, List<ItemCrops> crop
       )
       ..writeln('<p class="count">${esc.convert(head.length > 1 ? head[1] : '')}</p>');
     for (final MapEntry<int, String> item in itemTexts(r.text).entries) {
-      final ItemCrops? c = crops.where((ItemCrops c) => c.snapshotId == id && c.number == item.key).firstOrNull;
+      final ItemCrops? c = crops
+          .where((ItemCrops c) => (c.snapshotId == key || c.snapshotId == id) && c.number == item.key)
+          .firstOrNull;
       out
         ..writeln('<div class="item">')
         ..writeln('<pre class="text">${esc.convert(item.value)}</pre>')
         ..writeln('<div class="images">');
       if (c?.note != null) {
-        out.writeln('<div class="note">${esc.convert(c!.note!)}</div>');
+        final String logs = _missing.contains(c!.note)
+            ? ' (test output: <a href="render-after.log">after</a>, <a href="render-before.log">before</a>)'
+            : '';
+        out.writeln('<div class="note">${esc.convert(c.note!)}$logs</div>');
       }
       if (c != null && c.sameAs != null) {
         out.writeln('<div class="note">Same crops as item ${c.sameAs}.</div>');
@@ -423,7 +488,9 @@ String indexHtml(String base, List<SnapshotReview> reviews, List<ItemCrops> crop
 /// blank line and start with their number (report.dart).
 Map<int, String> itemTexts(String report) {
   final out = <int, String>{};
-  for (final String block in report.split('\n\n')) {
+  for (final String text in report.split('\n\n')) {
+    // Input lines come straight before the first item, in its block.
+    final String block = text.replaceFirst(RegExp(r'^(?:   Input .*\n)+'), '');
     final RegExpMatch? m = RegExp(r'^(\d+)\s').firstMatch(block);
     if (m != null) {
       out[int.parse(m[1]!)] = block.trimRight();

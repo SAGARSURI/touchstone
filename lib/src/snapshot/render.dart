@@ -28,7 +28,7 @@ Set<String>? debugRenderIds;
 /// The directory render mode writes to, or null when it is off.
 String? get renderDirectory => debugRenderDirectory ?? Platform.environment['TOUCHSTONE_RENDER_DIR'];
 
-/// The snapshot ids to render, or null for all of them.
+/// The snapshots to render, by [renderKey], or null for all of them.
 Set<String>? get renderIds {
   if (debugRenderIds != null) {
     return debugRenderIds;
@@ -50,19 +50,27 @@ Future<Render> renderView(WidgetTester tester) async {
   return Render(Rgba(region.width, region.height, region.rgba), dpr);
 }
 
-/// Writes the view's pixels for [id] to `<dir>/<id>.png`, with its device
-/// pixel ratio in `<dir>/<id>.json`, when [id] is one of [renderIds].
-Future<void> renderForReview(WidgetTester tester, String id, String dir) async {
-  final Set<String>? ids = renderIds;
-  if (ids != null && !ids.contains(id)) {
+/// A snapshot's name in render mode: its [baseline] file relative to the
+/// working directory (the package the tests run in), without `.snapshot`.
+/// Ids alone may repeat between test directories; baseline files do not.
+String renderKey(File baseline) {
+  final String path = _shown(baseline.path);
+  return path.endsWith('.snapshot') ? path.substring(0, path.length - '.snapshot'.length) : path;
+}
+
+/// Writes the view's pixels to `<dir>/<key>.png`, with its device pixel
+/// ratio in `<dir>/<key>.json`, when [key] is one of [renderIds].
+Future<void> renderForReview(WidgetTester tester, String key, String dir) async {
+  final Set<String>? keys = renderIds;
+  if (keys != null && !keys.contains(key)) {
     return;
   }
   await tester.pump();
   final Render render = await renderView(tester);
-  final png = File('$dir/$id.png');
+  final png = File('$dir/$key.png');
   png.parent.createSync(recursive: true);
   png.writeAsBytesSync(encodePng(render.image));
-  File('$dir/$id.json').writeAsStringSync(jsonEncode(<String, Object>{'dpr': render.dpr}));
+  File('$dir/$key.json').writeAsStringSync(jsonEncode(<String, Object>{'dpr': render.dpr}));
 }
 
 /// For a failing snapshot (an amendment to the spec's "A test fails", agreed

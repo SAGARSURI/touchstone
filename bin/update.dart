@@ -28,12 +28,7 @@ Future<void> main(List<String> arguments) async {
     final ReviewResult result = review(base: 'HEAD', policy: loadPolicy());
     stdout.write(result.render());
     if (images) {
-      final List<ItemCrops> crops = await renderCrops(result);
-      stdout.writeln(
-        crops.isEmpty
-            ? 'Images: none, no snapshot needs review or fails.'
-            : 'Images: build/touchstone/review/index.html (${crops.length} changed components)',
-      );
+      await writeImages(result);
     }
   } on FormatException catch (e) {
     stderr.writeln(e.message);

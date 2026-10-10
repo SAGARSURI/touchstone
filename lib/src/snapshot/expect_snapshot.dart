@@ -184,7 +184,7 @@ Future<void> expectSnapshot(
 }) async {
   final String? renderDir = renderDirectory;
   if (renderDir != null) {
-    await renderForReview(tester, id, renderDir);
+    await renderForReview(tester, renderKey(baselineFile(id)), renderDir);
     return;
   }
   final File file = baselineFile(id);
@@ -240,11 +240,18 @@ Future<void> expectSnapshot(
   final Snapshot capture = await captureSnapshot(tester, id, options: options);
   final String? message = compareWithBaseline(baseline, capture, color: useColor());
   if (message != null) {
-    final String images = await writeFailureCrops(
-      tester,
-      diffSnapshots(baseline, capture),
-      Directory.fromUri(_testDirectory().resolve('failures')),
-    );
+    // The crops are an aid: if they cannot be made, the difference is still
+    // what the test reports.
+    String images;
+    try {
+      images = await writeFailureCrops(
+        tester,
+        diffSnapshots(baseline, capture),
+        Directory.fromUri(_testDirectory().resolve('failures')),
+      );
+    } on Object catch (e) {
+      images = '\nImages of the changed components were not written: $e';
+    }
     fail(keepColoredLines('$message$images'));
   }
 }
