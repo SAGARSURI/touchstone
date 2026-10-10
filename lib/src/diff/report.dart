@@ -20,6 +20,7 @@ import 'ansi.dart';
 import 'changes.dart';
 import 'diff.dart';
 import 'policy.dart';
+import 'table.dart';
 import 'summary.dart';
 
 /// The style changes that share a cause in more than one of [reports], keyed
@@ -70,8 +71,9 @@ String _cause(Map<String, String> fields) {
 }
 
 /// Renders [report] with [decision]'s verdict on the first line, with
-/// terminal colour when [color] is true (ansi.dart).
-String renderReport(ChangeReport report, Decision decision, {bool color = false}) {
+/// terminal colour when [color] is true (ansi.dart), and its items as a
+/// table when [table] is true (table.dart).
+String renderReport(ChangeReport report, Decision decision, {bool color = false, bool table = false}) {
   final Ansi a = Ansi(color);
   final String verdict = switch (decision.verdict) {
     Verdict.pass => a.boldGreen(decision.verdict.label),
@@ -115,6 +117,10 @@ String renderReport(ChangeReport report, Decision decision, {bool color = false}
   final _Names names = _Names(report);
   const indent = '           ';
   var n = 0;
+  if (table && folded.isNotEmpty) {
+    out.write(_table(folded, names, a));
+    folded.clear();
+  }
   for (final List<ReportItem> same in folded) {
     if (n > 0) {
       out.writeln();
@@ -393,4 +399,92 @@ class _Names {
     }
     return n.fullId;
   }
+}
+
+/// [folded] items as a table: one row per value that changed, its field,
+/// before and after in their own columns; at:, consequence and cause lines
+/// span the last three columns.
+String _table(List<List<ReportItem>> folded, _Names names, Ansi a) {
+  final groups = <List<TableRow>>[];
+  var n = 0;
+  for (final List<ReportItem> same in folded) {
+    n++;
+    final ReportItem item = same.first;
+    final Change? c = item.change;
+    final rows = <TableRow>[];
+    final String type = c?.type.label ?? 'Shift';
+    final String where = c == null
+        ? names.of(item.group!.ancestor)
+        : same.length == 1
+        ? names.of(c.node)
+        : '${c.componentType} in ${same.length} places';
+    List<String> lead() => rows.isEmpty ? <String>['$n', a.cyan(type), a.bold(where)] : <String>['', '', ''];
+    void span(String text) => rows.add(TableRow(lead(), span: text));
+    void labelled(String line) {
+      final int colon = line.indexOf(': ');
+      span(colon < 0 ? line : '${a.dim(line.substring(0, colon + 1))}${line.substring(colon + 1)}');
+    }
+
+    if (c != null) {
+      for (final String v in _values(c)) {
+        final (String, String, String)? parts = splitChange(v);
+        if (parts == null) {
+          span(v);
+          continue;
+        }
+        final (String label, String before, String after) = parts;
+        final (String b, String d) = highlightPair(before, after, a);
+        rows.add(TableRow(<String>[...lead(), _field(label), b, d]));
+      }
+      if (same.length > 1) {
+        labelled('at: ${same.map((ReportItem i) => names.of(i.change!.node)).join(', ')}');
+      }
+      for (final String line in _groupLines(<ShiftGroup>[for (final ReportItem i in same) ...i.causedGroups])) {
+        labelled('consequence: $line');
+      }
+      final List<(Change, DiffNode?)> ks = <(Change, DiffNode?)>[
+        for (final ReportItem i in same)
+          for (final Change k in i.consequences) (k, i.change!.node),
+      ];
+      _consequenceLines(ks, (DiffNode k, DiffNode? at) {
+        final bool near = at != null && (identical(k, at) || identical(k, at.parent));
+        return same.length > 1 && near ? _relative(k, at) : names.of(k);
+      }).forEach(labelled);
+    } else {
+      final ShiftGroup g = item.group!;
+      span(g.summary);
+      labelled(
+        g.candidates.isEmpty
+            ? 'cause unknown, needs review'
+            : 'possible causes: ${g.candidates.map((Change x) => '${x.type.label} ${names.of(x.node)}').join(', ')}',
+      );
+      _consequenceLines(<(Change, DiffNode?)>[
+        for (final Change k in item.consequences) (k, null),
+      ], (DiffNode k, _) => names.of(k)).forEach(labelled);
+    }
+    groups.add(rows);
+  }
+  return renderTable(
+    const <TableColumn>[
+      TableColumn('#'),
+      TableColumn('Change'),
+      TableColumn('Component', max: 22),
+      TableColumn('Field', max: 20),
+      TableColumn('Before', flex: true),
+      TableColumn('After', flex: true),
+    ],
+    groups,
+    width: _width,
+    a: a,
+  );
+}
+
+/// The words naming a field, without their separator: `Text.data.2: ` is
+/// `Text.data.2`, and a colour's token follows its field.
+String _field(String label) {
+  String f = label.trim();
+  if (f.endsWith(':')) {
+    f = f.substring(0, f.length - 1);
+  }
+  return f.replaceAll(': ', ' ');
 }

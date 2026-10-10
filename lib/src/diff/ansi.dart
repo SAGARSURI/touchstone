@@ -77,29 +77,44 @@ final RegExp _namedColor = RegExp(r'^[A-Za-z][\w.]* #[0-9A-F]{8}$');
 /// before the arrow and green after it; the words naming the field and what
 /// both sides share are left plain. Unchanged when it has no arrow.
 String highlightChange(String entry, Ansi a) {
-  final int arrow = entry.indexOf(' -> ');
-  if (!a.on || arrow < 0) {
+  final (String, String, String)? parts = a.on ? splitChange(entry) : null;
+  if (parts == null) {
     return entry;
   }
+  final (String label, String before, String after) = parts;
+  final (String b, String c) = highlightPair(before, after, a);
+  return '$label$b -> $c';
+}
+
+/// [entry] as the words naming the field (with their separator), the value
+/// before and the value after; null when it has no arrow.
+(String, String, String)? splitChange(String entry) {
+  final int arrow = entry.indexOf(' -> ');
+  if (arrow < 0) {
+    return null;
+  }
   final String left = entry.substring(0, arrow);
-  final List<String> after = _split(entry.substring(arrow + 4));
+  final String after = entry.substring(arrow + 4);
   final List<String> leftTokens = _split(left);
-  final int start = _valueStart(left, leftTokens, after.length);
-  final List<String> label = leftTokens.sublist(0, start);
-  final List<String> before = leftTokens.sublist(start);
+  final int start = _valueStart(left, leftTokens, _split(after).length);
+  return (leftTokens.sublist(0, start).join(), leftTokens.sublist(start).join(), after);
+}
+
+/// [before] and [after] with the part that differs coloured, red and green.
+(String, String) highlightPair(String before, String after, Ansi a) {
+  final List<String> x = _split(before);
+  final List<String> y = _split(after);
   var p = 0;
-  while (p < before.length && p < after.length && before[p] == after[p]) {
+  while (p < x.length && p < y.length && x[p] == y[p]) {
     p++;
   }
   var s = 0;
-  while (s < before.length - p &&
-      s < after.length - p &&
-      before[before.length - 1 - s] == after[after.length - 1 - s]) {
+  while (s < x.length - p && s < y.length - p && x[x.length - 1 - s] == y[y.length - 1 - s]) {
     s++;
   }
   String side(List<String> t, String Function(String) colour) =>
       t.sublist(0, p).join() + colour(t.sublist(p, t.length - s).join()) + t.sublist(t.length - s).join();
-  return '${label.join()}${side(before, a.red)} -> ${side(after, a.green)}';
+  return (side(x, a.red), side(y, a.green));
 }
 
 List<String> _split(String s) => <String>[for (final Match m in _tokens.allMatches(s)) m[0]!];
