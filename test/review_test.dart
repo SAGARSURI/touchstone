@@ -19,6 +19,23 @@ class Tile extends StatelessWidget {
   );
 }
 
+// A tile that also draws a colour derived from its own, which has no token.
+class ShadedTile extends StatelessWidget {
+  const ShadedTile({super.key, this.color = const Color(0xFF000000)});
+  final Color color;
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    width: 100,
+    height: 20,
+    child: DecoratedBox(
+      decoration: BoxDecoration(
+        color: color,
+        border: Border.all(color: color.withAlpha(0x80)),
+      ),
+    ),
+  );
+}
+
 final options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Tile}));
 
 Future<String> capture(WidgetTester tester, Widget w) async {
@@ -89,6 +106,59 @@ void main() {
     final ReviewResult same = review(base: 'HEAD', policy: Policy.defaults(), root: root);
     expect(same.reviews, isEmpty);
     expect(same.exitCode, 0);
+  });
+
+  testWidgets('one token change in several snapshots is grouped under that token', (WidgetTester tester) async {
+    const Color before = Color(0xFF000000);
+    const Color after = Color(0xFFFF0000);
+    final tokens = SnapshotOptions(
+      policy: ComponentPolicy(include: <Type>{Tile, ShadedTile}),
+      tokenResolver: (Object v) => v == before || v == after ? 'brand.accent' : null,
+    );
+    Future<String> scene(Widget w) async {
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Align(alignment: Alignment.topLeft, child: w),
+        ),
+      );
+      return (await captureSnapshot(tester, 'tile', options: tokens)).toCanonical();
+    }
+
+    final String one = await scene(const Tile());
+    final String two = await scene(const Column(children: <Widget>[Tile(), Tile(height: 30), ShadedTile()]));
+    final String oneAfter = await scene(const Tile(color: after));
+    final String twoAfter = await scene(
+      const Column(
+        children: <Widget>[
+          Tile(color: after),
+          Tile(height: 30, color: after),
+          ShadedTile(color: after),
+        ],
+      ),
+    );
+
+    final Directory dir = Directory.systemTemp.createTempSync('touchstone_tokens');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    final String root = dir.resolveSymbolicLinksSync();
+    File('$root/test/snapshots/one.snapshot')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(one);
+    File('$root/test/snapshots/two.snapshot').writeAsStringSync(two);
+    git(root, <String>['init', '-q']);
+    git(root, <String>['add', '.']);
+    git(root, <String>['commit', '-q', '-m', 'base']);
+    File('$root/test/snapshots/one.snapshot').writeAsStringSync(oneAfter);
+    File('$root/test/snapshots/two.snapshot').writeAsStringSync(twoAfter);
+
+    final ReviewResult r = review(base: 'HEAD', policy: Policy.defaults(), root: root);
+    expect(r.reviews.first.text, contains('brand.accent #FF000000 -> #FFFF0000'));
+    expect(
+      r.render(),
+      contains(
+        'Causes in more than one snapshot:\n  brand.accent #FF000000 -> #FFFF0000: style change on 3 Tile, 1 ShadedTile in 2 snapshots\n',
+      ),
+    );
   });
 
   test('declared expectations hold only expect lines', () {

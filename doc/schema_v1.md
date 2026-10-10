@@ -46,11 +46,12 @@ nodes
 | id | Detection | `Type#key` for a `ValueKey` of a string, number, boolean or enum, with `%`, `/`, `#` and `@` in the key percent-encoded; otherwise `Type@n`, the n-th sibling component of that type. Siblings whose segments are still equal (keys `'7'` and `7`) get `@1`, `@2` in order. The full id joins segments from the root with `/` |
 | `bounds` | Detection | `x,y,width,height` of the component's top render object in global logical pixels, exact doubles |
 | `paint` | Detection | SHA-256 of the component's own paint text (below) |
-| `sem` | Detection | The semantics nodes the component owns: rect, transform, label, value, hint, tooltip, role, flags, actions and every other non-default `SemanticsData` field, as canonical JSON. A node belongs to the nearest component containing every render object that gave it content, not to the framework boundary that formed it (a list item's `IndexedSemantics`, for example). Nodes no render object owns (one per text span with a recognizer) go with the node that built them. Sort keys and traversal links are recorded, so reading order follows from the node. A custom action is recorded by its label, or `hint <action>: <hint>` for a hint override |
+| `sem` | Detection | The semantics nodes the component owns: rect, transform, label, value, hint, tooltip, role, flags, actions and every other non-default `SemanticsData` field, as canonical JSON. A node belongs to the nearest component containing every render object that gave it content, not to the framework boundary that formed it (a list item's `IndexedSemantics`, for example). Nodes no render object owns (one per text span with a recognizer) go with the node that built them. Sort keys and traversal links are recorded, so reading order follows from the node. A traversal link is written `link <n>`, numbered in the order met within the snapshot: its identifier is an arbitrary object whose text holds a run-dependent hash, and only which nodes share it matters. A custom action is recorded by its label, or `hint <action>: <hint>` for a hint override |
 | `opaque` | Detection | Why paint is a pixel hash (`path`, `platformView`, …), `-` if none |
-| `flat` | Detection | SHA-256 of the subtree's output with component boundaries removed (added 2026-10-09 for A5): the paint text of this component and every component inside it, written as if they were one component (a child component's commands where its marker would be, after its paint offset; render objects that only pass one child through left out, whoever built them; paint of a component outside the subtree as `foreign` plus its offset; a subtree component whose paint starts outside the subtree after its global transform), then the subtree's semantics nodes in semantics tree order, whoever owns each. Equal when a refactor changed the widget structure but not the output |
+| `flat` | Detection | SHA-256 of the subtree's output with component boundaries removed (added 2026-10-09 for A5): the paint text of this component and every component inside it, written as if they were one component (a child component's commands where its marker would be, after its paint offset; render objects that only pass one child through left out, whoever built them; paint of a component outside the subtree as `foreign` plus its offset; a subtree component whose paint starts outside the subtree after its global transform), then the subtree's semantics nodes in semantics tree order, whoever owns each. A node whose parent node is outside the subtree has its transform written relative to this component's origin instead of to that parent, so the hash does not depend on where the component sits (bounds records that). Equal when a refactor changed the widget structure but not the output |
 | `type` | Explanation | Widget class and the library that declares it |
 | `style` | Explanation | Diagnostics properties of the render objects that drew the component's paint, with a token name when the project's resolver returns one |
+| `shape` | Explanation | Optional (added in Phase 3, 2026-10-09). SHA-256 of the paint text with every child's placement left out: the offset after each `child` marker and each `comp(<index>)` marker. Equal on both sides when the component's paint changed only because children inside it moved, which the diff reports as a layout change inside it, not as unexplained paint. Left out of the line when unknown, so files written before it stay canonical |
 | `sub` | Detection | SHA-256 over the detection fields and the children's `sub`, in order |
 
 Explanation fields are written to the file, so they must be deterministic, but
@@ -93,9 +94,31 @@ in paint order:
   `getTransformTo`, offsets and transforms are written explicitly instead of
   relying on bounds.
 
-An opaque render object's paint ends with the pixel hash of its reach (see the
-Phase 0 register), so an opaque component's `paint` changes whenever its pixels
-do.
+An opaque render object's paint ends with a pixel hash, so an opaque
+component's `paint` changes whenever its pixels do.
+
+- Phase 3: when every reason is in the render object's own drawing or in a
+  clip or mask it applies (`path`, `picture`, `vertices`, a shader, a mask
+  filter, a text source, a platform view or texture), and its transform is a
+  plain translation, the render object is painted alone, without its
+  children, and the hash is of that drawing over what it covers in its own
+  coordinates: `pixels(own;<rect>;<hash>)`. A clip path is drawn as its
+  filled area, a shader mask as its shader, and a platform view or texture
+  as nothing (they have no pixels in a widget test; their rects are in the
+  commands). What other components draw over it or inside its clip, and
+  where an ancestor's clip cuts it, no longer change its hash: the catalogue
+  history showed every such change reported again as unexplained paint on
+  the clipping or covered component.
+- Otherwise (an unknown layer or filter, which may act on the children's
+  pixels, or a rotated or scaled transform), the hash is of the composited
+  view over the render object's reach (see the Phase 0 register):
+  `pixels(<rect>;<hash>)`.
+- In both forms `<hash>` is a 128-bit digest of the RGBA pixels, at the
+  device pixel ratio, from `lib/src/recorder/pixel_digest.dart` (since Phase 3
+  A10; SHA-256 before). SHA-256 over the pixels was most of the cost of a
+  capture, and the pixel digest only has to change when a pixel does: it
+  always changes when one 32-bit word changes, and two 64-bit lanes make an
+  accidental collision of larger changes negligible.
 
 ## Capture
 
@@ -106,8 +129,14 @@ frame fails and a load that failed with an error widget does not), or if text
 uses a font family that renders with a font not loaded through
 `SnapshotFonts.load`, which the fingerprint could not record. It then enables
 semantics, records paint, repaints to undo
-what recording touched, rasterizes the view only if a node is opaque, then
+what recording touched, rasterizes opaque nodes (alone, or the view when one
+must be hashed composited), then
 builds the component tree and hashes bottom-up.
+
+`expectSnapshot` checks an unchanged snapshot from its detection fields
+alone: it captures without describing `style` or `shape`, which are not
+hashed, and captures again with them only when the root hash or toolchain
+differs from the baseline, to write the change report (A10).
 
 Content that never settles (a shimmer) is captured with
 `SnapshotOptions(atPumpedTime: true)` after the test pumps an explicit time;
@@ -127,6 +156,19 @@ the first differing node and its likely cause are reported. Outside
 `withFixedClock`, any read of `package:clock` time during the rebuild fails the
 gate and names the component whose code read it, in its widget class or its
 `State` class.
+
+A Flutter upgrade changes the toolchain fingerprint, so every baseline is
+routed to migration (A12). `dart run touchstone:migrate --from <old flutter>`
+runs the tests twice. On the old release, each snapshot that matches its
+baseline rasterizes the whole test view and keeps its pixel digest under
+`build/touchstone/migration`. On the new release, each baseline from the old
+toolchain is rewritten after the determinism gate, and a
+`snapshots/<id>.migration` file beside it records both toolchains, both root
+hashes and both views' size and digest. Review passes a migration only when
+that file names both baselines exactly and the pixels are identical; every
+other migration needs review, with the reason. The two runs can also be made
+by hand with `--dart-define=TOUCHSTONE_MIGRATION=prove` and `=apply`. The
+schema is unchanged: the old pixels come from rendering on the old release.
 
 The gate rebuilds but does not mount the tree again, so a value fixed when a
 widget is first mounted (an unseeded `Random` in a `State` field) passes it.

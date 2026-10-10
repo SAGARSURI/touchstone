@@ -1,0 +1,914 @@
+Resolving dependencies...
+Downloading packages...
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+Got dependencies!
+4 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+
+Running Xcode build...                                          
+Xcode build done.                                           59.4s
+::group::✅ seed 0 (variant: TargetPlatform.android)
+A7 {"seed":0,"scene":"matrix/sign_in_dark","noisy":false,"mutation":"reorder children: moved the last of 3 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 1 (variant: TargetPlatform.android)
+A7 {"seed":1,"scene":"overlays/snackbar","noisy":false,"mutation":"size 1px: height 48.0 + 1","mutationLength":25,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 2 (variant: TargetPlatform.android)
+A7 {"seed":2,"scene":"sign_in/focused","noisy":false,"mutation":"size 1px: width 22.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 3 (variant: TargetPlatform.android)
+A7 {"seed":3,"scene":"states/loading","noisy":true,"mutation":"size 1px: width 36.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 4 (variant: TargetPlatform.android)
+A7 {"seed":4,"scene":"live/ticked","noisy":true,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 5 (variant: TargetPlatform.android)
+A7 {"seed":5,"scene":"chart/tooltip","noisy":false,"mutation":"custom painter removed: painter removed","mutationLength":39,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 6 (variant: TargetPlatform.android)
+A7 {"seed":6,"scene":"overlays/dropdown","noisy":false,"mutation":"padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 0.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":86,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 7 (variant: TargetPlatform.android)
+A7 {"seed":7,"scene":"states/loading","noisy":true,"mutation":"size 1px: height 8.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 8 (variant: TargetPlatform.android)
+A7 {"seed":8,"scene":"overlays/dialog","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 9 (variant: TargetPlatform.android)
+A7 {"seed":9,"scene":"matrix/settings_large","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 10 (variant: TargetPlatform.android)
+A7 {"seed":10,"scene":"matrix/sign_in_rtl","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 11 (variant: TargetPlatform.android)
+A7 {"seed":11,"scene":"overlays/dialog","noisy":false,"mutation":"padding 1px: padding EdgeInsets(16.0, 24.0, 16.0, 8.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":87,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 12 (variant: TargetPlatform.android)
+A7 {"seed":12,"scene":"order/amount","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 13 (variant: TargetPlatform.android)
+A7 {"seed":13,"scene":"watchlist/top","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 14 (variant: TargetPlatform.android)
+A7 {"seed":14,"scene":"settings/default","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 15 (variant: TargetPlatform.android)
+A7 {"seed":15,"scene":"watchlist/scrolled","noisy":false,"mutation":"padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":86,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 16 (variant: TargetPlatform.android)
+A7 {"seed":16,"scene":"overlays/dropdown","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 17 (variant: TargetPlatform.android)
+A7 {"seed":17,"scene":"order/symbol","noisy":false,"mutation":"padding 1px: padding EdgeInsets(6.0, 2.0, 6.0, 2.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":84,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 18 (variant: TargetPlatform.android)
+A7 {"seed":18,"scene":"order/amount","noisy":false,"mutation":"flex alignment: mainAxisAlignment MainAxisAlignment.center -> MainAxisAlignment.spaceBetween","mutationLength":92,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 19 (variant: TargetPlatform.android)
+A7 {"seed":19,"scene":"map/default","noisy":false,"mutation":"size 1px: width 24.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 20 (variant: TargetPlatform.android)
+A7 {"seed":20,"scene":"chart/default","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 21 (variant: TargetPlatform.android)
+A7 {"seed":21,"scene":"live/ticked","noisy":true,"mutation":"flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end","mutationLength":82,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 22 (variant: TargetPlatform.android)
+A7 {"seed":22,"scene":"text/all","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 23 (variant: TargetPlatform.android)
+A7 {"seed":23,"scene":"sign_in/submitting","noisy":false,"mutation":"custom painter removed: painter removed","mutationLength":39,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 24 (variant: TargetPlatform.android)
+A7 {"seed":24,"scene":"overlays/dialog","noisy":false,"mutation":"text: text +0.8X%","mutationLength":17,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 25 (variant: TargetPlatform.android)
+A7 {"seed":25,"scene":"overlays/sheet","noisy":false,"mutation":"text: text X0.85%","mutationLength":17,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 26 (variant: TargetPlatform.android)
+A7 {"seed":26,"scene":"matrix/settings_small","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 1.0, 0.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 27 (variant: TargetPlatform.android)
+A7 {"seed":27,"scene":"overlays/dialog","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 28 (variant: TargetPlatform.android)
+A7 {"seed":28,"scene":"states/empty","noisy":false,"mutation":"padding 1px: padding EdgeInsets.all(24.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":74,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 29 (variant: TargetPlatform.android)
+A7 {"seed":29,"scene":"watchlist/top","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 30 (variant: TargetPlatform.android)
+A7 {"seed":30,"scene":"order/symbol","noisy":false,"mutation":"padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":86,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 31 (variant: TargetPlatform.android)
+A7 {"seed":31,"scene":"detail/collapsed","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 4.0, 0.0, 0.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)","mutationLength":84,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 32 (variant: TargetPlatform.android)
+A7 {"seed":32,"scene":"overlays/dialog","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 1.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)","mutationLength":84,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 33 (variant: TargetPlatform.android)
+A7 {"seed":33,"scene":"matrix/sign_in_dark","noisy":false,"mutation":"text: text PXssword","mutationLength":19,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 34 (variant: TargetPlatform.android)
+A7 {"seed":34,"scene":"overlays/snackbar","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 35 (variant: TargetPlatform.android)
+A7 {"seed":35,"scene":"matrix/settings_large","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 36 (variant: TargetPlatform.android)
+A7 {"seed":36,"scene":"order/dragging","noisy":false,"mutation":"size 1px: width 56.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 37 (variant: TargetPlatform.android)
+A7 {"seed":37,"scene":"detail/collapsed","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":69,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 38 (variant: TargetPlatform.android)
+A7 {"seed":38,"scene":"matrix/sign_in_small","noisy":false,"mutation":"text: text Xassword","mutationLength":19,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 39 (variant: TargetPlatform.android)
+A7 {"seed":39,"scene":"map/default","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 40 (variant: TargetPlatform.android)
+A7 {"seed":40,"scene":"order/dragging","noisy":false,"mutation":"padding 1px: padding EdgeInsets.all(1.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":73,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 41 (variant: TargetPlatform.android)
+A7 {"seed":41,"scene":"matrix/settings_text_2x","noisy":false,"mutation":"size 1px: width 20.0 + 1","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 42 (variant: TargetPlatform.android)
+A7 {"seed":42,"scene":"sign_in/error","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 43 (variant: TargetPlatform.android)
+A7 {"seed":43,"scene":"watchlist/scrolled","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 44 (variant: TargetPlatform.android)
+A7 {"seed":44,"scene":"matrix/settings_dark","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 45 (variant: TargetPlatform.android)
+A7 {"seed":45,"scene":"matrix/sign_in_text_2x","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 46 (variant: TargetPlatform.android)
+A7 {"seed":46,"scene":"detail/overview","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 47 (variant: TargetPlatform.android)
+A7 {"seed":47,"scene":"matrix/sign_in_text_2x","noisy":false,"mutation":"padding 1px: padding EdgeInsets(12.0, 0.0, 12.0, 0.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)","mutationLength":86,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 48 (variant: TargetPlatform.android)
+A7 {"seed":48,"scene":"order/done","noisy":false,"mutation":"size 1px: height 56.0 + 1","mutationLength":25,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 49 (variant: TargetPlatform.android)
+A7 {"seed":49,"scene":"matrix/sign_in_small","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 50 (variant: TargetPlatform.android)
+A7 {"seed":50,"scene":"overlays/sheet","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 1.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":84,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 51 (variant: TargetPlatform.android)
+A7 {"seed":51,"scene":"overlays/dialog","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 52 (variant: TargetPlatform.android)
+A7 {"seed":52,"scene":"matrix/sign_in_small","noisy":false,"mutation":"text: text SignXin","mutationLength":18,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 53 (variant: TargetPlatform.android)
+A7 {"seed":53,"scene":"states/error","noisy":false,"mutation":"shape colour: shape colour Color(alpha: 0.0000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB) -...","mutationLength":213,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 54 (variant: TargetPlatform.android)
+A7 {"seed":54,"scene":"live/ticked","noisy":true,"mutation":"padding 1px: padding EdgeInsets(16.0, 8.0, 16.0, 8.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":86,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 55 (variant: TargetPlatform.android)
+A7 {"seed":55,"scene":"live/ticked","noisy":true,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 56 (variant: TargetPlatform.android)
+A7 {"seed":56,"scene":"matrix/settings_small","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 1.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":84,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 57 (variant: TargetPlatform.android)
+A7 {"seed":57,"scene":"detail/news","noisy":false,"mutation":"semantics label: semantics label \"Tab 2 of 3\" -> \"Tab 2 of 3!\"","mutationLength":62,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 58 (variant: TargetPlatform.android)
+A7 {"seed":58,"scene":"detail/overview","noisy":false,"mutation":"text: text Acme Holdings X","mutationLength":26,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 59 (variant: TargetPlatform.android)
+A7 {"seed":59,"scene":"sign_in/submitting","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 60 (variant: TargetPlatform.android)
+A7 {"seed":60,"scene":"buttons/all","noisy":false,"mutation":"padding 1px: padding EdgeInsets(24.0, 0.0, 24.0, 0.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)","mutationLength":86,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 61 (variant: TargetPlatform.android)
+A7 {"seed":61,"scene":"matrix/sign_in_small","noisy":false,"mutation":"reorder children: moved the last of 3 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 62 (variant: TargetPlatform.android)
+A7 {"seed":62,"scene":"matrix/sign_in_text_2x","noisy":false,"mutation":"text: text EmaXl","mutationLength":16,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 63 (variant: TargetPlatform.android)
+A7 {"seed":63,"scene":"order/amount","noisy":false,"mutation":"decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9725, colorSpace: ColorS...","mutationLength":225,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 64 (variant: TargetPlatform.android)
+A7 {"seed":64,"scene":"map/default","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 65 (variant: TargetPlatform.android)
+A7 {"seed":65,"scene":"matrix/settings_rtl","noisy":false,"mutation":"padding 1px: padding EdgeInsets(16.0, 24.0, 16.0, 8.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":87,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 66 (variant: TargetPlatform.android)
+A7 {"seed":66,"scene":"chart/default","noisy":false,"mutation":"size 1px: height 160.0 + 1","mutationLength":26,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 67 (variant: TargetPlatform.android)
+A7 {"seed":67,"scene":"watchlist/scrolled","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 68 (variant: TargetPlatform.android)
+A7 {"seed":68,"scene":"overlays/dropdown","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 69 (variant: TargetPlatform.android)
+A7 {"seed":69,"scene":"sign_in/error","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 70 (variant: TargetPlatform.android)
+A7 {"seed":70,"scene":"map/default","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 71 (variant: TargetPlatform.android)
+A7 {"seed":71,"scene":"map/default","noisy":false,"mutation":"size 1px: width 28.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 72 (variant: TargetPlatform.android)
+A7 {"seed":72,"scene":"states/loading","noisy":true,"mutation":"size 1px: width 16.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 73 (variant: TargetPlatform.android)
+A7 {"seed":73,"scene":"overlays/sheet","noisy":false,"mutation":"padding 1px: padding EdgeInsets(24.0, 0.0, 24.0, 0.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":86,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 74 (variant: TargetPlatform.android)
+A7 {"seed":74,"scene":"states/error","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 75 (variant: TargetPlatform.android)
+A7 {"seed":75,"scene":"order/amount","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 76 (variant: TargetPlatform.android)
+A7 {"seed":76,"scene":"live/flashing","noisy":true,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 77 (variant: TargetPlatform.android)
+A7 {"seed":77,"scene":"order/done","noisy":false,"mutation":"reorder children: moved the last of 4 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 78 (variant: TargetPlatform.android)
+A7 {"seed":78,"scene":"watchlist/scrolled","noisy":false,"mutation":"text: text X","mutationLength":12,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 79 (variant: TargetPlatform.android)
+A7 {"seed":79,"scene":"sign_in/error","noisy":false,"mutation":"reorder children: moved the last of 3 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 80 (variant: TargetPlatform.android)
+A7 {"seed":80,"scene":"live/initial","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 81 (variant: TargetPlatform.android)
+A7 {"seed":81,"scene":"chart/default","noisy":false,"mutation":"padding 1px: padding EdgeInsets(16.0, 24.0, 16.0, 8.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":87,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 82 (variant: TargetPlatform.android)
+A7 {"seed":82,"scene":"states/error","noisy":false,"mutation":"shape colour: shape colour Color(alpha: 0.0000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB) -...","mutationLength":213,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 83 (variant: TargetPlatform.android)
+A7 {"seed":83,"scene":"order/dragging","noisy":false,"mutation":"text: text FJX0","mutationLength":15,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 84 (variant: TargetPlatform.android)
+A7 {"seed":84,"scene":"live/initial","noisy":false,"mutation":"text: text UpdaXed 20:44:00","mutationLength":27,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 85 (variant: TargetPlatform.android)
+A7 {"seed":85,"scene":"matrix/settings_rtl","noisy":false,"mutation":"decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9725, colorSpace: ColorS...","mutationLength":225,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 86 (variant: TargetPlatform.android)
+A7 {"seed":86,"scene":"order/amount","noisy":false,"mutation":"reorder children: moved the last of 4 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 87 (variant: TargetPlatform.android)
+A7 {"seed":87,"scene":"sign_in/focused","noisy":false,"mutation":"shape colour: shape colour Color(alpha: 1.0000, red: 0.2235, green: 0.2863, blue: 0.6706, colorSpace: ColorSpace.sRGB) -...","mutationLength":213,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 88 (variant: TargetPlatform.android)
+A7 {"seed":88,"scene":"watchlist/top","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 89 (variant: TargetPlatform.android)
+A7 {"seed":89,"scene":"chart/default","noisy":false,"mutation":"custom painter removed: painter removed","mutationLength":39,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 90 (variant: TargetPlatform.android)
+A7 {"seed":90,"scene":"watchlist/top","noisy":false,"mutation":"padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)","mutationLength":86,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 91 (variant: TargetPlatform.android)
+A7 {"seed":91,"scene":"detail/overview","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 4.0, 0.0, 0.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":84,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 92 (variant: TargetPlatform.android)
+A7 {"seed":92,"scene":"states/error","noisy":false,"mutation":"size 1px: height 24.0 + 1","mutationLength":25,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 93 (variant: TargetPlatform.android)
+A7 {"seed":93,"scene":"matrix/settings_small","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 94 (variant: TargetPlatform.android)
+A7 {"seed":94,"scene":"map/default","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 95 (variant: TargetPlatform.android)
+A7 {"seed":95,"scene":"live/flashing","noisy":true,"mutation":"decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorS...","mutationLength":225,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 96 (variant: TargetPlatform.android)
+A7 {"seed":96,"scene":"live/initial","noisy":false,"mutation":"padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":86,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 97 (variant: TargetPlatform.android)
+A7 {"seed":97,"scene":"matrix/sign_in_text_2x","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 98 (variant: TargetPlatform.android)
+A7 {"seed":98,"scene":"overlays/dialog","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 99 (variant: TargetPlatform.android)
+A7 {"seed":99,"scene":"order/review","noisy":false,"mutation":"size 1px: width 24.0 + 1","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 100 (variant: TargetPlatform.android)
+A7 {"seed":100,"scene":"live/flashing","noisy":true,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 101 (variant: TargetPlatform.android)
+A7 {"seed":101,"scene":"live/initial","noisy":false,"mutation":"flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end","mutationLength":82,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 102 (variant: TargetPlatform.android)
+A7 {"seed":102,"scene":"overlays/dialog","noisy":false,"mutation":"shape colour: shape colour Color(alpha: 1.0000, red: 0.9137, green: 0.9059, blue: 0.9373, colorSpace: ColorSpace.sRGB) -...","mutationLength":213,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 103 (variant: TargetPlatform.android)
+A7 {"seed":103,"scene":"matrix/sign_in_rtl","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 104 (variant: TargetPlatform.android)
+A7 {"seed":104,"scene":"sign_in/focused","noisy":false,"mutation":"reorder children: moved the last of 4 children first","mutationLength":52,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 105 (variant: TargetPlatform.android)
+A7 {"seed":105,"scene":"detail/news","noisy":false,"mutation":"reorder children: moved the last of 3 children first","mutationLength":52,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 106 (variant: TargetPlatform.android)
+A7 {"seed":106,"scene":"matrix/sign_in_small","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 107 (variant: TargetPlatform.android)
+A7 {"seed":107,"scene":"matrix/settings_rtl","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 108 (variant: TargetPlatform.android)
+A7 {"seed":108,"scene":"overlays/dialog","noisy":false,"mutation":"size 1px: height 48.0 + 1","mutationLength":25,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 109 (variant: TargetPlatform.android)
+A7 {"seed":109,"scene":"sign_in/focused","noisy":false,"mutation":"padding 1px: padding EdgeInsets.all(13.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":74,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 110 (variant: TargetPlatform.android)
+A7 {"seed":110,"scene":"sign_in/focused","noisy":false,"mutation":"text: text SignXin","mutationLength":18,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 111 (variant: TargetPlatform.android)
+A7 {"seed":111,"scene":"order/amount","noisy":false,"mutation":"size 1px: width 36.0 + 1","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 112 (variant: TargetPlatform.android)
+A7 {"seed":112,"scene":"watchlist/top","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 113 (variant: TargetPlatform.android)
+A7 {"seed":113,"scene":"live/initial","noisy":false,"mutation":"text: text HARX","mutationLength":15,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 114 (variant: TargetPlatform.android)
+A7 {"seed":114,"scene":"sign_in/empty","noisy":false,"mutation":"text: text PXssword","mutationLength":19,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 115 (variant: TargetPlatform.android)
+A7 {"seed":115,"scene":"matrix/settings_dark","noisy":false,"mutation":"text: text UnXock with biometrics","mutationLength":33,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 116 (variant: TargetPlatform.android)
+A7 {"seed":116,"scene":"states/error","noisy":false,"mutation":"flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end","mutationLength":82,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 117 (variant: TargetPlatform.android)
+A7 {"seed":117,"scene":"chart/default","noisy":false,"mutation":"size 1px: height 16.0 + 1","mutationLength":25,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 118 (variant: TargetPlatform.android)
+A7 {"seed":118,"scene":"map/default","noisy":false,"mutation":"reorder children: moved the last of 5 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 119 (variant: TargetPlatform.android)
+A7 {"seed":119,"scene":"live/flashing","noisy":true,"mutation":"text: text DXL0","mutationLength":15,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 120 (variant: TargetPlatform.android)
+A7 {"seed":120,"scene":"watchlist/top","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 121 (variant: TargetPlatform.android)
+A7 {"seed":121,"scene":"detail/overview","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 122 (variant: TargetPlatform.android)
+A7 {"seed":122,"scene":"matrix/sign_in_large","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 123 (variant: TargetPlatform.android)
+A7 {"seed":123,"scene":"text/all","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 124 (variant: TargetPlatform.android)
+A7 {"seed":124,"scene":"watchlist/scrolled","noisy":false,"mutation":"flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end","mutationLength":82,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 125 (variant: TargetPlatform.android)
+A7 {"seed":125,"scene":"text/all","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 126 (variant: TargetPlatform.android)
+A7 {"seed":126,"scene":"states/error","noisy":false,"mutation":"text: text ReXry","mutationLength":16,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 127 (variant: TargetPlatform.android)
+A7 {"seed":127,"scene":"matrix/settings_rtl","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 128 (variant: TargetPlatform.android)
+A7 {"seed":128,"scene":"matrix/settings_large","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 129 (variant: TargetPlatform.android)
+A7 {"seed":129,"scene":"overlays/dialog","noisy":false,"mutation":"semantics label: semantics label \"Dismiss\" -> \"Dismiss!\"","mutationLength":56,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 130 (variant: TargetPlatform.android)
+A7 {"seed":130,"scene":"live/flashing","noisy":true,"mutation":"padding 1px: padding EdgeInsets(16.0, 8.0, 16.0, 8.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":86,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 131 (variant: TargetPlatform.android)
+A7 {"seed":131,"scene":"order/dragging","noisy":false,"mutation":"padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)","mutationLength":86,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 132 (variant: TargetPlatform.android)
+A7 {"seed":132,"scene":"matrix/sign_in_rtl","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 133 (variant: TargetPlatform.android)
+A7 {"seed":133,"scene":"detail/news","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 134 (variant: TargetPlatform.android)
+A7 {"seed":134,"scene":"matrix/settings_rtl","noisy":false,"mutation":"size 1px: height 1.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 135 (variant: TargetPlatform.android)
+A7 {"seed":135,"scene":"order/symbol","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 136 (variant: TargetPlatform.android)
+A7 {"seed":136,"scene":"sign_in/error","noisy":false,"mutation":"padding 1px: padding EdgeInsets.all(16.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)","mutationLength":74,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 137 (variant: TargetPlatform.android)
+A7 {"seed":137,"scene":"sign_in/empty","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 138 (variant: TargetPlatform.android)
+A7 {"seed":138,"scene":"matrix/settings_text_2x","noisy":false,"mutation":"text: text NXtifications","mutationLength":24,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 139 (variant: TargetPlatform.android)
+A7 {"seed":139,"scene":"matrix/sign_in_dark","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 140 (variant: TargetPlatform.android)
+A7 {"seed":140,"scene":"overlays/snackbar","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 1.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)","mutationLength":84,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 141 (variant: TargetPlatform.android)
+A7 {"seed":141,"scene":"matrix/sign_in_dark","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 142 (variant: TargetPlatform.android)
+A7 {"seed":142,"scene":"matrix/settings_large","noisy":false,"mutation":"text: text X","mutationLength":12,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 143 (variant: TargetPlatform.android)
+A7 {"seed":143,"scene":"states/error","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 144 (variant: TargetPlatform.android)
+A7 {"seed":144,"scene":"matrix/sign_in_text_2x","noisy":false,"mutation":"text: text SXgn in","mutationLength":18,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 145 (variant: TargetPlatform.android)
+A7 {"seed":145,"scene":"settings/default","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 146 (variant: TargetPlatform.android)
+A7 {"seed":146,"scene":"matrix/settings_rtl","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 147 (variant: TargetPlatform.android)
+A7 {"seed":147,"scene":"detail/news","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 148 (variant: TargetPlatform.android)
+A7 {"seed":148,"scene":"sign_in/empty","noisy":false,"mutation":"reorder children: moved the last of 3 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 149 (variant: TargetPlatform.android)
+A7 {"seed":149,"scene":"matrix/sign_in_text_2x","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 150 (variant: TargetPlatform.android)
+A7 {"seed":150,"scene":"live/flashing","noisy":true,"mutation":"decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.9412, green: 0.9705, blue: 0.9495, colorSpace: ColorS...","mutationLength":225,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 151 (variant: TargetPlatform.android)
+A7 {"seed":151,"scene":"sign_in/focused","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 16.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":85,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 152 (variant: TargetPlatform.android)
+A7 {"seed":152,"scene":"order/done","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 153 (variant: TargetPlatform.android)
+A7 {"seed":153,"scene":"order/symbol","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 154 (variant: TargetPlatform.android)
+A7 {"seed":154,"scene":"states/loading","noisy":true,"mutation":"reorder children: moved the last of 3 children first","mutationLength":52,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 155 (variant: TargetPlatform.android)
+A7 {"seed":155,"scene":"order/amount","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 156 (variant: TargetPlatform.android)
+A7 {"seed":156,"scene":"detail/overview","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 157 (variant: TargetPlatform.android)
+A7 {"seed":157,"scene":"order/amount","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 158 (variant: TargetPlatform.android)
+A7 {"seed":158,"scene":"watchlist/top","noisy":false,"mutation":"text: text Juniper HoldingsX10","mutationLength":30,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 159 (variant: TargetPlatform.android)
+A7 {"seed":159,"scene":"matrix/sign_in_text_2x","noisy":false,"mutation":"text: text Xign in","mutationLength":18,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 160 (variant: TargetPlatform.android)
+A7 {"seed":160,"scene":"settings/default","noisy":false,"mutation":"decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9725, colorSpace: ColorS...","mutationLength":225,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 161 (variant: TargetPlatform.android)
+A7 {"seed":161,"scene":"text/all","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 162 (variant: TargetPlatform.android)
+A7 {"seed":162,"scene":"live/initial","noisy":false,"mutation":"text: text 93X33","mutationLength":16,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 163 (variant: TargetPlatform.android)
+A7 {"seed":163,"scene":"live/ticked","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 164 (variant: TargetPlatform.android)
+A7 {"seed":164,"scene":"sign_in/error","noisy":false,"mutation":"padding 1px: padding EdgeInsets.all(16.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":74,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 165 (variant: TargetPlatform.android)
+A7 {"seed":165,"scene":"order/transition","noisy":true,"mutation":"size 1px: width 16.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 166 (variant: TargetPlatform.android)
+A7 {"seed":166,"scene":"sign_in/empty","noisy":false,"mutation":"reorder children: moved the last of 4 children first","mutationLength":52,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 167 (variant: TargetPlatform.android)
+A7 {"seed":167,"scene":"map/default","noisy":false,"mutation":"size 1px: width 28.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 168 (variant: TargetPlatform.android)
+A7 {"seed":168,"scene":"live/initial","noisy":false,"mutation":"flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end","mutationLength":82,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 169 (variant: TargetPlatform.android)
+A7 {"seed":169,"scene":"states/empty","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 170 (variant: TargetPlatform.android)
+A7 {"seed":170,"scene":"map/default","noisy":false,"mutation":"text: text Branches nXar you","mutationLength":28,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 171 (variant: TargetPlatform.android)
+A7 {"seed":171,"scene":"live/ticked","noisy":true,"mutation":"text: text 140.X2","mutationLength":17,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 172 (variant: TargetPlatform.android)
+A7 {"seed":172,"scene":"buttons/all","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 173 (variant: TargetPlatform.android)
+A7 {"seed":173,"scene":"overlays/snackbar","noisy":false,"mutation":"decoration radius: BoxDecoration.borderRadius +1","mutationLength":48,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 174 (variant: TargetPlatform.android)
+A7 {"seed":174,"scene":"order/amount","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 175 (variant: TargetPlatform.android)
+A7 {"seed":175,"scene":"sign_in/focused","noisy":false,"mutation":"text: text Sign iX","mutationLength":18,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 176 (variant: TargetPlatform.android)
+A7 {"seed":176,"scene":"sign_in/error","noisy":false,"mutation":"size 1px: height 8.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 177 (variant: TargetPlatform.android)
+A7 {"seed":177,"scene":"matrix/sign_in_dark","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 178 (variant: TargetPlatform.android)
+A7 {"seed":178,"scene":"states/loading","noisy":true,"mutation":"decoration radius: BoxDecoration.borderRadius +1","mutationLength":48,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 179 (variant: TargetPlatform.android)
+A7 {"seed":179,"scene":"matrix/settings_small","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 180 (variant: TargetPlatform.android)
+A7 {"seed":180,"scene":"matrix/settings_small","noisy":false,"mutation":"text: text X","mutationLength":12,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 181 (variant: TargetPlatform.android)
+A7 {"seed":181,"scene":"order/dragging","noisy":false,"mutation":"padding 1px: padding EdgeInsets.all(16.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":74,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 182 (variant: TargetPlatform.android)
+A7 {"seed":182,"scene":"matrix/sign_in_text_2x","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 183 (variant: TargetPlatform.android)
+A7 {"seed":183,"scene":"states/empty","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 184 (variant: TargetPlatform.android)
+A7 {"seed":184,"scene":"matrix/settings_large","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 185 (variant: TargetPlatform.android)
+A7 {"seed":185,"scene":"sign_in/submitting","noisy":false,"mutation":"shape colour: shape colour Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1294, colorSpace: ColorSpace.sRGB) -...","mutationLength":213,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 186 (variant: TargetPlatform.android)
+A7 {"seed":186,"scene":"detail/collapsed","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 187 (variant: TargetPlatform.android)
+A7 {"seed":187,"scene":"order/amount","noisy":false,"mutation":"decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9725, colorSpace: ColorS...","mutationLength":225,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 188 (variant: TargetPlatform.android)
+A7 {"seed":188,"scene":"detail/news","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 189 (variant: TargetPlatform.android)
+A7 {"seed":189,"scene":"sign_in/focused","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 190 (variant: TargetPlatform.android)
+A7 {"seed":190,"scene":"states/loading","noisy":true,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 191 (variant: TargetPlatform.android)
+A7 {"seed":191,"scene":"matrix/settings_rtl","noisy":false,"mutation":"size 1px: width 36.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 192 (variant: TargetPlatform.android)
+A7 {"seed":192,"scene":"matrix/sign_in_rtl","noisy":false,"mutation":"padding 1px: padding EdgeInsets(24.0, 0.0, 24.0, 0.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":86,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 193 (variant: TargetPlatform.android)
+A7 {"seed":193,"scene":"sign_in/focused","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 194 (variant: TargetPlatform.android)
+A7 {"seed":194,"scene":"settings/default","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 195 (variant: TargetPlatform.android)
+A7 {"seed":195,"scene":"overlays/snackbar","noisy":false,"mutation":"text: text 24 sXares","mutationLength":20,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 196 (variant: TargetPlatform.android)
+A7 {"seed":196,"scene":"live/initial","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 197 (variant: TargetPlatform.android)
+A7 {"seed":197,"scene":"order/amount","noisy":false,"mutation":"text: text +0.85X","mutationLength":17,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 198 (variant: TargetPlatform.android)
+A7 {"seed":198,"scene":"overlays/sheet","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 199 (variant: TargetPlatform.android)
+A7 {"seed":199,"scene":"settings/default","noisy":false,"mutation":"decoration radius: BoxDecoration.borderRadius +1","mutationLength":48,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 200 (variant: TargetPlatform.android)
+A7 {"seed":200,"scene":"sign_in/focused","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 201 (variant: TargetPlatform.android)
+A7 {"seed":201,"scene":"live/flashing","noisy":true,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 202 (variant: TargetPlatform.android)
+A7 {"seed":202,"scene":"matrix/sign_in_small","noisy":false,"mutation":"size 1px: height 8.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 203 (variant: TargetPlatform.android)
+A7 {"seed":203,"scene":"states/loading","noisy":true,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 204 (variant: TargetPlatform.android)
+A7 {"seed":204,"scene":"states/empty","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 205 (variant: TargetPlatform.android)
+A7 {"seed":205,"scene":"matrix/sign_in_large","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 206 (variant: TargetPlatform.android)
+A7 {"seed":206,"scene":"matrix/settings_small","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 207 (variant: TargetPlatform.android)
+A7 {"seed":207,"scene":"detail/news","noisy":false,"mutation":"padding 1px: padding EdgeInsets(16.0, 0.0, 24.0, 0.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":86,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 208 (variant: TargetPlatform.android)
+A7 {"seed":208,"scene":"detail/overview","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 209 (variant: TargetPlatform.android)
+A7 {"seed":209,"scene":"chart/tooltip","noisy":false,"mutation":"size 1px: height 200.0 + 1","mutationLength":26,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 210 (variant: TargetPlatform.android)
+A7 {"seed":210,"scene":"order/symbol","noisy":false,"mutation":"text: text Acme HoXdings 1","mutationLength":26,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 211 (variant: TargetPlatform.android)
+A7 {"seed":211,"scene":"detail/overview","noisy":false,"mutation":"size 1px: height 46.0 + 1","mutationLength":25,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 212 (variant: TargetPlatform.android)
+A7 {"seed":212,"scene":"detail/collapsed","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 213 (variant: TargetPlatform.android)
+A7 {"seed":213,"scene":"states/empty","noisy":false,"mutation":"size 1px: width 48.0 + 1","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 214 (variant: TargetPlatform.android)
+A7 {"seed":214,"scene":"order/amount","noisy":false,"mutation":"decoration colour: BoxDecoration.color Color(alpha: 0.1200, red: 0.8510, green: 0.1882, blue: 0.1451, colorSpace: ColorS...","mutationLength":225,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 215 (variant: TargetPlatform.android)
+A7 {"seed":215,"scene":"text/all","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 216 (variant: TargetPlatform.android)
+A7 {"seed":216,"scene":"matrix/settings_text_2x","noisy":false,"mutation":"size 1px: width 20.0 + 1","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 217 (variant: TargetPlatform.android)
+A7 {"seed":217,"scene":"matrix/settings_rtl","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 218 (variant: TargetPlatform.android)
+A7 {"seed":218,"scene":"order/dragging","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 219 (variant: TargetPlatform.android)
+A7 {"seed":219,"scene":"overlays/dropdown","noisy":false,"mutation":"text: text X","mutationLength":12,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 220 (variant: TargetPlatform.android)
+A7 {"seed":220,"scene":"watchlist/scrolled","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 221 (variant: TargetPlatform.android)
+A7 {"seed":221,"scene":"overlays/snackbar","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 4.0, 0.0, 0.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":84,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 222 (variant: TargetPlatform.android)
+A7 {"seed":222,"scene":"order/transition","noisy":true,"mutation":"semantics label: semantics label \"Back\" -> \"Back!\"","mutationLength":50,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 223 (variant: TargetPlatform.android)
+A7 {"seed":223,"scene":"matrix/settings_dark","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 1.0, 0.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 224 (variant: TargetPlatform.android)
+A7 {"seed":224,"scene":"detail/news","noisy":false,"mutation":"text: text Xeadlines 9","mutationLength":22,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 225 (variant: TargetPlatform.android)
+A7 {"seed":225,"scene":"states/empty","noisy":false,"mutation":"reorder children: moved the last of 5 children first","mutationLength":52,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 226 (variant: TargetPlatform.android)
+A7 {"seed":226,"scene":"buttons/all","noisy":false,"mutation":"text: text ContXnue","mutationLength":19,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 227 (variant: TargetPlatform.android)
+A7 {"seed":227,"scene":"overlays/sheet","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 4.0, 0.0, 0.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)","mutationLength":84,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 228 (variant: TargetPlatform.android)
+A7 {"seed":228,"scene":"chart/default","noisy":false,"mutation":"text: text DAILX RANGE","mutationLength":22,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 229 (variant: TargetPlatform.android)
+A7 {"seed":229,"scene":"order/done","noisy":false,"mutation":"reorder children: moved the last of 5 children first","mutationLength":52,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 230 (variant: TargetPlatform.android)
+A7 {"seed":230,"scene":"chart/tooltip","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 231 (variant: TargetPlatform.android)
+A7 {"seed":231,"scene":"map/default","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 232 (variant: TargetPlatform.android)
+A7 {"seed":232,"scene":"sign_in/submitting","noisy":false,"mutation":"size 1px: width 18.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 233 (variant: TargetPlatform.android)
+A7 {"seed":233,"scene":"states/empty","noisy":false,"mutation":"reorder children: moved the last of 3 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 234 (variant: TargetPlatform.android)
+A7 {"seed":234,"scene":"text/all","noisy":false,"mutation":"padding 1px: padding EdgeInsets.all(16.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":74,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 235 (variant: TargetPlatform.android)
+A7 {"seed":235,"scene":"sign_in/error","noisy":false,"mutation":"text: text SXgn in","mutationLength":18,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 236 (variant: TargetPlatform.android)
+A7 {"seed":236,"scene":"matrix/settings_dark","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 237 (variant: TargetPlatform.android)
+A7 {"seed":237,"scene":"chart/default","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 238 (variant: TargetPlatform.android)
+A7 {"seed":238,"scene":"order/done","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 239 (variant: TargetPlatform.android)
+A7 {"seed":239,"scene":"detail/news","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 240 (variant: TargetPlatform.android)
+A7 {"seed":240,"scene":"detail/news","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 241 (variant: TargetPlatform.android)
+A7 {"seed":241,"scene":"detail/news","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 242 (variant: TargetPlatform.android)
+A7 {"seed":242,"scene":"matrix/settings_text_2x","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 243 (variant: TargetPlatform.android)
+A7 {"seed":243,"scene":"sign_in/empty","noisy":false,"mutation":"text: text EmXil","mutationLength":16,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 244 (variant: TargetPlatform.android)
+A7 {"seed":244,"scene":"order/done","noisy":false,"mutation":"shape colour: shape colour Color(alpha: 1.0000, red: 0.9843, green: 0.9725, blue: 1.0000, colorSpace: ColorSpace.sRGB) -...","mutationLength":213,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 245 (variant: TargetPlatform.android)
+A7 {"seed":245,"scene":"sign_in/error","noisy":false,"mutation":"text: text Sign iX","mutationLength":18,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 246 (variant: TargetPlatform.android)
+A7 {"seed":246,"scene":"overlays/sheet","noisy":false,"mutation":"reorder children: moved the last of 3 children first","mutationLength":52,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 247 (variant: TargetPlatform.android)
+A7 {"seed":247,"scene":"order/done","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 248 (variant: TargetPlatform.android)
+A7 {"seed":248,"scene":"sign_in/submitting","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 249 (variant: TargetPlatform.android)
+A7 {"seed":249,"scene":"matrix/settings_text_2x","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 250 (variant: TargetPlatform.android)
+A7 {"seed":250,"scene":"overlays/dialog","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 251 (variant: TargetPlatform.android)
+A7 {"seed":251,"scene":"matrix/sign_in_dark","noisy":false,"mutation":"transform: transform -> translate(1, 0)","mutationLength":39,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 252 (variant: TargetPlatform.android)
+A7 {"seed":252,"scene":"matrix/sign_in_small","noisy":false,"mutation":"padding 1px: padding EdgeInsets.all(16.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)","mutationLength":74,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 253 (variant: TargetPlatform.android)
+A7 {"seed":253,"scene":"order/dragging","noisy":false,"mutation":"size 1px: width 390.0 + 1","mutationLength":25,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 254 (variant: TargetPlatform.android)
+A7 {"seed":254,"scene":"matrix/settings_text_2x","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 255 (variant: TargetPlatform.android)
+A7 {"seed":255,"scene":"detail/collapsed","noisy":false,"mutation":"text: text OverXiew","mutationLength":19,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 256 (variant: TargetPlatform.android)
+A7 {"seed":256,"scene":"settings/default","noisy":false,"mutation":"reorder children: moved the last of 3 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 257 (variant: TargetPlatform.android)
+A7 {"seed":257,"scene":"settings/default","noisy":false,"mutation":"size 1px: width 36.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 258 (variant: TargetPlatform.android)
+A7 {"seed":258,"scene":"watchlist/top","noisy":false,"mutation":"decoration radius: BoxDecoration.borderRadius +1","mutationLength":48,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 259 (variant: TargetPlatform.android)
+A7 {"seed":259,"scene":"order/dragging","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 260 (variant: TargetPlatform.android)
+A7 {"seed":260,"scene":"matrix/sign_in_large","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 16.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":85,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 261 (variant: TargetPlatform.android)
+A7 {"seed":261,"scene":"overlays/sheet","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 1.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)","mutationLength":84,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 262 (variant: TargetPlatform.android)
+A7 {"seed":262,"scene":"matrix/sign_in_dark","noisy":false,"mutation":"shape colour: shape colour Color(alpha: 1.0000, red: 0.5490, green: 0.6196, blue: 1.0000, colorSpace: ColorSpace.sRGB) -...","mutationLength":213,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 263 (variant: TargetPlatform.android)
+A7 {"seed":263,"scene":"overlays/sheet","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 264 (variant: TargetPlatform.android)
+A7 {"seed":264,"scene":"matrix/sign_in_large","noisy":false,"mutation":"shape colour: shape colour Color(alpha: 1.0000, red: 0.2235, green: 0.2863, blue: 0.6706, colorSpace: ColorSpace.sRGB) -...","mutationLength":213,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 265 (variant: TargetPlatform.android)
+A7 {"seed":265,"scene":"sign_in/focused","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 266 (variant: TargetPlatform.android)
+A7 {"seed":266,"scene":"order/dragging","noisy":false,"mutation":"size 1px: width 16.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 267 (variant: TargetPlatform.android)
+A7 {"seed":267,"scene":"order/amount","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 268 (variant: TargetPlatform.android)
+A7 {"seed":268,"scene":"sign_in/empty","noisy":false,"mutation":"text: text PXssword","mutationLength":19,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 269 (variant: TargetPlatform.android)
+A7 {"seed":269,"scene":"detail/collapsed","noisy":false,"mutation":"flex alignment: mainAxisAlignment MainAxisAlignment.spaceBetween -> MainAxisAlignment.spaceAround","mutationLength":97,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 270 (variant: TargetPlatform.android)
+A7 {"seed":270,"scene":"order/dragging","noisy":false,"mutation":"size 1px: width 24.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 271 (variant: TargetPlatform.android)
+A7 {"seed":271,"scene":"order/transition","noisy":true,"mutation":"text: text XOR0","mutationLength":15,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 272 (variant: TargetPlatform.android)
+A7 {"seed":272,"scene":"matrix/settings_small","noisy":false,"mutation":"decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9725, colorSpace: ColorS...","mutationLength":225,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 273 (variant: TargetPlatform.android)
+A7 {"seed":273,"scene":"sign_in/empty","noisy":false,"mutation":"size 1px: height 8.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 274 (variant: TargetPlatform.android)
+A7 {"seed":274,"scene":"detail/news","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 2.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":84,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 275 (variant: TargetPlatform.android)
+A7 {"seed":275,"scene":"sign_in/submitting","noisy":false,"mutation":"shape colour: shape colour Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1294, colorSpace: ColorSpace.sRGB) -...","mutationLength":213,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 276 (variant: TargetPlatform.android)
+A7 {"seed":276,"scene":"order/symbol","noisy":false,"mutation":"size 1px: width 16.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 277 (variant: TargetPlatform.android)
+A7 {"seed":277,"scene":"watchlist/top","noisy":false,"mutation":"size 1px: width 16.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 278 (variant: TargetPlatform.android)
+A7 {"seed":278,"scene":"detail/overview","noisy":false,"mutation":"padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 2.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":84,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 279 (variant: TargetPlatform.android)
+A7 {"seed":279,"scene":"order/symbol","noisy":false,"mutation":"decoration radius: BoxDecoration.borderRadius +1","mutationLength":48,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 280 (variant: TargetPlatform.android)
+A7 {"seed":280,"scene":"detail/news","noisy":false,"mutation":"text: text HeadlineX 10","mutationLength":23,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 281 (variant: TargetPlatform.android)
+A7 {"seed":281,"scene":"overlays/dialog","noisy":false,"mutation":"flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end","mutationLength":82,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 282 (variant: TargetPlatform.android)
+A7 {"seed":282,"scene":"matrix/settings_rtl","noisy":false,"mutation":"font weight: font weight","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 283 (variant: TargetPlatform.android)
+A7 {"seed":283,"scene":"live/flashing","noisy":true,"mutation":"flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end","mutationLength":82,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 284 (variant: TargetPlatform.android)
+A7 {"seed":284,"scene":"live/initial","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 285 (variant: TargetPlatform.android)
+A7 {"seed":285,"scene":"order/dragging","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 286 (variant: TargetPlatform.android)
+A7 {"seed":286,"scene":"states/loading","noisy":true,"mutation":"decoration radius: BoxDecoration.borderRadius +1","mutationLength":48,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 287 (variant: TargetPlatform.android)
+A7 {"seed":287,"scene":"overlays/sheet","noisy":false,"mutation":"size 1px: height 48.0 + 1","mutationLength":25,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 288 (variant: TargetPlatform.android)
+A7 {"seed":288,"scene":"matrix/sign_in_small","noisy":false,"mutation":"padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 0.0, 1.0)","mutationLength":69,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 289 (variant: TargetPlatform.android)
+A7 {"seed":289,"scene":"states/empty","noisy":false,"mutation":"reorder children: moved the last of 2 children first","mutationLength":52,"pixelsChanged":false,"semanticsChanged":true}
+::endgroup::
+::group::✅ seed 290 (variant: TargetPlatform.android)
+A7 {"seed":290,"scene":"order/done","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 291 (variant: TargetPlatform.android)
+A7 {"seed":291,"scene":"overlays/dropdown","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 292 (variant: TargetPlatform.android)
+A7 {"seed":292,"scene":"order/dragging","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 293 (variant: TargetPlatform.android)
+A7 {"seed":293,"scene":"matrix/settings_rtl","noisy":false,"mutation":"decoration radius: BoxDecoration.borderRadius +1","mutationLength":48,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 294 (variant: TargetPlatform.android)
+A7 {"seed":294,"scene":"order/dragging","noisy":false,"mutation":"text colour: text colour","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 295 (variant: TargetPlatform.android)
+A7 {"seed":295,"scene":"matrix/settings_large","noisy":false,"mutation":"size 1px: width 24.0 + 1","mutationLength":24,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 296 (variant: TargetPlatform.android)
+A7 {"seed":296,"scene":"overlays/sheet","noisy":false,"mutation":"text: text SortX Value","mutationLength":22,"pixelsChanged":true,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 297 (variant: TargetPlatform.android)
+A7 {"seed":297,"scene":"states/empty","noisy":false,"mutation":"flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end","mutationLength":82,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 298 (variant: TargetPlatform.android)
+A7 {"seed":298,"scene":"order/amount","noisy":false,"mutation":"padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)","mutationLength":86,"pixelsChanged":false,"semanticsChanged":false}
+::endgroup::
+::group::✅ seed 299 (variant: TargetPlatform.android)
+A7 {"seed":299,"scene":"sign_in/focused","noisy":false,"mutation":"size 1px: height 8.0 + 1","mutationLength":24,"pixelsChanged":true,"semanticsChanged":true}
+::endgroup::
+
+🎉 300 tests passed.

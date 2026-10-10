@@ -64,7 +64,7 @@ class _Wave extends CustomPainter {
   bool shouldRepaint(_Wave old) => false;
 }
 
-final options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Card2, Holder, Holder2, Dots, Wave}));
+final options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Card2, Holder, Holder2, Dots, Wave, Screen}));
 
 Widget app(Widget child) => Directionality(
   textDirection: TextDirection.ltr,
@@ -341,6 +341,42 @@ void main() {
     expect(Policy.defaults().decide(r).verdict, Verdict.pass);
   });
 
+  testWidgets('a new component around framework widgets, with the same output, is one identity change (A5)', (
+    WidgetTester tester,
+  ) async {
+    Widget tile(bool extracted) => Holder(
+      child: Row(
+        children: <Widget>[
+          const Text('title'),
+          if (extracted) const Holder2(child: Text('value')) else const Text('value'),
+        ],
+      ),
+    );
+    final ChangeReport r = await diffOf(tester, tile(false), tile(true));
+    expect(top(r), <String>['Identity root/Holder@0']);
+    expect(r.items.single.change!.detail, 'same output; added Holder2');
+    expect(Policy.defaults().decide(r).verdict, Verdict.pass);
+  });
+
+  testWidgets('an extraction inside a component that also moved is still an identity change', (
+    WidgetTester tester,
+  ) async {
+    Widget screen(bool extracted, double height) => column(<Widget>[
+      Card2(height: height),
+      Holder(
+        child: Row(
+          children: <Widget>[
+            const Text('title'),
+            if (extracted) const Holder2(child: Text('value')) else const Text('value'),
+          ],
+        ),
+      ),
+    ]);
+    final ChangeReport r = await diffOf(tester, screen(false, 40), screen(true, 41));
+    expect(top(r), unorderedEquals(<String>['Layout root/Card2@0', 'Identity root/Holder@0']));
+    expect(r.changes.where((Change c) => c.type == ChangeType.added), isEmpty);
+  });
+
   testWidgets('a different toolchain goes to migration', (WidgetTester tester) async {
     await tester.pumpWidget(app(const Card2()));
     final Snapshot a = await captureSnapshot(tester, 'x', options: options);
@@ -354,6 +390,92 @@ void main() {
     final ChangeReport r = diffSnapshots(a, b);
     expect(r.kind, ReportKind.migration);
     expect(renderReport(r, Policy.defaults().decide(r)), contains('flutter: ${a.toolchain['flutter']} -> 9.9.9'));
+  });
+
+  testWidgets('rows that a shift moves in or out of a list\'s built range are its consequences, never its cause', (
+    WidgetTester tester,
+  ) async {
+    // A banner far above the viewport pushes the visible rows down. Rows enter
+    // the cache area above the viewport (built, not painted) and leave it
+    // below. None of them caused the shift, and the banner is not built.
+    Widget list(bool banner) => SizedBox(
+      height: 200,
+      child: ListView(
+        controller: ScrollController(initialScrollOffset: 1000),
+        children: <Widget>[
+          if (banner) const SizedBox(height: 100),
+          for (int i = 0; i < 40; i++) Card2(key: ValueKey<String>('k$i'), height: 50, label: 'row $i'),
+        ],
+      ),
+    );
+    final ChangeReport r = await diffOf(tester, list(false), list(true));
+    expect(r.groups, isNotEmpty);
+    for (final ShiftGroup g in r.groups) {
+      expect(g.candidates, isEmpty, reason: g.summary);
+    }
+    expect(top(r).toSet(), <String>{'Shift root'});
+    expect(
+      r.items.expand((ReportItem i) => i.consequences).map((Change c) => '${c.type.label} ${c.nodeId}'),
+      containsAll(<String>[
+        'Added root/Card2#k14',
+        'Style root/Card2#k19',
+        'Style root/Card2#k23',
+        'Removed root/Card2#k28',
+      ]),
+    );
+    // A row that moved out of the visible area is marked hidden: that is where
+    // it is, not a semantics change.
+    expect(r.changes.where((Change c) => c.type == ChangeType.semantics), isEmpty);
+  });
+
+  testWidgets('a pixel-hashed component keeps its paint when a component painted over it changes', (
+    WidgetTester tester,
+  ) async {
+    Widget tree(Color color) => SizedBox(
+      height: 60,
+      child: Stack(
+        children: <Widget>[
+          const Wave(),
+          Positioned(left: 10, top: 5, width: 20, child: Card2(height: 10, color: color)),
+        ],
+      ),
+    );
+    final ChangeReport r = await diffOf(tester, tree(const Color(0xFF2196F3)), tree(const Color(0xFFF44336)));
+    expect(top(r), <String>['Style root/Card2@0']);
+    expect(r.changes.where((Change c) => c.type == ChangeType.paint), isEmpty);
+  });
+
+  testWidgets('a clip path keeps its paint when a child inside it changes, and a new clip shape is a change', (
+    WidgetTester tester,
+  ) async {
+    Widget tree(Color color, {bool oval = true}) => Holder2(
+      child: ClipPath(
+        clipper: _Shape(oval),
+        child: Card2(color: color),
+      ),
+    );
+    final ChangeReport child = await diffOf(tester, tree(const Color(0xFF2196F3)), tree(const Color(0xFFF44336)));
+    expect(top(child), <String>['Style root/Holder2@0/Card2@0']);
+    expect(child.changes.where((Change c) => c.type == ChangeType.paint), isEmpty);
+    final ChangeReport shape = await diffOf(
+      tester,
+      tree(const Color(0xFF2196F3)),
+      tree(const Color(0xFF2196F3), oval: false),
+    );
+    expect(top(shape), <String>['Paint root/Holder2@0']);
+  });
+
+  testWidgets('a component\'s own content moved by its growing children is a layout change, not unexplained paint', (
+    WidgetTester tester,
+  ) async {
+    // The footer is the screen's own text: it moves when either card grows,
+    // and nothing the screen draws changes.
+    final ChangeReport one = await diffOf(tester, const Screen(), const Screen(a: 50));
+    expect(top(one), <String>['Layout root/Screen@0/Card2@0']);
+    final ChangeReport two = await diffOf(tester, const Screen(), const Screen(a: 50, b: 45));
+    expect(two.items.where((ReportItem i) => i.flagged), isEmpty);
+    expect(top(two), contains('Layout root/Screen@0'));
+    expect(two.changes.where((Change c) => c.type == ChangeType.paint && c.causedBy == null), isEmpty);
   });
 
   group('policy', () {
@@ -397,4 +519,32 @@ class Holder2 extends StatelessWidget {
   final Widget child;
   @override
   Widget build(BuildContext context) => child;
+}
+
+/// An oval, or a triangle inside the same bounds.
+class _Shape extends CustomClipper<Path> {
+  _Shape(this.oval);
+  final bool oval;
+  @override
+  Path getClip(Size size) => oval
+      ? (Path()..addOval(Offset.zero & size))
+      : (Path()
+          ..moveTo(size.width / 2, 0)
+          ..lineTo(size.width, size.height)
+          ..lineTo(0, size.height)
+          ..close());
+  @override
+  bool shouldReclip(_Shape old) => old.oval != oval;
+}
+
+/// Two cards and a footer the screen draws itself.
+class Screen extends StatelessWidget {
+  const Screen({super.key, this.a = 40, this.b = 40});
+  final double a;
+  final double b;
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    height: 200,
+    child: column(<Widget>[Card2(height: a, label: 'a'), Card2(height: b, label: 'b'), const Text('footer')]),
+  );
 }

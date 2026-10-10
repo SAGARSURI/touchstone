@@ -1,0 +1,7 @@
+plain 1 18.207733874 rc=0
+capture 1 23.235833584 rc=0
+plain 2 8.961511485 rc=0
+capture 2 13.400261802 rc=0
+plain 3 9.613157862 rc=0
+capture 3 14.203500160 rc=0
+compare rc=0

@@ -30,6 +30,11 @@ abstract class OpSink {
 
   /// Adds a global rect this node's paint can change.
   void reach(Rect globalRect);
+
+  /// Adds a rect, in the node's own coordinates and before any clip, that
+  /// its own drawing covers; null when the drawing has no bounds of its own
+  /// (it fills or spreads over the whole clip).
+  void reachOwn(Rect? local);
 }
 
 class _State {
@@ -87,7 +92,11 @@ class RecordingCanvas implements Canvas {
       _toGlobal.multiplied(_m)..multiply(Matrix4.translationValues(offset.dx, offset.dy, 0));
 
   /// Records that pixels anywhere inside the current clip may change.
-  void reachClip() => _sink.reach(_top.spreadClip ?? currentClip);
+  void reachClip() {
+    _sink
+      ..reach(_top.spreadClip ?? currentClip)
+      ..reachOwn(null);
+  }
 
   /// Records that pixels inside [local], in current canvas coordinates, may
   /// change.
@@ -96,7 +105,9 @@ class RecordingCanvas implements Canvas {
       reachClip();
       return;
     }
-    _sink.reach(toGlobal(local).intersect(currentClip));
+    _sink
+      ..reach(toGlobal(local).intersect(currentClip))
+      ..reachOwn(MatrixUtils.transformRect(_m, local));
   }
 
   /// Records that pixels inside [local], widened for [paint], may change. A

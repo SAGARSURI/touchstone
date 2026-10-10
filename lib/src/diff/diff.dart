@@ -22,12 +22,16 @@
 // Pure Dart: no Flutter import, so the review command runs on the Dart VM.
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 
 import '../snapshot/snapshot.dart';
 import 'cascade.dart';
 import 'changes.dart';
+
+/// The paint hash of a component that painted nothing: SHA-256 of no commands.
+final String _emptyPaint = sha256.convert(const <int>[]).toString();
 
 /// Semantics keys that describe where a node is, not what it is. A change
 /// in only these follows from a layout change and is not reported on its
@@ -72,7 +76,13 @@ const String dynamicInputKey = 'dynamic';
 /// Compares [before] (the baseline) with [after] (the capture).
 ChangeReport diffSnapshots(Snapshot before, Snapshot after) {
   if (before.toolchain.toString() != after.toolchain.toString()) {
-    return ChangeReport.migration(after.id, before.toolchain, after.toolchain);
+    return ChangeReport.migration(
+      after.id,
+      before.toolchain,
+      after.toolchain,
+      beforeRoot: before.rootHash,
+      afterRoot: after.rootHash,
+    );
   }
   if (before.rootHash == after.rootHash && before.inputs.toString() == after.inputs.toString()) {
     return ChangeReport.equal(after.id);
@@ -270,8 +280,13 @@ class _Diff {
   /// replaced by one identity change on it, naming what came, went or was
   /// renamed.
   void _collapseRefactors(List<Change> changes) {
+    // Where the component sits is not part of the refactor: a component that
+    // moved, with the same size and output, is the same.
     bool same(DiffNode a) =>
-        a.match != null && a.node.bounds == a.match!.node.bounds && a.node.flat == a.match!.node.flat;
+        a.match != null &&
+        a.bounds?.w == a.match!.bounds?.w &&
+        a.bounds?.h == a.match!.bounds?.h &&
+        a.node.flat == a.match!.node.flat;
     final structural = <DiffNode, List<String>>{};
     for (final Change c in changes) {
       DiffNode? start;
@@ -368,7 +383,11 @@ class _Diff {
       ).entries)
         if (styleSide.contains(e.key)) e.key: e.value else '$layoutStylePrefix${e.key}': e.value,
     };
-    final Map<String, String> semanticsChanges = _semanticsChanges(b.node.semantics, a.node.semantics);
+    final Map<String, String> semanticsChanges = _semanticsChanges(
+      b.node.semantics,
+      a.node.semantics,
+      moved: bb != null && ab != null && (bb.x != ab.x || bb.y != ab.y),
+    );
     final bool textChanged = semanticsChanges.keys.any(_semanticsText.contains);
     final bool otherSemantics = semanticsChanges.keys.any((String k) => !_semanticsText.contains(k));
 
@@ -460,6 +479,20 @@ class _Diff {
         );
       } else if (b.node.opaque != a.node.opaque) {
         out.add(Change(ChangeType.paint, a, b, 'unexplained (opaque reasons ${b.node.opaque} -> ${a.node.opaque})'));
+      } else if (a.node.shape != '-' && a.node.shape == b.node.shape) {
+        // The paint differs only in where children are placed inside the
+        // component: framework children it lays out moved, and nothing it
+        // draws changed.
+        out.add(
+          Change(
+            ChangeType.layout,
+            a,
+            b,
+            'inside: its content moved; nothing it draws changed',
+            lead: 'inside: ',
+            contentMoved: true,
+          ),
+        );
       } else {
         out.add(
           Change(
@@ -477,7 +510,18 @@ class _Diff {
           if (!paintChanged || !_semanticsText.contains(e.key)) e.key: e.value,
       };
       if (sem.isNotEmpty) {
-        out.add(Change(ChangeType.semantics, a, b, _describeMap(sem), fields: sem));
+        out.add(
+          Change(
+            ChangeType.semantics,
+            a,
+            b,
+            _describeMap(sem),
+            fields: sem,
+            // Only how many nodes there are: a child's node, or the scroll
+            // view's count of children, can come or go with the child.
+            presenceOnly: sem.keys.every(_semanticsCount.contains),
+          ),
+        );
       }
     }
     final bool geometryOnly = semanticsChanges.isEmpty && b.node.semantics != a.node.semantics && !_layoutChanged;
@@ -533,6 +577,8 @@ Map<String, String> _style(String json) {
   return <String, String>{for (final MapEntry<Object?, Object?> e in decoded.entries) '${e.key}': '${e.value}'};
 }
 
+const Set<String> _semanticsCount = <String>{'nodes', 'scrollChildCount'};
+
 bool _presenceOnly(Map<String, String> changes) =>
     changes.values.every((String v) => v.startsWith('(none) -> ') || v.endsWith(' -> (none)'));
 
@@ -546,17 +592,35 @@ String _describeMap(Map<String, String> m) => m.entries.map((e) => '${e.key}: ${
 
 /// Differences in what the semantics nodes say, ignoring where they are.
 /// Keys are semantics property names; nodes are compared in order.
-Map<String, String> _semanticsChanges(String before, String after) {
+///
+/// A scroll view marks the nodes of children outside its visible area as
+/// hidden, so for a node of a viewport's child that [moved], the hidden flag
+/// says where it is, not what it is, and is ignored.
+Map<String, String> _semanticsChanges(String before, String after, {bool moved = false}) {
   if (before == after) {
     return <String, String>{};
   }
   List<Map<String, Object?>> parse(String s) => <Map<String, Object?>>[
     for (final Object? n in (jsonDecode(s) as List<Object?>)) (n! as Map<String, Object?>),
   ];
-  Map<String, Object?> meaning(Map<String, Object?> n) => <String, Object?>{
-    for (final MapEntry<String, Object?> e in n.entries)
-      if (!_semanticsGeometry.contains(e.key)) e.key: e.value,
-  };
+  bool inViewport(Map<String, Object?> n) =>
+      n['tags'] is List && (n['tags']! as List<Object?>).any((Object? t) => '$t'.startsWith('RenderViewport.'));
+  Map<String, Object?> meaning(Map<String, Object?> n) {
+    final out = <String, Object?>{
+      for (final MapEntry<String, Object?> e in n.entries)
+        if (!_semanticsGeometry.contains(e.key)) e.key: e.value,
+    };
+    if (moved && out['flags'] is List && inViewport(n)) {
+      final List<Object?> flags = (out['flags']! as List<Object?>).where((Object? f) => f != 'isHidden').toList();
+      if (flags.isEmpty) {
+        out.remove('flags');
+      } else {
+        out['flags'] = flags;
+      }
+    }
+    return out;
+  }
+
   final List<Map<String, Object?>> b = parse(before).map(meaning).where((m) => m.isNotEmpty).toList();
   final List<Map<String, Object?>> a = parse(after).map(meaning).where((m) => m.isNotEmpty).toList();
   if (jsonEncode(b) == jsonEncode(a)) {
@@ -566,20 +630,84 @@ Map<String, String> _semanticsChanges(String before, String after) {
   if (b.length != a.length) {
     out['nodes'] = '${b.length} -> ${a.length} semantics nodes';
   }
-  for (var i = 0; i < b.length && i < a.length; i++) {
-    for (final String k in <String>{...b[i].keys, ...a[i].keys}) {
+  // Nodes that say the same thing on both sides are matched first, in order,
+  // so one node coming or going does not make every node after it compare
+  // with its neighbour. Between matched nodes, the rest pair up in order.
+  for (final (int i, int j) in _pairUnmatched(b.map(jsonEncode).toList(), a.map(jsonEncode).toList())) {
+    for (final String k in <String>{...b[i].keys, ...a[j].keys}) {
       final String bv = b[i].containsKey(k) ? jsonEncode(b[i][k]) : '(none)';
-      final String av = a[i].containsKey(k) ? jsonEncode(a[i][k]) : '(none)';
+      final String av = a[j].containsKey(k) ? jsonEncode(a[j][k]) : '(none)';
       if (bv != av) {
         out[k] = out.containsKey(k) ? '${out[k]}, $bv -> $av' : '$bv -> $av';
       }
     }
   }
+  // Nodes that moved: matching on what they say pairs none of them, so the
+  // order is the change. Reading order is a change of its own, never a text
+  // change, so it is reported even when the paint around it changed.
+  List<String> sorted(List<String> xs) => List<String>.of(xs)..sort();
+  if (!out.keys.any(_semanticsText.contains)) {
+    List<String> texts(List<Map<String, Object?>> nodes) => <String>[
+      for (final Map<String, Object?> n in nodes)
+        for (final String k in _semanticsText)
+          if (n.containsKey(k)) jsonEncode(n[k]),
+    ];
+    final List<String> tb = texts(b);
+    final List<String> ta = texts(a);
+    if (tb.join('\n') != ta.join('\n') && sorted(tb).join('\n') == sorted(ta).join('\n')) {
+      out['order'] = 'reading order [${tb.join(', ')}] -> [${ta.join(', ')}]';
+    }
+  }
   if (out.isEmpty) {
-    // Same nodes, different order or count after dropping empty ones.
-    out['nodes'] = 'semantics nodes changed';
+    final bool sameNodes =
+        sorted(b.map(jsonEncode).toList()).join('\n') == sorted(a.map(jsonEncode).toList()).join('\n');
+    // Same nodes in another order, or a different count after dropping empty ones.
+    out[sameNodes ? 'order' : 'nodes'] = sameNodes
+        ? 'same semantics nodes in another order'
+        : 'semantics nodes changed';
   }
   return out;
+}
+
+/// Index pairs of [before] and [after] items left over once the longest run
+/// of equal items in order is matched: between two matched items, the
+/// unmatched ones on each side pair up in order, and any extra on one side
+/// is unpaired.
+List<(int, int)> _pairUnmatched(List<String> before, List<String> after) {
+  final int n = before.length;
+  final int m = after.length;
+  final List<List<int>> lcs = List<List<int>>.generate(n + 1, (_) => List<int>.filled(m + 1, 0));
+  for (int i = n - 1; i >= 0; i--) {
+    for (int j = m - 1; j >= 0; j--) {
+      lcs[i][j] = before[i] == after[j] ? lcs[i + 1][j + 1] + 1 : max(lcs[i + 1][j], lcs[i][j + 1]);
+    }
+  }
+  final pairs = <(int, int)>[];
+  final gapBefore = <int>[];
+  final gapAfter = <int>[];
+  void flush() {
+    for (var k = 0; k < gapBefore.length && k < gapAfter.length; k++) {
+      pairs.add((gapBefore[k], gapAfter[k]));
+    }
+    gapBefore.clear();
+    gapAfter.clear();
+  }
+
+  var i = 0;
+  var j = 0;
+  while (i < n || j < m) {
+    if (i < n && j < m && before[i] == after[j]) {
+      flush();
+      i++;
+      j++;
+    } else if (j >= m || (i < n && lcs[i + 1][j] >= lcs[i][j + 1])) {
+      gapBefore.add(i++);
+    } else {
+      gapAfter.add(j++);
+    }
+  }
+  flush();
+  return pairs;
 }
 
 /// Global bounds of a node.
@@ -646,6 +774,18 @@ class DiffNode {
   bool get isOrdinal => RegExp(r'@\d+$').hasMatch(segment);
 
   late final Bounds? bounds = Bounds.parse(node.bounds);
+
+  /// Built and laid out but not painted: a list item in a scroll view's cache
+  /// area, kept only for its semantics node, which is hidden.
+  late final bool unpainted = () {
+    if (node.paint != _emptyPaint || children.any((DiffNode c) => !c.unpainted)) {
+      return false;
+    }
+    final Object? nodes = node.semantics.isEmpty ? null : jsonDecode(node.semantics);
+    return nodes is List &&
+        nodes.isNotEmpty &&
+        nodes.every((Object? n) => n is Map && n['flags'] is List && (n['flags'] as List).contains('isHidden'));
+  }();
 
   String get boundsText => bounds?.toString() ?? '-';
 

@@ -46,3 +46,34 @@
 * An opaque node that drew only outside its clip (a row cut off by the end
   of a list) hashes no pixels, instead of every pixel of its clip; changes
   elsewhere in the list no longer change its paint (baselines re-recorded).
+* Phase 3 catalogue levels 4 and 5: overlays (dialog, bottom sheet,
+  snackbar, dropdown menu), a theme and locale matrix (dark, right-to-left,
+  text scale 2.0, small and large viewports), a `CustomPainter` chart with a
+  gradient fill and a tooltip, a live price list on a fixed clock, a map
+  placeholder (a platform view) under a blurred header, and a four-step order
+  flow with page transitions and a reorderable list: 26 new snapshots.
+* A semantics traversal link (`traversalParentIdentifier`,
+  `traversalChildIdentifier`) is recorded as `link <n>`, numbered in the order
+  met, instead of its identifier's text, which held a run-dependent hash. Found
+  by the repeat gate on the order flow's back button.
+* Fixes after the first catalogue history run (doc/phase3/history.md):
+  - list rows that a shift moves into or out of a list's built range, and the
+    list's own bookkeeping, are the shift's consequences and never its cause;
+  - an opaque node whose reasons can be painted alone is pixel-hashed on its
+    own drawing, so a component painted over it or inside its clip no longer
+    changes its paint (baselines re-recorded);
+  - each node records `shape`, its paint without child placement, so content
+    a component draws that only moved with its children is a layout change,
+    not unexplained paint;
+  - `flat` places the subtree's top semantics nodes relative to the
+    component, so a refactor inside a component that also moved is still an
+    identity change;
+  - a colour whose token is the same on both sides keeps the token name, and
+    the review lists each style cause that spans several snapshots once.
+* A10 (doc/phase3/a10.md): pixels are digested with a 128-bit non-cryptographic
+  hash instead of SHA-256, and `expectSnapshot` captures only the detection
+  fields until a snapshot differs (baselines re-recorded).
+* Toolchain migration (A12): `dart run touchstone:migrate --from <old flutter>`
+  rewrites baselines from the old release with a pixel proof beside each, and
+  review passes a migrated snapshot whose pixels are identical on both
+  releases.

@@ -3,6 +3,7 @@
 library;
 
 export 'src/diff/changes.dart';
+export 'src/diff/migration_proof.dart';
 export 'src/diff/diff.dart' show Bounds, DiffNode, diffSnapshots, dynamicInputKey;
 export 'src/diff/policy.dart';
 export 'src/diff/report.dart';

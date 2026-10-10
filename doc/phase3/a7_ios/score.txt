@@ -1,0 +1,72 @@
+Seeds on the device: 300; mutations applied: 300
+Matched across the three runs: 294 of 300
+Left out as noisy on the device: 23 (scenes: live/flashing, live/ticked, order/transition, states/loading)
+Scored: 271; device-visible: 197
+
+Real fonts: 0 misses of 197 device-visible mutations
+Real fonts, the reverse: 26 reported changes the device did not show
+  0 matrix/sign_in_dark: reorder children: moved the last of 3 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  1 overlays/snackbar: size 1px: height 48.0 + 1 (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  15 watchlist/scrolled: padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  16 overlays/dropdown: font weight: font weight (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  23 sign_in/submitting: custom painter removed: painter removed (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  31 detail/collapsed: padding 1px: padding EdgeInsets(0.0, 4.0, 0.0, 0.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  53 states/error: shape colour: shape colour Color(alpha: 0.0000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.0000, red: 0.0039, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  61 matrix/sign_in_small: reorder children: moved the last of 3 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  65 matrix/settings_rtl: padding 1px: padding EdgeInsets(16.0, 24.0, 16.0, 8.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  74 states/error: transform: transform -> translate(1, 0) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  79 sign_in/error: reorder children: moved the last of 3 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  82 states/error: shape colour: shape colour Color(alpha: 0.0000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.0000, red: 0.0000, green: 0.0235, blue: 0.0000, colorSpace: ColorSpace.sRGB) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  99 order/review: size 1px: width 24.0 + 1 (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  118 map/default: reorder children: moved the last of 5 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  122 matrix/sign_in_large: transform: transform -> translate(1, 0) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  148 sign_in/empty: reorder children: moved the last of 3 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  155 order/amount: reorder children: moved the last of 2 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  180 matrix/settings_small: text: text X (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  185 sign_in/submitting: shape colour: shape colour Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1294, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1373, colorSpace: ColorSpace.sRGB) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  213 states/empty: size 1px: width 48.0 + 1 (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  219 overlays/dropdown: text: text X (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  233 states/empty: reorder children: moved the last of 3 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  248 sign_in/submitting: transform: transform -> translate(1, 0) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  256 settings/default: reorder children: moved the last of 3 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  275 sign_in/submitting: shape colour: shape colour Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1294, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1373, colorSpace: ColorSpace.sRGB) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  295 matrix/settings_large: size 1px: width 24.0 + 1 (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+
+Default font: 3 misses of 197 device-visible mutations
+  miss 26 matrix/settings_small: padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 1.0, 0.0) (snapshot changed false, verdict pass; device pixels true, semantics false)
+  miss 93 matrix/settings_small: text colour: text colour (snapshot changed false, verdict pass; device pixels true, semantics false)
+  miss 179 matrix/settings_small: font weight: font weight (snapshot changed false, verdict pass; device pixels true, semantics false)
+Default font, the reverse: 25 reported changes the device did not show
+  0 matrix/sign_in_dark: reorder children: moved the last of 3 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  1 overlays/snackbar: size 1px: height 48.0 + 1 (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  15 watchlist/scrolled: padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  16 overlays/dropdown: font weight: font weight (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  23 sign_in/submitting: custom painter removed: painter removed (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  31 detail/collapsed: padding 1px: padding EdgeInsets(0.0, 4.0, 0.0, 0.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  53 states/error: shape colour: shape colour Color(alpha: 0.0000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.0000, red: 0.0039, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  61 matrix/sign_in_small: reorder children: moved the last of 3 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  65 matrix/settings_rtl: padding 1px: padding EdgeInsets(16.0, 24.0, 16.0, 8.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  74 states/error: transform: transform -> translate(1, 0) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  79 sign_in/error: reorder children: moved the last of 3 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  82 states/error: shape colour: shape colour Color(alpha: 0.0000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.0000, red: 0.0000, green: 0.0235, blue: 0.0000, colorSpace: ColorSpace.sRGB) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  99 order/review: size 1px: width 24.0 + 1 (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  118 map/default: reorder children: moved the last of 5 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  122 matrix/sign_in_large: transform: transform -> translate(1, 0) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  148 sign_in/empty: reorder children: moved the last of 3 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  155 order/amount: reorder children: moved the last of 2 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  185 sign_in/submitting: shape colour: shape colour Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1294, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1373, colorSpace: ColorSpace.sRGB) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  213 states/empty: size 1px: width 48.0 + 1 (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  219 overlays/dropdown: text: text X (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  233 states/empty: reorder children: moved the last of 3 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  248 sign_in/submitting: transform: transform -> translate(1, 0) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  256 settings/default: reorder children: moved the last of 3 children first (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  275 sign_in/submitting: shape colour: shape colour Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1294, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1373, colorSpace: ColorSpace.sRGB) (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+  295 matrix/settings_large: size 1px: width 24.0 + 1 (snapshot changed true, verdict needs-review; device pixels false, semantics false)
+
+Mismatched seeds:
+  41 matrix/settings_text_2x: device "size 1px: width 20.0 + 1", default "text colour: text colour", real "size 1px: width 20.0 + 1"
+  84 live/initial: device "text: text UpdaXed 20:44:00", default "text: text UpdaXed 09:30:00", real "text: text UpdaXed 09:30:00"
+  138 matrix/settings_text_2x: device "text: text NXtifications", default "transform: transform -> translate(1, 0)", real "text: text NXtifications"
+  150 live/flashing: device "decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.9412, green: 0.9705, blue: 0.9495, colorSpace: ColorS...", default "decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.8676, green: 0.9335, blue: 0.8865, colorSpace: ColorS...", real "decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.8676, green: 0.9335, blue: 0.8865, colorSpace: ColorS..."
+  216 matrix/settings_text_2x: device "size 1px: width 20.0 + 1", default "font weight: font weight", real "size 1px: width 20.0 + 1"
+  249 matrix/settings_text_2x: device "text colour: text colour", default "text: text Name, email, phoXe", real "text colour: text colour"

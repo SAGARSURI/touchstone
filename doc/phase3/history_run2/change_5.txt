@@ -1,0 +1,100 @@
+Change 5: Add longer strings for a new locale
+
+== buttons/all
+buttons/all    needs-review
+
+1  Content   AppButton in 2 places     label: "Continue" -> "Weiter zur Zahlungsbestätigung" (and 3 more fields)
+           at: AppButton#primary, AppButton#disabled
+2  Semantics AppButton#loading         label: "Continue, loading" -> "Weiter zur Zahlungsbestätigung, loading"
+
+== matrix/settings_dark
+matrix/settings_dark    needs-review
+
+1  Content   SettingsScreen@0          label: "Settings" -> "Einstellungen" (and 3 more fields)
+2  Layout    SettingsTile@0            size 390x72 -> 390x100
+           consequence: 1 component shifted down 14 px
+3  Content   SettingsTile@0            Text.data.2: "Name, email, phone" -> "Name, E-Mail-Adresse, Telefonnummer" (and 2 more fields); label: "Profile\nName, email, phone" -> "Profile\nName, E-Mail-Adresse, Telefonnummer"
+4  Layout    SettingsTile@1            size 390x56 -> 390x88
+           consequence: 1 component shifted down 44 px
+5  Content   SettingsTile@1            Text.data: "Linked accounts" -> "Verknüpfte Bankkonten und Depots" (and 2 more fields); label: "Linked accounts\n2" -> "Verknüpfte Bankkonten und Depots\n2"
+6  Shift     SettingsScreen@0          3 components shifted down 60 px; possible causes: Layout SettingsTile@0, Layout SettingsTile@1
+7  Layout    SettingsTile@3            size 390x64 -> 390x112
+           consequence: 1 component shifted down 84 px
+8  Content   SettingsTile@3            label: "Unlock with biometrics" -> "Mit biometrischen Daten entsperren" (and 3 more fields)
+9  Shift     SettingsScreen@0          7 components shifted down 108 px; possible causes: Layout SettingsTile@0, Layout SettingsTile@1, Layout SettingsTile@3
+
+== matrix/settings_large
+matrix/settings_large    needs-review
+
+1  Content   SettingsScreen@0          label: "Settings" -> "Einstellungen" (and 3 more fields)
+2  Content   SettingsTile@0            Text.data.2: "Name, email, phone" -> "Name, E-Mail-Adresse, Telefonnummer" (and 2 more fields); label: "Profile\nName, email, phone" -> "Profile\nName, E-Mail-Adresse, Telefonnummer"
+3  Content   SettingsTile@1            Text.data: "Linked accounts" -> "Verknüpfte Bankkonten und Depots" (and 2 more fields); label: "Linked accounts\n2" -> "Verknüpfte Bankkonten und Depots\n2"
+4  Content   SettingsTile@3            label: "Unlock with biometrics" -> "Mit biometrischen Daten entsperren" (and 3 more fields)
+
+== matrix/settings_rtl
+matrix/settings_rtl    needs-review
+
+1  Content   SettingsScreen@0          label: "Settings" -> "Einstellungen" (and 3 more fields)
+2  Layout    SettingsTile@0            size 390x72 -> 390x100
+           consequence: 1 component shifted down 14 px
+3  Content   SettingsTile@0            Text.data.2: "Name, email, phone" -> "Name, E-Mail-Adresse, Telefonnummer" (and 2 more fields); label: "Profile\nName, email, phone" -> "Profile\nName, E-Mail-Adresse, Telefonnummer"
+4  Layout    SettingsTile@1            size 390x56 -> 390x88
+           consequence: 1 component shifted down 44 px
+5  Content   SettingsTile@1            Text.data: "Linked accounts" -> "Verknüpfte Bankkonten und Depots" (and 2 more fields); label: "Linked accounts\n2" -> "Verknüpfte Bankkonten und Depots\n2"
+6  Shift     SettingsScreen@0          3 components shifted down 60 px; possible causes: Layout SettingsTile@0, Layout SettingsTile@1
+7  Layout    SettingsTile@3            size 390x64 -> 390x112
+           consequence: 1 component shifted down 84 px
+8  Content   SettingsTile@3            label: "Unlock with biometrics" -> "Mit biometrischen Daten entsperren" (and 3 more fields)
+9  Shift     SettingsScreen@0          7 components shifted down 108 px; possible causes: Layout SettingsTile@0, Layout SettingsTile@1, Layout SettingsTile@3
+
+== matrix/settings_small
+matrix/settings_small    needs-review
+
+1  Content   SettingsScreen@0          label: "Settings" -> "Einstellungen" (and 3 more fields)
+2  Layout    SettingsTile@0            size 320x80 -> 320x100
+           consequence: 1 component shifted down 10 px
+3  Content   SettingsTile@0            Text.data.2: "Name, email, phone" -> "Name, E-Mail-Adresse, Telefonnummer" (and 2 more fields); label: "Profile\nName, email, phone" -> "Profile\nName, E-Mail-Adresse, Telefonnummer"
+4  Layout    SettingsTile@1            size 320x64 -> 320x88
+           consequence: 1 component shifted down 32 px
+5  Content   SettingsTile@1            Text.data: "Linked accounts" -> "Verknüpfte Bankkonten und Depots" (and 2 more fields); label: "Linked accounts\n2" -> "Verknüpfte Bankkonten und Depots\n2"
+6  Shift     SettingsScreen@0          3 components shifted down 44 px; possible causes: Layout SettingsTile@0, Layout SettingsTile@1
+           consequence: Style SectionHeader@2: RenderParagraph.textAlign: start -> (none); RenderParagraph.textDirection: ltr -> (none); RichText.softWrap: wrapping at box width -> (none) (and 1 more field); RenderParagraph.overflow: clip -> (none); RenderParagraph.locale: en -> (none); RichText.maxLines: unlimited -> (none) (and 1 more field); RenderParagraph.devicePixelRatio: 2.0 -> (none); Text.inherit: true -> (none); Text.color: text.secondary -> (none) (and 1 more field); Text.weight: 600 -> (none) (and 1 more field); Text.letterSpacing: 0.8 -> (none) (and 1 more field); RenderParagraph.text.style.inherit: false -> (none); RenderParagraph.text.style.family: Roboto -> (none); RenderParagraph.text.style.baseline: alphabetic -> (none); RenderParagraph.text.style.height: 1.4x -> (none); RenderParagraph.text.style.leadingDistribution: even -> (none) (list items built or dropped)
+7  Layout    SettingsTile@3            size 320x112 -> 320x136
+           consequence: 1 component shifted down 56 px
+8  Content   SettingsTile@3            label: "Unlock with biometrics" -> "Mit biometrischen Daten entsperren" (and 3 more fields)
+9  Shift     SettingsScreen@0          4 components shifted down 68 px; possible causes: Layout SettingsTile@0, Layout SettingsTile@1, Layout SettingsTile@3
+
+== matrix/settings_text_2x
+matrix/settings_text_2x    needs-review
+
+1  Semantics SettingsScreen@0          nodes: 5 -> 4 semantics nodes; flags: (none) -> ["isHidden"], ["isHidden"] -> ["isHeader","namesRoute"]; tags: ["RenderViewport.twoPane"] -> (none); textDirection: (none) -> "ltr"
+2  Layout    SettingsTile@0            size 390x184 -> 390x264
+           consequence: 1 component shifted down 40 px
+3  Content   SettingsTile@0            Text.data.2: "Name, email, phone" -> "Name, E-Mail-Adresse, Telefonnummer" (and 2 more fields); label: "Profile\nName, email, phone" -> "Profile\nName, E-Mail-Adresse, Telefonnummer"
+4  Layout    SettingsTile@1            size 390x160 -> 390x256
+           consequence: 1 component shifted down 128 px
+5  Content   SettingsTile@1            Text.data: "Linked accounts" -> "Verknüpfte Bankkonten und Depots" (and 2 more fields); label: "Linked accounts\n2" -> "Verknüpfte Bankkonten und Depots\n2"
+6  Shift     SettingsScreen@0          3 components shifted down 176 px; possible causes: Layout SettingsTile@0, Layout SettingsTile@1
+           consequence: Style SettingsScreen@0: Container.bg.2: BoxDecoration(border: Border(bottom: BorderSide(color: #FFC7C5D0))) -> (none) (and 1 more field); Container.bg.border.2: Border(bottom: BorderSide(color: #FFC7C5D0)) -> (none) (and 2 more fields); Container.margin.2: EdgeInsets.zero -> (none); RenderDecoratedBox.decoration.2: BoxDecoration -> (none) (list items built or dropped)
+           consequence: Layout SettingsTile@3: size 390x208 -> 390x304; Padding.padding: EdgeInsets.zero -> (none) (and 1 more field); RenderPadding.textDirection: ltr -> (none) (and 1 more field); Padding.padding.2: EdgeInsets(16.0, 0.0, 24.0, 0.0) -> (none) (and 1 more field) (moved into or out of the painted area)
+           consequence: Semantics SettingsTile@3: flags: ["hasEnabledState","isEnabled","hasToggledState","isFocusable"] -> ["hasEnabledState","isEnabled","isHidden","hasToggledState","isFocusable"] (moved into or out of the painted area)
+           consequence: Removed SettingsIcon@0: was at 16,780,36,36 (moved into or out of the painted area)
+           consequence: Removed SettingsTile@4: was at 0,903,390,160 (moved into or out of the painted area)
+           consequence: Removed SectionHeader@2: was at 0,1063,390,66 (moved into or out of the painted area)
+
+== settings/default
+settings/default    needs-review
+
+1  Content   SettingsScreen@0          label: "Settings" -> "Einstellungen" (and 3 more fields)
+2  Layout    SettingsTile@0            size 390x72 -> 390x100
+           consequence: 1 component shifted down 14 px
+3  Content   SettingsTile@0            Text.data.2: "Name, email, phone" -> "Name, E-Mail-Adresse, Telefonnummer" (and 2 more fields); label: "Profile\nName, email, phone" -> "Profile\nName, E-Mail-Adresse, Telefonnummer"
+4  Layout    SettingsTile@1            size 390x56 -> 390x88
+           consequence: 1 component shifted down 44 px
+5  Content   SettingsTile@1            Text.data: "Linked accounts" -> "Verknüpfte Bankkonten und Depots" (and 2 more fields); label: "Linked accounts\n2" -> "Verknüpfte Bankkonten und Depots\n2"
+6  Shift     SettingsScreen@0          3 components shifted down 60 px; possible causes: Layout SettingsTile@0, Layout SettingsTile@1
+7  Layout    SettingsTile@3            size 390x64 -> 390x112
+           consequence: 1 component shifted down 84 px
+8  Content   SettingsTile@3            label: "Unlock with biometrics" -> "Mit biometrischen Daten entsperren" (and 3 more fields)
+9  Shift     SettingsScreen@0          7 components shifted down 108 px; possible causes: Layout SettingsTile@0, Layout SettingsTile@1, Layout SettingsTile@3
+

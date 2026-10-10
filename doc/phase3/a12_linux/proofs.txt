@@ -1,0 +1,410 @@
+== test/snapshots/buttons/all.migration
+touchstone-migration 1
+id	"buttons/all"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	50a4849827daebb60062fefa25760438c82aa78d1fce3346b9cd266111b438b9
+before.pixels	1170x2532 f2c6baf02583fe3e4362a4022c39b421
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	50a4849827daebb60062fefa25760438c82aa78d1fce3346b9cd266111b438b9
+after.pixels	1170x2532 f2c6baf02583fe3e4362a4022c39b421
+pixels	identical
+== test/snapshots/chart/default.migration
+touchstone-migration 1
+id	"chart/default"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	ab08cc8cb5c5a9a3931930ba6ca05ab603ecf7e8520d019d11c9112dcbbb3742
+before.pixels	1170x2532 21d5996b881b8a35c10977488fd773ed
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	ab08cc8cb5c5a9a3931930ba6ca05ab603ecf7e8520d019d11c9112dcbbb3742
+after.pixels	1170x2532 21d5996b881b8a35c10977488fd773ed
+pixels	identical
+== test/snapshots/chart/tooltip.migration
+touchstone-migration 1
+id	"chart/tooltip"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	6f7793b85f2bcfd89793c703ebf55e78cdaf58aea443f9c45bff8bf7f624186f
+before.pixels	1170x2532 c395277b8067854e34b007a6eb3cbdf8
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	6f7793b85f2bcfd89793c703ebf55e78cdaf58aea443f9c45bff8bf7f624186f
+after.pixels	1170x2532 c395277b8067854e34b007a6eb3cbdf8
+pixels	identical
+== test/snapshots/detail/collapsed.migration
+touchstone-migration 1
+id	"detail/collapsed"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	aa780b9309cec4eafbdfa1ea099a8fe632f45515b46fe60f97953d3109ddcb29
+before.pixels	1170x2532 3d9ed5f719a64b69e18257b2111a18fb
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	aa780b9309cec4eafbdfa1ea099a8fe632f45515b46fe60f97953d3109ddcb29
+after.pixels	1170x2532 3d9ed5f719a64b69e18257b2111a18fb
+pixels	identical
+== test/snapshots/detail/news.migration
+touchstone-migration 1
+id	"detail/news"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	59d7261a988da1525e00ddb4edf0516d20c0a19a05d0b684948d537099387305
+before.pixels	1170x2532 cbbbdcb3fd332531445dc8024d1b39a1
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	59d7261a988da1525e00ddb4edf0516d20c0a19a05d0b684948d537099387305
+after.pixels	1170x2532 cbbbdcb3fd332531445dc8024d1b39a1
+pixels	identical
+== test/snapshots/detail/overview.migration
+touchstone-migration 1
+id	"detail/overview"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	24e9aad91a7bbd083e2ec1e3a0ee9d1534aa99c17baa7abd355f34465d2c0c53
+before.pixels	1170x2532 abf226a11c1ae8d801c4188135425e14
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	24e9aad91a7bbd083e2ec1e3a0ee9d1534aa99c17baa7abd355f34465d2c0c53
+after.pixels	1170x2532 abf226a11c1ae8d801c4188135425e14
+pixels	identical
+== test/snapshots/live/flashing.migration
+touchstone-migration 1
+id	"live/flashing"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	6bd8ea01efc7becb3d93cb316f9020bcb98a749d9dc41051220af9eb1cd60e09
+before.pixels	1170x2532 ec1cc826bf79a0e5f1c53cbd4a995625
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	6bd8ea01efc7becb3d93cb316f9020bcb98a749d9dc41051220af9eb1cd60e09
+after.pixels	1170x2532 ec1cc826bf79a0e5f1c53cbd4a995625
+pixels	identical
+== test/snapshots/live/initial.migration
+touchstone-migration 1
+id	"live/initial"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	1de68e89a0bccd866bd19e9b8325fc31a0a21c0e3d6ead14b3eb828300f7c3bb
+before.pixels	1170x2532 c4bd6c78d810fe4c4c35ae5ae53291b3
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	1de68e89a0bccd866bd19e9b8325fc31a0a21c0e3d6ead14b3eb828300f7c3bb
+after.pixels	1170x2532 c4bd6c78d810fe4c4c35ae5ae53291b3
+pixels	identical
+== test/snapshots/live/ticked.migration
+touchstone-migration 1
+id	"live/ticked"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	17b67fb26db36b5e77624b6a621849e9d05988cacfe4f4008f529b50a4146525
+before.pixels	1170x2532 c4bd6c78d810fe4c4c35ae5ae53291b3
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	17b67fb26db36b5e77624b6a621849e9d05988cacfe4f4008f529b50a4146525
+after.pixels	1170x2532 c4bd6c78d810fe4c4c35ae5ae53291b3
+pixels	identical
+== test/snapshots/map/default.migration
+touchstone-migration 1
+id	"map/default"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	fc4fcfb0533ab4c1d5b914ebafb27845f9480b09538bead634e768dbc6a05833
+before.pixels	1170x2532 793a40f77668c2e3538dddcce98006cc
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	fc4fcfb0533ab4c1d5b914ebafb27845f9480b09538bead634e768dbc6a05833
+after.pixels	1170x2532 793a40f77668c2e3538dddcce98006cc
+pixels	identical
+== test/snapshots/matrix/settings_dark.migration
+touchstone-migration 1
+id	"matrix/settings_dark"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	82da5f2eea1f81243effd7c1d8ca38b5ec4c040c347195f8279cfd963ae58c55
+before.pixels	1170x2532 556d7184e4ace269d2964b048fbabdc2
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	82da5f2eea1f81243effd7c1d8ca38b5ec4c040c347195f8279cfd963ae58c55
+after.pixels	1170x2532 556d7184e4ace269d2964b048fbabdc2
+pixels	identical
+== test/snapshots/matrix/settings_large.migration
+touchstone-migration 1
+id	"matrix/settings_large"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	97980ecb8c1dc8e74c63f38840f2b41e45f8ca6212c0349dff80d5c17435c493
+before.pixels	2048x2732 cf4ddb1ac130fac869634272b04d097d
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	97980ecb8c1dc8e74c63f38840f2b41e45f8ca6212c0349dff80d5c17435c493
+after.pixels	2048x2732 cf4ddb1ac130fac869634272b04d097d
+pixels	identical
+== test/snapshots/matrix/settings_rtl.migration
+touchstone-migration 1
+id	"matrix/settings_rtl"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	446bef14d032d3a0f0eebc2149b6e9f8f0096e484ccf91dea5530ad664f70768
+before.pixels	1170x2532 5ddd1394b984206847172fca670a135b
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	446bef14d032d3a0f0eebc2149b6e9f8f0096e484ccf91dea5530ad664f70768
+after.pixels	1170x2532 5ddd1394b984206847172fca670a135b
+pixels	identical
+== test/snapshots/matrix/settings_small.migration
+touchstone-migration 1
+id	"matrix/settings_small"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	40ab3b259a5625a97b212dfa8ef92f213073730242d1411b577acf7f49c7a3d0
+before.pixels	640x1136 1458d748cf89f0d6160d8cada6c3c5d2
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	40ab3b259a5625a97b212dfa8ef92f213073730242d1411b577acf7f49c7a3d0
+after.pixels	640x1136 1458d748cf89f0d6160d8cada6c3c5d2
+pixels	identical
+== test/snapshots/matrix/settings_text_2x.migration
+touchstone-migration 1
+id	"matrix/settings_text_2x"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	e395dd171c1a6fa642cdbd72fcd792cd9fd00db47b211cf815642f25f0a0985a
+before.pixels	1170x2532 dadd6365864687d02bd688f30fc3fa0c
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	e395dd171c1a6fa642cdbd72fcd792cd9fd00db47b211cf815642f25f0a0985a
+after.pixels	1170x2532 dadd6365864687d02bd688f30fc3fa0c
+pixels	identical
+== test/snapshots/matrix/sign_in_dark.migration
+touchstone-migration 1
+id	"matrix/sign_in_dark"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	b81a4123f4c507c200d0aff8124db0b8485e4a8cd1e2ece946e6eb0c62494aa4
+before.pixels	1170x2532 f38005ac07d3a5e46e636c4222849b56
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	b81a4123f4c507c200d0aff8124db0b8485e4a8cd1e2ece946e6eb0c62494aa4
+after.pixels	1170x2532 f38005ac07d3a5e46e636c4222849b56
+pixels	identical
+== test/snapshots/matrix/sign_in_large.migration
+touchstone-migration 1
+id	"matrix/sign_in_large"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	a324575bb5a6833a42c505e30e313116ccbf33b0ca492b1b49c9388826690b89
+before.pixels	2048x2732 8036c36396742033cc08aee6d6f83d44
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	a324575bb5a6833a42c505e30e313116ccbf33b0ca492b1b49c9388826690b89
+after.pixels	2048x2732 8036c36396742033cc08aee6d6f83d44
+pixels	identical
+== test/snapshots/matrix/sign_in_rtl.migration
+touchstone-migration 1
+id	"matrix/sign_in_rtl"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	6cc7981b969cc50fe80aa628a2cd5db1472115f0a73f17f3dc068ee9573ceb3a
+before.pixels	1170x2532 88e53f281cbfa94b8be3b2b01be4e14c
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	6cc7981b969cc50fe80aa628a2cd5db1472115f0a73f17f3dc068ee9573ceb3a
+after.pixels	1170x2532 88e53f281cbfa94b8be3b2b01be4e14c
+pixels	identical
+== test/snapshots/matrix/sign_in_small.migration
+touchstone-migration 1
+id	"matrix/sign_in_small"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	3cdd4d32db5016c249b876575b687770ce36afd2cc987f495f9a60c661d4db52
+before.pixels	640x1136 a8ae19c35233bc8d403bbe05189bda9e
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	3cdd4d32db5016c249b876575b687770ce36afd2cc987f495f9a60c661d4db52
+after.pixels	640x1136 a8ae19c35233bc8d403bbe05189bda9e
+pixels	identical
+== test/snapshots/matrix/sign_in_text_2x.migration
+touchstone-migration 1
+id	"matrix/sign_in_text_2x"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	411d2fba800cc8347acfe7c75d52096ec4f6c0dcd25bd14912f3d81afdc5d8b0
+before.pixels	1170x2532 093826a5af626b67c22d75c85e0bdde1
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	411d2fba800cc8347acfe7c75d52096ec4f6c0dcd25bd14912f3d81afdc5d8b0
+after.pixels	1170x2532 093826a5af626b67c22d75c85e0bdde1
+pixels	identical
+== test/snapshots/order/amount.migration
+touchstone-migration 1
+id	"order/amount"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	ee32daa3a036c475fbb3ec3c4ea4671ed0637d735e701167a9ed42d6928af8c2
+before.pixels	1170x2532 2658233484ea3f16e36d521b4e9f89bd
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	ee32daa3a036c475fbb3ec3c4ea4671ed0637d735e701167a9ed42d6928af8c2
+after.pixels	1170x2532 2658233484ea3f16e36d521b4e9f89bd
+pixels	identical
+== test/snapshots/order/done.migration
+touchstone-migration 1
+id	"order/done"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	4fb080c65e2b7445249e551da2b927b3da48ba6096e733aea35cf5bacaca6ebd
+before.pixels	1170x2532 ba3fd20c6c66fa65c8993b9a04343951
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	4fb080c65e2b7445249e551da2b927b3da48ba6096e733aea35cf5bacaca6ebd
+after.pixels	1170x2532 ba3fd20c6c66fa65c8993b9a04343951
+pixels	identical
+== test/snapshots/order/dragging.migration
+touchstone-migration 1
+id	"order/dragging"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	f4c7bbc533161855cc06825c9075bbd585663d269f6a21977a978f62589aed1a
+before.pixels	1170x2532 58aaff38dc0d0e6e57e0982e695cb67c
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	f4c7bbc533161855cc06825c9075bbd585663d269f6a21977a978f62589aed1a
+after.pixels	1170x2532 58aaff38dc0d0e6e57e0982e695cb67c
+pixels	identical
+== test/snapshots/order/review.migration
+touchstone-migration 1
+id	"order/review"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	368c7204ada0c37bda680e926082add503418e586cd44b234bdb9d6ddea585f0
+before.pixels	1170x2532 3c729636cdf0cf22b37289432316444c
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	368c7204ada0c37bda680e926082add503418e586cd44b234bdb9d6ddea585f0
+after.pixels	1170x2532 3c729636cdf0cf22b37289432316444c
+pixels	identical
+== test/snapshots/order/symbol.migration
+touchstone-migration 1
+id	"order/symbol"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	4df0e8e9fb6cf766061b8b1a58169e5325464f4d8b83f4b8f1481d0fd874ef26
+before.pixels	1170x2532 26a57c00bbb4728b5d1485a9bc8c937a
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	4df0e8e9fb6cf766061b8b1a58169e5325464f4d8b83f4b8f1481d0fd874ef26
+after.pixels	1170x2532 26a57c00bbb4728b5d1485a9bc8c937a
+pixels	identical
+== test/snapshots/order/transition.migration
+touchstone-migration 1
+id	"order/transition"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	c1ef7b7d0c68ade05d01b406c9c80679106d8777c4f75634d8e1161c299abc57
+before.pixels	1170x2532 f8deadabc7ed990067d78581aca06a06
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	c1ef7b7d0c68ade05d01b406c9c80679106d8777c4f75634d8e1161c299abc57
+after.pixels	1170x2532 f8deadabc7ed990067d78581aca06a06
+pixels	identical
+== test/snapshots/overlays/dialog.migration
+touchstone-migration 1
+id	"overlays/dialog"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	df9f5a1e1d66d3860c65462c56701036f2e3b308411f400839a2d2862093d646
+before.pixels	1170x2532 6bf440180174a2ffc24532dd3f9ffefe
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	df9f5a1e1d66d3860c65462c56701036f2e3b308411f400839a2d2862093d646
+after.pixels	1170x2532 6bf440180174a2ffc24532dd3f9ffefe
+pixels	identical
+== test/snapshots/overlays/dropdown.migration
+touchstone-migration 1
+id	"overlays/dropdown"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	c8a697e92a83e083e6da9aa21d4e0b836fbb22a545099d647f7a9611c867fb95
+before.pixels	1170x2532 c28335c11bc80f3b7040aecc2d3367ef
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	c8a697e92a83e083e6da9aa21d4e0b836fbb22a545099d647f7a9611c867fb95
+after.pixels	1170x2532 c28335c11bc80f3b7040aecc2d3367ef
+pixels	identical
+== test/snapshots/overlays/sheet.migration
+touchstone-migration 1
+id	"overlays/sheet"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	d9832bf8c0614f482a69e8d5c34359722e065fd572d4adceb5622fc1871e5fa9
+before.pixels	1170x2532 f87e6553e08442d4121af628453d3da2
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	d9832bf8c0614f482a69e8d5c34359722e065fd572d4adceb5622fc1871e5fa9
+after.pixels	1170x2532 f87e6553e08442d4121af628453d3da2
+pixels	identical
+== test/snapshots/overlays/snackbar.migration
+touchstone-migration 1
+id	"overlays/snackbar"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	468f99007c37360b2b65054e9a4749b24198a935cbb6e0e01c3b545c3b368e01
+before.pixels	1170x2532 c47b37ecb096c66b87168ed251ce1f94
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	468f99007c37360b2b65054e9a4749b24198a935cbb6e0e01c3b545c3b368e01
+after.pixels	1170x2532 c47b37ecb096c66b87168ed251ce1f94
+pixels	identical
+== test/snapshots/settings/default.migration
+touchstone-migration 1
+id	"settings/default"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	e20f944a7af2ed310fb237d706825e9ab24b7e332634a15b555f06ba273bf899
+before.pixels	1170x2532 601a63c7b496acebd6ea041c96d46768
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	e20f944a7af2ed310fb237d706825e9ab24b7e332634a15b555f06ba273bf899
+after.pixels	1170x2532 601a63c7b496acebd6ea041c96d46768
+pixels	identical
+== test/snapshots/sign_in/empty.migration
+touchstone-migration 1
+id	"sign_in/empty"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	1ae34d8d9bcf6ce554e70dc26621fe4f778ec962117aefc7c5238d7237662187
+before.pixels	1170x2532 fbbc4c5ddc78c2913fcb9750179e73fd
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	1ae34d8d9bcf6ce554e70dc26621fe4f778ec962117aefc7c5238d7237662187
+after.pixels	1170x2532 fbbc4c5ddc78c2913fcb9750179e73fd
+pixels	identical
+== test/snapshots/sign_in/error.migration
+touchstone-migration 1
+id	"sign_in/error"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	61cd736f63856c105b659903d97df5df11676c359125224978a11ed2b6f5d39a
+before.pixels	1170x2532 52a433da22c80c1f2aea170663cc50c1
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	61cd736f63856c105b659903d97df5df11676c359125224978a11ed2b6f5d39a
+after.pixels	1170x2532 52a433da22c80c1f2aea170663cc50c1
+pixels	identical
+== test/snapshots/sign_in/focused.migration
+touchstone-migration 1
+id	"sign_in/focused"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	8a34ea2cc520c2521e9900f2464e28d02113059549c99830874fc2cfb44e610f
+before.pixels	1170x2532 5165572cf86bfad988044fd43ddfb17b
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	8a34ea2cc520c2521e9900f2464e28d02113059549c99830874fc2cfb44e610f
+after.pixels	1170x2532 5165572cf86bfad988044fd43ddfb17b
+pixels	identical
+== test/snapshots/sign_in/submitting.migration
+touchstone-migration 1
+id	"sign_in/submitting"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	89a4363244a6a34befa02ca04dedf734d0289b55351ac174cc392ccfb4536d00
+before.pixels	1170x2532 f7ac239fb37fdcddbd4dd8117170c69d
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	89a4363244a6a34befa02ca04dedf734d0289b55351ac174cc392ccfb4536d00
+after.pixels	1170x2532 f7ac239fb37fdcddbd4dd8117170c69d
+pixels	identical
+== test/snapshots/states/empty.migration
+touchstone-migration 1
+id	"states/empty"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	482b8dbfd8ce49c62b0e7541f52ab5c1c7230a8c11c127ef080b87753399943a
+before.pixels	1170x2532 827de2d85dec0fdf86563799a55ac659
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	482b8dbfd8ce49c62b0e7541f52ab5c1c7230a8c11c127ef080b87753399943a
+after.pixels	1170x2532 827de2d85dec0fdf86563799a55ac659
+pixels	identical
+== test/snapshots/states/error.migration
+touchstone-migration 1
+id	"states/error"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	8a9b7d4396e07c5172f066383d8542e0fac7187e620eb7a6bcec84f4848c21b9
+before.pixels	1170x2532 298ef89cc785729debdc8a755ebe6f30
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	8a9b7d4396e07c5172f066383d8542e0fac7187e620eb7a6bcec84f4848c21b9
+after.pixels	1170x2532 298ef89cc785729debdc8a755ebe6f30
+pixels	identical
+== test/snapshots/states/loading.migration
+touchstone-migration 1
+id	"states/loading"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	2474410718f16dae500e472c6713b0035232fe48643f8334824eb08843e973b7
+before.pixels	1170x2532 5d3eb846a560675ce10616ce17422154
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	2474410718f16dae500e472c6713b0035232fe48643f8334824eb08843e973b7
+after.pixels	1170x2532 5d3eb846a560675ce10616ce17422154
+pixels	identical
+== test/snapshots/text/all.migration
+touchstone-migration 1
+id	"text/all"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	56f501906862f84882c93e083e900e97e238e5129a94a821bc8746cf33a5ecfd
+before.pixels	1170x2532 e7fa3d63c05d5d7e6c11e78760519790
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	56f501906862f84882c93e083e900e97e238e5129a94a821bc8746cf33a5ecfd
+after.pixels	1170x2532 e7fa3d63c05d5d7e6c11e78760519790
+pixels	identical
+== test/snapshots/watchlist/scrolled.migration
+touchstone-migration 1
+id	"watchlist/scrolled"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	7e43fa95d608acfb5fb212334c537de0bcd23eae071fe1f2b53e752ae59247c9
+before.pixels	1170x2532 09da0d8167a2757c617dccc5fffe8fa4
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	7e43fa95d608acfb5fb212334c537de0bcd23eae071fe1f2b53e752ae59247c9
+after.pixels	1170x2532 09da0d8167a2757c617dccc5fffe8fa4
+pixels	identical
+== test/snapshots/watchlist/top.migration
+touchstone-migration 1
+id	"watchlist/top"
+before.toolchain	flutter="3.47.6"	framework="5fc346839b"	engine="692136cb65"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+before.root	818e1673e35efe424d5477f0cab656e3274c6db4a32667597632a81529b7d27d
+before.pixels	1170x2532 61e1fa413055a77a1fc74c12eefcafd4
+after.toolchain	flutter="3.47.7"	framework="abaf9c5237"	engine="deb287481e"	dart="3.13.5"	renderer="skia"	host="linux_x64"	library="0.0.1-dev.0"	fonts="FlutterTest"
+after.root	818e1673e35efe424d5477f0cab656e3274c6db4a32667597632a81529b7d27d
+after.pixels	1170x2532 61e1fa413055a77a1fc74c12eefcafd4
+pixels	identical

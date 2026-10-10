@@ -109,6 +109,24 @@ Future<Capture> captureWithDetails(
   WidgetTester tester,
   String id, {
   SnapshotOptions options = const SnapshotOptions(),
+}) => _checkedCapture(tester, id, options, explain: true);
+
+/// A capture for a hash check only: the detection fields, with no style or
+/// shape (spec, Node fields: explanation fields are not hashed). Describing
+/// style is most of what capture costs on a screen with no pixel-hashed node
+/// (doc/phase3/a10.md), and an unchanged snapshot never shows it. Not for
+/// writing a baseline or a report.
+Future<Snapshot> captureDetectionOnly(
+  WidgetTester tester,
+  String id, {
+  SnapshotOptions options = const SnapshotOptions(),
+}) async => (await _checkedCapture(tester, id, options, explain: false)).snapshot;
+
+Future<Capture> _checkedCapture(
+  WidgetTester tester,
+  String id,
+  SnapshotOptions options, {
+  required bool explain,
 }) async {
   if (!options.atPumpedTime && tester.binding.hasScheduledFrame) {
     throw CaptureFailure(
@@ -132,7 +150,7 @@ Future<Capture> captureWithDetails(
       'the toolchain fingerprint cannot record it. Load fonts for snapshot tests with SnapshotFonts.load.',
     );
   }
-  return _capture(tester, id, options);
+  return _capture(tester, id, options, explain: explain);
 }
 
 /// Font families the shown text uses that render with a font loaded outside
@@ -252,7 +270,7 @@ Future<SnapshotDifference> _diagnoseImages(
   SnapshotOptions options,
   List<_PendingImage> pending,
 ) async {
-  final Capture capture = await _capture(tester, id, options._atPumpedTime());
+  final Capture capture = await _capture(tester, id, options._atPumpedTime(), explain: true);
   final List<String> owners = <String>{
     // A component that paints only the placeholder may have been pruned.
     for (final _PendingImage p in pending)
@@ -268,7 +286,7 @@ Future<SnapshotDifference> _diagnoseImages(
   );
 }
 
-Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options) async {
+Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options, {required bool explain}) async {
   final ComponentPolicy policy = options.policy ?? (_defaultPolicy ??= ComponentPolicy());
   void checkSettled(String when) {
     if (!options.atPumpedTime) {
@@ -331,13 +349,27 @@ Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options
         id: comp.segment,
         bounds: comp.parent == null ? _rect(Offset.zero & view.size) : _bounds(comp.renderObject),
         paint: sha256.convert(utf8.encode(assembly.text(comp))).toString(),
+        shape: explain
+            ? sha256
+                  .convert(
+                    utf8.encode(
+                      assembly
+                          .text(comp)
+                          .replaceAll(_drawsNothing, '')
+                          .replaceAllMapped(_placement, (Match m) => m[1]!),
+                    ),
+                  )
+                  .toString()
+            : '-',
         semantics: jsonEncode(semantics[comp] ?? const <Object?>[]),
         opaque: reasons.isEmpty ? '-' : reasons.join('+'),
         flat: _flat(comp, assembly, semanticsIndex),
         type: comp.element == null ? 'root' : policy.typeOf(comp.element!.widget),
-        style: jsonEncode(
-          _style(assembly.renderObjects[comp] ?? const <RecordedNode>[], options.tokenResolver, comp.element),
-        ),
+        style: explain
+            ? jsonEncode(
+                _style(assembly.renderObjects[comp] ?? const <RecordedNode>[], options.tokenResolver, comp.element),
+              )
+            : '{}',
         children: comp.children.map(build).toList(),
       );
     }
@@ -476,6 +508,21 @@ List<String> _limits(PaintRecording recording) {
       'platform views and textures: their pixels do not exist in a widget test; bounds only',
   ];
 }
+
+/// Where a child is placed in a component's paint text: the offset after a
+/// framework child's `child` marker or a child component's `comp(<index>)`.
+final RegExp _placement = RegExp(r'\b(child|comp\(\d+\))\([^(){}\n]*\)');
+
+/// A shape draw that leaves every pixel as it was: a fully transparent
+/// paint with srcOver, colours not inverted, and no mask, colour filter,
+/// image filter or shader. Material paints one at each ink feature's bounds
+/// (a list tile's transparent background), so it follows its children when
+/// they move. Left out of `shape` only; the paint hash keeps it.
+final RegExp _drawsNothing = RegExp(
+  r'(?<=^|\{)draw(Rect|RRect|DRRect|Oval|Circle|Path|Arc|Line|Paint)\([^\n]*'
+  r';?P\(c\(0\.0,[^,()]+,[^,()]+,[^,()]+,\w+\);srcOver;[^()\n]*;false;-;-;-;-\)\)\n',
+  multiLine: true,
+);
 
 /// Builds each component's paint text from the per-render-object recording.
 ///
@@ -621,11 +668,41 @@ String _flat(Component comp, _PaintAssembly assembly, _Semantics semantics) {
   }
 
   visit(comp);
+  // A node whose parent node is outside the subtree is placed relative to
+  // the component instead of to that parent, so the subtree's output does not
+  // depend on where the component sits.
+  final RenderObject? ro = comp.renderObject;
+  final Matrix4? origin = ro == null || !ro.attached ? null : Matrix4.tryInvert(ro.getTransformTo(_root(ro)));
   final List<Map<String, Object?>> nodes = <Map<String, Object?>>[
-    for (final (Component owner, Map<String, Object?> node) in semantics.ordered)
-      if (inside.contains(owner)) node,
+    for (final (Component owner, Map<String, Object?> node, SemanticsNode sn) in semantics.ordered)
+      if (inside.contains(owner))
+        if (origin == null || inside.contains(semantics.owners[sn.parent]))
+          node
+        else
+          <String, Object?>{...node, 'transform': c.float64s((origin.clone()..multiply(_globalTransform(sn))).storage)},
   ];
   return sha256.convert(utf8.encode('$out\n${jsonEncode(nodes)}')).toString();
+}
+
+RenderObject _root(RenderObject ro) {
+  var root = ro;
+  while (root.parent != null) {
+    root = root.parent!;
+  }
+  return root;
+}
+
+/// [node]'s transform to the root semantics node's coordinates: the render
+/// view's, in physical pixels, the same as [RenderObject.getTransformTo] the
+/// render view.
+Matrix4 _globalTransform(SemanticsNode node) {
+  final m = Matrix4.identity();
+  for (SemanticsNode? n = node; n?.parent != null; n = n.parent) {
+    if (n!.transform != null) {
+      m.leftMultiply(n.transform!);
+    }
+  }
+  return m;
 }
 
 bool _passThrough(RecordedNode node) =>
@@ -646,11 +723,16 @@ class _Semantics {
   final Map<Component, List<Map<String, Object?>>> byComponent = <Component, List<Map<String, Object?>>>{};
 
   /// Every node with its owner, in the order the render tree is walked.
-  final List<(Component, Map<String, Object?>)> ordered = <(Component, Map<String, Object?>)>[];
+  final List<(Component, Map<String, Object?>, SemanticsNode)> ordered =
+      <(Component, Map<String, Object?>, SemanticsNode)>[];
 
-  void add(Component owner, Map<String, Object?> node) {
+  /// The owner of each described node.
+  final Map<SemanticsNode, Component> owners = <SemanticsNode, Component>{};
+
+  void add(Component owner, Map<String, Object?> node, SemanticsNode semanticsNode) {
     (byComponent[owner] ??= <Map<String, Object?>>[]).add(node);
-    ordered.add((owner, node));
+    ordered.add((owner, node, semanticsNode));
+    owners[semanticsNode] = owner;
   }
 }
 
@@ -667,15 +749,16 @@ _Semantics _semanticsByComponent(RenderView view, ComponentTree tree) {
   collect(view);
   final out = _Semantics();
   final seen = <SemanticsNode>{};
+  final links = <Object, int>{};
   void visit(RenderObject ro) {
     final SemanticsNode? node = ro.debugSemantics;
     if (node != null && owned[node] == ro && node.attached && !node.isMergedIntoParent && seen.add(node)) {
       final Component owner = _semanticsOwner(ro, node, tree);
-      out.add(owner, _describeSemantics(node));
+      out.add(owner, _describeSemantics(node, links), node);
       void unowned(SemanticsNode parent) {
         parent.visitChildren((SemanticsNode child) {
           if (!owned.containsKey(child) && !child.isMergedIntoParent && seen.add(child)) {
-            out.add(owner, _describeSemantics(child));
+            out.add(owner, _describeSemantics(child, links), child);
             unowned(child);
           }
           return true;
@@ -802,7 +885,10 @@ bool _contributesContent(RenderObject ro) {
       config.onCollapse != null;
 }
 
-Map<String, Object?> _describeSemantics(SemanticsNode node) {
+/// [links] numbers traversal identifiers in the order they are met. An
+/// identifier is an arbitrary object, such as an overlay portal's State,
+/// whose text holds a run-dependent hash; only which nodes share one matters.
+Map<String, Object?> _describeSemantics(SemanticsNode node, Map<Object, int> links) {
   final SemanticsData d = node.getSemanticsData();
   final out = <String, Object?>{'rect': c.rect(d.rect)};
   void put(String key, Object? value) {
@@ -862,8 +948,9 @@ Map<String, Object?> _describeSemantics(SemanticsNode node) {
   // Reading order follows from the rects and text direction above, plus sort
   // keys and traversal links.
   put('sortKey', _sortKey(node.sortKey));
-  put('traversalParentIdentifier', node.traversalParentIdentifier?.toString());
-  put('traversalChildIdentifier', node.traversalChildIdentifier?.toString());
+  String? link(Object? id) => id == null ? null : 'link ${links.putIfAbsent(id, () => links.length)}';
+  put('traversalParentIdentifier', link(node.traversalParentIdentifier));
+  put('traversalChildIdentifier', link(node.traversalChildIdentifier));
   return out;
 }
 

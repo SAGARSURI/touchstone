@@ -1,0 +1,2702 @@
+[
+  {
+    "seed": 0,
+    "scene": "matrix/sign_in_dark",
+    "mutation": "reorder children: moved the last of 3 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 1,
+    "scene": "overlays/snackbar",
+    "mutation": "size 1px: height 48.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 2,
+    "scene": "sign_in/focused",
+    "mutation": "size 1px: width 22.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 3,
+    "scene": "states/loading",
+    "mutation": "size 1px: width 36.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 4,
+    "scene": "live/ticked",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 5,
+    "scene": "chart/tooltip",
+    "mutation": "custom painter removed: painter removed",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 6,
+    "scene": "overlays/dropdown",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 0.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 7,
+    "scene": "states/loading",
+    "mutation": "size 1px: height 8.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 8,
+    "scene": "overlays/dialog",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 9,
+    "scene": "matrix/settings_large",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 10,
+    "scene": "matrix/sign_in_rtl",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 11,
+    "scene": "overlays/dialog",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 24.0, 16.0, 8.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 12,
+    "scene": "order/amount",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 13,
+    "scene": "watchlist/top",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 14,
+    "scene": "settings/default",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 15,
+    "scene": "watchlist/scrolled",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 16,
+    "scene": "overlays/dropdown",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 17,
+    "scene": "order/symbol",
+    "mutation": "padding 1px: padding EdgeInsets(6.0, 2.0, 6.0, 2.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 18,
+    "scene": "order/amount",
+    "mutation": "flex alignment: mainAxisAlignment MainAxisAlignment.center -> MainAxisAlignment.spaceBetween",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 19,
+    "scene": "map/default",
+    "mutation": "size 1px: width 24.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 20,
+    "scene": "chart/default",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 21,
+    "scene": "live/ticked",
+    "mutation": "flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 22,
+    "scene": "text/all",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 23,
+    "scene": "sign_in/submitting",
+    "mutation": "custom painter removed: painter removed",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 24,
+    "scene": "overlays/dialog",
+    "mutation": "text: text +0.8X%",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 25,
+    "scene": "overlays/sheet",
+    "mutation": "text: text X0.85%",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 26,
+    "scene": "matrix/settings_small",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 1.0, 0.0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 27,
+    "scene": "overlays/dialog",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 28,
+    "scene": "states/empty",
+    "mutation": "padding 1px: padding EdgeInsets.all(24.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 29,
+    "scene": "watchlist/top",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 30,
+    "scene": "order/symbol",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 31,
+    "scene": "detail/collapsed",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 4.0, 0.0, 0.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 32,
+    "scene": "overlays/dialog",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 1.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 33,
+    "scene": "matrix/sign_in_dark",
+    "mutation": "text: text PXssword",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 34,
+    "scene": "overlays/snackbar",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 35,
+    "scene": "matrix/settings_large",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 36,
+    "scene": "order/dragging",
+    "mutation": "size 1px: width 56.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 37,
+    "scene": "detail/collapsed",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 38,
+    "scene": "matrix/sign_in_small",
+    "mutation": "text: text Xassword",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 39,
+    "scene": "map/default",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 40,
+    "scene": "order/dragging",
+    "mutation": "padding 1px: padding EdgeInsets.all(1.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 41,
+    "scene": "matrix/settings_text_2x",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 42,
+    "scene": "sign_in/error",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 43,
+    "scene": "watchlist/scrolled",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 44,
+    "scene": "matrix/settings_dark",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 45,
+    "scene": "matrix/sign_in_text_2x",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 46,
+    "scene": "detail/overview",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 47,
+    "scene": "matrix/sign_in_text_2x",
+    "mutation": "padding 1px: padding EdgeInsets(12.0, 0.0, 12.0, 0.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 48,
+    "scene": "order/done",
+    "mutation": "size 1px: height 56.0 + 1",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 49,
+    "scene": "matrix/sign_in_small",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 50,
+    "scene": "overlays/sheet",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 1.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 51,
+    "scene": "overlays/dialog",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 52,
+    "scene": "matrix/sign_in_small",
+    "mutation": "text: text SignXin",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 53,
+    "scene": "states/error",
+    "mutation": "shape colour: shape colour Color(alpha: 0.0000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.0000, red: 0.0039, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 54,
+    "scene": "live/ticked",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 8.0, 16.0, 8.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 55,
+    "scene": "live/ticked",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 56,
+    "scene": "matrix/settings_small",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 1.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 57,
+    "scene": "detail/news",
+    "mutation": "semantics label: semantics label \"Tab 2 of 3\" -> \"Tab 2 of 3!\"",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 58,
+    "scene": "detail/overview",
+    "mutation": "text: text Acme Holdings X",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 59,
+    "scene": "sign_in/submitting",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 60,
+    "scene": "buttons/all",
+    "mutation": "padding 1px: padding EdgeInsets(24.0, 0.0, 24.0, 0.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 61,
+    "scene": "matrix/sign_in_small",
+    "mutation": "reorder children: moved the last of 3 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 62,
+    "scene": "matrix/sign_in_text_2x",
+    "mutation": "text: text EmaXl",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 63,
+    "scene": "order/amount",
+    "mutation": "decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9725, colorSpace: ColorSpace.sRGB) -> Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9451, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 64,
+    "scene": "map/default",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 65,
+    "scene": "matrix/settings_rtl",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 24.0, 16.0, 8.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 66,
+    "scene": "chart/default",
+    "mutation": "size 1px: height 160.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 67,
+    "scene": "watchlist/scrolled",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 68,
+    "scene": "overlays/dropdown",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 69,
+    "scene": "sign_in/error",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 70,
+    "scene": "map/default",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 71,
+    "scene": "map/default",
+    "mutation": "size 1px: width 28.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 72,
+    "scene": "states/loading",
+    "mutation": "size 1px: width 16.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 73,
+    "scene": "overlays/sheet",
+    "mutation": "padding 1px: padding EdgeInsets(24.0, 0.0, 24.0, 0.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 74,
+    "scene": "states/error",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 75,
+    "scene": "order/amount",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 76,
+    "scene": "live/flashing",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 77,
+    "scene": "order/done",
+    "mutation": "reorder children: moved the last of 4 children first",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 78,
+    "scene": "watchlist/scrolled",
+    "mutation": "text: text X",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 79,
+    "scene": "sign_in/error",
+    "mutation": "reorder children: moved the last of 3 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 80,
+    "scene": "live/initial",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 81,
+    "scene": "chart/default",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 24.0, 16.0, 8.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 82,
+    "scene": "states/error",
+    "mutation": "shape colour: shape colour Color(alpha: 0.0000, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.0000, red: 0.0000, green: 0.0235, blue: 0.0000, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 83,
+    "scene": "order/dragging",
+    "mutation": "text: text FJX0",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 84,
+    "scene": "live/initial",
+    "mutation": "text: text UpdaXed 09:30:00",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 85,
+    "scene": "matrix/settings_rtl",
+    "mutation": "decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9725, colorSpace: ColorSpace.sRGB) -> Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9529, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 86,
+    "scene": "order/amount",
+    "mutation": "reorder children: moved the last of 4 children first",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 87,
+    "scene": "sign_in/focused",
+    "mutation": "shape colour: shape colour Color(alpha: 1.0000, red: 0.2235, green: 0.2863, blue: 0.6706, colorSpace: ColorSpace.sRGB) -> Color(alpha: 1.0000, red: 0.2235, green: 0.2863, blue: 0.6549, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 88,
+    "scene": "watchlist/top",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 89,
+    "scene": "chart/default",
+    "mutation": "custom painter removed: painter removed",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 90,
+    "scene": "watchlist/top",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 91,
+    "scene": "detail/overview",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 4.0, 0.0, 0.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 92,
+    "scene": "states/error",
+    "mutation": "size 1px: height 24.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 93,
+    "scene": "matrix/settings_small",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 94,
+    "scene": "map/default",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 95,
+    "scene": "live/flashing",
+    "mutation": "decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 1.0000, green: 1.0000, blue: 1.0000, colorSpace: ColorSpace.sRGB) -> Color(alpha: 1.0000, red: 1.0000, green: 0.9843, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 96,
+    "scene": "live/initial",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 97,
+    "scene": "matrix/sign_in_text_2x",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 98,
+    "scene": "overlays/dialog",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 99,
+    "scene": "order/review",
+    "mutation": "size 1px: width 24.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 100,
+    "scene": "live/flashing",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 101,
+    "scene": "live/initial",
+    "mutation": "flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 102,
+    "scene": "overlays/dialog",
+    "mutation": "shape colour: shape colour Color(alpha: 1.0000, red: 0.9137, green: 0.9059, blue: 0.9373, colorSpace: ColorSpace.sRGB) -> Color(alpha: 1.0000, red: 0.9137, green: 0.9059, blue: 0.9137, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 103,
+    "scene": "matrix/sign_in_rtl",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 104,
+    "scene": "sign_in/focused",
+    "mutation": "reorder children: moved the last of 4 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 105,
+    "scene": "detail/news",
+    "mutation": "reorder children: moved the last of 3 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 106,
+    "scene": "matrix/sign_in_small",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 107,
+    "scene": "matrix/settings_rtl",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 108,
+    "scene": "overlays/dialog",
+    "mutation": "size 1px: height 48.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 109,
+    "scene": "sign_in/focused",
+    "mutation": "padding 1px: padding EdgeInsets.all(13.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 110,
+    "scene": "sign_in/focused",
+    "mutation": "text: text SignXin",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 111,
+    "scene": "order/amount",
+    "mutation": "size 1px: width 36.0 + 1",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 112,
+    "scene": "watchlist/top",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 113,
+    "scene": "live/initial",
+    "mutation": "text: text HARX",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 114,
+    "scene": "sign_in/empty",
+    "mutation": "text: text PXssword",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 115,
+    "scene": "matrix/settings_dark",
+    "mutation": "text: text UnXock with biometrics",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 116,
+    "scene": "states/error",
+    "mutation": "flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 117,
+    "scene": "chart/default",
+    "mutation": "size 1px: height 16.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 118,
+    "scene": "map/default",
+    "mutation": "reorder children: moved the last of 5 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 119,
+    "scene": "live/flashing",
+    "mutation": "text: text DXL0",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 120,
+    "scene": "watchlist/top",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 121,
+    "scene": "detail/overview",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 122,
+    "scene": "matrix/sign_in_large",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 123,
+    "scene": "text/all",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 124,
+    "scene": "watchlist/scrolled",
+    "mutation": "flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 125,
+    "scene": "text/all",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 126,
+    "scene": "states/error",
+    "mutation": "text: text ReXry",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 127,
+    "scene": "matrix/settings_rtl",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 128,
+    "scene": "matrix/settings_large",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 129,
+    "scene": "overlays/dialog",
+    "mutation": "semantics label: semantics label \"Dismiss\" -> \"Dismiss!\"",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 130,
+    "scene": "live/flashing",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 8.0, 16.0, 8.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 131,
+    "scene": "order/dragging",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 132,
+    "scene": "matrix/sign_in_rtl",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 133,
+    "scene": "detail/news",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 134,
+    "scene": "matrix/settings_rtl",
+    "mutation": "size 1px: height 1.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 135,
+    "scene": "order/symbol",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 136,
+    "scene": "sign_in/error",
+    "mutation": "padding 1px: padding EdgeInsets.all(16.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 137,
+    "scene": "sign_in/empty",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 138,
+    "scene": "matrix/settings_text_2x",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 139,
+    "scene": "matrix/sign_in_dark",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 140,
+    "scene": "overlays/snackbar",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 1.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 141,
+    "scene": "matrix/sign_in_dark",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 142,
+    "scene": "matrix/settings_large",
+    "mutation": "text: text X",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 143,
+    "scene": "states/error",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 144,
+    "scene": "matrix/sign_in_text_2x",
+    "mutation": "text: text SXgn in",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 145,
+    "scene": "settings/default",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 146,
+    "scene": "matrix/settings_rtl",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 147,
+    "scene": "detail/news",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 148,
+    "scene": "sign_in/empty",
+    "mutation": "reorder children: moved the last of 3 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 149,
+    "scene": "matrix/sign_in_text_2x",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 150,
+    "scene": "live/flashing",
+    "mutation": "decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.8676, green: 0.9335, blue: 0.8865, colorSpace: ColorSpace.sRGB) -> Color(alpha: 1.0000, red: 0.8667, green: 0.9216, blue: 0.8863, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 151,
+    "scene": "sign_in/focused",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 16.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 152,
+    "scene": "order/done",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 153,
+    "scene": "order/symbol",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 154,
+    "scene": "states/loading",
+    "mutation": "reorder children: moved the last of 3 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 155,
+    "scene": "order/amount",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 156,
+    "scene": "detail/overview",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 157,
+    "scene": "order/amount",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 158,
+    "scene": "watchlist/top",
+    "mutation": "text: text Juniper HoldingsX10",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 159,
+    "scene": "matrix/sign_in_text_2x",
+    "mutation": "text: text Xign in",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 160,
+    "scene": "settings/default",
+    "mutation": "decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9725, colorSpace: ColorSpace.sRGB) -> Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9490, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 161,
+    "scene": "text/all",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 162,
+    "scene": "live/initial",
+    "mutation": "text: text 93X33",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 163,
+    "scene": "live/ticked",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 164,
+    "scene": "sign_in/error",
+    "mutation": "padding 1px: padding EdgeInsets.all(16.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 165,
+    "scene": "order/transition",
+    "mutation": "size 1px: width 16.0 + 1",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 166,
+    "scene": "sign_in/empty",
+    "mutation": "reorder children: moved the last of 4 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 167,
+    "scene": "map/default",
+    "mutation": "size 1px: width 28.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 168,
+    "scene": "live/initial",
+    "mutation": "flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 169,
+    "scene": "states/empty",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 170,
+    "scene": "map/default",
+    "mutation": "text: text Branches nXar you",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 171,
+    "scene": "live/ticked",
+    "mutation": "text: text 140.X2",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 172,
+    "scene": "buttons/all",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 173,
+    "scene": "overlays/snackbar",
+    "mutation": "decoration radius: BoxDecoration.borderRadius +1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 174,
+    "scene": "order/amount",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 175,
+    "scene": "sign_in/focused",
+    "mutation": "text: text Sign iX",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 176,
+    "scene": "sign_in/error",
+    "mutation": "size 1px: height 8.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 177,
+    "scene": "matrix/sign_in_dark",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 178,
+    "scene": "states/loading",
+    "mutation": "decoration radius: BoxDecoration.borderRadius +1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 179,
+    "scene": "matrix/settings_small",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 180,
+    "scene": "matrix/settings_small",
+    "mutation": "text: text X",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 181,
+    "scene": "order/dragging",
+    "mutation": "padding 1px: padding EdgeInsets.all(16.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 182,
+    "scene": "matrix/sign_in_text_2x",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 183,
+    "scene": "states/empty",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 184,
+    "scene": "matrix/settings_large",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 185,
+    "scene": "sign_in/submitting",
+    "mutation": "shape colour: shape colour Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1294, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1373, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 186,
+    "scene": "detail/collapsed",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 187,
+    "scene": "order/amount",
+    "mutation": "decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9725, colorSpace: ColorSpace.sRGB) -> Color(alpha: 1.0000, red: 0.9412, green: 0.9529, blue: 0.9725, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 188,
+    "scene": "detail/news",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 189,
+    "scene": "sign_in/focused",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 190,
+    "scene": "states/loading",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 191,
+    "scene": "matrix/settings_rtl",
+    "mutation": "size 1px: width 36.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 192,
+    "scene": "matrix/sign_in_rtl",
+    "mutation": "padding 1px: padding EdgeInsets(24.0, 0.0, 24.0, 0.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 193,
+    "scene": "sign_in/focused",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 194,
+    "scene": "settings/default",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 195,
+    "scene": "overlays/snackbar",
+    "mutation": "text: text 24 sXares",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 196,
+    "scene": "live/initial",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 197,
+    "scene": "order/amount",
+    "mutation": "text: text +0.85X",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 198,
+    "scene": "overlays/sheet",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 199,
+    "scene": "settings/default",
+    "mutation": "decoration radius: BoxDecoration.borderRadius +1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 200,
+    "scene": "sign_in/focused",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 201,
+    "scene": "live/flashing",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 202,
+    "scene": "matrix/sign_in_small",
+    "mutation": "size 1px: height 8.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 203,
+    "scene": "states/loading",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 204,
+    "scene": "states/empty",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 205,
+    "scene": "matrix/sign_in_large",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 206,
+    "scene": "matrix/settings_small",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 207,
+    "scene": "detail/news",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 0.0, 24.0, 0.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 208,
+    "scene": "detail/overview",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 209,
+    "scene": "chart/tooltip",
+    "mutation": "size 1px: height 200.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 210,
+    "scene": "order/symbol",
+    "mutation": "text: text Acme HoXdings 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 211,
+    "scene": "detail/overview",
+    "mutation": "size 1px: height 46.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 212,
+    "scene": "detail/collapsed",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 213,
+    "scene": "states/empty",
+    "mutation": "size 1px: width 48.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 214,
+    "scene": "order/amount",
+    "mutation": "decoration colour: BoxDecoration.color Color(alpha: 0.1200, red: 0.8510, green: 0.1882, blue: 0.1451, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.1216, red: 0.8235, green: 0.1882, blue: 0.1451, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 215,
+    "scene": "text/all",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 216,
+    "scene": "matrix/settings_text_2x",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 217,
+    "scene": "matrix/settings_rtl",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 218,
+    "scene": "order/dragging",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 219,
+    "scene": "overlays/dropdown",
+    "mutation": "text: text X",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 220,
+    "scene": "watchlist/scrolled",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 221,
+    "scene": "overlays/snackbar",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 4.0, 0.0, 0.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 222,
+    "scene": "order/transition",
+    "mutation": "semantics label: semantics label \"Back\" -> \"Back!\"",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 223,
+    "scene": "matrix/settings_dark",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 1.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 224,
+    "scene": "detail/news",
+    "mutation": "text: text Xeadlines 9",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 225,
+    "scene": "states/empty",
+    "mutation": "reorder children: moved the last of 5 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 226,
+    "scene": "buttons/all",
+    "mutation": "text: text ContXnue",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 227,
+    "scene": "overlays/sheet",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 4.0, 0.0, 0.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 228,
+    "scene": "chart/default",
+    "mutation": "text: text DAILX RANGE",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 229,
+    "scene": "order/done",
+    "mutation": "reorder children: moved the last of 5 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 230,
+    "scene": "chart/tooltip",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 231,
+    "scene": "map/default",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 232,
+    "scene": "sign_in/submitting",
+    "mutation": "size 1px: width 18.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 233,
+    "scene": "states/empty",
+    "mutation": "reorder children: moved the last of 3 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 234,
+    "scene": "text/all",
+    "mutation": "padding 1px: padding EdgeInsets.all(16.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 235,
+    "scene": "sign_in/error",
+    "mutation": "text: text SXgn in",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 236,
+    "scene": "matrix/settings_dark",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 237,
+    "scene": "chart/default",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 238,
+    "scene": "order/done",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 239,
+    "scene": "detail/news",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 240,
+    "scene": "detail/news",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 241,
+    "scene": "detail/news",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 242,
+    "scene": "matrix/settings_text_2x",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 243,
+    "scene": "sign_in/empty",
+    "mutation": "text: text EmXil",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 244,
+    "scene": "order/done",
+    "mutation": "shape colour: shape colour Color(alpha: 1.0000, red: 0.9843, green: 0.9725, blue: 1.0000, colorSpace: ColorSpace.sRGB) -> Color(alpha: 1.0000, red: 0.9843, green: 0.9725, blue: 0.9686, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 245,
+    "scene": "sign_in/error",
+    "mutation": "text: text Sign iX",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 246,
+    "scene": "overlays/sheet",
+    "mutation": "reorder children: moved the last of 3 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 247,
+    "scene": "order/done",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 248,
+    "scene": "sign_in/submitting",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 249,
+    "scene": "matrix/settings_text_2x",
+    "mutation": "text: text Name, email, phoXe",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 250,
+    "scene": "overlays/dialog",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 251,
+    "scene": "matrix/sign_in_dark",
+    "mutation": "transform: transform -> translate(1, 0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 252,
+    "scene": "matrix/sign_in_small",
+    "mutation": "padding 1px: padding EdgeInsets.all(16.0) + EdgeInsets(1.0, 0.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 253,
+    "scene": "order/dragging",
+    "mutation": "size 1px: width 390.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 254,
+    "scene": "matrix/settings_text_2x",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 255,
+    "scene": "detail/collapsed",
+    "mutation": "text: text OverXiew",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 256,
+    "scene": "settings/default",
+    "mutation": "reorder children: moved the last of 3 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 257,
+    "scene": "settings/default",
+    "mutation": "size 1px: width 36.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 258,
+    "scene": "watchlist/top",
+    "mutation": "decoration radius: BoxDecoration.borderRadius +1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 259,
+    "scene": "order/dragging",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 260,
+    "scene": "matrix/sign_in_large",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 16.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 261,
+    "scene": "overlays/sheet",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 1.0) + EdgeInsets(0.0, 0.0, 1.0, 0.0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 262,
+    "scene": "matrix/sign_in_dark",
+    "mutation": "shape colour: shape colour Color(alpha: 1.0000, red: 0.5490, green: 0.6196, blue: 1.0000, colorSpace: ColorSpace.sRGB) -> Color(alpha: 1.0000, red: 0.5451, green: 0.6196, blue: 1.0000, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 263,
+    "scene": "overlays/sheet",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 264,
+    "scene": "matrix/sign_in_large",
+    "mutation": "shape colour: shape colour Color(alpha: 1.0000, red: 0.2235, green: 0.2863, blue: 0.6706, colorSpace: ColorSpace.sRGB) -> Color(alpha: 1.0000, red: 0.2235, green: 0.2980, blue: 0.6706, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 265,
+    "scene": "sign_in/focused",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 266,
+    "scene": "order/dragging",
+    "mutation": "size 1px: width 16.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 267,
+    "scene": "order/amount",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 268,
+    "scene": "sign_in/empty",
+    "mutation": "text: text PXssword",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 269,
+    "scene": "detail/collapsed",
+    "mutation": "flex alignment: mainAxisAlignment MainAxisAlignment.spaceBetween -> MainAxisAlignment.spaceAround",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 270,
+    "scene": "order/dragging",
+    "mutation": "size 1px: width 24.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 271,
+    "scene": "order/transition",
+    "mutation": "text: text XOR0",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 272,
+    "scene": "matrix/settings_small",
+    "mutation": "decoration colour: BoxDecoration.color Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9725, colorSpace: ColorSpace.sRGB) -> Color(alpha: 1.0000, red: 0.9451, green: 0.9529, blue: 0.9451, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 273,
+    "scene": "sign_in/empty",
+    "mutation": "size 1px: height 8.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 274,
+    "scene": "detail/news",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 2.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 275,
+    "scene": "sign_in/submitting",
+    "mutation": "shape colour: shape colour Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1294, colorSpace: ColorSpace.sRGB) -> Color(alpha: 0.1216, red: 0.1059, green: 0.1059, blue: 0.1373, colorSpace: ColorSpace.sRGB)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 276,
+    "scene": "order/symbol",
+    "mutation": "size 1px: width 16.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 277,
+    "scene": "watchlist/top",
+    "mutation": "size 1px: width 16.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 278,
+    "scene": "detail/overview",
+    "mutation": "padding 1px: padding EdgeInsets(0.0, 0.0, 0.0, 2.0) + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 279,
+    "scene": "order/symbol",
+    "mutation": "decoration radius: BoxDecoration.borderRadius +1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 280,
+    "scene": "detail/news",
+    "mutation": "text: text HeadlineX 10",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 281,
+    "scene": "overlays/dialog",
+    "mutation": "flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 282,
+    "scene": "matrix/settings_rtl",
+    "mutation": "font weight: font weight",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 283,
+    "scene": "live/flashing",
+    "mutation": "flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 284,
+    "scene": "live/initial",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 285,
+    "scene": "order/dragging",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 286,
+    "scene": "states/loading",
+    "mutation": "decoration radius: BoxDecoration.borderRadius +1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 287,
+    "scene": "overlays/sheet",
+    "mutation": "size 1px: height 48.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 288,
+    "scene": "matrix/sign_in_small",
+    "mutation": "padding 1px: padding EdgeInsets.zero + EdgeInsets(0.0, 0.0, 0.0, 1.0)",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 289,
+    "scene": "states/empty",
+    "mutation": "reorder children: moved the last of 2 children first",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": true
+  },
+  {
+    "seed": 290,
+    "scene": "order/done",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 291,
+    "scene": "overlays/dropdown",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 292,
+    "scene": "order/dragging",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 293,
+    "scene": "matrix/settings_rtl",
+    "mutation": "decoration radius: BoxDecoration.borderRadius +1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 294,
+    "scene": "order/dragging",
+    "mutation": "text colour: text colour",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 295,
+    "scene": "matrix/settings_large",
+    "mutation": "size 1px: width 24.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 296,
+    "scene": "overlays/sheet",
+    "mutation": "text: text SortX Value",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 297,
+    "scene": "states/empty",
+    "mutation": "flex alignment: mainAxisAlignment MainAxisAlignment.start -> MainAxisAlignment.end",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 298,
+    "scene": "order/amount",
+    "mutation": "padding 1px: padding EdgeInsets(16.0, 0.0, 16.0, 1.0) + EdgeInsets(0.0, 1.0, 0.0, 0.0)",
+    "snapshotChanged": false,
+    "verdict": "pass",
+    "pixelsChanged": false,
+    "semanticsChanged": false
+  },
+  {
+    "seed": 299,
+    "scene": "sign_in/focused",
+    "mutation": "size 1px: height 8.0 + 1",
+    "snapshotChanged": true,
+    "verdict": "needs-review",
+    "pixelsChanged": true,
+    "semanticsChanged": true
+  }
+]

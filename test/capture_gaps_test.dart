@@ -314,4 +314,24 @@ void main() {
     final ChangeReport r = diffSnapshots(a, b);
     expect(<String>[for (final ReportItem i in r.items) i.change!.nodeId], <String>['root/Box@0']);
   });
+
+  testWidgets('a tooltip traversal link is recorded without a run-dependent id', (WidgetTester tester) async {
+    Widget tip() => MaterialApp(
+      home: Box(
+        child: Tooltip(message: 'Back', child: const SizedBox(width: 48, height: 48)),
+      ),
+    );
+    final SemanticsHandle handle = tester.ensureSemantics();
+    await tester.pumpWidget(tip());
+    await tester.pumpAndSettle();
+    final Snapshot a = await captureSnapshot(tester, 'x', options: options);
+    // A new tree gives the overlay portal a new State, as a second run does.
+    await tester.pumpWidget(const SizedBox());
+    await tester.pumpWidget(tip());
+    await tester.pumpAndSettle();
+    final Snapshot b = await captureSnapshot(tester, 'x', options: options);
+    handle.dispose();
+    expect(a.toCanonical(), contains('traversalParentIdentifier'));
+    expect(b.toCanonical(), a.toCanonical());
+  });
 }

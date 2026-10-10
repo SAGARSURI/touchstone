@@ -54,7 +54,18 @@ class Change {
     this.ownLayoutChanged = false,
     this.lead = '',
     this.fields = const <String, String>{},
+    this.contentMoved = false,
   });
+
+  /// A layout change in which nothing the component draws changed, but
+  /// framework children inside it moved: its paint differs only in where
+  /// children are placed (the node's `shape` is equal on both sides).
+  final bool contentMoved;
+
+  /// For [contentMoved] with more than one child that could have moved them:
+  /// those children's changes. Empty when there is one, which is then
+  /// [causedBy], or none.
+  List<Change> possibleCauses = <Change>[];
 
   /// The changed properties [detail] lists, each "old -> new"; empty when it
   /// lists none.
@@ -64,7 +75,21 @@ class Change {
   final String lead;
 
   /// [detail] as the report writes it: see summary.dart.
-  String get summary => fields.isEmpty ? shortenValue(detail) : '$lead${summarizeFields(fields)}';
+  String get summary => summaryLines.join('; ');
+
+  /// [summary] as one entry per distinct change, the first with [lead]; a
+  /// lead that is a change of its own (a layout's size, `size a -> b; `) is
+  /// an entry of its own.
+  List<String> get summaryLines {
+    if (fields.isEmpty) {
+      return <String>[shortenValue(detail)];
+    }
+    final List<String> entries = summarizeFieldList(fields);
+    if (lead.endsWith('; ')) {
+      return <String>[lead.substring(0, lead.length - 2), ...entries];
+    }
+    return <String>['$lead${entries.first}', ...entries.skip(1)];
+  }
 
   /// A layout change in which a property that sizes or places children
   /// changed on this component (`Padding.padding`), not only its size.
@@ -95,6 +120,15 @@ class Change {
 
   /// Set when this change is a consequence of another (cascade grouping).
   Change? causedBy;
+
+  /// Set when this change is a consequence of a shift group that has no
+  /// single cause: a list item the shift moved into or out of the painted
+  /// area.
+  ShiftGroup? withShift;
+
+  /// On a list item that is built but not painted on one side, or inside
+  /// one: it moved into or out of the painted area.
+  bool atRangeEdge = false;
 
   /// The change at the end of [causedBy].
   Change get root {
@@ -128,8 +162,10 @@ class ShiftGroup {
   /// The candidate causes, one change per candidate component.
   List<Change> candidates = <Change>[];
 
-  /// The single root cause, when exactly one candidate exists.
-  Change? get cause => candidates.length == 1 ? candidates.single : null;
+  /// The single root cause: the one candidate, or the first of several
+  /// that are the same change on copies of one component (Sagar,
+  /// 2026-10-10: those count as one cause).
+  Change? get cause => candidates.length == 1 || sameChange(candidates) ? candidates.first : null;
 
   String get vectorText => describeVector(dx, dy);
 
@@ -174,22 +210,48 @@ class ReportItem {
 
 /// What differs between a baseline and a capture.
 class ChangeReport {
-  ChangeReport._(this.snapshotId, this.kind, {this.beforeToolchain, this.afterToolchain});
+  ChangeReport._(
+    this.snapshotId,
+    this.kind, {
+    this.beforeToolchain,
+    this.afterToolchain,
+    this.beforeRoot,
+    this.afterRoot,
+  });
 
   ChangeReport.equal(String snapshotId) : this._(snapshotId, ReportKind.equal);
 
-  ChangeReport.migration(String snapshotId, Map<String, String> before, Map<String, String> after)
-    : this._(snapshotId, ReportKind.migration, beforeToolchain: before, afterToolchain: after);
+  ChangeReport.migration(
+    String snapshotId,
+    Map<String, String> before,
+    Map<String, String> after, {
+    String? beforeRoot,
+    String? afterRoot,
+  }) : this._(
+         snapshotId,
+         ReportKind.migration,
+         beforeToolchain: before,
+         afterToolchain: after,
+         beforeRoot: beforeRoot,
+         afterRoot: afterRoot,
+       );
 
   ChangeReport.diff(this.snapshotId, this.changes, this.groups, this.items, this.inputChanges)
     : kind = ReportKind.diff,
       beforeToolchain = null,
-      afterToolchain = null;
+      afterToolchain = null,
+      beforeRoot = null,
+      afterRoot = null;
 
   final String snapshotId;
   final ReportKind kind;
   final Map<String, String>? beforeToolchain;
   final Map<String, String>? afterToolchain;
+
+  /// For a migration: the two baselines' root hashes, which a pixel proof
+  /// must name.
+  final String? beforeRoot;
+  final String? afterRoot;
 
   /// Every change found, including consequences.
   List<Change> changes = <Change>[];
@@ -225,4 +287,19 @@ enum ReportKind {
 
   /// Compared; see the items.
   diff,
+}
+
+/// Whether [changes] are more than one change and all the same change on
+/// copies of one component: the same type, component type and detail. One
+/// edit to a shared widget (a padding in every SectionHeader) makes such
+/// copies, so as candidate causes they count as one.
+bool sameChange(Iterable<Change> changes) {
+  final List<Change> cs = changes.toList();
+  if (cs.length < 2) {
+    return false;
+  }
+  final Change first = cs.first;
+  return cs.every(
+    (Change c) => c.type == first.type && c.componentType == first.componentType && c.detail == first.detail,
+  );
 }

@@ -1,0 +1,276 @@
+Change 9: Mix a refactor, an intended restyle and an accidental 1 px padding change in one pull request
+
+== buttons/all
+buttons/all    fail
+
+1  Layout    SectionHeader@0           size 358x49 -> 358x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           consequence: 1 component shifted down 1 px
+2  Layout    SectionHeader in 3 places  size 358x49 -> 358x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           at: SectionHeader@1, SectionHeader@2, SectionHeader@3
+3  Shift     ButtonSetScreen@0         1 component shifted down 2 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1
+4  Shift     ButtonSetScreen@0         1 component shifted down 3 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1, Layout SectionHeader@2
+5  Shift     ButtonSetScreen@0         2 components shifted down 4 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1, Layout SectionHeader@2, Layout SectionHeader@3
+
+   not in the declared expectations: Layout root/ButtonSetScreen@0/SectionHeader@0
+   not in the declared expectations: Layout root/ButtonSetScreen@0/SectionHeader@1
+   not in the declared expectations: shift under root/ButtonSetScreen@0
+   not in the declared expectations: Layout root/ButtonSetScreen@0/SectionHeader@2
+   not in the declared expectations: shift under root/ButtonSetScreen@0
+   not in the declared expectations: Layout root/ButtonSetScreen@0/SectionHeader@3
+   not in the declared expectations: shift under root/ButtonSetScreen@0
+
+== chart/default
+chart/default    fail
+
+1  Layout    ChartScreen@0             inside: its content moved; nothing it draws changed; possible causes: Layout SectionHeader@0, Layout SectionHeader@1
+2  Layout    SectionHeader@0           size 358x49 -> 358x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           consequence: 1 component shifted down 1 px
+3  Layout    SectionHeader@1           size 358x49 -> 358x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+4  Shift     ChartScreen@0             1 component shifted down 2 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1
+
+   not in the declared expectations: Layout root/ChartScreen@0
+   not in the declared expectations: Layout root/ChartScreen@0/SectionHeader@0
+   not in the declared expectations: Layout root/ChartScreen@0/SectionHeader@1
+   not in the declared expectations: shift under root/ChartScreen@0
+
+== chart/tooltip
+chart/tooltip    fail
+
+1  Layout    ChartScreen@0             inside: its content moved; nothing it draws changed; possible causes: Layout SectionHeader@0, Layout SectionHeader@1
+2  Layout    SectionHeader@0           size 358x49 -> 358x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           consequence: 2 components shifted down 1 px
+3  Layout    SectionHeader@1           size 358x49 -> 358x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+4  Shift     ChartScreen@0             1 component shifted down 2 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1
+
+   not in the declared expectations: Layout root/ChartScreen@0
+   not in the declared expectations: Layout root/ChartScreen@0/SectionHeader@0
+   not in the declared expectations: Layout root/ChartScreen@0/SectionHeader@1
+   not in the declared expectations: shift under root/ChartScreen@0
+
+== detail/collapsed
+detail/collapsed    fail
+
+1  Style     ChangeBadge@0             Container.bg.borderRadius: BorderRadius.circular(4.0) -> BorderRadius.circular(8.0) (and 4 more fields)
+2  Layout    SectionHeader@0           size 358x49 -> 358x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           consequence: Layout OverviewTab@0: inside: its content moved; nothing it draws changed
+
+   not in the declared expectations: Layout root/DetailScreen@0/OverviewTab@0/SectionHeader@0
+
+== detail/overview
+detail/overview    fail
+
+1  Style     ChangeBadge@0             Container.bg.borderRadius: BorderRadius.circular(4.0) -> BorderRadius.circular(8.0) (and 4 more fields)
+2  Layout    SectionHeader@0           size 358x49 -> 358x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           consequence: Layout OverviewTab@0: inside: its content moved; nothing it draws changed
+
+   not in the declared expectations: Layout root/DetailScreen@0/OverviewTab@0/SectionHeader@0
+
+== matrix/settings_dark
+matrix/settings_dark    fail
+
+1  Paint     SettingsScreen@0          unexplained (pixel hash changed)
+2  Layout    SectionHeader@0           size 390x49 -> 390x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           consequence: 4 components shifted down 1 px
+3  Identity  SettingsTile in 7 places  same output; added TileTrailing
+           at: SettingsTile@0, SettingsTile@1, SettingsTile@2, SettingsTile@3, SettingsTile@4, SettingsTile@5, SettingsTile@6
+4  Layout    SectionHeader in 2 places  size 390x49 -> 390x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           at: SectionHeader@1, SectionHeader@2
+5  Shift     SettingsScreen@0          6 components shifted down 2 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1
+6  Shift     SettingsScreen@0          4 components shifted down 3 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1, Layout SectionHeader@2
+
+   not in the declared expectations: Paint root/SettingsScreen@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@1
+   not in the declared expectations: shift under root/SettingsScreen@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@2
+   not in the declared expectations: shift under root/SettingsScreen@0
+
+== matrix/settings_large
+matrix/settings_large    fail
+
+1  Paint     SettingsScreen@0          unexplained (pixel hash changed)
+2  Layout    SectionHeader@0           size 1024x49 -> 1024x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           consequence: 4 components shifted down 1 px
+3  Identity  SettingsTile in 7 places  same output; added TileTrailing
+           at: SettingsTile@0, SettingsTile@1, SettingsTile@2, SettingsTile@3, SettingsTile@4, SettingsTile@5, SettingsTile@6
+4  Layout    SectionHeader in 2 places  size 1024x49 -> 1024x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           at: SectionHeader@1, SectionHeader@2
+5  Shift     SettingsScreen@0          6 components shifted down 2 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1
+6  Shift     SettingsScreen@0          4 components shifted down 3 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1, Layout SectionHeader@2
+
+   not in the declared expectations: Paint root/SettingsScreen@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@1
+   not in the declared expectations: shift under root/SettingsScreen@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@2
+   not in the declared expectations: shift under root/SettingsScreen@0
+
+== matrix/settings_rtl
+matrix/settings_rtl    fail
+
+1  Paint     SettingsScreen@0          unexplained (pixel hash changed)
+2  Layout    SectionHeader@0           size 390x49 -> 390x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           consequence: 4 components shifted down 1 px
+3  Identity  SettingsTile in 7 places  same output; added TileTrailing
+           at: SettingsTile@0, SettingsTile@1, SettingsTile@2, SettingsTile@3, SettingsTile@4, SettingsTile@5, SettingsTile@6
+4  Layout    SectionHeader in 2 places  size 390x49 -> 390x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           at: SectionHeader@1, SectionHeader@2
+5  Shift     SettingsScreen@0          6 components shifted down 2 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1
+6  Shift     SettingsScreen@0          4 components shifted down 3 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1, Layout SectionHeader@2
+
+   not in the declared expectations: Paint root/SettingsScreen@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@1
+   not in the declared expectations: shift under root/SettingsScreen@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@2
+   not in the declared expectations: shift under root/SettingsScreen@0
+
+== matrix/settings_small
+matrix/settings_small    fail
+
+1  Paint     SettingsScreen@0          unexplained (pixel hash changed)
+2  Layout    SectionHeader@0           size 320x49 -> 320x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           consequence: 4 components shifted down 1 px
+           consequence: Layout SectionHeader@2: size 320x49 -> 320x50 (moved into or out of the painted area)
+3  Identity  SettingsTile in 4 places  same output; added TileTrailing
+           at: SettingsTile@0, SettingsTile@1, SettingsTile@2, SettingsTile@3
+4  Layout    SectionHeader@1           size 320x49 -> 320x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+5  Shift     SettingsScreen@0          5 components shifted down 2 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1
+6  Added     TileTrailing@0            219.5,571,80.5,16
+           consequence: Style SettingsTile@4: RenderParagraph.textAlign.2: start -> (none); RenderParagraph.textDirection.2: ltr -> (none); RichText.softWrap.2: wrapping at box width -> (none) (and 3 more fields); DefaultTextStyle.overflow.2: clip -> (none) (and 2 more fields); RenderParagraph.locale.2: en -> (none); RichText.maxLines.2: unlimited -> (none) (and 1 more field); RenderParagraph.devicePixelRatio.2: 2.0 -> (none); Text.inherit.2: true -> (none); Text.color.2: text.secondary -> (none) (and 1 more field); DefaultTextStyle.debugLabel.2: (((englishLike labelSmall 2021).merge((blackMountainView labelSmall).apply)).copyWith).copyWith -> (none) (and 1 more field); DefaultTextStyle.inherit.2: false -> (none) (and 2 more fields); DefaultTextStyle.color.2: #FF46464F -> (none) (and 1 more field); DefaultTextStyle.family.2: Roboto -> (none) (and 2 more fields); DefaultTextStyle.weight.2: 500 -> (none) (and 2 more fields); DefaultTextStyle.letterSpacing.2: 0.5 -> (none) (and 2 more fields); DefaultTextStyle.baseline.2: alphabetic -> (none) (and 2 more fields); DefaultTextStyle.height.2: 1.4x -> (none) (and 2 more fields); DefaultTextStyle.leadingDistribution.2: even -> (none) (and 2 more fields); DefaultTextStyle.decoration.2: #FF1B1B21 TextDecoration.none -> (none) (and 1 more field); AnimatedDefaultTextStyle.duration.2: 200ms -> (none) (came or went with the child)
+7  Shift     SettingsScreen@0          2 components shifted down 3 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1, Added TileTrailing@0
+
+   not in the declared expectations: Paint root/SettingsScreen@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@1
+   not in the declared expectations: shift under root/SettingsScreen@0
+   not in the declared expectations: Added root/SettingsScreen@0/SettingsTile@4/TileTrailing@0
+   not in the declared expectations: shift under root/SettingsScreen@0
+
+== matrix/settings_text_2x
+matrix/settings_text_2x    fail
+
+1  Paint     SettingsScreen@0          unexplained (pixel hash changed)
+2  Layout    SectionHeader@0           size 390x66 -> 390x67; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           consequence: 4 components shifted down 1 px
+           consequence: Semantics SettingsTile@3: nodes: 2 -> 1 semantics nodes (moved into or out of the painted area)
+           consequence: Added SettingsTile@3/TileTrailing@0: at 310,1000,60,48 (moved into or out of the painted area)
+3  Identity  SettingsTile in 2 places  same output; added TileTrailing
+           at: SettingsTile@0, SettingsTile@1
+4  Layout    SectionHeader@1           size 390x66 -> 390x67; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+5  Semantics SettingsTile@2            nodes: 2 -> 1 semantics nodes
+6  Shift     SettingsScreen@0          1 component shifted down 2 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1, Added SettingsTile@2/TileTrailing@0
+7  Added     SettingsTile@2/TileTrailing@0  310,767,60,48
+           consequence: Style SettingsTile@2: Opacity.opacity: 1.0 -> (none) (and 1 more field); GestureDetector.startBehavior.2: start -> (none) (and 1 more field); Switch.value: on -> (none); DefaultTextStyle.debugLabel.2: (((englishLike labelSmall 2021).merge((blackMountainView labelSmall).apply)).copyWith).copyWith -> (none) (and 1 more field); DefaultTextStyle.inherit.2: false -> (none) (and 1 more field); DefaultTextStyle.color.2: #FF46464F -> (none) (and 1 more field); DefaultTextStyle.family.2: Roboto -> (none) (and 1 more field); DefaultTextStyle.weight.2: 500 -> (none) (and 1 more field); DefaultTextStyle.letterSpacing.2: 0.5 -> (none) (and 1 more field); DefaultTextStyle.baseline.2: alphabetic -> (none) (and 1 more field); DefaultTextStyle.height.2: 1.4x -> (none) (and 1 more field); DefaultTextStyle.leadingDistribution.2: even -> (none) (and 1 more field); DefaultTextStyle.decoration.2: #FF1B1B21 TextDecoration.none -> (none) (and 1 more field); DefaultTextStyle.softWrap.2: wrapping at box width -> (none) (and 1 more field); DefaultTextStyle.overflow.2: clip -> (none) (and 1 more field); AnimatedDefaultTextStyle.duration.2: 200ms -> (none); RenderCustomPaint.painter: _SwitchPainter# -> (none); RenderCustomPaint.preferredSize: Size(60.0, 48.0) -> (none); Actions.dispatcher.2: null -> (none); Actions.actions.2: {ActivateIntent: CallbackAction<ActivateIntent>#} -> (none) (came or went with the child)
+
+   not in the declared expectations: Paint root/SettingsScreen@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@1
+   not in the declared expectations: Semantics root/SettingsScreen@0/SettingsTile@2
+   not in the declared expectations: shift under root/SettingsScreen@0
+   not in the declared expectations: Added root/SettingsScreen@0/SettingsTile@2/TileTrailing@0
+
+== order/symbol
+order/symbol    needs-review
+
+1  Style     ChangeBadge in 6 places   Container.bg.borderRadius: BorderRadius.circular(4.0) -> BorderRadius.circular(8.0) (and 4 more fields)
+           at: WatchRow@0/PriceLabel@0/ChangeBadge@0, WatchRow@1/PriceLabel@0/ChangeBadge@0, WatchRow@2/PriceLabel@0/ChangeBadge@0, WatchRow@3/PriceLabel@0/ChangeBadge@0, WatchRow@4/PriceLabel@0/ChangeBadge@0, WatchRow@5/PriceLabel@0/ChangeBadge@0
+
+== overlays/dialog
+overlays/dialog    fail
+
+1  Layout    OverlaysScreen@0          inside: its content moved; nothing it draws changed; possible causes: Layout SectionHeader@0, Style ChangeBadge@0
+2  Style     ChangeBadge@0             Container.bg.borderRadius: BorderRadius.circular(4.0) -> BorderRadius.circular(8.0) (and 4 more fields)
+3  Layout    SectionHeader@0           size 156.35000610351562x49 -> 156.35000610351562x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+4  Shift     OverlaysScreen@0          1 component shifted down 0.5 px; possible causes: Style ChangeBadge@0, Layout SectionHeader@0
+5  Shift     OverlaysScreen@0          1 component shifted down 1 px; possible causes: Style ChangeBadge@0, Layout SectionHeader@0
+
+   not in the declared expectations: Layout root/OverlaysScreen@0
+   not in the declared expectations: Layout root/OverlaysScreen@0/SectionHeader@0
+   not in the declared expectations: shift under root/OverlaysScreen@0
+   not in the declared expectations: shift under root/OverlaysScreen@0
+
+== overlays/dropdown
+overlays/dropdown    fail
+
+1  Layout    root                      inside: its content moved; nothing it draws changed; cause unknown, needs review
+2  Layout    OverlaysScreen@0          inside: its content moved; nothing it draws changed; possible causes: Layout SectionHeader@0, Style ChangeBadge@0
+3  Style     ChangeBadge@0             Container.bg.borderRadius: BorderRadius.circular(4.0) -> BorderRadius.circular(8.0) (and 4 more fields)
+4  Layout    SectionHeader@0           size 156.35000610351562x49 -> 156.35000610351562x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+5  Shift     OverlaysScreen@0          1 component shifted down 0.5 px; possible causes: Style ChangeBadge@0, Layout SectionHeader@0
+6  Shift     OverlaysScreen@0          1 component shifted down 1 px; possible causes: Style ChangeBadge@0, Layout SectionHeader@0
+
+   not in the declared expectations: Layout root
+   not in the declared expectations: Layout root/OverlaysScreen@0
+   not in the declared expectations: Layout root/OverlaysScreen@0/SectionHeader@0
+   not in the declared expectations: shift under root/OverlaysScreen@0
+   not in the declared expectations: shift under root/OverlaysScreen@0
+
+== overlays/sheet
+overlays/sheet    fail
+
+1  Layout    OverlaysScreen@0          inside: its content moved; nothing it draws changed; possible causes: Layout SectionHeader@0, Style ChangeBadge@0
+2  Style     ChangeBadge@0             Container.bg.borderRadius: BorderRadius.circular(4.0) -> BorderRadius.circular(8.0) (and 4 more fields)
+3  Layout    SectionHeader@0           size 156.35000610351562x49 -> 156.35000610351562x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+4  Shift     OverlaysScreen@0          1 component shifted down 0.5 px; possible causes: Style ChangeBadge@0, Layout SectionHeader@0
+5  Shift     OverlaysScreen@0          1 component shifted down 1 px; possible causes: Style ChangeBadge@0, Layout SectionHeader@0
+
+   not in the declared expectations: Layout root/OverlaysScreen@0
+   not in the declared expectations: Layout root/OverlaysScreen@0/SectionHeader@0
+   not in the declared expectations: shift under root/OverlaysScreen@0
+   not in the declared expectations: shift under root/OverlaysScreen@0
+
+== overlays/snackbar
+overlays/snackbar    fail
+
+1  Layout    OverlaysScreen@0          inside: its content moved; nothing it draws changed; possible causes: Layout SectionHeader@0, Style ChangeBadge@0
+2  Style     ChangeBadge@0             Container.bg.borderRadius: BorderRadius.circular(4.0) -> BorderRadius.circular(8.0) (and 4 more fields)
+3  Layout    SectionHeader@0           size 156.35000610351562x49 -> 156.35000610351562x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+4  Shift     OverlaysScreen@0          1 component shifted down 0.5 px; possible causes: Style ChangeBadge@0, Layout SectionHeader@0
+5  Shift     OverlaysScreen@0          1 component shifted down 1 px; possible causes: Style ChangeBadge@0, Layout SectionHeader@0
+
+   not in the declared expectations: Layout root/OverlaysScreen@0
+   not in the declared expectations: Layout root/OverlaysScreen@0/SectionHeader@0
+   not in the declared expectations: shift under root/OverlaysScreen@0
+   not in the declared expectations: shift under root/OverlaysScreen@0
+
+== settings/default
+settings/default    fail
+
+1  Paint     SettingsScreen@0          unexplained (pixel hash changed)
+2  Layout    SectionHeader@0           size 390x49 -> 390x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           consequence: 4 components shifted down 1 px
+3  Identity  SettingsTile in 7 places  same output; added TileTrailing
+           at: SettingsTile@0, SettingsTile@1, SettingsTile@2, SettingsTile@3, SettingsTile@4, SettingsTile@5, SettingsTile@6
+4  Layout    SectionHeader in 2 places  size 390x49 -> 390x50; Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+           at: SectionHeader@1, SectionHeader@2
+5  Shift     SettingsScreen@0          6 components shifted down 2 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1
+6  Shift     SettingsScreen@0          4 components shifted down 3 px; possible causes: Layout SectionHeader@0, Layout SectionHeader@1, Layout SectionHeader@2
+
+   not in the declared expectations: Paint root/SettingsScreen@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@1
+   not in the declared expectations: shift under root/SettingsScreen@0
+   not in the declared expectations: Layout root/SettingsScreen@0/SectionHeader@2
+   not in the declared expectations: shift under root/SettingsScreen@0
+
+== watchlist/scrolled
+watchlist/scrolled    fail
+
+1  Layout    SectionHeader@0           inside: Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+2  Style     ChangeBadge in 13 places  Container.bg.borderRadius: BorderRadius.circular(4.0) -> BorderRadius.circular(8.0) (and 4 more fields)
+           at: WatchRow#BOR1/PriceLabel@0/ChangeBadge@0, WatchRow#COB1/PriceLabel@0/ChangeBadge@0, WatchRow#DEL1/PriceLabel@0/ChangeBadge@0, WatchRow#EMB1/PriceLabel@0/ChangeBadge@0, WatchRow#FJO1/PriceLabel@0/ChangeBadge@0, WatchRow#GRA1/PriceLabel@0/ChangeBadge@0, WatchRow#HAR1/PriceLabel@0/ChangeBadge@0, WatchRow#IND1/PriceLabel@0/ChangeBadge@0, WatchRow#JUN1/PriceLabel@0/ChangeBadge@0, WatchRow#KES1/PriceLabel@0/ChangeBadge@0, WatchRow#LUM1/PriceLabel@0/ChangeBadge@0, WatchRow#MER1/PriceLabel@0/ChangeBadge@0, WatchRow#NIM1/PriceLabel@0/ChangeBadge@0
+
+   not in the declared expectations: Layout root/WatchlistScreen@0/WatchlistHeader@0/SectionHeader@0
+
+== watchlist/top
+watchlist/top    fail
+
+1  Layout    SectionHeader@0           inside: Padding.padding: EdgeInsets(16.0, 24.0, 16.0, 8.0) -> EdgeInsets(16.0, 24.0, 16.0, 9.0) (and 1 more field)
+2  Style     ChangeBadge in 10 places  Container.bg.borderRadius: BorderRadius.circular(4.0) -> BorderRadius.circular(8.0) (and 4 more fields)
+           at: WatchRow#ACM0/PriceLabel@0/ChangeBadge@0, WatchRow#BOR0/PriceLabel@0/ChangeBadge@0, WatchRow#COB0/PriceLabel@0/ChangeBadge@0, WatchRow#DEL0/PriceLabel@0/ChangeBadge@0, WatchRow#EMB0/PriceLabel@0/ChangeBadge@0, WatchRow#FJO0/PriceLabel@0/ChangeBadge@0, WatchRow#GRA0/PriceLabel@0/ChangeBadge@0, WatchRow#HAR0/PriceLabel@0/ChangeBadge@0, WatchRow#IND0/PriceLabel@0/ChangeBadge@0, WatchRow#JUN0/PriceLabel@0/ChangeBadge@0
+
+   not in the declared expectations: Layout root/WatchlistScreen@0/WatchlistHeader@0/SectionHeader@0
+
+Causes in more than one snapshot:
+  BorderRadius.circular(4.0) -> BorderRadius.circular(8.0): style change on 35 ChangeBadge in 9 snapshots

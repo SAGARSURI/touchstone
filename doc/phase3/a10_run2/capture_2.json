@@ -1,0 +1,166 @@
+{
+  "buttons/all": {
+    "pumpUs": 487146,
+    "captureUs": 226616
+  },
+  "text/all": {
+    "pumpUs": 59262,
+    "captureUs": 38156
+  },
+  "settings/default": {
+    "pumpUs": 165464,
+    "captureUs": 77642
+  },
+  "sign_in/empty": {
+    "pumpUs": 156527,
+    "captureUs": 58537
+  },
+  "sign_in/focused": {
+    "pumpUs": 196667,
+    "captureUs": 126029
+  },
+  "sign_in/error": {
+    "pumpUs": 64799,
+    "captureUs": 38715
+  },
+  "sign_in/submitting": {
+    "pumpUs": 51353,
+    "captureUs": 44659
+  },
+  "watchlist/top": {
+    "pumpUs": 111690,
+    "captureUs": 66998
+  },
+  "watchlist/scrolled": {
+    "pumpUs": 187847,
+    "captureUs": 72506
+  },
+  "detail/overview": {
+    "pumpUs": 207989,
+    "captureUs": 39166
+  },
+  "detail/news": {
+    "pumpUs": 105417,
+    "captureUs": 41588
+  },
+  "detail/collapsed": {
+    "pumpUs": 93048,
+    "captureUs": 19374
+  },
+  "states/empty": {
+    "pumpUs": 28002,
+    "captureUs": 17096
+  },
+  "states/error": {
+    "pumpUs": 25596,
+    "captureUs": 23809
+  },
+  "states/loading": {
+    "pumpUs": 38595,
+    "captureUs": 55860
+  },
+  "overlays/dialog": {
+    "pumpUs": 113865,
+    "captureUs": 35316
+  },
+  "overlays/sheet": {
+    "pumpUs": 111515,
+    "captureUs": 42135
+  },
+  "overlays/snackbar": {
+    "pumpUs": 141691,
+    "captureUs": 40053
+  },
+  "overlays/dropdown": {
+    "pumpUs": 182802,
+    "captureUs": 28576
+  },
+  "matrix/settings_dark": {
+    "pumpUs": 183010,
+    "captureUs": 31322
+  },
+  "matrix/sign_in_dark": {
+    "pumpUs": 53178,
+    "captureUs": 39891
+  },
+  "matrix/settings_rtl": {
+    "pumpUs": 71299,
+    "captureUs": 45686
+  },
+  "matrix/sign_in_rtl": {
+    "pumpUs": 63222,
+    "captureUs": 32159
+  },
+  "matrix/settings_text_2x": {
+    "pumpUs": 55891,
+    "captureUs": 27941
+  },
+  "matrix/sign_in_text_2x": {
+    "pumpUs": 47862,
+    "captureUs": 24133
+  },
+  "matrix/settings_small": {
+    "pumpUs": 65039,
+    "captureUs": 46218
+  },
+  "matrix/sign_in_small": {
+    "pumpUs": 54902,
+    "captureUs": 36333
+  },
+  "matrix/settings_large": {
+    "pumpUs": 66962,
+    "captureUs": 42786
+  },
+  "matrix/sign_in_large": {
+    "pumpUs": 51063,
+    "captureUs": 40007
+  },
+  "chart/default": {
+    "pumpUs": 28167,
+    "captureUs": 20852
+  },
+  "chart/tooltip": {
+    "pumpUs": 26526,
+    "captureUs": 27251
+  },
+  "live/initial": {
+    "pumpUs": 37330,
+    "captureUs": 32460
+  },
+  "live/ticked": {
+    "pumpUs": 79708,
+    "captureUs": 28612
+  },
+  "live/flashing": {
+    "pumpUs": 51692,
+    "captureUs": 40725
+  },
+  "map/default": {
+    "pumpUs": 37178,
+    "captureUs": 46009
+  },
+  "order/symbol": {
+    "pumpUs": 53157,
+    "captureUs": 37264
+  },
+  "order/amount": {
+    "pumpUs": 298333,
+    "captureUs": 29703
+  },
+  "order/review": {
+    "pumpUs": 257205,
+    "captureUs": 41021
+  },
+  "order/done": {
+    "pumpUs": 254828,
+    "captureUs": 18846
+  },
+  "order/transition": {
+    "pumpUs": 232470,
+    "captureUs": 16508
+  },
+  "order/dragging": {
+    "pumpUs": 245554,
+    "captureUs": 34697
+  }
+}

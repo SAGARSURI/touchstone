@@ -5,8 +5,17 @@ on:
     branches: [main]
   pull_request:
 
+# A newer push to the same pull request supersedes a run still waiting or
+# running (Sagar, 2026-10-10).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
+    # The developer-experience review pull requests (doc/phase3/dx_protocol.md)
+    # are never merged; their checks would only tell the reviewer the answer.
+    if: ${{ !startsWith(github.head_ref, 'dx-review/') }}
     strategy:
       fail-fast: false
       matrix:

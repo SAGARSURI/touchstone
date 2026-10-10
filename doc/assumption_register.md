@@ -11,15 +11,15 @@ A phase starts only after the previous phase's exit gate is recorded here.
 | A1 | A custom recording context captures each node's own paint, including opacity and layer effects | Holds on fixtures; 3 of 50 paint mutations change no own paint hash, each explained below | 2026-10-07 |
 | A2 | Paths, images and text can be fingerprinted without rasterizing | Fails for paths: fallback taken (pixel hash for nodes that draw paths). Holds for images, and for text with a readable source | 2026-10-07 |
 | A3 | Snapshots are byte-identical across macOS machines | Fails: macOS arm64 and Intel differ on the pixel hashes of path-drawn nodes in 12 of 15 scenes. Fallback taken (baselines pinned to one host, recorded in the fingerprint) | 2026-10-08 |
-| A4 | Equal hashes imply equal pixels | 0 capture gaps on fixtures and on the 14 review cases, after the review fixes | 2026-10-07 |
+| A4 | Equal hashes imply equal pixels | Holds on real code: 0 capture gaps over the catalogue history, 9 changes × 41 snapshots ([phase3/history.md](phase3/history.md)); 0 on fixtures and the 14 review cases | 2026-10-09 |
 | A5 | Node identity survives refactors | Fails as first built (3 of 6 refactors needs-review). Fallback amended (flattened matching, Sagar 2026-10-09): 6 of 6 pass, each with no change or identity changes only; 0 mutations absorbed | 2026-10-09 |
 | A6 | Keeping only app-owned widgets gives a recognisable tree | Review sheet rebuilt from Phase 2 change reports; two engineers reviewing, Unsure answers remain | 2026-10-09 |
-| A7 | A change in the widget-test environment is a change users see | Not yet tested (Phase 3) | |
+| A7 | A change in the widget-test environment is a change users see | Holds on an iOS simulator sample: of 197 device-visible generated mutations, 0 missed with real fonts loaded; with the default test font, 3 missed, all rows pushed out of view by the test font's wrapping, and listed ([phase3/a7.md](phase3/a7.md)). Real fonts are needed for this to hold | 2026-10-09 |
 | A8 | Cascade grouping names the true root cause | Holds. Generated: 748 single causes, 0 wrong. Catalog: 19 of 19 with the corrected expectations Sagar accepted (17 of 19 and 1 wrong certain as first written) | 2026-10-09 |
 | A9 | Affected-test selection never skips a changed test | Not yet tested (Phase 4) | |
-| A10 | Capture and diff are cheap enough for every pull request | First numbers recorded, after the review fixes | 2026-10-07 |
+| A10 | Capture and diff are cheap enough for every pull request | Capture adds 16% on Linux x64 (budget 20%) after the fix; a hash-equal comparison with reading the baseline takes at most 0.48 ms on 39 of 41 snapshots and 0.78 to 1.05 ms on the two largest ([phase3/a10.md](phase3/a10.md)). macOS not measured | 2026-10-09 |
 | A11 | Pairwise variants catch what the full matrix catches | Not yet tested (Phase 4) | |
-| A12 | A Flutter upgrade can be absorbed without re-reviewing every baseline | Not yet tested (Phase 3) | |
+| A12 | A Flutter upgrade can be absorbed without re-reviewing every baseline | Holds for 3.47.6 to 3.47.7 (a patch release): all 41 catalogue snapshots pixel-identical on macOS arm64 and Linux x64, re-baselined automatically with a pixel proof, and review passes all ([phase3/a12.md](phase3/a12.md)). Runs again on the next minor release | 2026-10-09 |
 | A13 | Existing golden tests can be made deterministic | Holds: the gate fails 4 of 15 conventional goldens and names a node and a cause for each | 2026-10-08 |
 | A14 | The schema is not Flutter-shaped | Holds: every field has a web source, including `flat` (added for A5); 5 web captures parse as schema v1 | 2026-10-09 |
 
@@ -347,6 +347,24 @@ verbose reports (now shortened, see diff.md "Report wording") and a row
 reported as changed when only another row was edited (seed 945, capture
 change 5). Not yet met: Unsure answers remain.
 
+**One reviewer (Sagar, 2026-10-10 01:21Z, "Review alone").** The spec's
+experiment has two engineers review the attribution of every mutation; the
+second engineer is no longer on the project, so Sagar finishes the sheet
+alone. This is a deviation from the spec, and A6's result is one engineer's
+judgement.
+
+Sagar's review (2026-10-10): 64 of 67 rows Yes, and all 67 name the right
+component. Rows 3, 4 and 6 are Unsure on how readable the report is. The
+changes for them are in [a6_followup.md](phase3/a6_followup.md):
+- proven ink;
+- semantics nodes matched before comparing;
+- proven paint consequences counted;
+- copies of one change counted as one cause (Sagar, 2026-10-10).
+
+The gates still hold with these changes. Rows 2 to 7 of the sheet were
+regenerated for his second look. Not yet met: rows 3, 4 and 6 await that
+look.
+
 ### A13: conventional goldens made deterministic
 
 **Holds** ([a13.md](phase1/a13.md)). The gate fails 4 of 15 conventional golden
@@ -474,3 +492,74 @@ guessing.
 On the catalog, 17 of 19 entries are correct as written, with 1 wrong certain
 cause. Both misses are disputed expectations (see results.md).
 
+
+## Phase 3: catalogue verification, then release
+
+**Exit gate (spec):** 0 capture gaps on catalogue history. The release
+decision is recorded together with the gate results. Budgets met or
+renegotiated. Unexplained rate reported.
+
+**Result (2026-10-09): the gate's measurements are met; the release decision
+is pending.** Branch `phase3-catalogue`, PR #4. The plan and every step's
+expectations are in [phase3/](phase3/plan.md).
+
+### Every gate, as measured in Phase 3
+
+The gates Sagar confirmed on 2026-10-07, on the grown catalogue (41
+snapshots, levels 1 to 5):
+
+| Gate | Target | Result | Met | Source |
+| --- | --- | --- | --- | --- |
+| Missed mutations, catalog | 0 | 0 of 32 entries | yes | [gates.md](phase3/gates.md) |
+| Capture gaps on catalogue history | 0 | 0 over 9 × 41 snapshot pairs, both runs | yes | [history.md](phase3/history.md) |
+| Fail verdicts on no-op refactors | 0 | 0 of 6; all 6 pass | yes | gates.md |
+| Differing snapshots in 1,000 repeats per OS | 0 | 0 on macOS arm64, macOS Intel, Linux x64 and Linux arm64 | yes | gates.md |
+| Correct component and change type | ≥99% | 32 of 32 with the corrections accepted in Phase 2 (30 of 32 as written) | yes | gates.md |
+| Correct root cause on cascades | ≥95% | 19 of 19 with the accepted corrections (17 of 19 as written) | yes | gates.md |
+| Wrong root causes stated as certain | 0 | 0 of 60 on history run 2 (1 of 53 on run 1); 0 of 863 generated single causes | yes | history.md, gates.md |
+| Unexplained rate | under 5% | 3.8% (16 of 417) on history run 2; 7.5% on run 1 | yes | history.md |
+| Capture overhead | under 20% | +16% on Linux x64 after the A10 fix (+48% as first measured); macOS not measured | yes, on Linux | [a10.md](phase3/a10.md) |
+| Hash-equal comparison, with reading the baseline (Sagar, 2026-10-10) | under 1 ms per snapshot | 39 of 41 at most 0.48 ms; the two watchlist baselines 0.78 to 1.05 ms over two runs (2.4 to 3.4 ms before the parse was reworked) | at the budget on 2 of 41 | a10.md |
+| Misses in 10,000 generated mutations | 0 | 0, at verdict level and at snapshot level | yes | gates.md |
+
+Assumptions tested in Phase 3:
+- **A4 on real code: holds.** 0 capture gaps on the history.
+- **A7: holds with real fonts.** 0 of 197 device-visible mutations missed on
+  an iOS simulator; 3 missed with the default test font, all wrapping
+  ([a7.md](phase3/a7.md)).
+- **A10: budgets met on Linux**, with the parse question below.
+- **A12: holds for 3.47.6 to 3.47.7**, a patch release; runs again on the
+  next minor release ([a12.md](phase3/a12.md)).
+
+### Release decision
+
+**Pending: not yet (Sagar, 2026-10-10).** Publishing to pub.dev waits for Sagar's explicit go. The spec
+publishes "once the team is confident in the results"; these are open before
+that call:
+
+1. **Developer experience (step 8).** The protocol is written
+   ([dx_protocol.md](phase3/dx_protocol.md)); Sagar runs the sessions
+   alone (2026-10-10), and no number exists yet. The spec sets no gate on
+   these numbers.
+2. **A6.** Sagar reviews alone (his decision, one reviewer instead of the
+   spec's two). 64 of 67 rows are Yes. Rows 3, 4 and 6 were regenerated
+   after the report changes in [a6_followup.md](phase3/a6_followup.md) and
+   await his second look.
+3. **Schema changes inside v1: decided.** `shape`, the `flat` semantics
+   change and the 128-bit pixel digest stay in v1 (Sagar, 2026-10-10).
+   Nothing was published with the earlier forms; v1 is frozen as it stands
+   at release.
+4. **The comparison budget with the parse.** Sagar (2026-10-10): the
+   budget includes reading the baseline. After the parse was reworked, 39
+   of 41 snapshots take at most 0.48 ms; the two watchlist baselines sit at
+   the budget, 0.78 to 1.05 ms over two runs on the Linux container.
+5. **Capture overhead on macOS**, where baselines are checked, is not
+   measured; +16% is from the Linux container, with a small margin.
+6. **Regression set, not fixed:** `SettingsScreen@0`'s pixel hash changing
+   when only its children move (detection still changes; since
+   a6_followup.md the report proves it follows the moved tiles); a refactor in a tile cut off at the viewport
+   edge; theme colours derived from a token carrying no token; style
+   recording closure names with library numbers (seen in A12, and again
+   on one toolchain when the DX goldens were recorded: three order
+   snapshots' tooltip style went from `@657220820` to `@659220820`; style
+   is not hashed, so no verdict changed).

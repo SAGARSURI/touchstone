@@ -1,0 +1,20 @@
+Change 2: Extract a widget and rename a class, with no visual effect
+
+== order/symbol
+order/symbol    pass
+
+1  Identity  WatchRow in 6 places      same output; added QuoteNames, renamed SymbolAvatar -> TickerAvatar
+           at: WatchRow@0, WatchRow@1, WatchRow@2, WatchRow@3, WatchRow@4, WatchRow@5
+
+== watchlist/scrolled
+watchlist/scrolled    pass
+
+1  Identity  WatchRow in 13 places     same output; added QuoteNames, renamed SymbolAvatar -> TickerAvatar
+           at: WatchRow#COB1, WatchRow#DEL1, WatchRow#EMB1, WatchRow#FJO1, WatchRow#GRA1, WatchRow#HAR1, WatchRow#IND1, WatchRow#JUN1, WatchRow#KES1, WatchRow#LUM1, WatchRow#MER1, WatchRow#NIM1, WatchRow#ONY1
+
+== watchlist/top
+watchlist/top    pass
+
+1  Identity  WatchRow in 12 places     same output; added QuoteNames, renamed SymbolAvatar -> TickerAvatar
+           at: WatchRow#ACM0, WatchRow#BOR0, WatchRow#COB0, WatchRow#DEL0, WatchRow#EMB0, WatchRow#FJO0, WatchRow#GRA0, WatchRow#HAR0, WatchRow#IND0, WatchRow#JUN0, WatchRow#KES0, WatchRow#LUM0
+

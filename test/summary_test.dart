@@ -12,7 +12,7 @@ const String accent =
 
 void main() {
   group('summarizeFields', () {
-    test('fields with the same change are one entry, named by the public widget field', () {
+    test('fields with the same change are one entry, named by the public widget field, the rest left out', () {
       expect(
         summarizeFields(<String, String>{
           'RenderPhysicalShape.color': '$grey -> $accent',
@@ -20,24 +20,24 @@ void main() {
           'Material.color': '$grey -> $accent',
           'FilledButton.enabled': 'disabled -> (none)',
         }),
-        'Material.color: #1F1B1B21 -> brand.accent (and 2 more fields); FilledButton.enabled: disabled -> (none)',
+        'Material.color: #1F1B1B21 -> brand.accent; FilledButton.enabled: disabled -> (none)',
       );
     });
 
-    test('one other field is counted in the singular', () {
+    test('a render object field with the same change is not counted as a further change', () {
       expect(
         summarizeFields(<String, String>{'RenderOpacity.opacity': '(none) -> 0.6', 'Opacity.opacity': '(none) -> 0.6'}),
-        'Opacity.opacity: (none) -> 0.6 (and 1 more field)',
+        'Opacity.opacity: (none) -> 0.6',
       );
     });
 
-    test('a colour with the same token on both sides shows the values that changed', () {
+    test('a colour with the same token on both sides keeps the token and shows the values that changed', () {
       expect(
         shortenValue(
           'positive (Color(alpha: 1.0000, red: 0.1176, green: 0.5569, blue: 0.2431, colorSpace: ColorSpace.sRGB)) -> '
           'positive (Color(alpha: 1.0000, red: 0.1176, green: 0.5569, blue: 0.2471, colorSpace: ColorSpace.sRGB))',
         ),
-        '#FF1E8E3E -> #FF1E8E3F',
+        'positive #FF1E8E3E -> #FF1E8E3F',
       );
     });
 

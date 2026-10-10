@@ -9,6 +9,7 @@
 // layer's type and parameters.
 
 import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:crypto/crypto.dart';
@@ -17,6 +18,8 @@ import 'package:flutter/rendering.dart';
 import 'canonical.dart' as c;
 import 'describe.dart';
 import 'fingerprint.dart';
+import 'isolated.dart';
+import 'pixel_digest.dart';
 import 'recording_canvas.dart';
 
 /// One render object's own paint.
@@ -110,6 +113,30 @@ class RecordedNode implements OpSink {
   @override
   String image(ui.Image image) => _recording._addImage(image);
 
+  /// What this node's own drawing covers in its own coordinates, before any
+  /// clip; see [ownUnbounded].
+  Rect? get ownBounds => _own;
+  Rect? _own;
+
+  /// Some of this node's drawing has no bounds of its own: it fills or
+  /// spreads over the clip in effect.
+  bool get ownUnbounded => _ownUnbounded;
+  bool _ownUnbounded = false;
+
+  /// This opaque node's own drawing, without its children, when it could be
+  /// painted alone; its pixel hash is then taken from this instead of from
+  /// the composited view. Disposed by [PaintRecording.resolve].
+  ui.Picture? isolated;
+
+  @override
+  void reachOwn(Rect? local) {
+    if (local == null) {
+      _ownUnbounded = true;
+    } else if (local.width > 0 && local.height > 0) {
+      _own = _own?.expandToInclude(local) ?? local;
+    }
+  }
+
   @override
   void reach(Rect globalRect) {
     _reached = true;
@@ -130,6 +157,9 @@ class PaintRecording {
 
   /// The view, in global logical coordinates.
   late final Rect viewRect;
+
+  /// Physical pixels per logical pixel, for rasterizing a node painted alone.
+  late final double devicePixelRatio;
 
   /// Global regions a backdrop filter reads and rewrites. A pixel change under
   /// one can spread anywhere inside it.
@@ -171,7 +201,22 @@ class PaintRecording {
           )
           .toList();
       final Rect? region = opaqueRegions[node];
-      if (region != null) {
+      final ui.Picture? isolated = node.isolated;
+      if (isolated != null) {
+        // Painted alone: the pixels are this node's own drawing, over what it
+        // covers in its own coordinates, so neither what other components draw
+        // there nor where clips cut it changes them. Drawing with no bounds of
+        // its own is taken over its reach, in its own coordinates.
+        final Offset origin = MatrixUtils.transformPoint(node.toGlobal, Offset.zero);
+        Rect? own = node.ownBounds;
+        if (node.ownUnbounded) {
+          final Rect? reach = node.reachBounds?.shift(-origin);
+          own = own == null ? reach : (reach == null ? own : own.expandToInclude(reach));
+        }
+        ops.add(own == null ? 'pixels(own;none)' : 'pixels(own;${c.rect(own)};${await _rasterHash(isolated, own)})');
+        isolated.dispose();
+        node.isolated = null;
+      } else if (region != null) {
         // The region is written relative to the node's own origin, so a node
         // that only moves keeps its paint hash: its position is its bounds
         // (spec, Diff engine: a shifted component's "paint unchanged"). An
@@ -212,6 +257,30 @@ class PaintRecording {
   }
 
   static String _hash(List<String> lines) => sha256.convert(utf8.encode(lines.join('\n'))).toString();
+
+  /// The digest of [picture]'s pixels over [local], at the device pixel ratio.
+  Future<String> _rasterHash(ui.Picture picture, Rect local) async {
+    final double dpr = devicePixelRatio;
+    final Rect px = Rect.fromLTRB(local.left * dpr, local.top * dpr, local.right * dpr, local.bottom * dpr);
+    final int left = px.left.floor();
+    final int top = px.top.floor();
+    final int width = px.right.ceil() - left;
+    final int height = px.bottom.ceil() - top;
+    if (width <= 0 || height <= 0) {
+      return 'empty';
+    }
+    final recorder = ui.PictureRecorder();
+    ui.Canvas(recorder)
+      ..translate(-left.toDouble(), -top.toDouble())
+      ..scale(dpr)
+      ..drawPicture(picture);
+    final ui.Picture placed = recorder.endRecording();
+    final ui.Image image = await placed.toImage(width, height);
+    placed.dispose();
+    final ByteData? bytes = await image.toByteData();
+    image.dispose();
+    return pixelDigest(bytes!.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+  }
 }
 
 /// Paints a render tree into per-node op streams.
@@ -219,7 +288,9 @@ class PaintRecorder {
   /// Records [view] and everything it paints. Call after the last pump, with
   /// no frame scheduled.
   static PaintRecording record(RenderView view) {
-    final recording = PaintRecording._()..viewRect = Offset.zero & view.size;
+    final recording = PaintRecording._()
+      ..viewRect = Offset.zero & view.size
+      ..devicePixelRatio = view.configuration.devicePixelRatio;
     final node = RecordedNode._(
       0,
       view,
@@ -257,6 +328,44 @@ class PaintRecorder {
   static void _paintNode(PaintRecording recording, RecordedNode node) {
     final context = _RecordingContext(recording, node);
     node.renderObject.paint(context, Offset.zero);
+    if (node.isOpaque && _paintsAlone(node)) {
+      node.isolated = IsolatedPaint.record(node.renderObject);
+    }
+  }
+
+  /// Opaque reasons whose effect is in the node's own drawing, or in a clip
+  /// or mask it applies, so painting it alone reproduces it. An unknown layer
+  /// or filter may act on the children's pixels in ways a canvas cannot
+  /// repeat, so those nodes keep the composited view.
+  static const Set<OpaqueReason> _alone = <OpaqueReason>{
+    OpaqueReason.path,
+    OpaqueReason.picture,
+    OpaqueReason.vertices,
+    OpaqueReason.unknownShader,
+    OpaqueReason.fragmentShader,
+    OpaqueReason.unknownMaskFilter,
+    OpaqueReason.unknownTextSource,
+    OpaqueReason.platformView,
+    OpaqueReason.texture,
+  };
+
+  /// Whether [node] can be pixel-hashed on its own drawing: its reasons allow
+  /// it, and it sits in the view with no rotation or scale, so its own
+  /// coordinates are the view's, moved.
+  static bool _paintsAlone(RecordedNode node) {
+    if (!node.geometryVerified || !node.opaque.keys.every(_alone.contains)) {
+      return false;
+    }
+    final Float64List m = node.toGlobal.storage;
+    for (var i = 0; i < 16; i++) {
+      if (i == 12 || i == 13) {
+        continue;
+      }
+      if (m[i] != ((i % 5 == 0) ? 1 : 0)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /// Whether [composed] matches the render object's own paint transform to

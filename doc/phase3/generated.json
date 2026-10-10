@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-09",
+  "flutter": "3.47.6",
+  "host": "linux_x64",
+  "seeds": "0-9999",
+  "code": "92536d2",
+  "total": 10000,
+  "missedVerdict": 0,
+  "missedSnapshot": 0,
+  "oracleChanged": 6785,
+  "snapshotChanged": 7923,
+  "verdicts": {
+    "needs-review": 7923,
+    "pass": 2077,
+    "fail": 0
+  },
+  "ownerIsItem": 7864,
+  "typeAccepted": 6908,
+  "typeScored": 7125,
+  "shiftGroups": 1226,
+  "singleCause": 863,
+  "causeOk": 863,
+  "wrongCertain": 0,
+  "identityItems": 0,
+  "scenes": {
+    "buttons": 245,
+    "chart": 466,
+    "detail": 716,
+    "live": 732,
+    "map": 245,
+    "matrix": 2473,
+    "order": 1491,
+    "overlays": 980,
+    "settings": 235,
+    "sign_in": 975,
+    "states": 709,
+    "text": 265,
+    "watchlist": 468
+  }
+}
