@@ -11,7 +11,7 @@ class SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppTokens t = AppTokens.of(context);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(Space.m, Space.l, Space.m, Space.s),
+      padding: const EdgeInsets.fromLTRB(Space.m, Space.l, Space.m, Space.s + 1),
       child: Semantics(
         header: true,
         child: Text(
