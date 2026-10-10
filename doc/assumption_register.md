@@ -347,6 +347,12 @@ verbose reports (now shortened, see diff.md "Report wording") and a row
 reported as changed when only another row was edited (seed 945, capture
 change 5). Not yet met: Unsure answers remain.
 
+**One reviewer (Sagar, 2026-10-10 01:21Z, "Review alone").** The spec's
+experiment has two engineers review the attribution of every mutation; the
+second engineer is no longer on the project, so Sagar finishes the sheet
+alone. This is a deviation from the spec, and A6's result is one engineer's
+judgement.
+
 ### A13: conventional goldens made deterministic
 
 **Holds** ([a13.md](phase1/a13.md)). The gate fails 4 of 15 conventional golden
@@ -523,7 +529,8 @@ that call:
    ([dx_protocol.md](phase3/dx_protocol.md)); the sessions need two
    engineers, and no number exists yet. The spec sets no gate on these
    numbers.
-2. **A6.** The two engineers' review has Unsure answers left.
+2. **A6.** Sagar finishes the review sheet alone (his decision, one reviewer
+   instead of the spec's two); Unsure answers are left.
 3. **Schema changes inside v1.** `shape` (Phase 3), the `flat` semantics
    change (Phase 3) and the 128-bit pixel digest (A10) changed the canonical
    form without raising `touchstone-snapshot 1`, which schema_v1.md says is
