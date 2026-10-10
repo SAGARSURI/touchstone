@@ -147,14 +147,45 @@ and grouping do not depend on the wording.
 
 ## Commands
 
-- `dart run touchstone:review [--base <ref>] [--rules <file>] [--expect <file>]`
+- `dart run touchstone:review [--base <ref>] [--rules <file>] [--expect <file>] [--images]`
   compares every `.snapshot` file with its version at the base ref. It prints
   each report and a summary line. The exit code is 0 for pass, 1 for fail and
   2 for needs-review. A new or removed snapshot file is needs-review.
-- `dart run touchstone:update [flutter test arguments]` runs
+- `--images` adds the spec's review crops: before, after and diff images of
+  each changed component, in `build/touchstone/review/` with an `index.html`.
+  - It runs the tests in render mode (`TOUCHSTONE_RENDER_DIR`), where
+    `expectSnapshot` writes the view's pixels and compares nothing. It runs
+    them once in the working tree and once in a temporary git worktree at the
+    base.
+  - Only snapshots that need review or fail are rendered.
+  - Each crop is the component's bounds before and after, joined, plus 8
+    logical pixels.
+  - In the diff image, changed pixels are red. Items on the same area share
+    one set of crops, and a semantics item says it has no pixels.
+  - Crops never change the verdict or the exit code.
+  - In CI, upload the folder so reviewers can open it from the checks. The
+    checkout needs the base ref, so use `fetch-depth: 0`:
+    ```yaml
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - run: dart run touchstone:review --base origin/${{ github.base_ref }} --images
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: touchstone-review
+        path: build/touchstone/review/
+    ```
+- `dart run touchstone:update [--images] [flutter test arguments]` runs
   `flutter test --update-goldens`. That rewrites a baseline only after the
   determinism gate passes, and prints each rewritten snapshot's change report.
-  The command then prints what review will show against HEAD.
+  The command then prints what review will show against HEAD; with
+  `--images`, it also writes that review's crops.
+- A failing `expectSnapshot` writes the after crop of each changed component
+  to `failures/<snapshot id>/` beside the test, as golden tests do, and lists
+  the files in the message. This is an amendment to the spec's "A test
+  fails", agreed with Sagar on 2026-10-10. The baseline keeps no pixels, so
+  before and diff images come from `dart run touchstone:update --images`.
 - The spec's "scoped update" (accepting only style changes on one component) is
   marked "Proposed" in the spec and is not built.
 
