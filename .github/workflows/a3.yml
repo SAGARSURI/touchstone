@@ -9,6 +9,12 @@ on:
   workflow_dispatch:
   pull_request:
 
+# A newer push to the same pull request supersedes a run still waiting or
+# running (Sagar, 2026-10-10).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   repeat:
     # Not on the developer-experience review pull requests, which are never
