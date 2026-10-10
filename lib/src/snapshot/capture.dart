@@ -351,7 +351,14 @@ Future<Capture> _capture(WidgetTester tester, String id, SnapshotOptions options
         paint: sha256.convert(utf8.encode(assembly.text(comp))).toString(),
         shape: explain
             ? sha256
-                  .convert(utf8.encode(assembly.text(comp).replaceAllMapped(_placement, (Match m) => m[1]!)))
+                  .convert(
+                    utf8.encode(
+                      assembly
+                          .text(comp)
+                          .replaceAll(_drawsNothing, '')
+                          .replaceAllMapped(_placement, (Match m) => m[1]!),
+                    ),
+                  )
                   .toString()
             : '-',
         semantics: jsonEncode(semantics[comp] ?? const <Object?>[]),
@@ -505,6 +512,17 @@ List<String> _limits(PaintRecording recording) {
 /// Where a child is placed in a component's paint text: the offset after a
 /// framework child's `child` marker or a child component's `comp(<index>)`.
 final RegExp _placement = RegExp(r'\b(child|comp\(\d+\))\([^(){}\n]*\)');
+
+/// A shape draw that leaves every pixel as it was: a fully transparent
+/// paint with srcOver, colours not inverted, and no mask, colour filter,
+/// image filter or shader. Material paints one at each ink feature's bounds
+/// (a list tile's transparent background), so it follows its children when
+/// they move. Left out of `shape` only; the paint hash keeps it.
+final RegExp _drawsNothing = RegExp(
+  r'(?<=^|\{)draw(Rect|RRect|DRRect|Oval|Circle|Path|Arc|Line|Paint)\([^\n]*'
+  r';?P\(c\(0\.0,[^,()]+,[^,()]+,[^,()]+,\w+\);srcOver;[^()\n]*;false;-;-;-;-\)\)\n',
+  multiLine: true,
+);
 
 /// Builds each component's paint text from the per-render-object recording.
 ///

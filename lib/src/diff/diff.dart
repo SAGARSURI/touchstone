@@ -22,6 +22,7 @@
 // Pure Dart: no Flutter import, so the review command runs on the Dart VM.
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 
@@ -509,7 +510,18 @@ class _Diff {
           if (!paintChanged || !_semanticsText.contains(e.key)) e.key: e.value,
       };
       if (sem.isNotEmpty) {
-        out.add(Change(ChangeType.semantics, a, b, _describeMap(sem), fields: sem));
+        out.add(
+          Change(
+            ChangeType.semantics,
+            a,
+            b,
+            _describeMap(sem),
+            fields: sem,
+            // Only how many nodes there are: a child's node, or the scroll
+            // view's count of children, can come or go with the child.
+            presenceOnly: sem.keys.every(_semanticsCount.contains),
+          ),
+        );
       }
     }
     final bool geometryOnly = semanticsChanges.isEmpty && b.node.semantics != a.node.semantics && !_layoutChanged;
@@ -565,6 +577,8 @@ Map<String, String> _style(String json) {
   return <String, String>{for (final MapEntry<Object?, Object?> e in decoded.entries) '${e.key}': '${e.value}'};
 }
 
+const Set<String> _semanticsCount = <String>{'nodes', 'scrollChildCount'};
+
 bool _presenceOnly(Map<String, String> changes) =>
     changes.values.every((String v) => v.startsWith('(none) -> ') || v.endsWith(' -> (none)'));
 
@@ -616,10 +630,13 @@ Map<String, String> _semanticsChanges(String before, String after, {bool moved =
   if (b.length != a.length) {
     out['nodes'] = '${b.length} -> ${a.length} semantics nodes';
   }
-  for (var i = 0; i < b.length && i < a.length; i++) {
-    for (final String k in <String>{...b[i].keys, ...a[i].keys}) {
+  // Nodes that say the same thing on both sides are matched first, in order,
+  // so one node coming or going does not make every node after it compare
+  // with its neighbour. Between matched nodes, the rest pair up in order.
+  for (final (int i, int j) in _pairUnmatched(b.map(jsonEncode).toList(), a.map(jsonEncode).toList())) {
+    for (final String k in <String>{...b[i].keys, ...a[j].keys}) {
       final String bv = b[i].containsKey(k) ? jsonEncode(b[i][k]) : '(none)';
-      final String av = a[i].containsKey(k) ? jsonEncode(a[i][k]) : '(none)';
+      final String av = a[j].containsKey(k) ? jsonEncode(a[j][k]) : '(none)';
       if (bv != av) {
         out[k] = out.containsKey(k) ? '${out[k]}, $bv -> $av' : '$bv -> $av';
       }
@@ -630,6 +647,47 @@ Map<String, String> _semanticsChanges(String before, String after, {bool moved =
     out['nodes'] = 'semantics nodes changed';
   }
   return out;
+}
+
+/// Index pairs of [before] and [after] items left over once the longest run
+/// of equal items in order is matched: between two matched items, the
+/// unmatched ones on each side pair up in order, and any extra on one side
+/// is unpaired.
+List<(int, int)> _pairUnmatched(List<String> before, List<String> after) {
+  final int n = before.length;
+  final int m = after.length;
+  final List<List<int>> lcs = List<List<int>>.generate(n + 1, (_) => List<int>.filled(m + 1, 0));
+  for (int i = n - 1; i >= 0; i--) {
+    for (int j = m - 1; j >= 0; j--) {
+      lcs[i][j] = before[i] == after[j] ? lcs[i + 1][j + 1] + 1 : max(lcs[i + 1][j], lcs[i][j + 1]);
+    }
+  }
+  final pairs = <(int, int)>[];
+  final gapBefore = <int>[];
+  final gapAfter = <int>[];
+  void flush() {
+    for (var k = 0; k < gapBefore.length && k < gapAfter.length; k++) {
+      pairs.add((gapBefore[k], gapAfter[k]));
+    }
+    gapBefore.clear();
+    gapAfter.clear();
+  }
+
+  var i = 0;
+  var j = 0;
+  while (i < n || j < m) {
+    if (i < n && j < m && before[i] == after[j]) {
+      flush();
+      i++;
+      j++;
+    } else if (j >= m || (i < n && lcs[i + 1][j] >= lcs[i][j + 1])) {
+      gapBefore.add(i++);
+    } else {
+      gapAfter.add(j++);
+    }
+  }
+  flush();
+  return pairs;
 }
 
 /// Global bounds of a node.
