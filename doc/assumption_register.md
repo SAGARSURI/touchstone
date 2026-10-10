@@ -507,7 +507,7 @@ snapshots, levels 1 to 5):
 | Wrong root causes stated as certain | 0 | 0 of 60 on history run 2 (1 of 53 on run 1); 0 of 863 generated single causes | yes | history.md, gates.md |
 | Unexplained rate | under 5% | 3.8% (16 of 417) on history run 2; 7.5% on run 1 | yes | history.md |
 | Capture overhead | under 20% | +16% on Linux x64 after the A10 fix (+48% as first measured); macOS not measured | yes, on Linux | [a10.md](phase3/a10.md) |
-| Hash-equal comparison | under 1 ms per snapshot | 1.2 to 12.5 µs; with the baseline's parse, over 1 ms on 7 of 41 snapshots (up to 2.5 ms) | comparison yes; with the parse no | a10.md |
+| Hash-equal comparison, with reading the baseline (Sagar, 2026-10-10) | under 1 ms per snapshot | 39 of 41 at most 0.48 ms; the two watchlist baselines 0.78 to 1.05 ms over two runs (2.4 to 3.4 ms before the parse was reworked) | at the budget on 2 of 41 | a10.md |
 | Misses in 10,000 generated mutations | 0 | 0, at verdict level and at snapshot level | yes | gates.md |
 
 Assumptions tested in Phase 3:
@@ -521,7 +521,7 @@ Assumptions tested in Phase 3:
 
 ### Release decision
 
-**Pending.** Publishing to pub.dev waits for Sagar's explicit go. The spec
+**Pending: not yet (Sagar, 2026-10-10).** Publishing to pub.dev waits for Sagar's explicit go. The spec
 publishes "once the team is confident in the results"; these are open before
 that call:
 
@@ -531,14 +531,14 @@ that call:
    numbers.
 2. **A6.** Sagar finishes the review sheet alone (his decision, one reviewer
    instead of the spec's two); Unsure answers are left.
-3. **Schema changes inside v1.** `shape` (Phase 3), the `flat` semantics
-   change (Phase 3) and the 128-bit pixel digest (A10) changed the canonical
-   form without raising `touchstone-snapshot 1`, which schema_v1.md says is
-   raised on any change. Nothing has been published, so v1 can still be
-   frozen as it stands at release, or raised to 2. Sagar's call.
-4. **The comparison budget with the parse.** The comparison itself is in
-   microseconds; reading the baseline takes over 1 ms on 7 large snapshots.
-   Whether the budget covers the parse is Sagar's reading of the spec.
+3. **Schema changes inside v1: decided.** `shape`, the `flat` semantics
+   change and the 128-bit pixel digest stay in v1 (Sagar, 2026-10-10).
+   Nothing was published with the earlier forms; v1 is frozen as it stands
+   at release.
+4. **The comparison budget with the parse.** Sagar (2026-10-10): the
+   budget includes reading the baseline. After the parse was reworked, 39
+   of 41 snapshots take at most 0.48 ms; the two watchlist baselines sit at
+   the budget, 0.78 to 1.05 ms over two runs on the Linux container.
 5. **Capture overhead on macOS**, where baselines are checked, is not
    measured; +16% is from the Linux container, with a small margin.
 6. **Regression set, not fixed:** `SettingsScreen@0`'s pixel hash changing

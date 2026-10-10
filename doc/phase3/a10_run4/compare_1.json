@@ -1,0 +1,289 @@
+{
+  "buttons/all": {
+    "pumpUs": 563133,
+    "captureUs": 266257,
+    "compareNsPerRound": 6063,
+    "parseAndCompareUsPerRound": 266,
+    "readParseAndCompareUsPerRound": 274
+  },
+  "text/all": {
+    "pumpUs": 49294,
+    "captureUs": 17089,
+    "compareNsPerRound": 3538,
+    "parseAndCompareUsPerRound": 168,
+    "readParseAndCompareUsPerRound": 167
+  },
+  "settings/default": {
+    "pumpUs": 155900,
+    "captureUs": 93304,
+    "compareNsPerRound": 5005,
+    "parseAndCompareUsPerRound": 357,
+    "readParseAndCompareUsPerRound": 432
+  },
+  "sign_in/empty": {
+    "pumpUs": 193494,
+    "captureUs": 57264,
+    "compareNsPerRound": 2611,
+    "parseAndCompareUsPerRound": 127,
+    "readParseAndCompareUsPerRound": 207
+  },
+  "sign_in/focused": {
+    "pumpUs": 161892,
+    "captureUs": 132694,
+    "compareNsPerRound": 2737,
+    "parseAndCompareUsPerRound": 182,
+    "readParseAndCompareUsPerRound": 195
+  },
+  "sign_in/error": {
+    "pumpUs": 63118,
+    "captureUs": 42882,
+    "compareNsPerRound": 2136,
+    "parseAndCompareUsPerRound": 143,
+    "readParseAndCompareUsPerRound": 162
+  },
+  "sign_in/submitting": {
+    "pumpUs": 43218,
+    "captureUs": 31676,
+    "compareNsPerRound": 1979,
+    "parseAndCompareUsPerRound": 129,
+    "readParseAndCompareUsPerRound": 169
+  },
+  "watchlist/top": {
+    "pumpUs": 165477,
+    "captureUs": 86554,
+    "compareNsPerRound": 1861,
+    "parseAndCompareUsPerRound": 784,
+    "readParseAndCompareUsPerRound": 926
+  },
+  "watchlist/scrolled": {
+    "pumpUs": 164461,
+    "captureUs": 60615,
+    "compareNsPerRound": 1792,
+    "parseAndCompareUsPerRound": 862,
+    "readParseAndCompareUsPerRound": 956
+  },
+  "detail/overview": {
+    "pumpUs": 177797,
+    "captureUs": 35710,
+    "compareNsPerRound": 1923,
+    "parseAndCompareUsPerRound": 181,
+    "readParseAndCompareUsPerRound": 228
+  },
+  "detail/news": {
+    "pumpUs": 101566,
+    "captureUs": 46998,
+    "compareNsPerRound": 2295,
+    "parseAndCompareUsPerRound": 222,
+    "readParseAndCompareUsPerRound": 282
+  },
+  "detail/collapsed": {
+    "pumpUs": 85186,
+    "captureUs": 32584,
+    "compareNsPerRound": 3304,
+    "parseAndCompareUsPerRound": 222,
+    "readParseAndCompareUsPerRound": 204
+  },
+  "states/empty": {
+    "pumpUs": 24409,
+    "captureUs": 14497,
+    "compareNsPerRound": 2051,
+    "parseAndCompareUsPerRound": 76,
+    "readParseAndCompareUsPerRound": 110
+  },
+  "states/error": {
+    "pumpUs": 27832,
+    "captureUs": 24111,
+    "compareNsPerRound": 2470,
+    "parseAndCompareUsPerRound": 171,
+    "readParseAndCompareUsPerRound": 116
+  },
+  "states/loading": {
+    "pumpUs": 37772,
+    "captureUs": 161612,
+    "compareNsPerRound": 2093,
+    "parseAndCompareUsPerRound": 138,
+    "readParseAndCompareUsPerRound": 173
+  },
+  "overlays/dialog": {
+    "pumpUs": 139321,
+    "captureUs": 50893,
+    "compareNsPerRound": 2104,
+    "parseAndCompareUsPerRound": 261,
+    "readParseAndCompareUsPerRound": 225
+  },
+  "overlays/sheet": {
+    "pumpUs": 111776,
+    "captureUs": 57477,
+    "compareNsPerRound": 5092,
+    "parseAndCompareUsPerRound": 306,
+    "readParseAndCompareUsPerRound": 249
+  },
+  "overlays/snackbar": {
+    "pumpUs": 105978,
+    "captureUs": 36453,
+    "compareNsPerRound": 2363,
+    "parseAndCompareUsPerRound": 233,
+    "readParseAndCompareUsPerRound": 247
+  },
+  "overlays/dropdown": {
+    "pumpUs": 179664,
+    "captureUs": 58592,
+    "compareNsPerRound": 3868,
+    "parseAndCompareUsPerRound": 211,
+    "readParseAndCompareUsPerRound": 202
+  },
+  "matrix/settings_dark": {
+    "pumpUs": 166150,
+    "captureUs": 66582,
+    "compareNsPerRound": 15729,
+    "parseAndCompareUsPerRound": 455,
+    "readParseAndCompareUsPerRound": 460
+  },
+  "matrix/sign_in_dark": {
+    "pumpUs": 48591,
+    "captureUs": 39570,
+    "compareNsPerRound": 2561,
+    "parseAndCompareUsPerRound": 137,
+    "readParseAndCompareUsPerRound": 160
+  },
+  "matrix/settings_rtl": {
+    "pumpUs": 63620,
+    "captureUs": 42437,
+    "compareNsPerRound": 2429,
+    "parseAndCompareUsPerRound": 385,
+    "readParseAndCompareUsPerRound": 377
+  },
+  "matrix/sign_in_rtl": {
+    "pumpUs": 42657,
+    "captureUs": 34291,
+    "compareNsPerRound": 1905,
+    "parseAndCompareUsPerRound": 134,
+    "readParseAndCompareUsPerRound": 202
+  },
+  "matrix/settings_text_2x": {
+    "pumpUs": 42191,
+    "captureUs": 33317,
+    "compareNsPerRound": 4604,
+    "parseAndCompareUsPerRound": 272,
+    "readParseAndCompareUsPerRound": 311
+  },
+  "matrix/sign_in_text_2x": {
+    "pumpUs": 37927,
+    "captureUs": 30518,
+    "compareNsPerRound": 1800,
+    "parseAndCompareUsPerRound": 134,
+    "readParseAndCompareUsPerRound": 179
+  },
+  "matrix/settings_small": {
+    "pumpUs": 50586,
+    "captureUs": 32568,
+    "compareNsPerRound": 1859,
+    "parseAndCompareUsPerRound": 308,
+    "readParseAndCompareUsPerRound": 424
+  },
+  "matrix/sign_in_small": {
+    "pumpUs": 46617,
+    "captureUs": 30531,
+    "compareNsPerRound": 3820,
+    "parseAndCompareUsPerRound": 126,
+    "readParseAndCompareUsPerRound": 155
+  },
+  "matrix/settings_large": {
+    "pumpUs": 48159,
+    "captureUs": 34732,
+    "compareNsPerRound": 1903,
+    "parseAndCompareUsPerRound": 389,
+    "readParseAndCompareUsPerRound": 395
+  },
+  "matrix/sign_in_large": {
+    "pumpUs": 40750,
+    "captureUs": 37865,
+    "compareNsPerRound": 1914,
+    "parseAndCompareUsPerRound": 145,
+    "readParseAndCompareUsPerRound": 188
+  },
+  "chart/default": {
+    "pumpUs": 37865,
+    "captureUs": 26121,
+    "compareNsPerRound": 5244,
+    "parseAndCompareUsPerRound": 163,
+    "readParseAndCompareUsPerRound": 252
+  },
+  "chart/tooltip": {
+    "pumpUs": 32513,
+    "captureUs": 30993,
+    "compareNsPerRound": 2932,
+    "parseAndCompareUsPerRound": 210,
+    "readParseAndCompareUsPerRound": 176
+  },
+  "live/initial": {
+    "pumpUs": 37846,
+    "captureUs": 67336,
+    "compareNsPerRound": 9790,
+    "parseAndCompareUsPerRound": 347,
+    "readParseAndCompareUsPerRound": 311
+  },
+  "live/ticked": {
+    "pumpUs": 81876,
+    "captureUs": 35175,
+    "compareNsPerRound": 1931,
+    "parseAndCompareUsPerRound": 263,
+    "readParseAndCompareUsPerRound": 374
+  },
+  "live/flashing": {
+    "pumpUs": 40612,
+    "captureUs": 39519,
+    "compareNsPerRound": 3257,
+    "parseAndCompareUsPerRound": 299,
+    "readParseAndCompareUsPerRound": 375
+  },
+  "map/default": {
+    "pumpUs": 35768,
+    "captureUs": 57355,
+    "compareNsPerRound": 4681,
+    "parseAndCompareUsPerRound": 177,
+    "readParseAndCompareUsPerRound": 167
+  },
+  "order/symbol": {
+    "pumpUs": 60929,
+    "captureUs": 36919,
+    "compareNsPerRound": 2019,
+    "parseAndCompareUsPerRound": 395,
+    "readParseAndCompareUsPerRound": 419
+  },
+  "order/amount": {
+    "pumpUs": 244616,
+    "captureUs": 46787,
+    "compareNsPerRound": 2869,
+    "parseAndCompareUsPerRound": 206,
+    "readParseAndCompareUsPerRound": 192
+  },
+  "order/review": {
+    "pumpUs": 268285,
+    "captureUs": 53057,
+    "compareNsPerRound": 1884,
+    "parseAndCompareUsPerRound": 195,
+    "readParseAndCompareUsPerRound": 233
+  },
+  "order/done": {
+    "pumpUs": 238911,
+    "captureUs": 24550,
+    "compareNsPerRound": 1817,
+    "parseAndCompareUsPerRound": 70,
+    "readParseAndCompareUsPerRound": 86
+  },
+  "order/transition": {
+    "pumpUs": 219753,
+    "captureUs": 26155,
+    "compareNsPerRound": 2107,
+    "parseAndCompareUsPerRound": 72,
+    "readParseAndCompareUsPerRound": 91
+  },
+  "order/dragging": {
+    "pumpUs": 272880,
+    "captureUs": 34803,
+    "compareNsPerRound": 1894,
+    "parseAndCompareUsPerRound": 227,
+    "readParseAndCompareUsPerRound": 265
+  }
+}
