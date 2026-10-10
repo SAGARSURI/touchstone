@@ -104,13 +104,18 @@ String renderReport(ChangeReport report, Decision decision) {
         out.writeln('$number${c.type.label.padRight(10)}${where.padRight(24)}  ${_detail(c)}');
         out.writeln('${indent}at: ${same.map((ReportItem i) => names.of(i.change!.node)).join(', ')}');
       }
-      for (final ShiftGroup g in item.causedGroups) {
-        out.writeln('${indent}consequence: ${g.summary}');
+      for (final String line in _groupLines(<ShiftGroup>[for (final ReportItem i in same) ...i.causedGroups])) {
+        out.writeln('${indent}consequence: $line');
       }
-      for (final Change k in item.consequences) {
-        final bool near = identical(k.node, c.node) || identical(k.node, c.node.parent);
-        final String name = same.length > 1 && near ? _relative(k.node, c.node) : names.of(k.node);
-        out.writeln('${indent}consequence: ${k.type.label} $name: ${_consequenceDetail(k)}');
+      final List<(Change, DiffNode?)> ks = <(Change, DiffNode?)>[
+        for (final ReportItem i in same)
+          for (final Change k in i.consequences) (k, i.change!.node),
+      ];
+      for (final String line in _consequenceLines(ks, (DiffNode k, DiffNode? at) {
+        final bool near = at != null && (identical(k, at) || identical(k, at.parent));
+        return same.length > 1 && near ? _relative(k, at) : names.of(k);
+      })) {
+        out.writeln('$indent$line');
       }
     } else {
       final ShiftGroup g = item.group!;
@@ -118,8 +123,10 @@ String renderReport(ChangeReport report, Decision decision) {
           ? 'cause unknown, needs review'
           : 'possible causes: ${g.candidates.map((Change x) => '${x.type.label} ${names.of(x.node)}').join(', ')}';
       out.writeln('$number${'Shift'.padRight(10)}${names.of(g.ancestor).padRight(24)}  ${g.summary}; $causes');
-      for (final Change k in item.consequences) {
-        out.writeln('${indent}consequence: ${k.type.label} ${names.of(k.node)}: ${_consequenceDetail(k)}');
+      for (final String line in _consequenceLines(<(Change, DiffNode?)>[
+        for (final Change k in item.consequences) (k, null),
+      ], (DiffNode k, _) => names.of(k))) {
+        out.writeln('$indent$line');
       }
     }
   }
@@ -147,16 +154,86 @@ String _detail(Change c) => switch (c.type) {
   _ => c.summary,
 };
 
+/// The consequence lines for [ks], each a consequence with the component of
+/// the item it is under (null under a shift), naming components with [name].
+/// A line that reads the same for several instances of a folded item is
+/// written once.
+///
+/// Paint that only followed a layout change is proven, not listed: a
+/// component painted at its new size, or one whose content moved with
+/// nothing it draws changed (its shape is the same). The component's own
+/// resize line already says the first; the rest are counted on one line.
+/// Paint that is not proven is listed one per line.
+List<String> _consequenceLines(List<(Change, DiffNode?)> ks, String Function(DiffNode, DiffNode?) name) {
+  final lines = <String>{};
+  final followed = <String, DiffNode>{};
+  for (final (Change k, DiffNode? at) in ks) {
+    final bool atNewSize = k.type == ChangeType.paint && k.causedBy != null && identical(k.causedBy!.node, k.node);
+    if (atNewSize && identical(k.node, at)) {
+      continue;
+    }
+    if ((atNewSize || k.contentMoved) && !k.atRangeEdge) {
+      followed.putIfAbsent(name(k.node, at), () => k.node);
+      continue;
+    }
+    lines.add('consequence: ${k.type.label} ${name(k.node, at)}: ${_consequenceDetail(k)}');
+  }
+  if (followed.length > 3) {
+    final types = <String>{for (final DiffNode n in followed.values) n.typeName};
+    lines.add('consequence: ${followed.length} components repainted only to follow it (${types.join(', ')})');
+  } else if (followed.isNotEmpty) {
+    lines.add('consequence: repainted only to follow it: ${followed.keys.join(', ')}');
+  }
+  return lines.toList();
+}
+
+/// [groups] caused by one item: one line each, or, when they all moved the
+/// same way, one line with the range of distances.
+List<String> _groupLines(List<ShiftGroup> groups) {
+  if (groups.length < 2) {
+    return <String>[for (final ShiftGroup g in groups) g.summary];
+  }
+  String direction(ShiftGroup g) => g.vectorText.split(' ').first;
+  final String d = direction(groups.first);
+  if (d == 'by' || groups.any((ShiftGroup g) => direction(g) != d)) {
+    return <String>[for (final ShiftGroup g in groups) g.summary];
+  }
+  final List<double> distances = <double>[for (final ShiftGroup g in groups) g.dx.abs() + g.dy.abs()]..sort();
+  String n(double v) => v == v.roundToDouble() ? v.toInt().toString() : v.toString();
+  final int count = groups.fold(0, (int sum, ShiftGroup g) => sum + g.componentCount);
+  final String range = distances.first == distances.last
+      ? n(distances.first)
+      : '${n(distances.first)} to ${n(distances.last)}';
+  return <String>['$count components shifted $d $range px'];
+}
+
 String _consequenceDetail(Change c) => switch (c.type) {
   _ when c.atRangeEdge && c.presenceOnly => '${c.summary} (list items built or dropped)',
   _ when c.atRangeEdge => '${c.summary} (moved into or out of the painted area)',
   ChangeType.paint when c.causedBy != null && identical(c.causedBy!.node, c.node) => c.summary,
   ChangeType.paint => 'paint changed where its children moved or changed (not verified: paint is compared by hash)',
-  _ when c.presenceOnly => '${c.summary} (came or went with the child)',
+  ChangeType.semantics when c.presenceOnly => '${c.summary} (${_cameOrWent(c)} with the child)',
+  _ when c.presenceOnly && c.fields.isNotEmpty => '${_propertyNames(c.fields)} ${_cameOrWent(c)} with the child',
+  _ when c.presenceOnly => '${c.summary} (${_cameOrWent(c)} with the child)',
   _ when c.contentMoved => c.summary,
   ChangeType.layout => '${c.summary}, grew with its child',
   _ => c.summary,
 };
+
+String _cameOrWent(Change c) => switch (c.causedBy?.type) {
+  ChangeType.added => 'came',
+  ChangeType.removed => 'went',
+  _ => 'came or went',
+};
+
+/// The properties in [fields] once each: without the index of the child they
+/// belong to (`Container.bg.4`), and without the parts of a property already
+/// named (`Container.bg.border` under `Container.bg`).
+String _propertyNames(Map<String, String> fields) {
+  final List<String> names = <String>{for (final String k in fields.keys) k.replaceFirst(RegExp(r'(\.\d+)+$'), '')}
+      .toList();
+  return names.where((String n) => !names.any((String m) => n != m && n.startsWith('$m.'))).join(', ');
+}
 
 /// [items] with the same change on several instances of one component
 /// folded together, at the first one's place. Every instance is still named.
@@ -166,16 +243,11 @@ List<List<ReportItem>> _folded(List<ReportItem> items) {
   var unique = 0;
   for (final ReportItem item in items) {
     final Change? c = item.change;
-    final String key = c == null || item.causedGroups.isNotEmpty
+    // The same change on copies of one component is one line, whatever
+    // each copy's consequences: their consequences are listed together.
+    final String key = c == null
         ? '${unique++}'
-        : <String>[
-            c.type.label,
-            c.componentType,
-            '${item.flagged}',
-            _detail(c),
-            for (final Change k in item.consequences)
-              '${k.type.label} ${_relative(k.node, c.node)}: ${_consequenceDetail(k)}',
-          ].join('\n');
+        : <String>[c.type.label, c.componentType, '${item.flagged}', _detail(c)].join('\n');
     final List<ReportItem>? same = byKey[key];
     if (same != null) {
       same.add(item);
