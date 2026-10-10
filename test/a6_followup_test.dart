@@ -180,7 +180,7 @@ void main() {
     h.dispose();
   });
 
-  testWidgets('the same labels in another order are a reading-order change', (WidgetTester tester) async {
+  testWidgets('the same labels in another order are a reading-order change of their own', (WidgetTester tester) async {
     final SemanticsHandle h = tester.ensureSemantics();
     final ChangeReport r = await _diff(
       tester,
@@ -188,6 +188,10 @@ void main() {
       const Labelled(radii: <double>[5, 4]),
     );
     expect(_render(r), contains('reading order ["dot 4.0", "dot 5.0"] -> ["dot 5.0", "dot 4.0"]'));
+    expect(
+      r.changes.where((Change c) => c.type == ChangeType.semantics && c.fields.containsKey('order')),
+      hasLength(1),
+    );
     h.dispose();
   });
 }

@@ -642,8 +642,10 @@ Map<String, String> _semanticsChanges(String before, String after, {bool moved =
       }
     }
   }
-  // The same texts read in another order: matching nodes on what they say
-  // pairs none of them, so the order is the change.
+  // Nodes that moved: matching on what they say pairs none of them, so the
+  // order is the change. Reading order is a change of its own, never a text
+  // change, so it is reported even when the paint around it changed.
+  List<String> sorted(List<String> xs) => List<String>.of(xs)..sort();
   if (!out.keys.any(_semanticsText.contains)) {
     List<String> texts(List<Map<String, Object?>> nodes) => <String>[
       for (final Map<String, Object?> n in nodes)
@@ -652,14 +654,17 @@ Map<String, String> _semanticsChanges(String before, String after, {bool moved =
     ];
     final List<String> tb = texts(b);
     final List<String> ta = texts(a);
-    if (tb.join('\n') != ta.join('\n') &&
-        (List<String>.of(tb)..sort()).join('\n') == (List<String>.of(ta)..sort()).join('\n')) {
-      out['label'] = 'reading order [${tb.join(', ')}] -> [${ta.join(', ')}]';
+    if (tb.join('\n') != ta.join('\n') && sorted(tb).join('\n') == sorted(ta).join('\n')) {
+      out['order'] = 'reading order [${tb.join(', ')}] -> [${ta.join(', ')}]';
     }
   }
   if (out.isEmpty) {
-    // Same nodes, different order or count after dropping empty ones.
-    out['nodes'] = 'semantics nodes changed';
+    final bool sameNodes =
+        sorted(b.map(jsonEncode).toList()).join('\n') == sorted(a.map(jsonEncode).toList()).join('\n');
+    // Same nodes in another order, or a different count after dropping empty ones.
+    out[sameNodes ? 'order' : 'nodes'] = sameNodes
+        ? 'same semantics nodes in another order'
+        : 'semantics nodes changed';
   }
   return out;
 }
