@@ -9,7 +9,7 @@
 // `plain` pumps each scene as snapshots_test.dart does. `capture` also does
 // what expectSnapshot does for an unchanged snapshot: read the baseline,
 // parse it, capture the detection fields, compare root hashes and toolchains. `compare` does the
-// same, then times the comparison alone and with the parse over 1,000 rounds,
+// same, then times the comparison alone, with the parse, and with reading the file over 1,000 rounds,
 // so it is kept out of the wall time of `capture`. `record` writes the
 // baselines that `capture` compares against into build/a10/, since the
 // committed ones are macOS baselines. Per-scene stopwatch times go to
@@ -17,6 +17,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:touchstone/src/snapshot/capture.dart' show captureDetectionOnly;
@@ -45,7 +46,8 @@ void main() {
             ..writeAsStringSync(s.toCanonical());
         case 'capture' || 'compare':
           final check = Stopwatch()..start();
-          final Snapshot baseline = Snapshot.parse(_baseline(scene).readAsStringSync());
+          // Read as expectSnapshot reads it.
+          final Snapshot baseline = Snapshot.parseBytes(_baseline(scene).readAsBytesSync());
           final Snapshot capture = await captureDetectionOnly(tester, scene.id, options: scene.options);
           final bool equal =
               baseline.rootHash == capture.rootHash && baseline.toolchain.toString() == capture.toolchain.toString();
@@ -56,8 +58,9 @@ void main() {
             break;
           }
 
-          // The comparison alone, and with the parse, over 1,000 rounds.
-          final String text = _baseline(scene).readAsStringSync();
+          // The comparison alone, with the parse, and with reading the file
+          // too, over 1,000 rounds.
+          final Uint8List bytes = _baseline(scene).readAsBytesSync();
           final compare = Stopwatch()..start();
           var same = 0;
           for (var i = 0; i < 1000; i++) {
@@ -69,15 +72,24 @@ void main() {
           compare.stop();
           final parsed = Stopwatch()..start();
           for (var i = 0; i < 1000; i++) {
-            final Snapshot b = Snapshot.parse(text);
+            final Snapshot b = Snapshot.parseBytes(bytes);
             if (b.rootHash == capture.rootHash && b.toolchain.toString() == capture.toolchain.toString()) {
               same++;
             }
           }
           parsed.stop();
-          expect(same, 2000);
+          final read = Stopwatch()..start();
+          for (var i = 0; i < 1000; i++) {
+            final Snapshot b = Snapshot.parseBytes(_baseline(scene).readAsBytesSync());
+            if (b.rootHash == capture.rootHash && b.toolchain.toString() == capture.toolchain.toString()) {
+              same++;
+            }
+          }
+          read.stop();
+          expect(same, 3000);
           row['compareNsPerRound'] = compare.elapsedMicroseconds;
           row['parseAndCompareUsPerRound'] = parsed.elapsedMicroseconds ~/ 1000;
+          row['readParseAndCompareUsPerRound'] = read.elapsedMicroseconds ~/ 1000;
       }
       times[scene.id] = row;
     });

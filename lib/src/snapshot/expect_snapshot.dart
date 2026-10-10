@@ -6,7 +6,9 @@
 // Comparing a capture with its baseline is a root-hash check; only a mismatch
 // reaches the diff, and the failure message is the change report.
 
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -189,7 +191,7 @@ Future<void> expectSnapshot(
     }
     file.parent.createSync(recursive: true);
     file.writeAsStringSync(text);
-    final (Snapshot? previous, String? unreadable) = old == null ? (null, null) : _read(old);
+    final (Snapshot? previous, String? unreadable) = old == null ? (null, null) : _read(utf8.encode(old));
     // ignore: avoid_print
     print(switch (old) {
       null => 'Snapshot $id: new baseline written.',
@@ -203,7 +205,7 @@ Future<void> expectSnapshot(
   if (!exists) {
     fail('No baseline for snapshot $id at ${file.path}. Run flutter test --update-goldens to record it.');
   }
-  final (Snapshot? read, String? unreadable) = _read(file.readAsStringSync());
+  final (Snapshot? read, String? unreadable) = _read(file.readAsBytesSync());
   if (read == null) {
     fail(
       'The baseline for snapshot $id at ${file.path} could not be read ($unreadable). '
@@ -263,9 +265,9 @@ Future<void> _migrate(
 
 /// A committed baseline, or why it could not be parsed: written by an older
 /// schema, or edited by hand.
-(Snapshot?, String?) _read(String text) {
+(Snapshot?, String?) _read(Uint8List bytes) {
   try {
-    return (Snapshot.parse(text), null);
+    return (Snapshot.parseBytes(bytes), null);
   } on FormatException catch (e) {
     return (null, clipLine(e.message));
   }

@@ -10,6 +10,7 @@
 // indentation.
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart';
 
@@ -91,21 +92,25 @@ class Snapshot {
   /// Parses [text] written by [toCanonical]. Node hashes are recomputed and
   /// must match the ones written, so a hand-edited node is rejected. The
   /// header lines (inputs, toolchain, limits) are not hashed.
-  static Snapshot parse(String text) {
+  static Snapshot parse(String text) => parseBytes(utf8.encode(text));
+
+  /// Parses a snapshot file's UTF-8 [bytes], as [parse] does. A baseline is
+  /// read this way: decoding the whole file was the largest cost of reading
+  /// one (A10), and most of it is `style`, which a hash check never reads.
+  static Snapshot parseBytes(Uint8List bytes) {
     // A checkout with autocrlf turns every line ending into CRLF; the first
     // one says which.
-    final int firstEnd = text.indexOf('\n');
-    if (firstEnd > 0 && text.codeUnitAt(firstEnd - 1) == 0x0D) {
-      text = text.replaceAll('\r\n', '\n');
+    final int firstEnd = bytes.indexOf(0x0A);
+    if (firstEnd > 0 && bytes[firstEnd - 1] == 0x0D) {
+      bytes = utf8.encode(utf8.decode(bytes).replaceAll('\r\n', '\n'));
     }
-    // The header is split into lines. The node lines, nearly all `style` on
-    // the largest baselines, are read field by field in place (A10: splitting
-    // them into lines and fields was most of the parse time).
-    final int nodesAt = text.indexOf('\nnodes\n');
+    // The header is decoded and split into lines. The node lines are read
+    // field by field in place, and each field is decoded when it is used.
+    final int nodesAt = _indexOfNodesLine(bytes);
     if (nodesAt < 0) {
       throw const FormatException('No nodes line');
     }
-    final List<String> lines = text.substring(0, nodesAt + 7).split('\n');
+    final List<String> lines = utf8.decoder.convert(bytes, 0, nodesAt + 7).split('\n');
     var i = 0;
     String next() => lines[i++];
     final String head = next();
@@ -146,13 +151,13 @@ class Snapshot {
     _ParsedLine? root;
     final order = <_ParsedLine>[];
     var at = nodesAt + 7;
-    while (at < text.length && text.codeUnitAt(at) != 0x0A) {
+    while (at < bytes.length && bytes[at] != 0x0A) {
       var spaces = 0;
-      while (at + spaces < text.length && text.codeUnitAt(at + spaces) == 0x20) {
+      while (at + spaces < bytes.length && bytes[at + spaces] == 0x20) {
         spaces++;
       }
       final parsed = _ParsedLine(spaces ~/ 2, <int>[]);
-      at = _readFields(text, at + spaces, parsed.fields);
+      at = _readFields(bytes, at + spaces, parsed.fields);
       order.add(parsed);
       while (stack.isNotEmpty && stack.last.depth >= parsed.depth) {
         stack.removeLast();
@@ -165,7 +170,7 @@ class Snapshot {
       stack.add(parsed);
     }
     for (final _ParsedLine n in order.reversed) {
-      n.node = SnapshotNode._fromFields(text, n.fields, <SnapshotNode>[
+      n.node = SnapshotNode._fromFields(bytes, n.fields, <SnapshotNode>[
         for (final _ParsedLine c in n.children) c.node!,
       ]);
     }
@@ -222,7 +227,7 @@ class SnapshotNode {
     required this.opaque,
     required this.flat,
     required this.type,
-    required String this._source,
+    required Uint8List this._source,
     required this._styleStart,
     required this._styleEnd,
     required this.shape,
@@ -259,10 +264,10 @@ class SnapshotNode {
   final String type;
 
   /// Explanation: resolved visual properties, canonical JSON.
-  String get style => _style ??= _source!.substring(_styleStart, _styleEnd);
+  String get style => _style ??= utf8.decoder.convert(_source!, _styleStart, _styleEnd);
 
   String? _style;
-  final String? _source;
+  final Uint8List? _source;
   final int _styleStart;
   final int _styleEnd;
 
@@ -316,31 +321,31 @@ class SnapshotNode {
       )
       .toString();
 
-  /// The node whose line's tab-separated fields are at [fields] in [text],
+  /// The node whose line's tab-separated fields are at [fields] in [bytes],
   /// as start and end offsets, with [children] already built. Throws if the
   /// stored subtree hash is not the one its content gives.
-  static SnapshotNode _fromFields(String text, List<int> fields, List<SnapshotNode> children) {
+  static SnapshotNode _fromFields(Uint8List bytes, List<int> fields, List<SnapshotNode> children) {
     final int count = fields.length ~/ 2;
-    String value(int i, String name) {
-      if (i >= count || !text.startsWith('$name=', fields[2 * i])) {
-        throw FormatException('Expected $name in: ${text.substring(fields.first, fields.last)}');
+    String line() => utf8.decoder.convert(bytes, fields.first, fields.last);
+    int valueStart(int i, String name) {
+      if (i >= count || !_startsWith(bytes, fields[2 * i], '$name=')) {
+        throw FormatException('Expected $name in: ${line()}');
       }
-      return text.substring(fields[2 * i] + name.length + 1, fields[2 * i + 1]);
+      return fields[2 * i] + name.length + 1;
     }
 
-    if (count < 8 || !text.startsWith('style=', fields[14])) {
-      throw FormatException('Expected style in: ${text.substring(fields.first, fields.last)}');
-    }
+    String value(int i, String name) => utf8.decoder.convert(bytes, valueStart(i, name), fields[2 * i + 1]);
+
     final node = SnapshotNode._read(
-      id: jsonDecode(text.substring(fields[0], fields[1])) as String,
+      id: jsonDecode(utf8.decoder.convert(bytes, fields[0], fields[1])) as String,
       bounds: value(1, 'bounds'),
       paint: value(2, 'paint'),
       semantics: value(3, 'sem'),
       opaque: value(4, 'opaque'),
       flat: value(5, 'flat'),
       type: jsonDecode(value(6, 'type')) as String,
-      source: text,
-      styleStart: fields[14] + 6,
+      source: bytes,
+      styleStart: valueStart(7, 'style'),
       styleEnd: fields[15],
       shape: count > 9 ? value(8, 'shape') : '-',
       children: children,
@@ -354,14 +359,14 @@ class SnapshotNode {
 
 /// Adds the start and end offsets of each tab-separated field of the node
 /// line that starts at [start], after its indentation, to [fields], and
-/// returns where the next line starts. Nothing is copied: a field is read
-/// once, when the node is built. `sub`, the subtree hash, is always the last
-/// field, so the line ends with it; no field holds a raw tab or line break,
-/// since free text is JSON.
-int _readFields(String text, int start, List<int> fields) {
+/// returns where the next line starts. Nothing is copied: a field is decoded
+/// when the node is built. `sub`, the subtree hash, is always the last field,
+/// so the line ends with it; no field holds a raw tab or line break, since
+/// free text is JSON.
+int _readFields(Uint8List bytes, int start, List<int> fields) {
   var at = start;
-  while (!text.startsWith('sub=', at)) {
-    final int tab = text.indexOf('\t', at);
+  while (!_startsWith(bytes, at, 'sub=')) {
+    final int tab = bytes.indexOf(0x09, at);
     if (tab < 0 || fields.length > 18) {
       throw FormatException('No subtree hash on the node line at offset $start');
     }
@@ -370,14 +375,38 @@ int _readFields(String text, int start, List<int> fields) {
       ..add(tab);
     at = tab + 1;
   }
-  int end = text.indexOf('\n', at);
+  int end = bytes.indexOf(0x0A, at);
   if (end < 0) {
-    end = text.length;
+    end = bytes.length;
   }
   fields
     ..add(at)
     ..add(end);
   return end + 1;
+}
+
+/// Whether [bytes] hold the ASCII [prefix] at [at].
+bool _startsWith(Uint8List bytes, int at, String prefix) {
+  if (at + prefix.length > bytes.length) {
+    return false;
+  }
+  for (var i = 0; i < prefix.length; i++) {
+    if (bytes[at + i] != prefix.codeUnitAt(i)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/// Where the `nodes` line's leading line break is in [bytes], or -1.
+int _indexOfNodesLine(Uint8List bytes) {
+  const String marker = '\nnodes\n';
+  for (int at = bytes.indexOf(0x0A); at >= 0; at = bytes.indexOf(0x0A, at + 1)) {
+    if (_startsWith(bytes, at, marker)) {
+      return at;
+    }
+  }
+  return -1;
 }
 
 /// A node line read but not yet built, while [Snapshot.parse] collects its
