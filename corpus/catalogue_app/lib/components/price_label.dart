@@ -41,7 +41,7 @@ class ChangeBadge extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: Space.xs),
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(4)),
+      decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(8)),
       child: Text(
         '$sign${change.toStringAsFixed(2)}%',
         style: TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w500),
