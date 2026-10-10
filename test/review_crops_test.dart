@@ -285,6 +285,11 @@ void main() {
     expect(_hasRed(decodePng(File('${tmp.path}/out/${shift.diff}').readAsBytesSync())), isTrue);
   });
 
+  test('a render key is the baseline path under the package, with / on any platform', () {
+    expect(relativeKey('/p/app/test/a/snapshots/idle.snapshot', '/p/app'), 'test/a/snapshots/idle');
+    expect(relativeKey(r'C:\p\app\test\a\snapshots\idle.snapshot', r'C:\p\app\'), 'test/a/snapshots/idle');
+  });
+
   test('the first item is found when input lines come before it', () {
     const text =
         'x    needs-review\n\n   Input   theme: light -> dark\n1  Style     B@0  color: #FF000000 -> #FFFFFFFF\n';

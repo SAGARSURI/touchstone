@@ -53,9 +53,16 @@ Future<Render> renderView(WidgetTester tester) async {
 /// A snapshot's name in render mode: its [baseline] file relative to the
 /// working directory (the package the tests run in), without `.snapshot`.
 /// Ids alone may repeat between test directories; baseline files do not.
-String renderKey(File baseline) {
-  final String path = _shown(baseline.path);
-  return path.endsWith('.snapshot') ? path.substring(0, path.length - '.snapshot'.length) : path;
+String renderKey(File baseline) => relativeKey(baseline.absolute.path, Directory.current.absolute.path);
+
+/// [path] relative to [here], with `/` separators whatever the platform (so
+/// it matches the paths review reads from git), without `.snapshot`.
+@visibleForTesting
+String relativeKey(String path, String here) {
+  final String abs = path.replaceAll(r'\', '/');
+  final String dir = here.replaceAll(r'\', '/').replaceFirst(RegExp(r'/$'), '');
+  final String rel = abs.startsWith('$dir/') ? abs.substring(dir.length + 1) : abs;
+  return rel.endsWith('.snapshot') ? rel.substring(0, rel.length - '.snapshot'.length) : rel;
 }
 
 /// Writes the view's pixels to `<dir>/<key>.png`, with its device pixel
