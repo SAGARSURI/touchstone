@@ -90,3 +90,8 @@ structured report, not this text.
 
 Not run yet. The two snapshot review PRs (#5, #8) show review output in the
 new layout.
+
+Item 07 (#8) is not a blind review: a sample of terminal colour sent to
+Sagar on 2026-10-10 showed #8's first scenes, including the undeclared
+SectionHeader padding change it is meant to catch. Its time and decision are
+recorded but not counted; the other three items are unaffected.
