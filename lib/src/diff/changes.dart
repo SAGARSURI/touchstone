@@ -77,12 +77,17 @@ class Change {
   /// [detail] as the report writes it: see summary.dart.
   String get summary => summaryLines.join('; ');
 
-  /// [summary] as one entry per distinct change, the first with [lead].
+  /// [summary] as one entry per distinct change, the first with [lead]; a
+  /// lead that is a change of its own (a layout's size, `size a -> b; `) is
+  /// an entry of its own.
   List<String> get summaryLines {
     if (fields.isEmpty) {
       return <String>[shortenValue(detail)];
     }
     final List<String> entries = summarizeFieldList(fields);
+    if (lead.endsWith('; ')) {
+      return <String>[lead.substring(0, lead.length - 2), ...entries];
+    }
     return <String>['$lead${entries.first}', ...entries.skip(1)];
   }
 

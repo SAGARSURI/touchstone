@@ -24,7 +24,17 @@ class Box extends StatelessWidget {
   Widget build(BuildContext context) => SizedBox(width: 40, height: 40, child: ColoredBox(color: color));
 }
 
-final _options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Row2, Box}));
+class Pad extends StatelessWidget {
+  const Pad({super.key, required this.bottom});
+  final double bottom;
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: EdgeInsets.only(bottom: bottom),
+    child: const SizedBox(width: 40, height: 40),
+  );
+}
+
+final _options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Row2, Box, Pad}));
 
 Widget _app(Widget a, Widget b) => MaterialApp(
   home: Align(
@@ -91,6 +101,32 @@ void main() {
     final int column = lines[at].indexOf('Box@0');
     expect(lines[at + 1].indexOf(RegExp(r'\S')), column, reason: 'the next line starts under the first instance');
     expect(lines.skip(at).join(' '), contains('Box@19'));
+    printOnFailure(text);
+  });
+
+  testWidgets("a layout change's size and the property that changed it are on separate lines", (
+    WidgetTester tester,
+  ) async {
+    Widget pad(double bottom) => MaterialApp(
+      home: Align(
+        alignment: Alignment.topLeft,
+        child: Pad(bottom: bottom),
+      ),
+    );
+    await tester.pumpWidget(pad(8));
+    await tester.pumpAndSettle();
+    final Snapshot a = await captureSnapshot(tester, 'x', options: _options);
+    await tester.pumpWidget(pad(9));
+    await tester.pumpAndSettle();
+    final Snapshot b = await captureSnapshot(tester, 'x', options: _options);
+    final ChangeReport r = diffSnapshots(a, b);
+    final String text = renderReport(r, Policy.defaults().decide(r));
+    final List<String> lines = text.split('\n');
+
+    final int size = lines.indexWhere((String l) => l.endsWith('size 40x48 -> 40x49'));
+    expect(size, greaterThan(0));
+    expect(lines[size + 1].trimLeft(), startsWith('Padding.padding: '));
+    expect(r.items.single.change!.summary, startsWith('size 40x48 -> 40x49; Padding.padding: '));
     printOnFailure(text);
   });
 }
