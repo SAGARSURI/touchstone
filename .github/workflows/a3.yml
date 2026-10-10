@@ -11,6 +11,9 @@ on:
 
 jobs:
   repeat:
+    # Not on the developer-experience review pull requests, which are never
+    # merged (doc/phase3/dx_protocol.md).
+    if: ${{ !startsWith(github.head_ref, 'dx-review/') }}
     strategy:
       fail-fast: false
       matrix:
@@ -49,7 +52,7 @@ jobs:
 
   summary:
     needs: repeat
-    if: always()
+    if: always() && !startsWith(github.head_ref, 'dx-review/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

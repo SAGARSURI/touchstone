@@ -7,6 +7,9 @@ on:
 
 jobs:
   verify:
+    # The developer-experience review pull requests (doc/phase3/dx_protocol.md)
+    # are never merged; their checks would only tell the reviewer the answer.
+    if: ${{ !startsWith(github.head_ref, 'dx-review/') }}
     strategy:
       fail-fast: false
       matrix:
