@@ -1,6 +1,8 @@
 // Cascade attribution (spec: Diff engine, "Cascade attribution").
 //
 // A causal claim is made only when exactly one candidate cause exists.
+// Several candidates that are the same change on copies of one component
+// (one edit to a shared widget) count as one (Sagar, 2026-10-10).
 //
 // - Shift group: components under a common ancestor whose size and paint are
 //   unchanged and whose position moved by the same vector. The ancestor is
@@ -98,15 +100,16 @@ ChangeReport groupCascades(
   }
 
   // A parent's style, or layout inside it, where render objects only
-  // appeared or disappeared, beside exactly one child component that was
-  // added or removed: the child's wrappers (a keep-alive, a divider drawn per
-  // child) came or went with it.
+  // appeared or disappeared, or its semantics where only the number of nodes
+  // changed, beside exactly one child component that was added or removed:
+  // the child's wrappers (a keep-alive, a divider drawn per child) came or
+  // went with it.
   for (final Change c in changes) {
     final bool sameSize = c.before?.bounds?.sizeText == c.after?.bounds?.sizeText;
     if (!c.presenceOnly ||
         c.after == null ||
         c.causedBy != null ||
-        !(c.type == ChangeType.style || (c.type == ChangeType.layout && sameSize))) {
+        !(c.type == ChangeType.style || c.type == ChangeType.semantics || (c.type == ChangeType.layout && sameSize))) {
       continue;
     }
     final List<Change> structural = <Change>[
@@ -291,8 +294,8 @@ ChangeReport groupCascades(
         }
       }
     }
-    if (roots.length == 1) {
-      c.causedBy = roots.values.single;
+    if (roots.length == 1 || sameChange(roots.values)) {
+      c.causedBy = roots.values.first;
     } else {
       c.possibleCauses = roots.values.toList();
     }
@@ -338,8 +341,10 @@ ChangeReport groupCascades(
         }
       }
     }
-    if (childrenChanged && roots.length == 1 && !identical(roots.values.single, c)) {
-      c.causedBy = roots.values.single;
+    if (childrenChanged &&
+        (roots.length == 1 || sameChange(roots.values)) &&
+        !roots.values.any((Change r) => identical(r, c))) {
+      c.causedBy = roots.values.first;
     }
   }
 
