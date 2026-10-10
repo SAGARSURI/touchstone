@@ -148,8 +148,10 @@ class ShiftGroup {
   /// The candidate causes, one change per candidate component.
   List<Change> candidates = <Change>[];
 
-  /// The single root cause, when exactly one candidate exists.
-  Change? get cause => candidates.length == 1 ? candidates.single : null;
+  /// The single root cause: the one candidate, or the first of several
+  /// that are the same change on copies of one component (Sagar,
+  /// 2026-10-10: those count as one cause).
+  Change? get cause => candidates.length == 1 || sameChange(candidates) ? candidates.first : null;
 
   String get vectorText => describeVector(dx, dy);
 
@@ -271,4 +273,19 @@ enum ReportKind {
 
   /// Compared; see the items.
   diff,
+}
+
+/// Whether [changes] are more than one change and all the same change on
+/// copies of one component: the same type, component type and detail. One
+/// edit to a shared widget (a padding in every SectionHeader) makes such
+/// copies, so as candidate causes they count as one.
+bool sameChange(Iterable<Change> changes) {
+  final List<Change> cs = changes.toList();
+  if (cs.length < 2) {
+    return false;
+  }
+  final Change first = cs.first;
+  return cs.every(
+    (Change c) => c.type == first.type && c.componentType == first.componentType && c.detail == first.detail,
+  );
 }

@@ -353,6 +353,18 @@ second engineer is no longer on the project, so Sagar finishes the sheet
 alone. This is a deviation from the spec, and A6's result is one engineer's
 judgement.
 
+Sagar's review (2026-10-10): 64 of 67 rows Yes, and all 67 name the right
+component. Rows 3, 4 and 6 are Unsure on how readable the report is. The
+changes for them are in [a6_followup.md](phase3/a6_followup.md):
+- proven ink;
+- semantics nodes matched before comparing;
+- proven paint consequences counted;
+- copies of one change counted as one cause (Sagar, 2026-10-10).
+
+The gates still hold with these changes. Rows 2 to 7 of the sheet were
+regenerated for his second look. Not yet met: rows 3, 4 and 6 await that
+look.
+
 ### A13: conventional goldens made deterministic
 
 **Holds** ([a13.md](phase1/a13.md)). The gate fails 4 of 15 conventional golden
@@ -526,11 +538,13 @@ publishes "once the team is confident in the results"; these are open before
 that call:
 
 1. **Developer experience (step 8).** The protocol is written
-   ([dx_protocol.md](phase3/dx_protocol.md)); the sessions need two
-   engineers, and no number exists yet. The spec sets no gate on these
-   numbers.
-2. **A6.** Sagar finishes the review sheet alone (his decision, one reviewer
-   instead of the spec's two); Unsure answers are left.
+   ([dx_protocol.md](phase3/dx_protocol.md)); Sagar runs the sessions
+   alone (2026-10-10), and no number exists yet. The spec sets no gate on
+   these numbers.
+2. **A6.** Sagar reviews alone (his decision, one reviewer instead of the
+   spec's two). 64 of 67 rows are Yes. Rows 3, 4 and 6 were regenerated
+   after the report changes in [a6_followup.md](phase3/a6_followup.md) and
+   await his second look.
 3. **Schema changes inside v1: decided.** `shape`, the `flat` semantics
    change and the 128-bit pixel digest stay in v1 (Sagar, 2026-10-10).
    Nothing was published with the earlier forms; v1 is frozen as it stands
@@ -542,7 +556,8 @@ that call:
 5. **Capture overhead on macOS**, where baselines are checked, is not
    measured; +16% is from the Linux container, with a small margin.
 6. **Regression set, not fixed:** `SettingsScreen@0`'s pixel hash changing
-   when only its children move; a refactor in a tile cut off at the viewport
+   when only its children move (detection still changes; since
+   a6_followup.md the report proves it follows the moved tiles); a refactor in a tile cut off at the viewport
    edge; theme colours derived from a token carrying no token; style
    recording closure names with library numbers (seen in A12, and again
    on one toolchain when the DX goldens were recorded: three order
