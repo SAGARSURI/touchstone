@@ -120,6 +120,20 @@ void main() {
     final String overview = lines.takeWhile((String l) => l != 'Each snapshot:').join('\n');
     expect(lines.first, startsWith('4 snapshots differ from HEAD'));
     expect(lines.last, lines.first);
+    // A summary of at most five lines opens it, naming what fits on a line
+    // and counting the rest; the overview follows under "All changes:".
+    expect(lines.sublist(1, 4), <String>[
+      'Also: Style Tile, Layout Tile, test/snapshots/gone.snapshot (snapshot removed), +1 more',
+      '',
+      'All changes:',
+    ]);
+    expect(
+      renderSummary(<String, ChangeReport>{
+        for (final SnapshotReview s in r.reviews)
+          if (s.report case final ChangeReport report) s.path: report,
+      }, width: 25),
+      'Also: Style Tile, +1 more\n',
+    );
     expect(overview, contains('Other changes:\n'));
     expect(
       overview,
@@ -135,6 +149,8 @@ void main() {
     final ReviewResult strict = review(base: 'HEAD', policy: Policy.parse('forbid Tile Layout'), root: root);
     expect(strict.reviews[1].decision.verdict, Verdict.fail);
     expect(strict.exitCode, 1);
+    // The summary names what fails the rules before anything else.
+    expect(strict.render().split('\n')[1], 'Fails the rules: Layout Tile');
 
     File('$root/test/snapshots/a.snapshot').writeAsStringSync(base);
     File('$root/test/snapshots/b.snapshot').writeAsStringSync(base);
@@ -195,6 +211,15 @@ void main() {
       contains(
         'Causes in more than one snapshot:\n  brand.accent #FF000000 -> #FFFF0000: style change on 3 Tile, 1 ShadedTile in 2 snapshots\n',
       ),
+    );
+    expect(r.render().split('\n')[1], 'Shared cause: brand.accent #FF000000 -> #FFFF0000, 4 components in 2 snapshots');
+    // Too narrow for the cause, it is cut to nothing rather than failing.
+    expect(
+      renderSummary(<String, ChangeReport>{
+        for (final SnapshotReview s in r.reviews)
+          if (s.report case final ChangeReport report) s.path: report,
+      }, width: 20),
+      'Shared cause: …, 4 components in 2 snapshots\n',
     );
     // Changes a shared cause explains are not listed again in the overview.
     expect(r.render().split('Each snapshot:').first, isNot(contains('Style Tile')));

@@ -31,10 +31,14 @@ class SnapshotReview {
 
 /// Every snapshot file that differs between [base] and the working tree.
 class ReviewResult {
-  ReviewResult(this.base, this.reviews);
+  ReviewResult(this.base, this.reviews, {this.policy});
 
   final String base;
   final List<SnapshotReview> reviews;
+
+  /// The rules the reviews were decided with, so the summary can name the
+  /// items that fail them.
+  final Policy? policy;
 
   /// The worst verdict, or pass when nothing differs.
   Verdict get verdict => reviews.fold(
@@ -49,7 +53,8 @@ class ReviewResult {
     Verdict.needsReview => 2,
   };
 
-  /// The counts and the verdict, an overview of every distinct change
+  /// The counts and the verdict with a summary of at most four more lines
+  /// (renderSummary), an overview of every distinct change
   /// (renderOverview), each snapshot's review, and the verdict line again
   /// as the last line; with terminal colour when [color] is true (ansi.dart).
   String render({bool color = false}) {
@@ -66,19 +71,19 @@ class ReviewResult {
     // Snapshots are named by id, or by file when two files share an id.
     final List<String> ids = <String>[for (final SnapshotReview r in reviews) ?r.report?.snapshotId];
     final bool byId = ids.toSet().length == ids.length;
-    final String overview = renderOverview(
-      <String, ChangeReport>{
-        for (final SnapshotReview r in reviews)
-          if (r.report case final ChangeReport report) byId ? report.snapshotId : r.path: report,
-      },
-      others: <String, String>{
-        for (final SnapshotReview r in reviews)
-          if (r.report == null) r.path: r.decision.reasons.first,
-      },
-    );
+    final reports = <String, ChangeReport>{
+      for (final SnapshotReview r in reviews)
+        if (r.report case final ChangeReport report) byId ? report.snapshotId : r.path: report,
+    };
+    final others = <String, String>{
+      for (final SnapshotReview r in reviews)
+        if (r.report == null) r.path: r.decision.reasons.first,
+    };
     out
+      ..write(renderSummary(reports, others: others, fails: policy?.fails))
       ..writeln()
-      ..write(overview)
+      ..writeln('All changes:')
+      ..write(renderOverview(reports, others: others))
       ..writeln()
       ..writeln('Each snapshot:')
       ..writeln();
@@ -135,7 +140,7 @@ ReviewResult review({required String base, required Policy policy, String root =
     final Decision decision = policy.decide(report, proof: _proof(report, '$top/$path'));
     reviews.add(SnapshotReview(shown, decision, renderReport(report, decision), report));
   }
-  return ReviewResult(base, reviews);
+  return ReviewResult(base, reviews, policy: policy);
 }
 
 /// Parses `--name value` pairs; only [allowed] names are accepted. A name in

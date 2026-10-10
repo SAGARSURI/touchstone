@@ -61,33 +61,50 @@ Map<String, List<(String, Change)>> _sharedCauses(Map<String, ChangeReport> repo
   return byCause;
 }
 
-/// The overview a review opens with (doc/phase3/review_overview_expectations.md):
-/// the unexplained items first, as the default policy flags them, then the
-/// causes shared between snapshots, then every other visible item. Items
-/// with the same change type, component type and wording are one line, with
-/// the snapshot they are in, or how many. [others] are snapshots with no
-/// report to read (new, removed, unreadable), each with why.
-String renderOverview(Map<String, ChangeReport> reports, {Map<String, String> others = const <String, String>{}}) {
-  final Set<String> shared = _sharedCauses(reports).keys.toSet();
-  // Lines are grouped by their full values and printed with each value cut.
+/// The overview's items: lines grouped by their full values, each with the
+/// snapshots it is in, the line as printed, and its name (change and
+/// component type, or the snapshot) for the summary.
+class _Overview {
+  final failing = <String, Set<String>>{};
   final flagged = <String, Set<String>>{};
   final rest = <String, Set<String>>{};
   final shown = <String, String>{};
+  final names = <String, String>{};
+}
+
+_Overview _overview(
+  Map<String, ChangeReport> reports,
+  Map<String, String> others, {
+  bool Function(ReportItem item)? fails,
+}) {
+  final Set<String> shared = _sharedCauses(reports).keys.toSet();
+  final o = _Overview();
+  void add(Map<String, Set<String>> into, String line, String name, String id) {
+    o.names[line] = name;
+    (into[line] ??= <String>{}).add(id);
+  }
+
   for (final MapEntry<String, ChangeReport> r in reports.entries) {
     if (r.value.kind == ReportKind.migration) {
-      (rest['${r.key}: recorded with a different toolchain (migration)'] ??= <String>{}).add(r.key);
+      add(o.rest, '${r.key}: recorded with a different toolchain (migration)', '${r.key} (migration)', r.key);
       continue;
     }
     for (final String input in r.value.inputChanges) {
-      (rest['Input: $input'] ??= <String>{}).add(r.key);
+      add(o.rest, 'Input: $input', 'Input', r.key);
     }
     for (final ReportItem item in r.value.items) {
-      if (item.isInfo) {
+      // Information items are left out unless a rule fails them.
+      final bool failing = fails?.call(item) ?? false;
+      if (item.isInfo && !failing) {
         continue;
       }
       final Change? c = item.change;
       List<String>? values = c == null ? null : _overviewValues(c);
-      if (c != null && c.type == ChangeType.style && c.fields.isNotEmpty && shared.contains(_cause(c.fields))) {
+      if (!failing &&
+          c != null &&
+          c.type == ChangeType.style &&
+          c.fields.isNotEmpty &&
+          shared.contains(_cause(c.fields))) {
         // The shared cause explains its tokens and the colours that follow
         // from them; any other value that changed with them is still listed.
         final bool all = _cause(c.fields) == fieldValues(c.fields);
@@ -100,17 +117,118 @@ String renderOverview(Map<String, ChangeReport> reports, {Map<String, String> ot
         }
         values = summarizeFieldList(unexplained);
       }
+      final String name = c != null ? '${c.type.label} ${c.componentType}' : 'Shift ${item.group!.ancestor.typeName}';
       final String line = c != null
-          ? '${c.type.label} ${c.componentType}: ${values!.join('; ')}'
-          : 'Shift ${item.group!.ancestor.typeName}: ${item.group!.summary}'
-                '${item.group!.candidates.isEmpty ? ', cause unknown' : ''}';
-      shown[line] = c != null ? '${c.type.label} ${c.componentType}: ${values!.map(_short).join('; ')}' : line;
-      ((item.flagged ? flagged : rest)[line] ??= <String>{}).add(r.key);
+          ? '$name: ${values!.join('; ')}'
+          : '$name: ${item.group!.summary}${item.group!.candidates.isEmpty ? ', cause unknown' : ''}';
+      o.shown[line] = c != null ? '$name: ${values!.map(_short).join('; ')}' : line;
+      add(
+        failing
+            ? o.failing
+            : item.flagged
+            ? o.flagged
+            : o.rest,
+        line,
+        name,
+        r.key,
+      );
     }
   }
-  for (final MapEntry<String, String> o in others.entries) {
-    (rest['${o.key}: ${o.value}'] ??= <String>{}).add(o.key);
+  for (final MapEntry<String, String> other in others.entries) {
+    add(o.rest, '${other.key}: ${other.value}', '${other.key} (${other.value})', other.key);
   }
+  return o;
+}
+
+/// The summary a review opens with, under its verdict line
+/// (doc/phase3/review_summary_expectations.md): at most four lines of at
+/// most [width] characters. "Fails the rules:" names the items [fails]
+/// picks out (Policy.fails), "Check first:" names the unexplained items,
+/// each shared cause that fits gets a line with how many components and
+/// snapshots it changed, and "Also:" names every other item and counts the
+/// shared causes left. Each line names what fits and counts the rest as
+/// "+N more", so every distinct change is named or counted.
+String renderSummary(
+  Map<String, ChangeReport> reports, {
+  Map<String, String> others = const <String, String>{},
+  bool Function(ReportItem item)? fails,
+  int width = 100,
+}) {
+  final _Overview o = _overview(reports, others, fails: fails);
+  // Items by name, most snapshots first, with how many when more than one.
+  List<String> named(Map<String, Set<String>> lines) {
+    final bySnapshots = <String, Set<String>>{};
+    for (final MapEntry<String, Set<String>> e in lines.entries) {
+      (bySnapshots[o.names[e.key]!] ??= <String>{}).addAll(e.value);
+    }
+    final List<MapEntry<String, Set<String>>> sorted = bySnapshots.entries.toList()
+      ..sort(
+        (MapEntry<String, Set<String>> x, MapEntry<String, Set<String>> y) => y.value.length.compareTo(x.value.length),
+      );
+    return <String>[
+      for (final MapEntry<String, Set<String>> e in sorted)
+        e.value.length == 1 ? e.key : '${e.key} (${e.value.length} snapshots)',
+    ];
+  }
+
+  // As many of [items] as fit after [prefix], then "+N more".
+  String fit(String prefix, List<String> items) {
+    for (int n = items.length; n > 0; n--) {
+      final String more = n < items.length ? ', +${items.length - n} more' : '';
+      final String line = '$prefix${items.take(n).join(', ')}$more';
+      if (line.length <= width) {
+        return line;
+      }
+    }
+    return '$prefix+${items.length} more';
+  }
+
+  final List<String> causes = <String>[
+    for (final MapEntry<String, List<(String, Change)>> e in _sharedCauses(reports).entries)
+      () {
+        final int snapshots = <String>{for (final (String id, _) in e.value) id}.length;
+        final String counts = ', ${e.value.length} components in $snapshots snapshots';
+        const prefix = 'Shared cause: ';
+        final int room = width - prefix.length - counts.length;
+        final String cause = e.key.length <= room
+            ? e.key
+            : room > 1
+            ? '${e.key.substring(0, room - 1)}…'
+            : '…';
+        return '$prefix$cause$counts';
+      }(),
+  ];
+  final List<String> failing = named(o.failing);
+  final List<String> flagged = named(o.flagged);
+  final List<String> rest = named(o.rest);
+  final out = StringBuffer();
+  if (failing.isNotEmpty) {
+    out.writeln(fit('Fails the rules: ', failing));
+  }
+  if (flagged.isNotEmpty) {
+    out.writeln(fit('Check first, unexplained: ', flagged));
+  }
+  final int room = 4 - (failing.isEmpty ? 0 : 1) - (flagged.isEmpty ? 0 : 1);
+  final int ownLines = rest.isEmpty && causes.length <= room ? causes.length : room - 1;
+  for (final String cause in causes.take(ownLines)) {
+    out.writeln(cause);
+  }
+  final int left = causes.length - ownLines;
+  final List<String> also = <String>[if (left > 0) '$left more shared ${left == 1 ? 'cause' : 'causes'}', ...rest];
+  if (also.isNotEmpty) {
+    out.writeln(fit('Also: ', also));
+  }
+  return out.toString();
+}
+
+/// The overview that follows the summary (doc/phase3/review_overview_expectations.md):
+/// the unexplained items first, as the default policy flags them, then the
+/// causes shared between snapshots, then every other visible item. Items
+/// with the same change type, component type and wording are one line, with
+/// the snapshot they are in, or how many. [others] are snapshots with no
+/// report to read (new, removed, unreadable), each with why.
+String renderOverview(Map<String, ChangeReport> reports, {Map<String, String> others = const <String, String>{}}) {
+  final _Overview o = _overview(reports, others);
   final out = StringBuffer();
   void section(String title, Map<String, Set<String>> lines) {
     if (lines.isEmpty) {
@@ -127,13 +245,13 @@ String renderOverview(Map<String, ChangeReport> reports, {Map<String, String> ot
           : e.value.length == 1
           ? ', in ${e.value.single}'
           : ', in ${e.value.length} snapshots';
-      _wrap(out, '  ', '${shown[e.key] ?? e.key}$where', '      ');
+      _wrap(out, '  ', '${o.shown[e.key] ?? e.key}$where', '      ');
     }
   }
 
-  section('Unexplained, check these first:', flagged);
+  section('Unexplained, check these first:', o.flagged);
   out.write(renderCauses(reports));
-  section('Other changes:', rest);
+  section('Other changes:', o.rest);
   return out.toString();
 }
 
