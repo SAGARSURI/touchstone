@@ -82,9 +82,10 @@ class Change {
   /// an entry of its own.
   List<String> get summaryLines {
     if (fields.isEmpty) {
-      return <String>[shortenValue(detail)];
+      return <String>[shortenSize(shortenValue(detail))];
     }
     final List<String> entries = summarizeFieldList(fields);
+    final String lead = shortenSize(this.lead);
     if (lead.endsWith('; ')) {
       return <String>[lead.substring(0, lead.length - 2), ...entries];
     }

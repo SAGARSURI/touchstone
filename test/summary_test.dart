@@ -11,6 +11,13 @@ const String accent =
     'brand.accent (Color(alpha: 1.0000, red: 0.2235, green: 0.2863, blue: 0.6706, colorSpace: ColorSpace.sRGB))';
 
 void main() {
+  test('layout sizes are rounded to two places, or more when two would hide the change', () {
+    expect(shortenSize('size 86.927734375x60 -> 88.927734375x62'), 'size 86.93x60 -> 88.93x62');
+    expect(shortenSize('size 10.001x5 -> 10.004x5'), 'size 10.001x5 -> 10.004x5');
+    expect(shortenSize('size 163.625x140 -> 163.625x142'), 'size 163.63x140 -> 163.63x142');
+    expect(shortenSize('size -> 2x2'), 'size -> 2x2');
+  });
+
   group('summarizeFields', () {
     test('fields with the same change are one entry, named by the public widget field, the rest left out', () {
       expect(

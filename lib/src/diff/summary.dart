@@ -14,6 +14,8 @@
 //    values: `brand.accent #FF3949AB -> #FF4050B0`.
 // 3. When a value is a constructor call and one named argument changed, only
 //    that argument is written: `bg.color: #1F1E8E3E -> #1F1E8E3F`.
+// 4. A layout's size is rounded to two decimal places, or to as many as it
+//    takes for before and after to still differ: `size 86.93x60 -> 88.93x62`.
 
 final RegExp _color = RegExp(
   r'Color\(alpha: ([\d.]+), red: ([\d.]+), green: ([\d.]+), blue: ([\d.]+), colorSpace: ColorSpace\.sRGB\)',
@@ -60,6 +62,33 @@ String shortenValue(String text) {
     });
   }
   return hex.replaceAllMapped(_token, (Match m) => m[1]!);
+}
+
+final RegExp _size = RegExp(r'size ([\d.]+)x([\d.]+) -> ([\d.]+)x([\d.]+)');
+
+/// [text] with each `size WxH -> WxH` rounded (rule 4 above).
+String shortenSize(String text) => text.replaceAllMapped(_size, (Match m) {
+  final (String w0, String w1) = _rounded(m[1]!, m[3]!);
+  final (String h0, String h1) = _rounded(m[2]!, m[4]!);
+  return 'size ${w0}x$h0 -> ${w1}x$h1';
+});
+
+/// [a] and [b] to two decimal places, or more when two would make them equal
+/// though they differ.
+(String, String) _rounded(String a, String b) {
+  for (var digits = 2; digits <= 6; digits++) {
+    final String ra = _fixed(double.parse(a), digits);
+    final String rb = _fixed(double.parse(b), digits);
+    if (ra != rb || a == b) {
+      return (ra, rb);
+    }
+  }
+  return (a, b);
+}
+
+String _fixed(double v, int digits) {
+  final String s = v.toStringAsFixed(digits);
+  return s.contains('.') ? s.replaceFirst(RegExp(r'\.?0+$'), '') : s;
 }
 
 int _byRecognisable(String a, String b) {
