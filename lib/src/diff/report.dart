@@ -133,7 +133,7 @@ String renderSummary(
   int width = 100,
 }) {
   final _Overview o = _overview(reports, others);
-  // Items by name, with the snapshots they are in, most snapshots first.
+  // Items by name, most snapshots first, with how many when more than one.
   List<String> named(Map<String, Set<String>> lines) {
     final bySnapshots = <String, Set<String>>{};
     for (final MapEntry<String, Set<String>> e in lines.entries) {
@@ -145,9 +145,7 @@ String renderSummary(
       );
     return <String>[
       for (final MapEntry<String, Set<String>> e in sorted)
-        e.value.length == 1 && e.key.startsWith(e.value.single)
-            ? e.key
-            : '${e.key} (${e.value.length} ${e.value.length == 1 ? 'snapshot' : 'snapshots'})',
+        e.value.length == 1 ? e.key : '${e.key} (${e.value.length} snapshots)',
     ];
   }
 
