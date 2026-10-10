@@ -19,7 +19,7 @@ class SettingsScreen extends StatelessWidget {
           const SectionHeader('Account'),
           const SettingsTile(icon: Icons.person_outline, title: 'Profile', subtitle: 'Name, email, phone'),
           const Divider(height: 1),
-          const SettingsTile(icon: Icons.account_balance_outlined, title: 'Linked accounts', trailingText: '2'),
+          const SettingsTile(icon: Icons.account_balance_outlined, title: 'Linked bank accounts', trailingText: '2'),
           const SectionHeader('Preferences'),
           SettingsTile(icon: Icons.notifications_none, title: 'Notifications', value: notifications),
           const Divider(height: 1),
