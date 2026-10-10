@@ -38,7 +38,10 @@ jobs:
           : > "$out"
           run base
           for n in 01 02 03 04 05 06 07 08 09 10 11 12; do
-            git fetch -q origin "dx/$n-snapshot"
+            # Each item's change is on whichever of its branches was pushed.
+            for ref in "dx/$n-snapshot" "dx/$n-golden" "record-baselines/dx-$n"; do
+              git fetch -q origin "$ref" 2>/dev/null && break
+            done
             git checkout -q FETCH_HEAD -- lib
             run "$n"
             git checkout -q HEAD -- lib
