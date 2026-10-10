@@ -62,4 +62,8 @@ jobs:
         if: always()
         with:
           name: catalogue-${{ matrix.os }}
-          path: corpus/catalogue_app/build/
+          # build/ holds the test results; test/failures/ holds the crops a
+          # failing snapshot writes.
+          path: |
+            corpus/catalogue_app/build/
+            corpus/catalogue_app/test/failures/

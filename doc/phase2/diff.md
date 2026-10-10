@@ -100,6 +100,13 @@ file, so committed baselines must be re-recorded.
 - **Upward growth.** A parent whose size changed by the same amount as exactly
   one changed child is that child's consequence, and chains fold to the
   deepest cause.
+  - Interpretation (2026-10-10, at Sagar's ask to fold a parent's resize
+    under its cause): "the same amount" is per axis.
+  - A parent whose own layout properties did not change matches a child when,
+    on each axis where the parent's size changed, it changed by the child's
+    amount.
+  - For example, a button whose padding grew by 1 grows 2x2. Its card grows
+    0x2, because a wider sibling holds the card's width.
 
 ## Policy (spec: Policy and verdicts)
 
@@ -147,14 +154,51 @@ and grouping do not depend on the wording.
 
 ## Commands
 
-- `dart run touchstone:review [--base <ref>] [--rules <file>] [--expect <file>]`
+- `dart run touchstone:review [--base <ref>] [--rules <file>] [--expect <file>] [--images]`
   compares every `.snapshot` file with its version at the base ref. It prints
   each report and a summary line. The exit code is 0 for pass, 1 for fail and
   2 for needs-review. A new or removed snapshot file is needs-review.
-- `dart run touchstone:update [flutter test arguments]` runs
+- `--images` adds the spec's review crops: before, after and diff images of
+  each changed component, in `build/touchstone/review/` with an `index.html`.
+  - It runs the tests in render mode (`TOUCHSTONE_RENDER_DIR`), where
+    `expectSnapshot` writes the view's pixels and compares nothing. It runs
+    them once in the working tree and once in a temporary git worktree at the
+    base.
+  - Only snapshots that need review or fail are rendered.
+  - Each crop is the component's bounds before and after, joined, plus 8
+    logical pixels. A shift with no single cause is cropped where its
+    components were and are.
+  - Renders are named by baseline file, so two test directories may use the
+    same snapshot id. The test runs' output is kept beside the page, in
+    `render-after.log` and `render-before.log`, for when a render is missing.
+  - An error making the images is printed; the command's exit code is still
+    the review's. A failing test's crops are best-effort in the same way.
+  - In the diff image, changed pixels are red. Items on the same area share
+    one set of crops, and a semantics item says it has no pixels.
+  - Crops never change the verdict or the exit code.
+  - In CI, upload the folder so reviewers can open it from the checks. The
+    checkout needs the base ref, so use `fetch-depth: 0`:
+    ```yaml
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - run: dart run touchstone:review --base origin/${{ github.base_ref }} --images
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: touchstone-review
+        path: build/touchstone/review/
+    ```
+- `dart run touchstone:update [--images] [flutter test arguments]` runs
   `flutter test --update-goldens`. That rewrites a baseline only after the
   determinism gate passes, and prints each rewritten snapshot's change report.
-  The command then prints what review will show against HEAD.
+  The command then prints what review will show against HEAD; with
+  `--images`, it also writes that review's crops.
+- A failing `expectSnapshot` writes the after crop of each changed component
+  to `failures/<snapshot id>/` beside the test, as golden tests do, and lists
+  the files in the message. This is an amendment to the spec's "A test
+  fails", agreed with Sagar on 2026-10-10. The baseline keeps no pixels, so
+  before and diff images come from `dart run touchstone:update --images`.
 - The spec's "scoped update" (accepting only style changes on one component) is
   marked "Proposed" in the spec and is not built.
 

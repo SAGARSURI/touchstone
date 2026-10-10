@@ -49,11 +49,16 @@ class ReviewResult {
     Verdict.needsReview => 2,
   };
 
-  String render() {
+  /// Every review, then the causes shared between snapshots and the
+  /// counts; with terminal colour when [color] is true (ansi.dart).
+  String render({bool color = false}) {
     final out = StringBuffer();
     for (final SnapshotReview r in reviews) {
       out
-        ..write(r.text)
+        ..write(switch (r.report) {
+          final ChangeReport report when color => renderReport(report, r.decision, color: true),
+          _ => r.text,
+        })
         ..writeln();
     }
     out.write(
@@ -117,12 +122,17 @@ ReviewResult review({required String base, required Policy policy, String root =
   return ReviewResult(base, reviews);
 }
 
-/// Parses `--name value` pairs; only [allowed] names are accepted.
-Map<String, String> parseOptions(List<String> args, Set<String> allowed) {
+/// Parses `--name value` pairs; only [allowed] names are accepted. A name in
+/// [flags] takes no value and maps to `'true'`.
+Map<String, String> parseOptions(List<String> args, Set<String> allowed, {Set<String> flags = const <String>{}}) {
   final out = <String, String>{};
   for (var i = 0; i < args.length; i++) {
     final String a = args[i];
     final String name = a.startsWith('--') ? a.substring(2) : '';
+    if (flags.contains(name)) {
+      out[name] = 'true';
+      continue;
+    }
     if (!allowed.contains(name) || i + 1 >= args.length) {
       throw FormatException('Unknown or incomplete option: $a');
     }
@@ -170,11 +180,13 @@ MigrationProof? _proof(ChangeReport report, String path) {
 
 Set<String> _snapshotPaths(String listing) => <String>{
   for (final String line in listing.split('\n'))
-    if (line.endsWith('.snapshot')) line,
+    if (line.endsWith('.snapshot') && !_ignored(line, separator: '/')) line,
 };
 
-bool _ignored(String path) =>
-    path.split(Platform.pathSeparator).any((String part) => part == '.dart_tool' || part == 'build');
+/// Whether [path] is under `.dart_tool` or `build`, where Dart and Flutter
+/// write their own `.snapshot` files.
+bool _ignored(String path, {String? separator}) =>
+    path.split(separator ?? Platform.pathSeparator).any((String part) => part == '.dart_tool' || part == 'build');
 
 String _git(List<String> args, String dir) {
   final ProcessResult r = Process.runSync('git', args, workingDirectory: dir);

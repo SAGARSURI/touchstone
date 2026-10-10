@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:touchstone/src/diff/ansi.dart';
 import 'package:touchstone/touchstone.dart';
 
 class Row2 extends StatelessWidget {
@@ -71,6 +72,9 @@ void main() {
     expect(lines[title + 1].trimLeft(), startsWith('-> "A considerably longer title'));
     final int value = lines[title].indexOf(RegExp(r'\S+: "Short"'));
     expect(lines[title + 1].indexOf('->'), value + 2, reason: 'the arrow sits just inside the value column');
+    final String colored = renderReport(r, Policy.defaults().decide(r), color: true);
+    expect(colored, contains('\x1B['));
+    expect(stripAnsi(colored), text, reason: 'colour adds escapes and nothing else');
     printOnFailure(text);
     h.dispose();
   });
@@ -101,6 +105,7 @@ void main() {
     final int column = lines[at].indexOf('Box@0');
     expect(lines[at + 1].indexOf(RegExp(r'\S')), column, reason: 'the next line starts under the first instance');
     expect(lines.skip(at).join(' '), contains('Box@19'));
+    expect(stripAnsi(renderReport(r, Policy.defaults().decide(r), color: true)), text);
     printOnFailure(text);
   });
 
