@@ -1,0 +1,54 @@
+# Checks the developer-experience protocol's practice branches
+# (doc/phase3/dx_protocol.md) on macOS, where their baselines are valid: on
+# the base, both arms pass; with each item's change, both arms fail. Push a
+# branch named dx-check/<anything> to run it; the results are committed to
+# that branch as doc/phase3/dx_check.txt.
+name: dx-check
+
+on:
+  push:
+    branches: ['dx-check/**']
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: macos-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.6
+          channel: stable
+      - name: Run both arms on the base and on every item
+        working-directory: corpus/catalogue_app
+        run: |
+          flutter pub get
+          out=../../doc/phase3/dx_check.txt
+          run() {
+            local s g
+            flutter test test/snapshots_test.dart > /dev/null 2>&1 && s=pass || s=fail
+            flutter test test/dx/goldens_test.dart > /dev/null 2>&1 && g=pass || g=fail
+            echo "$1 snapshot=$s golden=$g" | tee -a "$out"
+          }
+          : > "$out"
+          run base
+          for n in 01 02 03 04 05 06 07 08 09 10 11 12; do
+            git fetch -q origin "dx/$n-snapshot"
+            git checkout -q FETCH_HEAD -- lib
+            run "$n"
+            git checkout -q HEAD -- lib
+            git clean -fdq lib
+          done
+      - name: Commit results
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add doc/phase3/dx_check.txt
+          git commit -m "dx-check on $(uname -sm)" || echo 'Nothing to commit'
+          git push

@@ -10,16 +10,19 @@ tests:
 3. Review time for pull requests that change baselines.
 
 These need people to time themselves, so this file fixes how; the numbers
-come from the engineers who run it, and go in `dx_results.md` beside it. No
+come from the engineer who runs it, and go in `dx_results.md` beside it. No
 number here is a gate: the spec lists them as measurements, and adopters
 report the same three after release.
 
 ## Who
 
-Two engineers: Sagar and the second engineer who reviews A6. Neither may
-have written the change they are timed on. The changes below were frozen
-before this protocol, so the engineer who prepared them (Claude) does not
-take part.
+One engineer: Sagar (2026-10-10; the second engineer first planned is no
+longer on the project). He did not write the changes: they were frozen
+before this protocol, and the engineer who prepared them (Claude) does not
+take part. He has read the history write-ups and this file, so he knows
+which twelve changes are in play, though not which branch carries which;
+that makes every time shorter in both arms, and is reported with the
+numbers.
 
 ## The changes
 
@@ -51,20 +54,24 @@ Each change has a written answer key before any session: the component, the
 change type and the cause, as the catalogs and the history expectations
 already state.
 
-## Two arms, crossed
+## Two arms
 
-Each change is prepared twice, as two branches off the same commit:
-`dx/<nn>-snapshot`, where the snapshot tests fail, and `dx/<nn>-golden`,
-where the golden tests fail. Each engineer gets six changes in each arm, and
-never the same change in both, so every change is measured once per arm:
+With one engineer, each change is seen once, in one arm: seeing a change in
+both arms, or in a session and then in a review, would give the second
+sighting its answer. So the four changes that have review pull requests
+(1, 3, 6 and 7, measure 3) are left out of measures 1 and 2, and the other
+eight are split so that changes of a similar kind land in different arms:
 
-| Engineer | Snapshot arm | Golden arm |
+| Measure | Snapshot arm | Golden arm |
 | --- | --- | --- |
-| A | 1, 3, 5, 7, 9, 11 | 2, 4, 6, 8, 10, 12 |
-| B | 2, 4, 6, 8, 10, 12 | 1, 3, 5, 7, 9, 11 |
+| 1 and 2 | 2 clip, 5 locale, 8 padding, 9 selected | 4 icon, 10 removed, 11 enabled, 12 insert |
+| 3 | 1 colour token, 7 mixed pull request | 3 promo banner, 6 library upgrade |
 
-The order inside a session alternates arms (snapshot, golden, snapshot, ...)
-so practice does not favour one arm.
+Each item in measures 1 and 2 is one branch off the same commit,
+`dx/<nn>-snapshot` or `dx/<nn>-golden`, where that arm's tests fail. The
+order alternates arms (snapshot, golden, snapshot, ...) so practice does
+not favour one arm. Four items per arm is a small sample: the numbers are
+reported as they are, with no claim of a difference unless it is large.
 
 ## Measures 1 and 2: naming the cause
 
@@ -90,10 +97,10 @@ but the terminal output.
 ## Measure 3: reviewing a pull request that changes baselines
 
 Four pull requests on the repository, drafts never merged, each re-recording
-the baselines for one change: changes 1, 3, 6 and 7. Each exists twice, one
-with re-recorded snapshot files and the review command's output in its
-description, one with re-recorded golden PNGs. Each engineer reviews two in
-each arm, crossed as above, and never the same change twice.
+the baselines for one change, in the arm the table above gives it: changes 1
+and 7 with re-recorded snapshot files and the review command's output in the
+description, changes 3 and 6 with re-recorded golden PNGs. CI does not run
+on them, since a red or green check would give the answer.
 
 The clock runs from opening the pull request to a decision: approve, or
 request changes with the reason. The decision is checked against the answer
@@ -110,6 +117,7 @@ One row per session item, in `dx_results.md`:
 
 ## What Claude prepares
 
-The 24 `dx/<nn>-<arm>` branches with their `DX.md` (the command to run and
-nothing about the cause), the eight review pull requests, and the answer
-key, kept outside the branches until the sessions are over.
+The eight `dx/<nn>-<arm>` branches above with their `DX.md` (the command to
+run and nothing about the cause), the four review pull requests, and the
+answer key (`tool/dx_items.dart`), which is on the base commit as it always
+was: the branches ask not to open `tool/` before writing a cause down.
