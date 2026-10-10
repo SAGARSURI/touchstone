@@ -55,3 +55,9 @@ c22b4f3 and the catalogue gates.
 
 Review pull request #5's description (item 01) was regenerated with this
 output, the per-snapshot reports folded under a `<details>`.
+
+After review (f4859e6): a style item under a shared token cause now keeps
+its other fields in the overview, unless they differ only in colours, and
+lines are grouped by their full values before being cut. Items 01 and 07
+give the same overview as above; gates are unaffected, as no gate reads the
+overview.
