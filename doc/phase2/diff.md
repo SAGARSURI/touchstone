@@ -100,6 +100,13 @@ file, so committed baselines must be re-recorded.
 - **Upward growth.** A parent whose size changed by the same amount as exactly
   one changed child is that child's consequence, and chains fold to the
   deepest cause.
+  - Interpretation (2026-10-10, at Sagar's ask to fold a parent's resize
+    under its cause): "the same amount" is per axis.
+  - A parent whose own layout properties did not change matches a child when,
+    on each axis where the parent's size changed, it changed by the child's
+    amount.
+  - For example, a button whose padding grew by 1 grows 2x2. Its card grows
+    0x2, because a wider sibling holds the card's width.
 
 ## Policy (spec: Policy and verdicts)
 

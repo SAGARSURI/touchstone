@@ -12,7 +12,10 @@
 //   restyled. A reordered or moved component counts too, earlier on either
 //   side, since it moves its siblings the way an insertion or removal does.
 // - Upward growth: a parent whose size changed by the same amount as one
-//   changed child is a consequence of that child.
+//   changed child is a consequence of that child. On each axis where the
+//   parent's size changed, it changed by the child's amount; an axis where
+//   the parent kept its size (held by a wider sibling) is not counted, when
+//   the parent's own layout properties did not change (doc/phase2/diff.md).
 // - Downward constraint (an addition, recorded in doc/phase2/diff.md): a
 //   child that was only resized, under a parent whose own layout properties
 //   changed, is a consequence of the parent.
@@ -92,7 +95,7 @@ ChangeReport groupCascades(
     final List<Change> growing = <Change>[
       for (final DiffNode child in parent.node.children)
         for (final Change c in byNode[child] ?? const <Change>[])
-          if (c.type == ChangeType.layout && _sizeDelta(c) == delta && !identical(c.causedBy, parent)) c,
+          if (c.type == ChangeType.layout && _grewBy(parent, delta, _sizeDelta(c)) && !identical(c.causedBy, parent)) c,
     ];
     if (growing.length == 1) {
       parent.causedBy = growing.single;
@@ -414,6 +417,21 @@ int _depth(DiffNode n) {
     d++;
   }
   return d;
+}
+
+/// Whether [parent], whose size changed by [delta], grew by a child's
+/// [growth]: the same on both axes, or, when the parent's own layout did not
+/// change, the same on each axis where the parent changed.
+bool _grewBy(Change parent, (double, double) delta, (double, double)? growth) {
+  if (growth == null) {
+    return false;
+  }
+  if (growth == delta) {
+    return true;
+  }
+  return !parent.ownLayoutChanged &&
+      (delta.$1 == 0 || delta.$1 == growth.$1) &&
+      (delta.$2 == 0 || delta.$2 == growth.$2);
 }
 
 (double, double)? _sizeDelta(Change c) {

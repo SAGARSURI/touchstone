@@ -64,7 +64,9 @@ class _Wave extends CustomPainter {
   bool shouldRepaint(_Wave old) => false;
 }
 
-final options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Card2, Holder, Holder2, Dots, Wave, Screen}));
+final options = SnapshotOptions(
+  policy: ComponentPolicy(include: <Type>{Card2, Holder, Holder2, Dots, Wave, Screen, Button}),
+);
 
 Widget app(Widget child) => Directionality(
   textDirection: TextDirection.ltr,
@@ -230,6 +232,32 @@ void main() {
     final ReportItem item = r.items.single;
     expect(item.consequences.map((Change c) => '${c.type.label} ${c.nodeId}'), contains('Layout root/Holder@0'));
     expect(r.groups.single.cause!.nodeId, 'root/Holder@0/Card2@0');
+  });
+
+  testWidgets('a parent that grew on one axis by its child\'s growth on that axis is that child\'s consequence', (
+    WidgetTester tester,
+  ) async {
+    Widget scene(double pad) => Align(
+      alignment: Alignment.topLeft,
+      child: Holder(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const SizedBox(width: 150, height: 10),
+            Button(pad: pad),
+          ],
+        ),
+      ),
+    );
+    final ChangeReport r = await diffOf(tester, scene(12), scene(13));
+    // The holder's width is the spacer's, so it grew only in height, by the
+    // button's growth in height.
+    expect(top(r), <String>['Layout root/Holder@0/Button@0']);
+    expect(
+      r.items.single.consequences.map((Change c) => '${c.type.label} ${c.nodeId}'),
+      contains('Layout root/Holder@0'),
+    );
   });
 
   testWidgets('padding that moves framework children inside a component is a layout change', (
@@ -512,6 +540,16 @@ void main() {
       expect(Policy.parse('expect Card2 Layout').decide(r).verdict, Verdict.fail);
     });
   });
+}
+
+class Button extends StatelessWidget {
+  const Button({super.key, required this.pad});
+  final double pad;
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: EdgeInsets.all(pad),
+    child: const ColoredBox(color: Color(0xFF3949AB), child: SizedBox(width: 60, height: 20)),
+  );
 }
 
 class Holder2 extends StatelessWidget {
