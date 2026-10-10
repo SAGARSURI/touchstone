@@ -394,3 +394,25 @@ class _Names {
     return n.fullId;
   }
 }
+
+/// The items of [report] as the report numbers them (from 1): the change
+/// type, the component as the report names it, and the changes the item
+/// holds (several when one change on copies of a component is folded into
+/// one item; none for a shift).
+List<({int number, String type, String component, List<Change> changes})> numberedItems(ChangeReport report) {
+  final _Names names = _Names(report);
+  var n = 0;
+  return <({int number, String type, String component, List<Change> changes})>[
+    for (final List<ReportItem> same in _folded(report.items))
+      (
+        number: ++n,
+        type: same.first.change?.type.label ?? 'Shift',
+        component: switch (same.first.change) {
+          null => names.of(same.first.group!.ancestor),
+          final Change c when same.length == 1 => names.of(c.node),
+          final Change c => '${c.componentType} in ${same.length} places',
+        },
+        changes: <Change>[for (final ReportItem i in same) ?i.change],
+      ),
+  ];
+}

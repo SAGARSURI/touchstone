@@ -24,6 +24,7 @@ import 'capture.dart';
 import 'components.dart';
 import 'difference.dart';
 import 'migration.dart';
+import 'render.dart';
 import 'snapshot.dart';
 
 /// Captures needed for a baseline, all byte-identical.
@@ -178,6 +179,11 @@ Future<void> expectSnapshot(
   Rebuild rebuild = rebuildEverything,
   bool recordMissing = false,
 }) async {
+  final String? renderDir = renderDirectory;
+  if (renderDir != null) {
+    await renderForReview(tester, id, renderDir);
+    return;
+  }
   final File file = baselineFile(id);
   final bool exists = file.existsSync();
   if (autoUpdateGoldenFiles || (!exists && recordMissing)) {

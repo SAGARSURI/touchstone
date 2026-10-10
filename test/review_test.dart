@@ -75,6 +75,10 @@ void main() {
       ..writeAsStringSync(base);
     File('$root/test/snapshots/b.snapshot').writeAsStringSync(base);
     File('$root/test/snapshots/gone.snapshot').writeAsStringSync(base);
+    // Dart's own compiled snapshots, committed by mistake, are not ours.
+    File('$root/.dart_tool/pub/bin/touchstone/review.dart-3.13.5.snapshot')
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(<int>[0x80, 0xFF, 0x00]);
     git(root, <String>['init', '-q']);
     git(root, <String>['add', '.']);
     git(root, <String>['commit', '-q', '-m', 'base']);
