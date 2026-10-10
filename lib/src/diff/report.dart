@@ -65,13 +65,18 @@ Map<String, List<(String, Change)>> _sharedCauses(Map<String, ChangeReport> repo
 /// snapshots it is in, the line as printed, and its name (change and
 /// component type, or the snapshot) for the summary.
 class _Overview {
+  final failing = <String, Set<String>>{};
   final flagged = <String, Set<String>>{};
   final rest = <String, Set<String>>{};
   final shown = <String, String>{};
   final names = <String, String>{};
 }
 
-_Overview _overview(Map<String, ChangeReport> reports, Map<String, String> others) {
+_Overview _overview(
+  Map<String, ChangeReport> reports,
+  Map<String, String> others, {
+  bool Function(ReportItem item)? fails,
+}) {
   final Set<String> shared = _sharedCauses(reports).keys.toSet();
   final o = _Overview();
   void add(Map<String, Set<String>> into, String line, String name, String id) {
@@ -93,7 +98,12 @@ _Overview _overview(Map<String, ChangeReport> reports, Map<String, String> other
       }
       final Change? c = item.change;
       List<String>? values = c == null ? null : _overviewValues(c);
-      if (c != null && c.type == ChangeType.style && c.fields.isNotEmpty && shared.contains(_cause(c.fields))) {
+      final bool failing = fails?.call(item) ?? false;
+      if (!failing &&
+          c != null &&
+          c.type == ChangeType.style &&
+          c.fields.isNotEmpty &&
+          shared.contains(_cause(c.fields))) {
         // The shared cause explains its tokens and the colours that follow
         // from them; any other value that changed with them is still listed.
         final bool all = _cause(c.fields) == fieldValues(c.fields);
@@ -111,7 +121,16 @@ _Overview _overview(Map<String, ChangeReport> reports, Map<String, String> other
           ? '$name: ${values!.join('; ')}'
           : '$name: ${item.group!.summary}${item.group!.candidates.isEmpty ? ', cause unknown' : ''}';
       o.shown[line] = c != null ? '$name: ${values!.map(_short).join('; ')}' : line;
-      add(item.flagged ? o.flagged : o.rest, line, name, r.key);
+      add(
+        failing
+            ? o.failing
+            : item.flagged
+            ? o.flagged
+            : o.rest,
+        line,
+        name,
+        r.key,
+      );
     }
   }
   for (final MapEntry<String, String> other in others.entries) {
@@ -122,7 +141,8 @@ _Overview _overview(Map<String, ChangeReport> reports, Map<String, String> other
 
 /// The summary a review opens with, under its verdict line
 /// (doc/phase3/review_summary_expectations.md): at most four lines of at
-/// most [width] characters. "Check first:" names the unexplained items,
+/// most [width] characters. "Fails the rules:" names the items [fails]
+/// picks out (Policy.fails), "Check first:" names the unexplained items,
 /// each shared cause that fits gets a line with how many components and
 /// snapshots it changed, and "Also:" names every other item and counts the
 /// shared causes left. Each line names what fits and counts the rest as
@@ -130,9 +150,10 @@ _Overview _overview(Map<String, ChangeReport> reports, Map<String, String> other
 String renderSummary(
   Map<String, ChangeReport> reports, {
   Map<String, String> others = const <String, String>{},
+  bool Function(ReportItem item)? fails,
   int width = 100,
 }) {
-  final _Overview o = _overview(reports, others);
+  final _Overview o = _overview(reports, others, fails: fails);
   // Items by name, most snapshots first, with how many when more than one.
   List<String> named(Map<String, Set<String>> lines) {
     final bySnapshots = <String, Set<String>>{};
@@ -172,13 +193,17 @@ String renderSummary(
         return '$prefix$cause$counts';
       }(),
   ];
+  final List<String> failing = named(o.failing);
   final List<String> flagged = named(o.flagged);
   final List<String> rest = named(o.rest);
   final out = StringBuffer();
+  if (failing.isNotEmpty) {
+    out.writeln(fit('Fails the rules: ', failing));
+  }
   if (flagged.isNotEmpty) {
     out.writeln(fit('Check first, unexplained: ', flagged));
   }
-  final int room = 4 - (flagged.isEmpty ? 0 : 1);
+  final int room = 4 - (failing.isEmpty ? 0 : 1) - (flagged.isEmpty ? 0 : 1);
   final int ownLines = rest.isEmpty && causes.length <= room ? causes.length : room - 1;
   for (final String cause in causes.take(ownLines)) {
     out.writeln(cause);

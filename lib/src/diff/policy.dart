@@ -159,20 +159,14 @@ class Policy {
     for (final String input in report.inputChanges) {
       raise(Verdict.needsReview, 'declared input changed: $input');
     }
-    final List<Rule> expected = _of(RuleAction.expect).toList();
     for (final ReportItem item in report.items) {
-      final List<Change> own = <Change>[if (item.change != null) item.change!, ...item.consequences];
-      for (final Rule r in _of(RuleAction.forbid)) {
-        if (own.any(r.matches) ||
-            (item.group != null && r.matchesGroup(item.group!)) ||
-            item.causedGroups.any(r.matchesGroup)) {
-          raise(Verdict.fail, 'forbidden by "${r.line}": ${_name(item)}');
-        }
+      for (final Rule r in _forbidding(item)) {
+        raise(Verdict.fail, 'forbidden by "${r.line}": ${_name(item)}');
       }
       if (item.isInfo) {
         continue;
       }
-      if (expected.isNotEmpty && !_expectedCovers(expected, item)) {
+      if (_unexpected(item)) {
         raise(Verdict.fail, 'not in the declared expectations: ${_name(item)}');
         continue;
       }
@@ -187,6 +181,28 @@ class Policy {
       raise(Verdict.needsReview, item.flagged ? 'unexplained: ${_name(item)}' : 'visible change: ${_name(item)}');
     }
     return Decision(verdict, reasons);
+  }
+
+  /// Whether [item] alone fails a comparison: a forbid rule matches it, or
+  /// it is visible and the declared expectations leave it out.
+  bool fails(ReportItem item) => _forbidding(item).isNotEmpty || (!item.isInfo && _unexpected(item));
+
+  /// The forbid rules that match [item], its consequences or its shifts.
+  List<Rule> _forbidding(ReportItem item) {
+    final List<Change> own = <Change>[if (item.change != null) item.change!, ...item.consequences];
+    return <Rule>[
+      for (final Rule r in _of(RuleAction.forbid))
+        if (own.any(r.matches) ||
+            (item.group != null && r.matchesGroup(item.group!)) ||
+            item.causedGroups.any(r.matchesGroup))
+          r,
+    ];
+  }
+
+  /// Whether expectations are declared and none covers [item].
+  bool _unexpected(ReportItem item) {
+    final List<Rule> expected = _of(RuleAction.expect).toList();
+    return expected.isNotEmpty && !_expectedCovers(expected, item);
   }
 
   bool _expectedCovers(List<Rule> expected, ReportItem item) {

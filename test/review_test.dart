@@ -149,6 +149,8 @@ void main() {
     final ReviewResult strict = review(base: 'HEAD', policy: Policy.parse('forbid Tile Layout'), root: root);
     expect(strict.reviews[1].decision.verdict, Verdict.fail);
     expect(strict.exitCode, 1);
+    // The summary names what fails the rules before anything else.
+    expect(strict.render().split('\n')[1], 'Fails the rules: Layout Tile');
 
     File('$root/test/snapshots/a.snapshot').writeAsStringSync(base);
     File('$root/test/snapshots/b.snapshot').writeAsStringSync(base);

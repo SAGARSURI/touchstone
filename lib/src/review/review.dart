@@ -31,10 +31,14 @@ class SnapshotReview {
 
 /// Every snapshot file that differs between [base] and the working tree.
 class ReviewResult {
-  ReviewResult(this.base, this.reviews);
+  ReviewResult(this.base, this.reviews, {this.policy});
 
   final String base;
   final List<SnapshotReview> reviews;
+
+  /// The rules the reviews were decided with, so the summary can name the
+  /// items that fail them.
+  final Policy? policy;
 
   /// The worst verdict, or pass when nothing differs.
   Verdict get verdict => reviews.fold(
@@ -76,7 +80,7 @@ class ReviewResult {
         if (r.report == null) r.path: r.decision.reasons.first,
     };
     out
-      ..write(renderSummary(reports, others: others))
+      ..write(renderSummary(reports, others: others, fails: policy?.fails))
       ..writeln()
       ..writeln('All changes:')
       ..write(renderOverview(reports, others: others))
@@ -136,7 +140,7 @@ ReviewResult review({required String base, required Policy policy, String root =
     final Decision decision = policy.decide(report, proof: _proof(report, '$top/$path'));
     reviews.add(SnapshotReview(shown, decision, renderReport(report, decision), report));
   }
-  return ReviewResult(base, reviews);
+  return ReviewResult(base, reviews, policy: policy);
 }
 
 /// Parses `--name value` pairs; only [allowed] names are accepted. A name in
