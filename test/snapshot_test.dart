@@ -325,10 +325,19 @@ void main() {
         isA<TestFailure>().having(
           (TestFailure f) => stripAnsi(f.message ?? ''),
           'message',
-          allOf(startsWith('card/idle    fail'), contains('Content   Label@0'), contains('"a" -> "b"')),
+          allOf(
+            startsWith('card/idle    fail'),
+            contains('Content   Label@0'),
+            contains('"a" -> "b"'),
+            contains(
+              'The changed components as they render now:\n  ${dir.path}/failures/card/idle/1-content-after.png (item 1)\n',
+            ),
+            endsWith('For before and diff images too, record it with dart run touchstone:update --images.'),
+          ),
         ),
       ),
     );
+    expect(File('${dir.path}/failures/card/idle/1-content-after.png').existsSync(), isTrue);
   });
 
   test('the library version matches pubspec.yaml', () {

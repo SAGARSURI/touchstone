@@ -158,10 +158,13 @@ String _firstAppFrame(StackTrace trace) {
 
 /// Where the baseline for [id] lives: `snapshots/<id>.snapshot` beside the
 /// test file.
-File baselineFile(String id) {
+File baselineFile(String id) => File.fromUri(_testDirectory().resolve('snapshots/$id.snapshot'));
+
+/// The directory of the running test file, which holds `snapshots/` and,
+/// as for golden files, `failures/`.
+Uri _testDirectory() {
   final GoldenFileComparator comparator = goldenFileComparator;
-  final Uri base = comparator is LocalFileComparator ? comparator.basedir : Directory.current.uri;
-  return File.fromUri(base.resolve('snapshots/$id.snapshot'));
+  return comparator is LocalFileComparator ? comparator.basedir : Directory.current.uri;
 }
 
 /// Captures [id] and compares it with its baseline. With
@@ -237,7 +240,12 @@ Future<void> expectSnapshot(
   final Snapshot capture = await captureSnapshot(tester, id, options: options);
   final String? message = compareWithBaseline(baseline, capture, color: useColor());
   if (message != null) {
-    fail(keepColoredLines(message));
+    final String images = await writeFailureCrops(
+      tester,
+      diffSnapshots(baseline, capture),
+      Directory.fromUri(_testDirectory().resolve('failures')),
+    );
+    fail(keepColoredLines('$message$images'));
   }
 }
 

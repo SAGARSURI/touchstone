@@ -13,6 +13,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../audit/pixels.dart';
+import '../diff/changes.dart';
+import '../review/crops.dart';
 import '../review/png.dart';
 
 /// Overrides TOUCHSTONE_RENDER_DIR, for tests of render mode.
@@ -35,14 +37,8 @@ Set<String>? get renderIds {
   return ids?.split(',').where((String s) => s.isNotEmpty).toSet();
 }
 
-/// Writes the view's pixels for [id] to `<dir>/<id>.png`, with its device
-/// pixel ratio in `<dir>/<id>.json`, when [id] is one of [renderIds].
-Future<void> renderForReview(WidgetTester tester, String id, String dir) async {
-  final Set<String>? ids = renderIds;
-  if (ids != null && !ids.contains(id)) {
-    return;
-  }
-  await tester.pump();
+/// The view's pixels now, with its device pixel ratio.
+Future<Render> renderView(WidgetTester tester) async {
   final RenderView view = tester.binding.renderViews.first;
   final double dpr = view.flutterView.devicePixelRatio;
   final PixelRegion region = (await tester.runAsync(() => rasterize(view, Offset.zero & view.size)))!;
@@ -51,8 +47,60 @@ Future<void> renderForReview(WidgetTester tester, String id, String dir) async {
   for (var i = 0; i < 3; i++) {
     await tester.pump();
   }
+  return Render(Rgba(region.width, region.height, region.rgba), dpr);
+}
+
+/// Writes the view's pixels for [id] to `<dir>/<id>.png`, with its device
+/// pixel ratio in `<dir>/<id>.json`, when [id] is one of [renderIds].
+Future<void> renderForReview(WidgetTester tester, String id, String dir) async {
+  final Set<String>? ids = renderIds;
+  if (ids != null && !ids.contains(id)) {
+    return;
+  }
+  await tester.pump();
+  final Render render = await renderView(tester);
   final png = File('$dir/$id.png');
   png.parent.createSync(recursive: true);
-  png.writeAsBytesSync(encodePng(Rgba(region.width, region.height, region.rgba)));
-  File('$dir/$id.json').writeAsStringSync(jsonEncode(<String, Object>{'dpr': dpr}));
+  png.writeAsBytesSync(encodePng(render.image));
+  File('$dir/$id.json').writeAsStringSync(jsonEncode(<String, Object>{'dpr': render.dpr}));
+}
+
+/// For a failing snapshot (an amendment to the spec's "A test fails", agreed
+/// on 2026-10-10): writes the after crop of each changed component, from the
+/// view as it is now, to `<failures>/<id>/`, and returns the lines that list
+/// them for the failure message. The baseline keeps no pixels, so there is
+/// no before crop here; `dart run touchstone:update --images` renders one.
+Future<String> writeFailureCrops(WidgetTester tester, ChangeReport report, Directory failures) async {
+  if (report.kind != ReportKind.diff || report.items.isEmpty) {
+    return '';
+  }
+  final dir = Directory('${failures.path}/${report.snapshotId}');
+  if (dir.existsSync()) {
+    dir.deleteSync(recursive: true);
+  }
+  final List<ItemCrops> crops = writeCrops(report, null, await renderView(tester), failures.path);
+  final files = <String>[];
+  for (final ItemCrops c in crops) {
+    if (c.after == null || c.sameAs != null) {
+      continue;
+    }
+    final List<int> items = <int>[
+      for (final ItemCrops o in crops)
+        if (o == c || o.sameAs == c.number) o.number,
+    ];
+    files.add('${_shown('${failures.path}/${c.after}')} (item${items.length > 1 ? 's' : ''} ${items.join(', ')})');
+  }
+  if (files.isEmpty) {
+    return '';
+  }
+  return '\nThe changed components as they render now:\n'
+      '${files.map((String f) => '  $f\n').join()}'
+      'For before and diff images too, record it with dart run touchstone:update --images.';
+}
+
+/// [path] relative to the working directory when it is under it.
+String _shown(String path) {
+  final String here = Directory.current.absolute.path;
+  final String abs = File(path).absolute.path;
+  return abs.startsWith('$here/') ? abs.substring(here.length + 1) : abs;
 }
