@@ -59,9 +59,11 @@ What the rows do show, as written and not scored:
 ## Readability findings from the snapshot arm
 
 Raised by Sagar during the sessions, from the terminal output:
-1. **"(and N more fields)" hides fields.** An item names its first changed
-   field and counts the rest; the terminal never shows them
-   (`lib/src/diff/summary.dart`).
+1. **"(and N more fields)" reads as a hidden change.** It counts other
+   fields that changed to the same value, such as `RenderOpacity.opacity`
+   beside `Opacity.opacity` (`lib/src/diff/summary.dart`), so nothing else
+   changed; but the wording suggests a further change the terminal does not
+   show.
 2. **The layout is hard to read.** Long values wrap with no indent, so a
    continuation reads as a new row; one item packs several fields onto one
    line; there is no summary before the list; Flutter's stack trace sits
