@@ -19,7 +19,7 @@ void main(List<String> args) {
   try {
     final Policy policy = loadPolicy(rules: options['rules'], expectations: options['expect']);
     final ReviewResult result = review(base: options['base'] ?? 'HEAD', policy: policy);
-    stdout.write(result.render());
+    stdout.write(result.render(color: useColor(out: stdout)));
     exit(result.exitCode);
   } on FormatException catch (e) {
     stderr.writeln(e.message);

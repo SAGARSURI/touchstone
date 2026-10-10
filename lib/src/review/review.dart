@@ -49,11 +49,16 @@ class ReviewResult {
     Verdict.needsReview => 2,
   };
 
-  String render() {
+  /// Every review, then the causes shared between snapshots and the
+  /// counts; with terminal colour when [color] is true (ansi.dart).
+  String render({bool color = false}) {
     final out = StringBuffer();
     for (final SnapshotReview r in reviews) {
       out
-        ..write(r.text)
+        ..write(switch (r.report) {
+          final ChangeReport report when color => renderReport(report, r.decision, color: true),
+          _ => r.text,
+        })
         ..writeln();
     }
     out.write(

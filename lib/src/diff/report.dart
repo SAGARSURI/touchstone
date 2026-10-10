@@ -16,6 +16,7 @@
 // counts them by type, and a blank line separates the items (DX sessions,
 // doc/phase3/dx_results.md).
 
+import 'ansi.dart';
 import 'changes.dart';
 import 'diff.dart';
 import 'policy.dart';
@@ -68,9 +69,16 @@ String _cause(Map<String, String> fields) {
   return tokens.isEmpty ? values : tokens.join('; ');
 }
 
-/// Renders [report] with [decision]'s verdict on the first line.
-String renderReport(ChangeReport report, Decision decision) {
-  final out = StringBuffer('${report.snapshotId}    ${decision.verdict.label}\n');
+/// Renders [report] with [decision]'s verdict on the first line, with
+/// terminal colour when [color] is true (ansi.dart).
+String renderReport(ChangeReport report, Decision decision, {bool color = false}) {
+  final Ansi a = Ansi(color);
+  final String verdict = switch (decision.verdict) {
+    Verdict.pass => a.boldGreen(decision.verdict.label),
+    Verdict.needsReview => a.boldYellow(decision.verdict.label),
+    Verdict.fail => a.boldRed(decision.verdict.label),
+  };
+  final out = StringBuffer('${a.bold(report.snapshotId)}    $verdict\n');
   switch (report.kind) {
     case ReportKind.equal:
       out.write('\nNo changes.\n');
@@ -79,7 +87,9 @@ String renderReport(ChangeReport report, Decision decision) {
       out.write('\nRecorded with a different toolchain, so not compared (migration).\n');
       for (final String k in <String>{...report.beforeToolchain!.keys, ...report.afterToolchain!.keys}) {
         if (report.beforeToolchain![k] != report.afterToolchain![k]) {
-          out.write('  $k: ${report.beforeToolchain![k] ?? '(none)'} -> ${report.afterToolchain![k] ?? '(none)'}\n');
+          out.write(
+            '  ${highlightChange('$k: ${report.beforeToolchain![k] ?? '(none)'} -> ${report.afterToolchain![k] ?? '(none)'}', a)}\n',
+          );
         }
       }
       for (final String reason in decision.reasons.skip(1)) {
@@ -115,12 +125,14 @@ String renderReport(ChangeReport report, Decision decision) {
     final Change? c = item.change;
     if (c != null) {
       final String where = same.length == 1 ? names.of(c.node) : '${c.componentType} in ${same.length} places';
-      _writeValues(out, '$number${c.type.label.padRight(10)}${where.padRight(24)}  ', _values(c));
+      _writeValues(out, _lead(a, number, c.type.label, where), <String>[
+        for (final String v in _values(c)) highlightChange(v, a),
+      ]);
       if (same.length > 1) {
-        _writeLabelled(out, indent, 'at: ${same.map((ReportItem i) => names.of(i.change!.node)).join(', ')}');
+        _writeLabelled(out, indent, 'at: ${same.map((ReportItem i) => names.of(i.change!.node)).join(', ')}', a);
       }
       for (final String line in _groupLines(<ShiftGroup>[for (final ReportItem i in same) ...i.causedGroups])) {
-        _writeLabelled(out, indent, 'consequence: $line');
+        _writeLabelled(out, indent, 'consequence: $line', a);
       }
       final List<(Change, DiffNode?)> ks = <(Change, DiffNode?)>[
         for (final ReportItem i in same)
@@ -130,21 +142,18 @@ String renderReport(ChangeReport report, Decision decision) {
         final bool near = at != null && (identical(k, at) || identical(k, at.parent));
         return same.length > 1 && near ? _relative(k, at) : names.of(k);
       })) {
-        _writeLabelled(out, indent, line);
+        _writeLabelled(out, indent, line, a);
       }
     } else {
       final ShiftGroup g = item.group!;
       final String causes = g.candidates.isEmpty
           ? 'cause unknown, needs review'
           : 'possible causes: ${g.candidates.map((Change x) => '${x.type.label} ${names.of(x.node)}').join(', ')}';
-      _writeValues(out, '$number${'Shift'.padRight(10)}${names.of(g.ancestor).padRight(24)}  ', <String>[
-        g.summary,
-        causes,
-      ]);
+      _writeValues(out, _lead(a, number, 'Shift', names.of(g.ancestor)), <String>[g.summary, causes]);
       for (final String line in _consequenceLines(<(Change, DiffNode?)>[
         for (final Change k in item.consequences) (k, null),
       ], (DiffNode k, _) => names.of(k))) {
-        _writeLabelled(out, indent, line);
+        _writeLabelled(out, indent, line, a);
       }
     }
   }
@@ -158,23 +167,28 @@ String renderReport(ChangeReport report, Decision decision) {
   if (passed.isNotEmpty || failed.isNotEmpty) {
     out.writeln();
     for (final String r in <String>[...failed, ...passed]) {
-      _writeLabelled(out, '   ', r);
+      _writeLabelled(out, '   ', r, a, error: !r.startsWith('passed by'));
     }
   }
   return out.toString();
 }
+
+/// An item's first columns: its number, change type and component.
+String _lead(Ansi a, String number, String type, String where) =>
+    '$number${a.cyan(type)}${' ' * (10 - type.length).clamp(0, 10)}'
+    '${a.bold(where)}${' ' * (24 - where.length).clamp(0, 24)}  ';
 
 /// Lines longer than this break before their arrow, then between words.
 const int _width = 100;
 
 /// [values] after [lead], the first on its line and each other one under it.
 void _writeValues(StringBuffer out, String lead, List<String> values) {
-  final String under = ' ' * lead.length;
+  final String under = ' ' * visibleLength(lead);
   for (var i = 0; i < values.length; i++) {
     final String start = i == 0 ? lead : under;
     final String value = values[i];
     final int arrow = value.indexOf(' -> ');
-    if (start.length + value.length > _width && arrow > 0) {
+    if (visibleLength(start) + visibleLength(value) > _width && arrow > 0) {
       _wrap(out, start, value.substring(0, arrow), '$under   ');
       _wrap(out, '$under  ', value.substring(arrow + 1), '$under     ');
     } else {
@@ -185,26 +199,36 @@ void _writeValues(StringBuffer out, String lead, List<String> values) {
 
 /// [line] after [indent], a further line starting under the text after its
 /// label ("at: ", "consequence: ").
-void _writeLabelled(StringBuffer out, String indent, String line) {
+void _writeLabelled(StringBuffer out, String indent, String line, Ansi a, {bool error = false}) {
   final int colon = line.indexOf(': ');
   final String label = colon < 0 ? '' : line.substring(0, colon + 2);
-  _wrap(out, '$indent$label', line.substring(label.length), ' ' * (indent.length + label.length));
+  final String text = line.substring(label.length);
+  _wrap(
+    out,
+    '$indent${error ? a.red(label) : a.dim(label)}',
+    error ? a.red(text) : text,
+    ' ' * (indent.length + label.length),
+  );
 }
 
 /// [text] after [start], broken between words to fit [_width], each further
 /// line starting with [more]. A word longer than a line is not broken.
 void _wrap(StringBuffer out, String start, String text, String more) {
   final line = StringBuffer(start);
+  var width = visibleLength(start);
   var empty = true;
   for (final String word in text.split(' ')) {
-    if (!empty && line.length + 1 + word.length > _width) {
+    final int w = visibleLength(word);
+    if (!empty && width + 1 + w > _width) {
       out.writeln(line);
       line
         ..clear()
         ..write(more);
+      width = visibleLength(more);
       empty = true;
     }
     line.write(empty ? word : ' $word');
+    width += empty ? w : 1 + w;
     empty = false;
   }
   out.writeln(line);

@@ -7,6 +7,7 @@ import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:touchstone/src/snapshot/capture.dart' show captureDetectionOnly;
+import 'package:touchstone/src/diff/ansi.dart';
 import 'package:touchstone/touchstone.dart';
 
 class Card2 extends StatelessWidget {
@@ -322,7 +323,7 @@ void main() {
       () => expectSnapshot(tester, 'card/idle', options: options),
       throwsA(
         isA<TestFailure>().having(
-          (TestFailure f) => f.message,
+          (TestFailure f) => stripAnsi(f.message ?? ''),
           'message',
           allOf(startsWith('card/idle    fail'), contains('Content   Label@0'), contains('"a" -> "b"')),
         ),

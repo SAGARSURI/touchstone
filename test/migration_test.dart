@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:touchstone/review.dart';
 import 'package:touchstone/src/snapshot/migration.dart';
+import 'package:touchstone/src/diff/ansi.dart';
 import 'package:touchstone/touchstone.dart';
 
 class Label extends StatelessWidget {
@@ -94,7 +95,7 @@ void main() {
       () => expectSnapshot(tester, 'label', options: options),
       throwsA(
         isA<TestFailure>().having(
-          (TestFailure f) => f.message,
+          (TestFailure f) => stripAnsi(f.message ?? ''),
           'message',
           allOf(contains('different toolchain'), contains('flutter: 3.47.5 -> ')),
         ),

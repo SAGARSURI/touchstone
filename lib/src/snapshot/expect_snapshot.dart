@@ -13,6 +13,7 @@ import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../diff/ansi.dart';
 import '../diff/changes.dart';
 import '../diff/diff.dart';
 import '../diff/migration_proof.dart';
@@ -198,7 +199,7 @@ Future<void> expectSnapshot(
       _ when previous == null =>
         'Snapshot $id: baseline rewritten. The old one could not be read ($unreadable), '
             'so there is no change report.',
-      _ => updateReport(previous, Snapshot.parse(text)),
+      _ => updateReport(previous, Snapshot.parse(text), color: useColor()),
     });
     return;
   }
@@ -228,9 +229,9 @@ Future<void> expectSnapshot(
     return;
   }
   final Snapshot capture = await captureSnapshot(tester, id, options: options);
-  final String? message = compareWithBaseline(baseline, capture);
+  final String? message = compareWithBaseline(baseline, capture, color: useColor());
   if (message != null) {
-    fail(message);
+    fail(keepColoredLines(message));
   }
 }
 
@@ -274,14 +275,15 @@ Future<void> _migrate(
 }
 
 /// The failure message for [capture] against its [baseline], or null when
-/// the only differences are content of declared dynamic components.
-String? compareWithBaseline(Snapshot baseline, Snapshot capture) {
+/// the only differences are content of declared dynamic components; with
+/// terminal colour when [color] is true (ansi.dart).
+String? compareWithBaseline(Snapshot baseline, Snapshot capture, {bool color = false}) {
   final ChangeReport report = diffSnapshots(baseline, capture);
   switch (report.kind) {
     case ReportKind.equal:
       return null;
     case ReportKind.migration:
-      return '${renderReport(report, Decision(Verdict.fail, const <String>[]))}'
+      return '${renderReport(report, Decision(Verdict.fail, const <String>[]), color: color)}'
           'Re-record it with flutter test --update-goldens on the new toolchain.';
     case ReportKind.diff:
       break;
@@ -296,14 +298,15 @@ String? compareWithBaseline(Snapshot baseline, Snapshot capture) {
         'First differing node: ${d.nodeId} (${d.fields.join(', ')}).\n'
         '  baseline: ${clipLine(d.before)}\n  this run: ${clipLine(d.after)}';
   }
-  return '${renderReport(report, Decision(Verdict.fail, const <String>[]))}'
+  return '${renderReport(report, Decision(Verdict.fail, const <String>[]), color: color)}'
       'The capture differs from its baseline. If the change is intended, run flutter test --update-goldens '
       'to record it.';
 }
 
 /// What `--update-goldens` prints for a rewritten baseline: the change report
-/// a reviewer will see, with the default policy's verdict.
-String updateReport(Snapshot old, Snapshot updated) {
+/// a reviewer will see, with the default policy's verdict; with terminal
+/// colour when [color] is true (ansi.dart).
+String updateReport(Snapshot old, Snapshot updated, {bool color = false}) {
   final ChangeReport report = diffSnapshots(old, updated);
-  return renderReport(report, Policy.defaults().decide(report));
+  return renderReport(report, Policy.defaults().decide(report), color: color);
 }
