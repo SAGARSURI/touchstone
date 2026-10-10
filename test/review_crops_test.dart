@@ -211,6 +211,16 @@ void main() {
     expect(same.pixels[0], same.pixels[1]);
   });
 
+  test('report items are found by number in the report text', () {
+    const text =
+        'x    needs-review\n2 items: 1 Layout, 1 Style\n\n1  Layout    A@0  size 1x1 -> 1x2\n'
+        '                 at: root/A@0\n\n2  Style     B@0  color: #FF000000 -> #FFFFFFFF\n';
+    expect(itemTexts(text), <int, String>{
+      1: '1  Layout    A@0  size 1x1 -> 1x2\n                 at: root/A@0',
+      2: '2  Style     B@0  color: #FF000000 -> #FFFFFFFF',
+    });
+  });
+
   test('images of different sizes get no diff', () {
     expect(diffImage(Rgba.blank(2, 2), Rgba.blank(3, 2)), isNull);
   });

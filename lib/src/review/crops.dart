@@ -353,51 +353,126 @@ String _run(String executable, List<String> args, String dir) {
   return r.stdout as String;
 }
 
-/// A page with each snapshot's report and, beside each item, its crops.
+/// A page with each snapshot's report items, each above its crops: before
+/// and after in one frame with a slider and a flip button, and the diff.
 String indexHtml(String base, List<SnapshotReview> reviews, List<ItemCrops> crops) {
   const HtmlEscape esc = HtmlEscape();
   final out = StringBuffer()
     ..writeln('<!doctype html><html><head><meta charset="utf-8"><title>Touchstone review</title><style>')
-    ..writeln(
-      'body{font:14px/1.4 system-ui,sans-serif;margin:24px;color:#1f2328;background:#fff}'
-      'pre{background:#f6f8fa;padding:12px;overflow:auto}'
-      '.item{margin:16px 0}.row{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}'
-      'figure{margin:0;max-width:32%}figure img{max-width:100%;border:1px solid #d0d7de;image-rendering:pixelated}'
-      'figcaption{color:#59636e;font-size:12px}.note{color:#9a6700}',
-    )
+    ..writeln(_css)
     ..writeln('</style></head><body>')
     ..writeln('<h1>Snapshot review against ${esc.convert(base)}</h1>')
     ..writeln(
-      '<p>Crops are rendered on this machine for reviewers; they never affect a verdict. '
+      '<p class="lead">Crops are rendered on this machine for reviewers; they never affect a verdict. '
+      'Drag the slider, click the image or press F over it to flip between before and after. '
       'In the diff, changed pixels are red: light for a small change such as a shade, dark for a large one.</p>',
     );
   for (final SnapshotReview r in reviews) {
     final String id = r.report!.snapshotId;
+    final List<String> head = r.text.split('\n\n').first.split('\n');
     out
-      ..writeln('<h2>${esc.convert(id)} (${esc.convert(r.decision.verdict.label)})</h2>')
-      ..writeln('<pre>${esc.convert(r.text)}</pre>');
-    for (final ItemCrops c in crops.where((ItemCrops c) => c.snapshotId == id)) {
-      out.writeln('<div class="item"><b>${c.number}  ${esc.convert(c.type)}  ${esc.convert(c.component)}</b>');
-      if (c.note != null) {
-        out.writeln('<div class="note">${esc.convert(c.note!)}</div>');
+      ..writeln(
+        '<section><h2>${esc.convert(id)} <span class="verdict">${esc.convert(r.decision.verdict.label)}</span></h2>',
+      )
+      ..writeln('<p class="count">${esc.convert(head.length > 1 ? head[1] : '')}</p>');
+    for (final MapEntry<int, String> item in itemTexts(r.text).entries) {
+      final ItemCrops? c = crops.where((ItemCrops c) => c.snapshotId == id && c.number == item.key).firstOrNull;
+      out
+        ..writeln('<div class="item">')
+        ..writeln('<pre class="text">${esc.convert(item.value)}</pre>')
+        ..writeln('<div class="images">');
+      if (c?.note != null) {
+        out.writeln('<div class="note">${esc.convert(c!.note!)}</div>');
       }
-      if (c.sameAs != null) {
-        out.writeln('<div class="note">Same crops as item ${c.sameAs}.</div></div>');
-        continue;
-      }
-      out.writeln('<div class="row">');
-      for (final (String label, String? path) in <(String, String?)>[
-        ('before', c.before),
-        ('after', c.after),
-        ('diff', c.diff),
-      ]) {
-        if (path != null) {
-          out.writeln('<figure><img src="${esc.convert(path)}" alt="$label"><figcaption>$label</figcaption></figure>');
+      if (c != null && c.sameAs != null) {
+        out.writeln('<div class="note">Same crops as item ${c.sameAs}.</div>');
+      } else if (c != null) {
+        if (c.before != null && c.after != null) {
+          out.writeln(
+            '<figure><div class="compare" tabindex="0">'
+            '<img class="b" src="${esc.convert(c.before!)}" alt="before">'
+            '<img class="a" src="${esc.convert(c.after!)}" alt="after">'
+            '<span class="label">after</span></div>'
+            '<input type="range" min="0" max="100" value="100" aria-label="before or after">'
+            '<figcaption>before &#8596; after <button type="button">Flip</button></figcaption></figure>',
+          );
+        } else {
+          for (final (String label, String? path) in <(String, String?)>[('before', c.before), ('after', c.after)]) {
+            if (path != null) {
+              out.writeln(
+                '<figure><img src="${esc.convert(path)}" alt="$label"><figcaption>$label</figcaption></figure>',
+              );
+            }
+          }
+        }
+        if (c.diff != null) {
+          out.writeln('<figure><img src="${esc.convert(c.diff!)}" alt="diff"><figcaption>diff</figcaption></figure>');
         }
       }
       out.writeln('</div></div>');
     }
+    out.writeln('<details><summary>Full report</summary><pre>${esc.convert(r.text)}</pre></details></section>');
   }
-  out.writeln('</body></html>');
+  out
+    ..writeln('<script>$_script</script>')
+    ..writeln('</body></html>');
   return out.toString();
 }
+
+/// The report's items by number, from its text: items are separated by a
+/// blank line and start with their number (report.dart).
+Map<int, String> itemTexts(String report) {
+  final out = <int, String>{};
+  for (final String block in report.split('\n\n')) {
+    final RegExpMatch? m = RegExp(r'^(\d+)\s').firstMatch(block);
+    if (m != null) {
+      out[int.parse(m[1]!)] = block.trimRight();
+    }
+  }
+  return out;
+}
+
+const String _css = '''
+body{font:14px/1.45 system-ui,sans-serif;margin:24px;color:#1f2328;background:#fff}
+h2{margin-top:32px}
+.verdict{font-size:13px;padding:2px 8px;border-radius:10px;background:#fff8c5;vertical-align:middle}
+.lead,.count{color:#59636e}
+.item{border-top:1px solid #d0d7de;padding:16px 0}
+.text{margin:0 0 12px;font-size:13px;overflow-x:auto}
+.images{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+figure{margin:0}
+figure img,.compare{display:block;max-width:360px;border:1px solid #d0d7de;image-rendering:pixelated}
+figcaption{color:#59636e;font-size:12px;margin-top:4px}
+.compare{position:relative;cursor:pointer;line-height:0}
+.compare img{border:0;max-width:100%}
+.compare .a{position:absolute;inset:0;width:100%}
+.compare .label{position:absolute;top:4px;left:4px;font:11px/1.4 system-ui;background:#1f2328;color:#fff;padding:1px 6px;border-radius:8px}
+input[type=range]{width:100%;max-width:360px;display:block}
+.note{color:#9a6700;font-size:13px;max-width:360px}
+details{margin-top:16px}
+details pre{background:#f6f8fa;padding:12px;overflow:auto}
+''';
+
+const String _script = r'''
+for (const fig of document.querySelectorAll('figure')) {
+  const box = fig.querySelector('.compare');
+  if (!box) continue;
+  const after = box.querySelector('.a'), label = box.querySelector('.label');
+  const range = fig.querySelector('input'), flip = fig.querySelector('button');
+  const show = (v) => {
+    range.value = v;
+    after.style.clipPath = 'inset(0 ' + (100 - v) + '% 0 0)';
+    label.textContent = v >= 100 ? 'after' : v <= 0 ? 'before' : 'before | after';
+  };
+  const toggle = () => show(+range.value > 0 ? 0 : 100);
+  range.addEventListener('input', () => show(+range.value));
+  box.addEventListener('click', toggle);
+  flip.addEventListener('click', toggle);
+  show(100);
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'f' && e.key !== 'F') return;
+  const box = document.querySelector('.compare:hover') || document.activeElement.closest('.compare');
+  if (box) box.click();
+});
+''';
