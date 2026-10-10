@@ -53,7 +53,9 @@ at base c22b4f3.
    A first version wrote "(1 snapshot)" after each name, which cut item
    01's "Also:" line to two names; the count is now shown only when it is
    more than one.
-5. Pending: the suite passes (141 tests); the gate runs are in progress.
+5. Met. The suite passes (141 tests). `run_catalogs` and `run_history` on
+   5661098, which also carries the fails line below, give report.md,
+   report.json and results.json identical to review-summary's run.
 
 Added after the results (5661098): with declared expectations or forbid
 rules, item 07's verdict is fail, but the summary named no failing item.
