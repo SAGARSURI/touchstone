@@ -27,8 +27,6 @@ class SettingsScreen extends StatelessWidget {
           const Divider(height: 1),
           const SettingsTile(icon: Icons.language, title: 'Language', trailingText: 'English'),
           const SectionHeader('About'),
-          const SettingsTile(icon: Icons.description_outlined, title: 'Terms of service'),
-          const Divider(height: 1),
           const SettingsTile(icon: Icons.info_outline, title: 'Version', trailingText: '1.0.0'),
         ],
       ),
