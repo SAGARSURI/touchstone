@@ -36,6 +36,23 @@ class ShadedTile extends StatelessWidget {
   );
 }
 
+// A tile with a colour and a corner radius, and a line of text.
+class RoundTile extends StatelessWidget {
+  const RoundTile({super.key, this.color = const Color(0xFF000000), this.radius = 4, this.text = ''});
+  final Color color;
+  final double radius;
+  final String text;
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    width: 100,
+    height: 20,
+    child: DecoratedBox(
+      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(radius)),
+      child: Text(text, maxLines: 1),
+    ),
+  );
+}
+
 final options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Tile}));
 
 Future<String> capture(WidgetTester tester, Widget w) async {
@@ -181,6 +198,58 @@ void main() {
     );
     // Changes a shared cause explains are not listed again in the overview.
     expect(r.render().split('Each snapshot:').first, isNot(contains('Style Tile')));
+  });
+
+  testWidgets('the overview keeps what a shared cause does not explain, and groups by whole values', (
+    WidgetTester tester,
+  ) async {
+    const Color before = Color(0xFF000000);
+    const Color after = Color(0xFFFF0000);
+    final tokens = SnapshotOptions(
+      policy: ComponentPolicy(include: <Type>{RoundTile}),
+      tokenResolver: (Object v) => v == before || v == after ? 'brand.accent' : null,
+    );
+    Future<String> scene(Widget w) async {
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: Align(alignment: Alignment.topLeft, child: w),
+        ),
+      );
+      return (await captureSnapshot(tester, 'tile', options: tokens)).toCanonical();
+    }
+
+    final String long = 'a' * 120;
+    final Directory dir = Directory.systemTemp.createTempSync('touchstone_overview');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    final String root = dir.resolveSymbolicLinksSync();
+    Directory('$root/test/snapshots').createSync(recursive: true);
+    void write(String name, String text) => File('$root/test/snapshots/$name.snapshot').writeAsStringSync(text);
+    write('one', await scene(const RoundTile()));
+    write('two', await scene(const RoundTile()));
+    write('three', await scene(RoundTile(text: long)));
+    write('four', await scene(RoundTile(text: long)));
+    git(root, <String>['init', '-q']);
+    git(root, <String>['add', '.']);
+    git(root, <String>['commit', '-q', '-m', 'base']);
+    // The token changes in two snapshots; in one, the radius changes too.
+    write('one', await scene(const RoundTile(color: after)));
+    write('two', await scene(const RoundTile(color: after, radius: 8)));
+    // The same long text changes to two different texts.
+    write('three', await scene(RoundTile(text: '${long}b')));
+    write('four', await scene(RoundTile(text: '${long}c')));
+
+    final String overview = review(
+      base: 'HEAD',
+      policy: Policy.defaults(),
+      root: root,
+    ).render().split('Each snapshot:').first.replaceAll('\n      ', ' ');
+    expect(overview, contains('brand.accent #FF000000 -> #FFFF0000: style change on 2 RoundTile in 2 snapshots'));
+    expect(overview, matches(RegExp(r'Style RoundTile: [^\n]*BorderRadius')));
+    // The token's own colour field is the shared cause, not listed again.
+    expect(overview, isNot(contains('bg.color')));
+    expect(overview, contains('in test/snapshots/three.snapshot'));
+    expect(overview, contains('in test/snapshots/four.snapshot'));
   });
 
   test('declared expectations hold only expect lines', () {

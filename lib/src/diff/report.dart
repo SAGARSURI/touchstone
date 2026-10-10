@@ -69,8 +69,10 @@ Map<String, List<(String, Change)>> _sharedCauses(Map<String, ChangeReport> repo
 /// report to read (new, removed, unreadable), each with why.
 String renderOverview(Map<String, ChangeReport> reports, {Map<String, String> others = const <String, String>{}}) {
   final Set<String> shared = _sharedCauses(reports).keys.toSet();
+  // Lines are grouped by their full values and printed with each value cut.
   final flagged = <String, Set<String>>{};
   final rest = <String, Set<String>>{};
+  final shown = <String, String>{};
   for (final MapEntry<String, ChangeReport> r in reports.entries) {
     if (r.value.kind == ReportKind.migration) {
       (rest['${r.key}: recorded with a different toolchain (migration)'] ??= <String>{}).add(r.key);
@@ -84,13 +86,25 @@ String renderOverview(Map<String, ChangeReport> reports, {Map<String, String> ot
         continue;
       }
       final Change? c = item.change;
+      List<String>? values = c == null ? null : _overviewValues(c);
       if (c != null && c.type == ChangeType.style && c.fields.isNotEmpty && shared.contains(_cause(c.fields))) {
-        continue;
+        // The shared cause explains its tokens and the colours that follow
+        // from them; any other value that changed with them is still listed.
+        final bool all = _cause(c.fields) == fieldValues(c.fields);
+        final Map<String, String> unexplained = <String, String>{
+          for (final MapEntry<String, String> f in c.fields.entries)
+            if (!all && !_colourOnly(shortenValue(f.value))) f.key: f.value,
+        };
+        if (unexplained.isEmpty) {
+          continue;
+        }
+        values = summarizeFieldList(unexplained);
       }
       final String line = c != null
-          ? '${c.type.label} ${c.componentType}: ${_overviewValues(c).map(_short).join('; ')}'
+          ? '${c.type.label} ${c.componentType}: ${values!.join('; ')}'
           : 'Shift ${item.group!.ancestor.typeName}: ${item.group!.summary}'
                 '${item.group!.candidates.isEmpty ? ', cause unknown' : ''}';
+      shown[line] = c != null ? '${c.type.label} ${c.componentType}: ${values!.map(_short).join('; ')}' : line;
       ((item.flagged ? flagged : rest)[line] ??= <String>{}).add(r.key);
     }
   }
@@ -113,7 +127,7 @@ String renderOverview(Map<String, ChangeReport> reports, {Map<String, String> ot
           : e.value.length == 1
           ? ', in ${e.value.single}'
           : ', in ${e.value.length} snapshots';
-      _wrap(out, '  ', '${e.key}$where', '      ');
+      _wrap(out, '  ', '${shown[e.key] ?? e.key}$where', '      ');
     }
   }
 
@@ -122,6 +136,22 @@ String renderOverview(Map<String, ChangeReport> reports, {Map<String, String> ot
   section('Other changes:', rest);
   return out.toString();
 }
+
+/// Whether [value], "old -> new", differs only in colours.
+bool _colourOnly(String value) {
+  if (_tokenValue.hasMatch(value)) {
+    return true;
+  }
+  final List<String> sides = value.split(' -> ');
+  if (sides.length != 2) {
+    return false;
+  }
+  String plain(String side) => side.replaceAll(_colourText, '#');
+  return plain(sides[0]) == plain(sides[1]);
+}
+
+// A colour as hex, or as Color(...), which may be cut off at the side's end.
+final RegExp _colourText = RegExp(r'#[0-9A-Fa-f]{8}|Color\([^)]*(?:\)|$)');
 
 /// [c]'s values for the overview. A layout change's new size follows from
 /// the values that changed with it, and differs with the screen, so it is
