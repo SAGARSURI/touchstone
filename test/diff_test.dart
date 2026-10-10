@@ -337,6 +337,11 @@ void main() {
     expect(top(r), <String>['Identity root/Card2#b']);
     expect(r.infoOnly, isTrue);
     expect(Policy.defaults().decide(r).verdict, Verdict.pass);
+    // The review summary leaves it out, unless a rule fails it.
+    expect(renderSummary(<String, ChangeReport>{'x': r}, fails: Policy.defaults().fails), '');
+    final Policy strict = Policy.parse('forbid * Identity');
+    expect(strict.decide(r).verdict, Verdict.fail);
+    expect(renderSummary(<String, ChangeReport>{'x': r}, fails: strict.fails), 'Fails the rules: Identity Card2\n');
   });
 
   testWidgets('the same output under a new parent is moved', (WidgetTester tester) async {

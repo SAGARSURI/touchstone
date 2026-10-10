@@ -213,6 +213,14 @@ void main() {
       ),
     );
     expect(r.render().split('\n')[1], 'Shared cause: brand.accent #FF000000 -> #FFFF0000, 4 components in 2 snapshots');
+    // Too narrow for the cause, it is cut to nothing rather than failing.
+    expect(
+      renderSummary(<String, ChangeReport>{
+        for (final SnapshotReview s in r.reviews)
+          if (s.report case final ChangeReport report) s.path: report,
+      }, width: 20),
+      'Shared cause: …, 4 components in 2 snapshots\n',
+    );
     // Changes a shared cause explains are not listed again in the overview.
     expect(r.render().split('Each snapshot:').first, isNot(contains('Style Tile')));
   });

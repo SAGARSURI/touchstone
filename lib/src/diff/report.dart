@@ -93,12 +93,13 @@ _Overview _overview(
       add(o.rest, 'Input: $input', 'Input', r.key);
     }
     for (final ReportItem item in r.value.items) {
-      if (item.isInfo) {
+      // Information items are left out unless a rule fails them.
+      final bool failing = fails?.call(item) ?? false;
+      if (item.isInfo && !failing) {
         continue;
       }
       final Change? c = item.change;
       List<String>? values = c == null ? null : _overviewValues(c);
-      final bool failing = fails?.call(item) ?? false;
       if (!failing &&
           c != null &&
           c.type == ChangeType.style &&
@@ -189,7 +190,11 @@ String renderSummary(
         final String counts = ', ${e.value.length} components in $snapshots snapshots';
         const prefix = 'Shared cause: ';
         final int room = width - prefix.length - counts.length;
-        final String cause = e.key.length <= room ? e.key : '${e.key.substring(0, room - 1)}…';
+        final String cause = e.key.length <= room
+            ? e.key
+            : room > 1
+            ? '${e.key.substring(0, room - 1)}…'
+            : '…';
         return '$prefix$cause$counts';
       }(),
   ];
