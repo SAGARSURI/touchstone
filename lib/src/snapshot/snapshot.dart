@@ -92,7 +92,20 @@ class Snapshot {
   /// must match the ones written, so a hand-edited node is rejected. The
   /// header lines (inputs, toolchain, limits) are not hashed.
   static Snapshot parse(String text) {
-    final List<String> lines = const LineSplitter().convert(text);
+    // A checkout with autocrlf turns every line ending into CRLF; the first
+    // one says which.
+    final int firstEnd = text.indexOf('\n');
+    if (firstEnd > 0 && text.codeUnitAt(firstEnd - 1) == 0x0D) {
+      text = text.replaceAll('\r\n', '\n');
+    }
+    // The header is split into lines. The node lines, nearly all `style` on
+    // the largest baselines, are read field by field in place (A10: splitting
+    // them into lines and fields was most of the parse time).
+    final int nodesAt = text.indexOf('\nnodes\n');
+    if (nodesAt < 0) {
+      throw const FormatException('No nodes line');
+    }
+    final List<String> lines = text.substring(0, nodesAt + 7).split('\n');
     var i = 0;
     String next() => lines[i++];
     final String head = next();
@@ -126,40 +139,42 @@ class Snapshot {
     }
     final String rootHash = field('rootHash');
     field('nodes');
-    final stack = <(int, SnapshotNode)>[];
-    SnapshotNode? root;
-    final pendingChildren = <SnapshotNode, List<SnapshotNode>>{};
-    final order = <SnapshotNode>[];
-    while (i < lines.length && lines[i].isNotEmpty) {
-      final String line = next();
-      final int depth = (line.length - line.trimLeft().length) ~/ 2;
-      final SnapshotNode node = SnapshotNode._parseLine(line.trimLeft());
-      order.add(node);
-      pendingChildren[node] = <SnapshotNode>[];
-      while (stack.isNotEmpty && stack.last.$1 >= depth) {
+    // Lines first, as (depth, fields, children); nodes are built bottom-up
+    // afterwards, so each subtree hash is computed once, from content, and
+    // checked against the one stored.
+    final stack = <_ParsedLine>[];
+    _ParsedLine? root;
+    final order = <_ParsedLine>[];
+    var at = nodesAt + 7;
+    while (at < text.length && text.codeUnitAt(at) != 0x0A) {
+      var spaces = 0;
+      while (at + spaces < text.length && text.codeUnitAt(at + spaces) == 0x20) {
+        spaces++;
+      }
+      final parsed = _ParsedLine(spaces ~/ 2, <int>[]);
+      at = _readFields(text, at + spaces, parsed.fields);
+      order.add(parsed);
+      while (stack.isNotEmpty && stack.last.depth >= parsed.depth) {
         stack.removeLast();
       }
       if (stack.isEmpty) {
-        root = node;
+        root = parsed;
       } else {
-        pendingChildren[stack.last.$2]!.add(node);
+        stack.last.children.add(parsed);
       }
-      stack.add((depth, node));
+      stack.add(parsed);
     }
-    // Rebuild bottom-up so every subtree hash is recomputed from content.
-    final rebuilt = <SnapshotNode, SnapshotNode>{};
-    for (final SnapshotNode n in order.reversed) {
-      rebuilt[n] = n._withChildren(<SnapshotNode>[for (final SnapshotNode c in pendingChildren[n]!) rebuilt[c]!]);
-      if (rebuilt[n]!.subtreeHash != n._parsedSub) {
-        throw FormatException('Subtree hash does not match content for ${n.id}');
-      }
+    for (final _ParsedLine n in order.reversed) {
+      n.node = SnapshotNode._fromFields(text, n.fields, <SnapshotNode>[
+        for (final _ParsedLine c in n.children) c.node!,
+      ]);
     }
     final snapshot = Snapshot(
       id: id,
       inputs: inputs,
       toolchain: toolchain,
       coverage: Coverage(limits: limits, opaqueNodes: opaque),
-      root: rebuilt[root]!,
+      root: root!.node!,
     );
     if (snapshot.rootHash != rootHash) {
       throw const FormatException('Root hash does not match content');
@@ -188,8 +203,29 @@ class SnapshotNode {
     required this.opaque,
     required this.flat,
     required this.type,
-    required this.style,
+    required String this._style,
     this.shape = '-',
+    required this.children,
+  }) : _source = null,
+       _styleStart = 0,
+       _styleEnd = 0,
+       subtreeHash = _subtreeHash(id, bounds, paint, semantics, opaque, flat, children);
+
+  /// A node read from a baseline, whose style stays in [source] until it is
+  /// asked for: a hash check never reads it, and on the largest baselines it
+  /// is most of the text (A10).
+  SnapshotNode._read({
+    required this.id,
+    required this.bounds,
+    required this.paint,
+    required this.semantics,
+    required this.opaque,
+    required this.flat,
+    required this.type,
+    required String this._source,
+    required this._styleStart,
+    required this._styleEnd,
+    required this.shape,
     required this.children,
   }) : subtreeHash = _subtreeHash(id, bounds, paint, semantics, opaque, flat, children);
 
@@ -223,7 +259,12 @@ class SnapshotNode {
   final String type;
 
   /// Explanation: resolved visual properties, canonical JSON.
-  final String style;
+  String get style => _style ??= _source!.substring(_styleStart, _styleEnd);
+
+  String? _style;
+  final String? _source;
+  final int _styleStart;
+  final int _styleEnd;
 
   /// Explanation: SHA-256 of the paint commands with every child's placement
   /// left out. Equal on both sides when the paint changed only because
@@ -235,8 +276,6 @@ class SnapshotNode {
 
   /// SHA-256 over the detection fields and the children's subtree hashes.
   final String subtreeHash;
-
-  String? _parsedSub;
 
   String get detectionText => _detection(id, bounds, paint, semantics, opaque, flat);
 
@@ -277,39 +316,79 @@ class SnapshotNode {
       )
       .toString();
 
-  static SnapshotNode _parseLine(String line) {
-    final List<String> parts = line.split('\t');
+  /// The node whose line's tab-separated fields are at [fields] in [text],
+  /// as start and end offsets, with [children] already built. Throws if the
+  /// stored subtree hash is not the one its content gives.
+  static SnapshotNode _fromFields(String text, List<int> fields, List<SnapshotNode> children) {
+    final int count = fields.length ~/ 2;
     String value(int i, String name) {
-      if (!parts[i].startsWith('$name=')) {
-        throw FormatException('Expected $name in: $line');
+      if (i >= count || !text.startsWith('$name=', fields[2 * i])) {
+        throw FormatException('Expected $name in: ${text.substring(fields.first, fields.last)}');
       }
-      return parts[i].substring(name.length + 1);
+      return text.substring(fields[2 * i] + name.length + 1, fields[2 * i + 1]);
     }
 
-    return SnapshotNode(
-      id: jsonDecode(parts[0]) as String,
+    if (count < 8 || !text.startsWith('style=', fields[14])) {
+      throw FormatException('Expected style in: ${text.substring(fields.first, fields.last)}');
+    }
+    final node = SnapshotNode._read(
+      id: jsonDecode(text.substring(fields[0], fields[1])) as String,
       bounds: value(1, 'bounds'),
       paint: value(2, 'paint'),
       semantics: value(3, 'sem'),
       opaque: value(4, 'opaque'),
       flat: value(5, 'flat'),
       type: jsonDecode(value(6, 'type')) as String,
-      style: value(7, 'style'),
-      shape: parts.length > 9 ? value(8, 'shape') : '-',
-      children: const <SnapshotNode>[],
-    ).._parsedSub = value(parts.length > 9 ? 9 : 8, 'sub');
+      source: text,
+      styleStart: fields[14] + 6,
+      styleEnd: fields[15],
+      shape: count > 9 ? value(8, 'shape') : '-',
+      children: children,
+    );
+    if (node.subtreeHash != value(count > 9 ? 9 : 8, 'sub')) {
+      throw FormatException('Subtree hash does not match content for ${node.id}');
+    }
+    return node;
   }
+}
 
-  SnapshotNode _withChildren(List<SnapshotNode> children) => SnapshotNode(
-    id: id,
-    bounds: bounds,
-    paint: paint,
-    semantics: semantics,
-    opaque: opaque,
-    flat: flat,
-    type: type,
-    style: style,
-    shape: shape,
-    children: children,
-  );
+/// Adds the start and end offsets of each tab-separated field of the node
+/// line that starts at [start], after its indentation, to [fields], and
+/// returns where the next line starts. Nothing is copied: a field is read
+/// once, when the node is built. `sub`, the subtree hash, is always the last
+/// field, so the line ends with it; no field holds a raw tab or line break,
+/// since free text is JSON.
+int _readFields(String text, int start, List<int> fields) {
+  var at = start;
+  while (!text.startsWith('sub=', at)) {
+    final int tab = text.indexOf('\t', at);
+    if (tab < 0 || fields.length > 18) {
+      throw FormatException('No subtree hash on the node line at offset $start');
+    }
+    fields
+      ..add(at)
+      ..add(tab);
+    at = tab + 1;
+  }
+  int end = text.indexOf('\n', at);
+  if (end < 0) {
+    end = text.length;
+  }
+  fields
+    ..add(at)
+    ..add(end);
+  return end + 1;
+}
+
+/// A node line read but not yet built, while [Snapshot.parse] collects its
+/// children.
+class _ParsedLine {
+  _ParsedLine(this.depth, this.fields);
+
+  final int depth;
+
+  /// Start and end offsets of each field, from [_readFields].
+  final List<int> fields;
+  final List<_ParsedLine> children = <_ParsedLine>[];
+  SnapshotNode? node;
 }

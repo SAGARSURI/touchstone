@@ -67,6 +67,17 @@ void main() {
     expect(() => Snapshot.parse(tampered), throwsFormatException);
   });
 
+  testWidgets('a baseline checked out with CRLF line endings parses the same, and every subtree hash is checked', (
+    WidgetTester tester,
+  ) async {
+    final Snapshot s = await snap(tester, const Card2(child: Label('a')));
+    final String text = s.toCanonical();
+    expect(Snapshot.parse(text.replaceAll('\n', '\r\n')).toCanonical(), text);
+    // A leaf's stored subtree hash changed, with the root hash left as it was.
+    final String leaf = s.root.children.first.children.first.subtreeHash;
+    expect(() => Snapshot.parse(text.replaceFirst('sub=$leaf', 'sub=${'0' * leaf.length}')), throwsFormatException);
+  });
+
   testWidgets('a capture for a hash check has the same detection fields and no explanation', (
     WidgetTester tester,
   ) async {
