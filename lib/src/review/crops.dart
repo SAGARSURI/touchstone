@@ -78,8 +78,9 @@ Rgba crop(Render render, LogicalRect area) {
   return out;
 }
 
-/// [after] faded, with every pixel that differs from [before] in red, so a
-/// 1 px change shows. Null when the two are not the same size.
+/// [after] in faded grey, with every pixel that differs from [before] in
+/// red: light for a small change (a shade), dark for a large one (something
+/// moved), so a 1 px change shows. Null when the two are not the same size.
 Rgba? diffImage(Rgba before, Rgba after) {
   if (before.width != after.width || before.height != after.height) {
     return null;
@@ -89,24 +90,39 @@ Rgba? diffImage(Rgba before, Rgba after) {
   final Uint8List b = after.pixels;
   final Uint8List o = out.pixels;
   for (var i = 0; i < b.length; i += 4) {
-    if (a[i] != b[i] || a[i + 1] != b[i + 1] || a[i + 2] != b[i + 2] || a[i + 3] != b[i + 3]) {
+    var delta = 0;
+    for (var k = 0; k < 4; k++) {
+      delta = math.max(delta, (a[i + k] - b[i + k]).abs());
+    }
+    if (delta > 0) {
+      // Square root, so a change of a few levels is still clearly pink.
+      final double t = math.sqrt(delta / 255);
+      final int gb = (diffLight.$2 + (diffDark.$2 - diffLight.$2) * t).round();
       o
-        ..[i] = 230
-        ..[i + 1] = 30
-        ..[i + 2] = 30
+        ..[i] = (diffLight.$1 + (diffDark.$1 - diffLight.$1) * t).round()
+        ..[i + 1] = gb
+        ..[i + 2] = gb
         ..[i + 3] = 255;
     } else {
-      // Over white, then faded, so transparent areas stay white.
-      final int alpha = b[i + 3];
-      for (var k = 0; k < 3; k++) {
-        final int onWhite = 255 - ((255 - b[i + k]) * alpha / 255).round();
-        o[i + k] = 255 - ((255 - onWhite) * 0.3).round();
-      }
-      o[i + 3] = 255;
+      // Grey over white, then faded, so only changes have colour.
+      final double alpha = b[i + 3] / 255;
+      final double lum = 0.299 * b[i] + 0.587 * b[i + 1] + 0.114 * b[i + 2];
+      final int v = 255 - ((255 - lum) * alpha * 0.3).round();
+      o
+        ..[i] = v
+        ..[i + 1] = v
+        ..[i + 2] = v
+        ..[i + 3] = 255;
     }
   }
   return out;
 }
+
+/// The diff colour of the smallest change, as (red, green and blue).
+const (int, int) diffLight = (255, 175);
+
+/// The diff colour of the largest change, as (red, green and blue).
+const (int, int) diffDark = (190, 0);
 
 /// The crops written for one report item.
 class ItemCrops {
@@ -353,7 +369,7 @@ String indexHtml(String base, List<SnapshotReview> reviews, List<ItemCrops> crop
     ..writeln('<h1>Snapshot review against ${esc.convert(base)}</h1>')
     ..writeln(
       '<p>Crops are rendered on this machine for reviewers; they never affect a verdict. '
-      'In the diff, changed pixels are red.</p>',
+      'In the diff, changed pixels are red: light for a small change such as a shade, dark for a large one.</p>',
     );
   for (final SnapshotReview r in reviews) {
     final String id = r.report!.snapshotId;

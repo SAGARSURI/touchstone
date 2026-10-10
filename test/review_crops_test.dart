@@ -56,9 +56,10 @@ Widget _app(String hint, Color color) => MaterialApp(
   ),
 );
 
+/// Whether [image], a diff, marks a change: only changes have colour.
 bool _hasRed(Rgba image) {
   for (var i = 0; i < image.pixels.length; i += 4) {
-    if (image.pixels[i] == 230 && image.pixels[i + 1] == 30 && image.pixels[i + 2] == 30) {
+    if (image.pixels[i] != image.pixels[i + 1]) {
       return true;
     }
   }
@@ -194,6 +195,20 @@ void main() {
     expect(crops.first.sameAs, isNull);
     expect(crops.last.sameAs, crops.first.number);
     expect(crops.last.diff, crops.first.diff);
+  });
+
+  test('a small change is light red and a large one dark red; the rest is grey', () {
+    Rgba pixel(int r, int g, int b) => Rgba(1, 1, Uint8List.fromList(<int>[r, g, b, 255]));
+    final Rgba shade = diffImage(pixel(0x39, 0x49, 0xAB), pixel(0x3F, 0x51, 0xB5))!;
+    final Rgba moved = diffImage(pixel(255, 255, 255), pixel(0x39, 0x49, 0xAB))!;
+    final Rgba same = diffImage(pixel(230, 30, 30), pixel(230, 30, 30))!;
+    expect(shade.pixels[0], greaterThan(moved.pixels[0]));
+    expect(shade.pixels[1], greaterThan(moved.pixels[1]));
+    expect(shade.pixels[1], lessThan(shade.pixels[0]), reason: 'still red');
+    final Rgba full = diffImage(pixel(0, 0, 0), pixel(255, 255, 255))!;
+    expect(full.pixels.sublist(0, 3), <int>[diffDark.$1, diffDark.$2, diffDark.$2]);
+    // An unchanged red pixel is grey, so it is not read as a change.
+    expect(same.pixels[0], same.pixels[1]);
   });
 
   test('images of different sizes get no diff', () {
