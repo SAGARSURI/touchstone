@@ -8,6 +8,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:touchstone/review.dart' show ReviewResult, SnapshotReview;
 import 'package:touchstone/src/review/crops.dart';
 import 'package:touchstone/src/review/png.dart';
 import 'package:touchstone/src/snapshot/render.dart';
@@ -28,6 +29,19 @@ class Box extends StatelessWidget {
   final Color color;
   @override
   Widget build(BuildContext context) => SizedBox(width: 40, height: 40, child: ColoredBox(color: color));
+}
+
+class Row3 extends StatelessWidget {
+  const Row3({super.key, required this.label});
+  final String label;
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    height: 50,
+    child: DecoratedBox(
+      decoration: const BoxDecoration(color: Color(0xFF2196F3)),
+      child: Text(label),
+    ),
+  );
 }
 
 class Button extends StatelessWidget {
@@ -105,13 +119,18 @@ void main() {
 
   testWidgets('render mode writes pixels for the named snapshots and compares nothing', (WidgetTester tester) async {
     debugRenderDirectory = tmp.path;
-    debugRenderIds = <String>{'crops_wanted'};
+    // Named by baseline file, so two test directories' snapshots with one id
+    // do not overwrite each other.
+    debugRenderIds = <String>{'test/snapshots/crops_wanted'};
     await tester.pumpWidget(_app('a', const Color(0xFF000000)));
     await expectSnapshot(tester, 'crops_wanted', options: _options);
     await expectSnapshot(tester, 'crops_skipped', options: _options);
-    expect(File('${tmp.path}/crops_wanted.png').existsSync(), isTrue);
-    expect(File('${tmp.path}/crops_wanted.json').readAsStringSync(), '{"dpr":${tester.view.devicePixelRatio}}');
-    expect(File('${tmp.path}/crops_skipped.png').existsSync(), isFalse);
+    expect(File('${tmp.path}/test/snapshots/crops_wanted.png').existsSync(), isTrue);
+    expect(
+      File('${tmp.path}/test/snapshots/crops_wanted.json').readAsStringSync(),
+      '{"dpr":${tester.view.devicePixelRatio}}',
+    );
+    expect(File('${tmp.path}/test/snapshots/crops_skipped.png').existsSync(), isFalse);
     expect(Directory('test/snapshots').listSync().where((FileSystemEntity f) => f.path.contains('crops_')), isEmpty);
   });
 
@@ -131,8 +150,8 @@ void main() {
 
     final List<ItemCrops> crops = writeCrops(
       diffSnapshots(a, b),
-      Render.read('${tmp.path}/before', 'x'),
-      Render.read('${tmp.path}/after', 'x'),
+      Render.read('${tmp.path}/before', 'test/snapshots/x'),
+      Render.read('${tmp.path}/after', 'test/snapshots/x'),
       '${tmp.path}/out',
     );
     final ItemCrops box = crops.singleWhere((ItemCrops c) => c.component.startsWith('Box'));
@@ -187,8 +206,8 @@ void main() {
     final Snapshot b = await captureSnapshot(tester, 'x', options: options);
     final List<ItemCrops> crops = writeCrops(
       diffSnapshots(a, b),
-      Render.read('${tmp.path}/before', 'x'),
-      Render.read('${tmp.path}/after', 'x'),
+      Render.read('${tmp.path}/before', 'test/snapshots/x'),
+      Render.read('${tmp.path}/after', 'test/snapshots/x'),
       '${tmp.path}/out',
     );
     expect(crops.map((ItemCrops c) => c.type), <String>['Layout', 'Style']);
@@ -219,6 +238,61 @@ void main() {
       1: '1  Layout    A@0  size 1x1 -> 1x2\n                 at: root/A@0',
       2: '2  Style     B@0  color: #FF000000 -> #FFFFFFFF',
     });
+  });
+
+  testWidgets('a shift with no cause is cropped where its components were and are', (WidgetTester tester) async {
+    // A banner far above the viewport pushes the visible rows down; none of
+    // them caused it, and the banner is not built (as in diff_test.dart).
+    Widget list(bool banner) => Directionality(
+      textDirection: TextDirection.ltr,
+      child: ColoredBox(
+        color: const Color(0xFFFFFFFF),
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: SizedBox(
+            width: 200,
+            height: 200,
+            child: ListView(
+              controller: ScrollController(initialScrollOffset: 1000),
+              children: <Widget>[
+                if (banner) const SizedBox(height: 100),
+                for (int i = 0; i < 40; i++) Row3(key: ValueKey<String>('k$i'), label: 'row ${'x' * (i % 3)}'),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    final options = SnapshotOptions(policy: ComponentPolicy(include: <Type>{Row3}));
+    debugRenderDirectory = '${tmp.path}/before';
+    await tester.pumpWidget(list(false));
+    await expectSnapshot(tester, 'x', options: options);
+    final Snapshot a = await captureSnapshot(tester, 'x', options: options);
+    debugRenderDirectory = '${tmp.path}/after';
+    await tester.pumpWidget(list(true));
+    await expectSnapshot(tester, 'x', options: options);
+    final Snapshot b = await captureSnapshot(tester, 'x', options: options);
+    final ChangeReport report = diffSnapshots(a, b);
+    expect(report.items.map((ReportItem i) => i.change == null), contains(isTrue));
+    final List<ItemCrops> crops = writeCrops(
+      report,
+      Render.read('${tmp.path}/before', 'test/snapshots/x'),
+      Render.read('${tmp.path}/after', 'test/snapshots/x'),
+      '${tmp.path}/out',
+    );
+    final ItemCrops shift = crops.firstWhere((ItemCrops c) => c.type == 'Shift');
+    expect(shift.note, isNull);
+    expect(_hasRed(decodePng(File('${tmp.path}/out/${shift.diff}').readAsBytesSync())), isTrue);
+  });
+
+  test('the first item is found when input lines come before it', () {
+    const text =
+        'x    needs-review\n\n   Input   theme: light -> dark\n1  Style     B@0  color: #FF000000 -> #FFFFFFFF\n';
+    expect(itemTexts(text), <int, String>{1: '1  Style     B@0  color: #FF000000 -> #FFFFFFFF'});
+  });
+
+  test('an error making images is printed, not thrown', () async {
+    await writeImages(ReviewResult('HEAD', <SnapshotReview>[]), make: (_) => throw const FileSystemException('no'));
   });
 
   test('images of different sizes get no diff', () {
