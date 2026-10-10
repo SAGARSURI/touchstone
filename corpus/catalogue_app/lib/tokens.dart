@@ -25,7 +25,7 @@ class AppTokens extends ThemeExtension<AppTokens> {
   final Color divider;
 
   static const AppTokens light = AppTokens(
-    brandAccent: Color(0xFF3949AB),
+    brandAccent: Color(0xFF3F51B5),
     surface: Color(0xFFFFFFFF),
     surfaceMuted: Color(0xFFF1F3F8),
     textPrimary: Color(0xFF1B1D24),
