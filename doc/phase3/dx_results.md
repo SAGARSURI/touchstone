@@ -72,6 +72,21 @@ Raised by Sagar during the sessions, from the terminal output:
 These are not changed during the measurement, so every item was measured on
 the same output.
 
+After the sessions Sagar chose to fix the layout before measure 3 (405bd62,
+5d9563c, 4492942), and looked at before and after reports of the same session
+changes:
+- each distinct change is on its own line, and other fields recording the
+  same change are left out rather than counted;
+- a line longer than 100 columns breaks before its arrow, then between
+  words, so Flutter's own wrapping never applies;
+- a count of items by type sits under the verdict, and a blank line
+  separates items.
+
+What is detected and how changes are attributed is unchanged: the joined
+wording each change carries is the same, and the scoring tools read the
+structured report, not this text.
+
 ## Measure 3: reviewing pull requests that change baselines
 
-Not run yet.
+Not run yet. The two snapshot review PRs (#5, #8) show review output in the
+new layout.
