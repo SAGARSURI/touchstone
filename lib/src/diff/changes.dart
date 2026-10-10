@@ -75,7 +75,16 @@ class Change {
   final String lead;
 
   /// [detail] as the report writes it: see summary.dart.
-  String get summary => fields.isEmpty ? shortenValue(detail) : '$lead${summarizeFields(fields)}';
+  String get summary => summaryLines.join('; ');
+
+  /// [summary] as one entry per distinct change, the first with [lead].
+  List<String> get summaryLines {
+    if (fields.isEmpty) {
+      return <String>[shortenValue(detail)];
+    }
+    final List<String> entries = summarizeFieldList(fields);
+    return <String>['$lead${entries.first}', ...entries.skip(1)];
+  }
 
   /// A layout change in which a property that sizes or places children
   /// changed on this component (`Padding.padding`), not only its size.

@@ -6,7 +6,9 @@
 //
 // 1. Fields that changed to the same value are one entry, named by the field
 //    a developer is likeliest to recognise (a public widget's over a render
-//    object's or a private one's), with the rest counted.
+//    object's or a private one's). The others are left out: they record the
+//    same change, and counting them read as a further change (DX sessions,
+//    doc/phase3/dx_results.md).
 // 2. Colours are written as their token, or as #AARRGGBB when they have none.
 //    When both sides have the same token, it is written once, before the two
 //    values: `brand.accent #FF3949AB -> #FF4050B0`.
@@ -19,19 +21,19 @@ final RegExp _color = RegExp(
 final RegExp _token = RegExp(r'([A-Za-z][\w.]*) \((#[0-9A-F]{8})\)');
 
 /// [fields] (each "old -> new") as one short line.
-String summarizeFields(Map<String, String> fields) {
+String summarizeFields(Map<String, String> fields) => summarizeFieldList(fields).join('; ');
+
+/// [fields] (each "old -> new") as short entries, one per distinct change.
+List<String> summarizeFieldList(Map<String, String> fields) {
   final Map<String, List<String>> byValue = <String, List<String>>{};
   for (final MapEntry<String, String> e in fields.entries) {
     final (String key, String value) = _narrow(e.key, shortenValue(e.value));
     (byValue[value] ??= <String>[]).add(key);
   }
-  return byValue.entries
-      .map((MapEntry<String, List<String>> e) {
-        final List<String> keys = e.value..sort(_byRecognisable);
-        final int more = keys.length - 1;
-        return '${keys.first}: ${e.key}${more == 0 ? '' : ' (and $more more field${more == 1 ? '' : 's'})'}';
-      })
-      .join('; ');
+  return <String>[
+    for (final MapEntry<String, List<String>> e in byValue.entries)
+      '${(e.value..sort(_byRecognisable)).first}: ${e.key}',
+  ];
 }
 
 /// What changed in [fields], without the fields' names: the same change on

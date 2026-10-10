@@ -187,7 +187,9 @@ void main() {
       const Labelled(radii: <double>[4, 5]),
       const Labelled(radii: <double>[5, 4]),
     );
-    expect(_render(r), contains('reading order ["dot 4.0", "dot 5.0"] -> ["dot 5.0", "dot 4.0"]'));
+    final String text = _render(r);
+    expect(text, contains('reading order ["dot 4.0", "dot 5.0"]'));
+    expect(text, contains('-> ["dot 5.0", "dot 4.0"]'));
     expect(
       r.changes.where((Change c) => c.type == ChangeType.semantics && c.fields.containsKey('order')),
       hasLength(1),

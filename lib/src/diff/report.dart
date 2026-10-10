@@ -7,9 +7,13 @@
 //   2  Style   OrderButton#submit      background: brand.primary -> brand.accent
 //   3  Paint   SparklineChart#spark    unexplained (pixel hash changed)
 //
-// Each line is a change's short wording (summary.dart). The same change on
-// several instances of one component is one line, followed by an "at:" line
-// naming every instance.
+// Each item opens with a change's short wording (summary.dart); a change to
+// several values lists each on its own line, under the first, and a value
+// too long for one line breaks before its arrow, then between words. The
+// same change on several instances of one component is one item, followed
+// by an "at:" line naming every instance. When there are several items, a
+// line under the verdict counts them by type, and a blank line separates
+// the items (DX sessions, doc/phase3/dx_results.md).
 
 import 'changes.dart';
 import 'diff.dart';
@@ -84,6 +88,15 @@ String renderReport(ChangeReport report, Decision decision) {
     case ReportKind.diff:
       break;
   }
+  final List<List<ReportItem>> folded = _folded(report.items);
+  if (folded.length > 1) {
+    final byType = <String, int>{};
+    for (final List<ReportItem> same in folded) {
+      byType.update(same.first.change?.type.label ?? 'Shift', (int k) => k + 1, ifAbsent: () => 1);
+    }
+    final String types = byType.entries.map((MapEntry<String, int> e) => '${e.value} ${e.key}').join(', ');
+    out.writeln('${folded.length} items: $types');
+  }
   out.writeln();
   for (final String input in report.inputChanges) {
     out.writeln('   Input   $input');
@@ -91,17 +104,18 @@ String renderReport(ChangeReport report, Decision decision) {
   final _Names names = _Names(report);
   const indent = '           ';
   var n = 0;
-  for (final List<ReportItem> same in _folded(report.items)) {
+  for (final List<ReportItem> same in folded) {
+    if (n > 0) {
+      out.writeln();
+    }
     n++;
     final String number = '$n'.padRight(3);
     final ReportItem item = same.first;
     final Change? c = item.change;
     if (c != null) {
-      if (same.length == 1) {
-        out.writeln('$number${c.type.label.padRight(10)}${names.of(c.node).padRight(24)}  ${_detail(c)}');
-      } else {
-        final String where = '${c.componentType} in ${same.length} places';
-        out.writeln('$number${c.type.label.padRight(10)}${where.padRight(24)}  ${_detail(c)}');
+      final String where = same.length == 1 ? names.of(c.node) : '${c.componentType} in ${same.length} places';
+      _writeValues(out, '$number${c.type.label.padRight(10)}${where.padRight(24)}  ', _values(c));
+      if (same.length > 1) {
         out.writeln('${indent}at: ${same.map((ReportItem i) => names.of(i.change!.node)).join(', ')}');
       }
       for (final String line in _groupLines(<ShiftGroup>[for (final ReportItem i in same) ...i.causedGroups])) {
@@ -122,7 +136,10 @@ String renderReport(ChangeReport report, Decision decision) {
       final String causes = g.candidates.isEmpty
           ? 'cause unknown, needs review'
           : 'possible causes: ${g.candidates.map((Change x) => '${x.type.label} ${names.of(x.node)}').join(', ')}';
-      out.writeln('$number${'Shift'.padRight(10)}${names.of(g.ancestor).padRight(24)}  ${g.summary}; $causes');
+      _writeValues(out, '$number${'Shift'.padRight(10)}${names.of(g.ancestor).padRight(24)}  ', <String>[
+        g.summary,
+        causes,
+      ]);
       for (final String line in _consequenceLines(<(Change, DiffNode?)>[
         for (final Change k in item.consequences) (k, null),
       ], (DiffNode k, _) => names.of(k))) {
@@ -145,6 +162,51 @@ String renderReport(ChangeReport report, Decision decision) {
   }
   return out.toString();
 }
+
+/// Lines longer than this break before their arrow, then between words.
+const int _width = 100;
+
+/// [values] after [lead], the first on its line and each other one under it.
+void _writeValues(StringBuffer out, String lead, List<String> values) {
+  final String under = ' ' * lead.length;
+  for (var i = 0; i < values.length; i++) {
+    final String start = i == 0 ? lead : under;
+    final String value = values[i];
+    final int arrow = value.indexOf(' -> ');
+    if (start.length + value.length > _width && arrow > 0) {
+      _wrap(out, start, value.substring(0, arrow), '$under   ');
+      _wrap(out, '$under  ', value.substring(arrow + 1), '$under     ');
+    } else {
+      _wrap(out, start, value, '$under   ');
+    }
+  }
+}
+
+/// [text] after [start], broken between words to fit [_width], each further
+/// line starting with [more]. A word longer than a line is not broken.
+void _wrap(StringBuffer out, String start, String text, String more) {
+  final line = StringBuffer(start);
+  var empty = true;
+  for (final String word in text.split(' ')) {
+    if (!empty && line.length + 1 + word.length > _width) {
+      out.writeln(line);
+      line
+        ..clear()
+        ..write(more);
+      empty = true;
+    }
+    line.write(empty ? word : ' $word');
+    empty = false;
+  }
+  out.writeln(line);
+}
+
+/// [c]'s wording as one entry per distinct change.
+List<String> _values(Change c) => switch (c.type) {
+  ChangeType.added || ChangeType.removed => <String>[_detail(c)],
+  _ when c.contentMoved => <String>[_detail(c)],
+  _ => c.summaryLines,
+};
 
 String _detail(Change c) => switch (c.type) {
   ChangeType.added || ChangeType.removed => c.summary.replaceFirst(RegExp(r'^(at|was at) '), ''),
