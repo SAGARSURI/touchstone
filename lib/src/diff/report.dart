@@ -27,20 +27,9 @@ import 'summary.dart';
 /// how many components of each type it changed and in how many snapshots.
 /// Empty when no cause spans two snapshots.
 String renderCauses(Map<String, ChangeReport> reports) {
-  final byCause = <String, List<(String, Change)>>{};
-  for (final MapEntry<String, ChangeReport> r in reports.entries) {
-    for (final Change c in r.value.changes) {
-      if (c.type == ChangeType.style && c.fields.isNotEmpty) {
-        (byCause[_cause(c.fields)] ??= <(String, Change)>[]).add((r.key, c));
-      }
-    }
-  }
   final out = StringBuffer();
-  for (final MapEntry<String, List<(String, Change)>> e in byCause.entries) {
+  for (final MapEntry<String, List<(String, Change)>> e in _sharedCauses(reports).entries) {
     final int snapshots = <String>{for (final (String id, _) in e.value) id}.length;
-    if (snapshots < 2) {
-      continue;
-    }
     final types = <String, int>{};
     for (final (_, Change c) in e.value) {
       types.update(c.node.typeName, (int n) => n + 1, ifAbsent: () => 1);
@@ -56,6 +45,131 @@ String renderCauses(Map<String, ChangeReport> reports) {
   }
   return out.isEmpty ? '' : 'Causes in more than one snapshot:\n$out';
 }
+
+/// The style changes of [reports] by cause, keeping only causes found in
+/// more than one snapshot.
+Map<String, List<(String, Change)>> _sharedCauses(Map<String, ChangeReport> reports) {
+  final byCause = <String, List<(String, Change)>>{};
+  for (final MapEntry<String, ChangeReport> r in reports.entries) {
+    for (final Change c in r.value.changes) {
+      if (c.type == ChangeType.style && c.fields.isNotEmpty) {
+        (byCause[_cause(c.fields)] ??= <(String, Change)>[]).add((r.key, c));
+      }
+    }
+  }
+  byCause.removeWhere((String _, List<(String, Change)> v) => <String>{for (final (String id, _) in v) id}.length < 2);
+  return byCause;
+}
+
+/// The overview a review opens with (doc/phase3/review_overview_expectations.md):
+/// the unexplained items first, as the default policy flags them, then the
+/// causes shared between snapshots, then every other visible item. Items
+/// with the same change type, component type and wording are one line, with
+/// the snapshot they are in, or how many. [others] are snapshots with no
+/// report to read (new, removed, unreadable), each with why.
+String renderOverview(Map<String, ChangeReport> reports, {Map<String, String> others = const <String, String>{}}) {
+  final Set<String> shared = _sharedCauses(reports).keys.toSet();
+  // Lines are grouped by their full values and printed with each value cut.
+  final flagged = <String, Set<String>>{};
+  final rest = <String, Set<String>>{};
+  final shown = <String, String>{};
+  for (final MapEntry<String, ChangeReport> r in reports.entries) {
+    if (r.value.kind == ReportKind.migration) {
+      (rest['${r.key}: recorded with a different toolchain (migration)'] ??= <String>{}).add(r.key);
+      continue;
+    }
+    for (final String input in r.value.inputChanges) {
+      (rest['Input: $input'] ??= <String>{}).add(r.key);
+    }
+    for (final ReportItem item in r.value.items) {
+      if (item.isInfo) {
+        continue;
+      }
+      final Change? c = item.change;
+      List<String>? values = c == null ? null : _overviewValues(c);
+      if (c != null && c.type == ChangeType.style && c.fields.isNotEmpty && shared.contains(_cause(c.fields))) {
+        // The shared cause explains its tokens and the colours that follow
+        // from them; any other value that changed with them is still listed.
+        final bool all = _cause(c.fields) == fieldValues(c.fields);
+        final Map<String, String> unexplained = <String, String>{
+          for (final MapEntry<String, String> f in c.fields.entries)
+            if (!all && !_colourOnly(shortenValue(f.value))) f.key: f.value,
+        };
+        if (unexplained.isEmpty) {
+          continue;
+        }
+        values = summarizeFieldList(unexplained);
+      }
+      final String line = c != null
+          ? '${c.type.label} ${c.componentType}: ${values!.join('; ')}'
+          : 'Shift ${item.group!.ancestor.typeName}: ${item.group!.summary}'
+                '${item.group!.candidates.isEmpty ? ', cause unknown' : ''}';
+      shown[line] = c != null ? '${c.type.label} ${c.componentType}: ${values!.map(_short).join('; ')}' : line;
+      ((item.flagged ? flagged : rest)[line] ??= <String>{}).add(r.key);
+    }
+  }
+  for (final MapEntry<String, String> o in others.entries) {
+    (rest['${o.key}: ${o.value}'] ??= <String>{}).add(o.key);
+  }
+  final out = StringBuffer();
+  void section(String title, Map<String, Set<String>> lines) {
+    if (lines.isEmpty) {
+      return;
+    }
+    out.writeln(title);
+    final List<MapEntry<String, Set<String>>> sorted = lines.entries.toList()
+      ..sort(
+        (MapEntry<String, Set<String>> x, MapEntry<String, Set<String>> y) => y.value.length.compareTo(x.value.length),
+      );
+    for (final MapEntry<String, Set<String>> e in sorted) {
+      final String where = e.value.length == 1 && e.key.startsWith('${e.value.single}: ')
+          ? ''
+          : e.value.length == 1
+          ? ', in ${e.value.single}'
+          : ', in ${e.value.length} snapshots';
+      _wrap(out, '  ', '${shown[e.key] ?? e.key}$where', '      ');
+    }
+  }
+
+  section('Unexplained, check these first:', flagged);
+  out.write(renderCauses(reports));
+  section('Other changes:', rest);
+  return out.toString();
+}
+
+/// Whether [value], "old -> new", differs only in colours.
+bool _colourOnly(String value) {
+  if (_tokenValue.hasMatch(value)) {
+    return true;
+  }
+  final List<String> sides = value.split(' -> ');
+  if (sides.length != 2) {
+    return false;
+  }
+  String plain(String side) => side.replaceAll(_colourText, '#');
+  return plain(sides[0]) == plain(sides[1]);
+}
+
+// A colour as hex, or as Color(...), which may be cut off at the side's end.
+final RegExp _colourText = RegExp(r'#[0-9A-Fa-f]{8}|Color\([^)]*(?:\)|$)');
+
+/// [c]'s values for the overview. A layout change's new size follows from
+/// the values that changed with it, and differs with the screen, so it is
+/// left out when there are any: one padding change on many screens is one
+/// line.
+List<String> _overviewValues(Change c) {
+  final List<String> values = _values(c);
+  if (c.type != ChangeType.layout) {
+    return values;
+  }
+  final List<String> causes = values.where((String v) => !v.startsWith('size ')).toList();
+  return causes.isEmpty ? values : causes;
+}
+
+/// One changed value cut to a line's worth, so every value an
+/// item changed is named; the snapshot's own report has the rest.
+String _short(String value) =>
+    value.length <= 96 ? value : '${value.substring(0, 95).replaceFirst(RegExp(r'…+$'), '')}…';
 
 final RegExp _tokenValue = RegExp(r'^[A-Za-z][\w.]* #[0-9A-F]{8} -> #[0-9A-F]{8}$');
 
