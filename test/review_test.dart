@@ -97,6 +97,22 @@ void main() {
     ]);
     expect(r.exitCode, 2);
     expect(r.render(), contains('4 snapshots differ from HEAD: 0 pass, 4 needs-review, 0 fail.'));
+    // The overview comes first and names every change once; each snapshot's
+    // report follows, and the verdict line is also the last line.
+    final List<String> lines = r.render().trimRight().split('\n');
+    final String overview = lines.takeWhile((String l) => l != 'Each snapshot:').join('\n');
+    expect(lines.first, startsWith('4 snapshots differ from HEAD'));
+    expect(lines.last, lines.first);
+    expect(overview, contains('Other changes:\n'));
+    expect(
+      overview,
+      contains('  Style Tile: ColoredBox.color: #FF000000 -> #FFFF0000, in test/snapshots/a.snapshot\n'),
+    );
+    expect(overview, contains('  Layout Tile: '));
+    expect(overview, contains('SizedBox.height: 20.0 -> 30.0, in test/snapshots/b.snapshot\n'));
+    expect(overview, contains('  test/snapshots/gone.snapshot: snapshot removed\n'));
+    expect(overview, contains('  test/snapshots/new.snapshot: new snapshot'));
+    expect(overview, isNot(contains('Unexplained')));
     expect(r.reviews.first.text, contains('ColoredBox.color'));
 
     final ReviewResult strict = review(base: 'HEAD', policy: Policy.parse('forbid Tile Layout'), root: root);
@@ -163,6 +179,8 @@ void main() {
         'Causes in more than one snapshot:\n  brand.accent #FF000000 -> #FFFF0000: style change on 3 Tile, 1 ShadedTile in 2 snapshots\n',
       ),
     );
+    // Changes a shared cause explains are not listed again in the overview.
+    expect(r.render().split('Each snapshot:').first, isNot(contains('Style Tile')));
   });
 
   test('declared expectations hold only expect lines', () {

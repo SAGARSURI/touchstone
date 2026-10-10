@@ -49,10 +49,39 @@ class ReviewResult {
     Verdict.needsReview => 2,
   };
 
-  /// Every review, then the causes shared between snapshots and the
-  /// counts; with terminal colour when [color] is true (ansi.dart).
+  /// The counts and the verdict, an overview of every distinct change
+  /// (renderOverview), each snapshot's review, and the verdict line again
+  /// as the last line; with terminal colour when [color] is true (ansi.dart).
   String render({bool color = false}) {
-    final out = StringBuffer();
+    int count(Verdict v) => reviews.where((SnapshotReview r) => r.decision.verdict == v).length;
+    final String verdictLine = reviews.isEmpty
+        ? 'No snapshot differs from $base.'
+        : '${reviews.length} ${reviews.length == 1 ? 'snapshot differs' : 'snapshots differ'} from $base: '
+              '${count(Verdict.pass)} pass, ${count(Verdict.needsReview)} needs-review, ${count(Verdict.fail)} fail. '
+              'Verdict: ${verdict.label}.';
+    final out = StringBuffer()..writeln(verdictLine);
+    if (reviews.isEmpty) {
+      return out.toString();
+    }
+    // Snapshots are named by id, or by file when two files share an id.
+    final List<String> ids = <String>[for (final SnapshotReview r in reviews) ?r.report?.snapshotId];
+    final bool byId = ids.toSet().length == ids.length;
+    final String overview = renderOverview(
+      <String, ChangeReport>{
+        for (final SnapshotReview r in reviews)
+          if (r.report case final ChangeReport report) byId ? report.snapshotId : r.path: report,
+      },
+      others: <String, String>{
+        for (final SnapshotReview r in reviews)
+          if (r.report == null) r.path: r.decision.reasons.first,
+      },
+    );
+    out
+      ..writeln()
+      ..write(overview)
+      ..writeln()
+      ..writeln('Each snapshot:')
+      ..writeln();
     for (final SnapshotReview r in reviews) {
       out
         ..write(switch (r.report) {
@@ -61,20 +90,7 @@ class ReviewResult {
         })
         ..writeln();
     }
-    out.write(
-      renderCauses(<String, ChangeReport>{
-        for (final SnapshotReview r in reviews)
-          if (r.report case final ChangeReport report) r.path: report,
-      }),
-    );
-    int count(Verdict v) => reviews.where((SnapshotReview r) => r.decision.verdict == v).length;
-    out.writeln(
-      reviews.isEmpty
-          ? 'No snapshot differs from $base.'
-          : '${reviews.length} ${reviews.length == 1 ? 'snapshot differs' : 'snapshots differ'} from $base: '
-                '${count(Verdict.pass)} pass, ${count(Verdict.needsReview)} needs-review, ${count(Verdict.fail)} fail. '
-                'Verdict: ${verdict.label}.',
-    );
+    out.writeln(verdictLine);
     return out.toString();
   }
 }

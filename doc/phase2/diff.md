@@ -156,8 +156,18 @@ and grouping do not depend on the wording.
 
 - `dart run touchstone:review [--base <ref>] [--rules <file>] [--expect <file>] [--images]`
   compares every `.snapshot` file with its version at the base ref. It prints
-  each report and a summary line. The exit code is 0 for pass, 1 for fail and
-  2 for needs-review. A new or removed snapshot file is needs-review.
+  the summary line, then an overview, then each snapshot's report, and the
+  summary line again last. The exit code is 0 for pass, 1 for fail and 2 for
+  needs-review. A new or removed snapshot file is needs-review.
+- The overview lists every distinct change once, so a reviewer can decide
+  from it and open a snapshot's report only for detail
+  ([expectations](../phase3/review_overview_expectations.md)):
+  - unexplained items first, as the default policy flags them;
+  - causes shared by more than one snapshot, such as a token;
+  - every other change, one line per change type, component type and
+    values, with the snapshot it is in or how many. A layout change is
+    listed by what changed (a padding), not by its new size, which differs
+    with the screen. Long values are cut; the report has them whole.
 - `--images` adds the spec's review crops: before, after and diff images of
   each changed component, in `build/touchstone/review/` with an `index.html`.
   - It runs the tests in render mode (`TOUCHSTONE_RENDER_DIR`), where
