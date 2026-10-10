@@ -27,12 +27,25 @@ class SettingsTile extends StatelessWidget {
       leading: SettingsIcon(icon: icon),
       title: Text(title, style: TextStyle(color: t.textPrimary)),
       subtitle: subtitle == null ? null : Text(subtitle!, style: TextStyle(color: t.textSecondary)),
-      trailing: value != null
-          ? Switch(value: value!, onChanged: (_) {})
-          : trailingText != null
-          ? Text(trailingText!, style: TextStyle(color: t.textSecondary))
-          : Icon(Icons.chevron_right, color: t.textSecondary),
+      trailing: TileTrailing(value: value, text: trailingText),
     );
+  }
+}
+
+class TileTrailing extends StatelessWidget {
+  const TileTrailing({super.key, this.value, this.text});
+
+  final bool? value;
+  final String? text;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppTokens t = AppTokens.of(context);
+    return value != null
+        ? Switch(value: value!, onChanged: (_) {})
+        : text != null
+        ? Text(text!, style: TextStyle(color: t.textSecondary))
+        : Icon(Icons.chevron_right, color: t.textSecondary);
   }
 }
 
