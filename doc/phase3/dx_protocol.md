@@ -38,9 +38,9 @@ golden test does not fail on them, so there is no failure to time.
 | # | Change | Source |
 | --- | --- | --- |
 | 1 | Change one colour token | history change 1 |
-| 2 | A clip changed on the detail header image | catalog `clip` |
+| 2 | An icon drawn at 60% opacity on the empty and error states | catalog `opacity` |
 | 3 | Add a promo banner above the watchlist | history change 3 |
-| 4 | An icon changed in a settings row | catalog `icon` |
+| 4 | A longer title on a settings row | catalog `text` |
 | 5 | Longer strings for a new locale | history change 5 |
 | 6 | A design-library upgrade that shifts default paddings | history change 7 |
 | 7 | A refactor, an intended restyle and an accidental 1 px padding in one pull request | history change 9 |
@@ -49,6 +49,20 @@ golden test does not fail on them, so there is no failure to time.
 | 10 | A widget removed | catalog `widget-removed` |
 | 11 | Enabled state | catalog `enabled-state` |
 | 12 | Insert near the start of a column | catalog `column-insert-start` |
+
+Two changes first chosen fail no golden test, found by the `dx-check`
+workflow on macOS before any session ([dx_check_run2.txt](dx_check_run2.txt)),
+and were replaced from the same catalog:
+
+- **A clip on the detail header image** (catalog `clip`): the conventional
+  test hands the image over as bytes and settles, and the image is never
+  decoded in the test's fake time, so the golden has no image to clip.
+- **An icon changed in a settings row** (catalog `icon`): the test font
+  draws every glyph, icon glyphs included, as the same box, so the golden
+  is the same.
+
+The snapshot tests fail on both. That the golden arm misses them is itself
+a result for the comparison, and goes in `dx_results.md` beside the timings.
 
 Each change has a written answer key before any session: the component, the
 change type and the cause, as the catalogs and the history expectations
@@ -64,11 +78,12 @@ eight are split so that changes of a similar kind land in different arms:
 
 | Measure | Snapshot arm | Golden arm |
 | --- | --- | --- |
-| 1 and 2 | 2 clip, 5 locale, 8 padding, 9 selected | 4 icon, 10 removed, 11 enabled, 12 insert |
+| 1 and 2 | 2 opacity, 5 locale, 8 padding, 9 selected | 4 text, 10 removed, 11 enabled, 12 insert |
 | 3 | 1 colour token, 7 mixed pull request | 3 promo banner, 6 library upgrade |
 
 Each item in measures 1 and 2 is one branch off the same commit,
-`dx/<nn>-snapshot` or `dx/<nn>-golden`, where that arm's tests fail. The
+`dx-session/<nn>-snapshot` or `dx-session/<nn>-golden`, where that arm's
+tests fail. The
 order alternates arms (snapshot, golden, snapshot, ...) so practice does
 not favour one arm. Four items per arm is a small sample: the numbers are
 reported as they are, with no claim of a difference unless it is large.
@@ -117,7 +132,7 @@ One row per session item, in `dx_results.md`:
 
 ## What Claude prepares
 
-The eight `dx/<nn>-<arm>` branches above with their `DX.md` (the command to
+The eight `dx-session/<nn>-<arm>` branches above with their `DX.md` (the command to
 run and nothing about the cause), the four review pull requests, and the
 answer key (`tool/dx_items.dart`), which is on the base commit as it always
 was: the branches ask not to open `tool/` before writing a cause down.

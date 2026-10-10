@@ -13,9 +13,9 @@ import 'history_phase3.dart' as h3;
 /// Item number to its source: `h<change>` or the catalog entry's id.
 const Map<int, String> items = <int, String>{
   1: 'h1',
-  2: 'clip',
+  2: 'opacity',
   3: 'h3',
-  4: 'icon',
+  4: 'text',
   5: 'h5',
   6: 'h7',
   7: 'h9',
