@@ -115,12 +115,33 @@ String renderReport(ChangeReport report, Decision decision, {bool color = false,
     out.writeln('   Input   $input');
   }
   final _Names names = _Names(report);
-  const indent = '           ';
-  var n = 0;
   if (table && folded.isNotEmpty) {
     out.write(_table(folded, names, a));
-    folded.clear();
+  } else {
+    _list(out, folded, names, a);
   }
+  if (report.items.isEmpty && report.inputChanges.isEmpty) {
+    out.writeln('No changes.');
+  }
+  final List<String> passed = decision.reasons.where((String r) => r.startsWith('passed by')).toList();
+  final List<String> failed = decision.reasons
+      .where((String r) => r.startsWith('forbidden') || r.startsWith('not in the declared'))
+      .toList();
+  if (passed.isNotEmpty || failed.isNotEmpty) {
+    out.writeln();
+    for (final String r in <String>[...failed, ...passed]) {
+      _writeLabelled(out, '   ', r, a, error: !r.startsWith('passed by'));
+    }
+  }
+  return out.toString();
+}
+
+/// [folded] items as a list: each item's number, change type and component,
+/// then each value that changed on its own line, and its at:, consequence
+/// and cause lines under it.
+void _list(StringBuffer out, List<List<ReportItem>> folded, _Names names, Ansi a) {
+  const indent = '           ';
+  var n = 0;
   for (final List<ReportItem> same in folded) {
     if (n > 0) {
       out.writeln();
@@ -163,20 +184,6 @@ String renderReport(ChangeReport report, Decision decision, {bool color = false,
       }
     }
   }
-  if (report.items.isEmpty && report.inputChanges.isEmpty) {
-    out.writeln('No changes.');
-  }
-  final List<String> passed = decision.reasons.where((String r) => r.startsWith('passed by')).toList();
-  final List<String> failed = decision.reasons
-      .where((String r) => r.startsWith('forbidden') || r.startsWith('not in the declared'))
-      .toList();
-  if (passed.isNotEmpty || failed.isNotEmpty) {
-    out.writeln();
-    for (final String r in <String>[...failed, ...passed]) {
-      _writeLabelled(out, '   ', r, a, error: !r.startsWith('passed by'));
-    }
-  }
-  return out.toString();
 }
 
 /// An item's first columns: its number, change type and component.
