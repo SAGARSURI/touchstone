@@ -642,6 +642,21 @@ Map<String, String> _semanticsChanges(String before, String after, {bool moved =
       }
     }
   }
+  // The same texts read in another order: matching nodes on what they say
+  // pairs none of them, so the order is the change.
+  if (!out.keys.any(_semanticsText.contains)) {
+    List<String> texts(List<Map<String, Object?>> nodes) => <String>[
+      for (final Map<String, Object?> n in nodes)
+        for (final String k in _semanticsText)
+          if (n.containsKey(k)) jsonEncode(n[k]),
+    ];
+    final List<String> tb = texts(b);
+    final List<String> ta = texts(a);
+    if (tb.join('\n') != ta.join('\n') &&
+        (List<String>.of(tb)..sort()).join('\n') == (List<String>.of(ta)..sort()).join('\n')) {
+      out['label'] = 'reading order [${tb.join(', ')}] -> [${ta.join(', ')}]';
+    }
+  }
   if (out.isEmpty) {
     // Same nodes, different order or count after dropping empty ones.
     out['nodes'] = 'semantics nodes changed';

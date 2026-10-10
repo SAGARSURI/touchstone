@@ -179,4 +179,15 @@ void main() {
     expect(text, isNot(contains('"dot 4.0" -> "dot 5.0"')));
     h.dispose();
   });
+
+  testWidgets('the same labels in another order are a reading-order change', (WidgetTester tester) async {
+    final SemanticsHandle h = tester.ensureSemantics();
+    final ChangeReport r = await _diff(
+      tester,
+      const Labelled(radii: <double>[4, 5]),
+      const Labelled(radii: <double>[5, 4]),
+    );
+    expect(_render(r), contains('reading order ["dot 4.0", "dot 5.0"] -> ["dot 5.0", "dot 4.0"]'));
+    h.dispose();
+  });
 }
