@@ -64,4 +64,33 @@ void main() {
     printOnFailure(text);
     h.dispose();
   });
+
+  testWidgets('a long "at:" line breaks between instances, under its label', (WidgetTester tester) async {
+    Widget boxes(Color color) => MaterialApp(
+      home: Align(
+        alignment: Alignment.topLeft,
+        child: Wrap(children: <Widget>[for (var i = 0; i < 20; i++) Box(color: color)]),
+      ),
+    );
+    await tester.pumpWidget(boxes(const Color(0xFF000000)));
+    await tester.pumpAndSettle();
+    final Snapshot a = await captureSnapshot(tester, 'x', options: _options);
+    await tester.pumpWidget(boxes(const Color(0xFFFFFFFF)));
+    await tester.pumpAndSettle();
+    final Snapshot b = await captureSnapshot(tester, 'x', options: _options);
+    final ChangeReport r = diffSnapshots(a, b);
+    final String text = renderReport(r, Policy.defaults().decide(r));
+    final List<String> lines = text.split('\n');
+
+    expect(text, contains('Box in 20 places'));
+    for (final String line in lines) {
+      expect(line.length, lessThanOrEqualTo(100), reason: line);
+    }
+    final int at = lines.indexWhere((String l) => l.trimLeft().startsWith('at: Box@0, '));
+    expect(at, greaterThan(0));
+    final int column = lines[at].indexOf('Box@0');
+    expect(lines[at + 1].indexOf(RegExp(r'\S')), column, reason: 'the next line starts under the first instance');
+    expect(lines.skip(at).join(' '), contains('Box@19'));
+    printOnFailure(text);
+  });
 }

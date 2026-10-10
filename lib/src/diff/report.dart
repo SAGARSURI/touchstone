@@ -11,9 +11,10 @@
 // several values lists each on its own line, under the first, and a value
 // too long for one line breaks before its arrow, then between words. The
 // same change on several instances of one component is one item, followed
-// by an "at:" line naming every instance. When there are several items, a
-// line under the verdict counts them by type, and a blank line separates
-// the items (DX sessions, doc/phase3/dx_results.md).
+// by an "at:" line naming every instance; that line and consequences break
+// between words too. When there are several items, a line under the verdict
+// counts them by type, and a blank line separates the items (DX sessions,
+// doc/phase3/dx_results.md).
 
 import 'changes.dart';
 import 'diff.dart';
@@ -50,7 +51,7 @@ String renderCauses(Map<String, ChangeReport> reports) {
             }))
             .map((MapEntry<String, int> t) => '${t.value} ${t.key}')
             .join(', ');
-    out.write('  ${e.key}: style change on $components in $snapshots snapshots\n');
+    _wrap(out, '  ', '${e.key}: style change on $components in $snapshots snapshots', '      ');
   }
   return out.isEmpty ? '' : 'Causes in more than one snapshot:\n$out';
 }
@@ -116,10 +117,10 @@ String renderReport(ChangeReport report, Decision decision) {
       final String where = same.length == 1 ? names.of(c.node) : '${c.componentType} in ${same.length} places';
       _writeValues(out, '$number${c.type.label.padRight(10)}${where.padRight(24)}  ', _values(c));
       if (same.length > 1) {
-        out.writeln('${indent}at: ${same.map((ReportItem i) => names.of(i.change!.node)).join(', ')}');
+        _writeLabelled(out, indent, 'at: ${same.map((ReportItem i) => names.of(i.change!.node)).join(', ')}');
       }
       for (final String line in _groupLines(<ShiftGroup>[for (final ReportItem i in same) ...i.causedGroups])) {
-        out.writeln('${indent}consequence: $line');
+        _writeLabelled(out, indent, 'consequence: $line');
       }
       final List<(Change, DiffNode?)> ks = <(Change, DiffNode?)>[
         for (final ReportItem i in same)
@@ -129,7 +130,7 @@ String renderReport(ChangeReport report, Decision decision) {
         final bool near = at != null && (identical(k, at) || identical(k, at.parent));
         return same.length > 1 && near ? _relative(k, at) : names.of(k);
       })) {
-        out.writeln('$indent$line');
+        _writeLabelled(out, indent, line);
       }
     } else {
       final ShiftGroup g = item.group!;
@@ -143,7 +144,7 @@ String renderReport(ChangeReport report, Decision decision) {
       for (final String line in _consequenceLines(<(Change, DiffNode?)>[
         for (final Change k in item.consequences) (k, null),
       ], (DiffNode k, _) => names.of(k))) {
-        out.writeln('$indent$line');
+        _writeLabelled(out, indent, line);
       }
     }
   }
@@ -157,7 +158,7 @@ String renderReport(ChangeReport report, Decision decision) {
   if (passed.isNotEmpty || failed.isNotEmpty) {
     out.writeln();
     for (final String r in <String>[...failed, ...passed]) {
-      out.writeln('   $r');
+      _writeLabelled(out, '   ', r);
     }
   }
   return out.toString();
@@ -180,6 +181,14 @@ void _writeValues(StringBuffer out, String lead, List<String> values) {
       _wrap(out, start, value, '$under   ');
     }
   }
+}
+
+/// [line] after [indent], a further line starting under the text after its
+/// label ("at: ", "consequence: ").
+void _writeLabelled(StringBuffer out, String indent, String line) {
+  final int colon = line.indexOf(': ');
+  final String label = colon < 0 ? '' : line.substring(0, colon + 2);
+  _wrap(out, '$indent$label', line.substring(label.length), ' ' * (indent.length + label.length));
 }
 
 /// [text] after [start], broken between words to fit [_width], each further
